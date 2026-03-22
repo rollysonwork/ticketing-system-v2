@@ -72,12 +72,10 @@
             background: #15803d;
         }
 
-        /* Fix for STORE SEARCH header in dark mode */
         body.dark-mode .search-header {
             color: #e2e8f0;
         }
 
-        /* Ensure preview boxes have dark background in dark mode */
         body.dark-mode .preview-multiline {
             background: #4a5568;
             color: #e2e8f0;
@@ -122,7 +120,6 @@
             color: #2563eb;
         }
 
-        /* Theme toggle button */
         .theme-toggle {
             background: transparent;
             border: none;
@@ -219,7 +216,6 @@
             top: 24px;
         }
 
-        /* Preview text uppercase for all except ticket module/contact */
         .right-panel,
         .right-panel * {
             text-transform: uppercase;
@@ -232,7 +228,6 @@
             line-height: 1.5;
         }
 
-        /* Ticket preview specific styles */
         #ticket-previewPanel div {
             margin-bottom: 6px;
             border-bottom: 1px dashed #d0deeb;
@@ -246,6 +241,11 @@
             display: inline-block;
         }
 
+        body.dark-mode #ticket-previewPanel strong,
+        body.dark-mode #ticket-previewPanel div {
+            color: #e2e8f0;
+        }
+
         .preview-multiline {
             white-space: pre-wrap;
             display: inline-block;
@@ -253,12 +253,6 @@
             padding: 4px 10px;
             border-radius: 12px;
             max-width: 100%;
-        }
-
-        /* Dark mode fix for ticket preview labels */
-        body.dark-mode #ticket-previewPanel strong,
-        body.dark-mode #ticket-previewPanel div {
-            color: #e2e8f0;
         }
 
         /* ===== TABLE STYLES ===== */
@@ -312,12 +306,10 @@
             color: #e2e8f0;
         }
 
-        /* Module column shouldn't be uppercase */
         #entryTable td:nth-child(10) {
             text-transform: none;
         }
 
-        /* Multi-line columns */
         #entryTable td:nth-child(11),
         #entryTable td:nth-child(14),
         #entryTable td:nth-child(15) {
@@ -676,7 +668,6 @@
             color: #e2e8f0;
         }
 
-        /* Uppercase for most inputs */
         input:not([type="date"]):not(#store-email):not(#store-password):not(#ticket-module):not(#ticket-contactNumber):not(.no-uppercase),
         textarea:not(#store-email):not(#store-password):not(.no-uppercase),
         select {
@@ -705,7 +696,6 @@
             border-color: #4a5568;
         }
 
-        /* Style for readonly password fields */
         input[readonly].password-field {
             background: #f0f3f7;
             color: #64748b;
@@ -962,7 +952,7 @@
                     <div id="ticket-searchResults" class="search-results"></div>
                     <div id="ticket-loadStatus" class="load-status"></div>
                 </div>
-                 <table>
+                <table>
                     <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
                     <tr>
                         <td>SHIFT SCHEDULE</td>
@@ -1161,10 +1151,11 @@
         </div>
     </div>
 
-    <!-- Bulk Actions & Export/Import Bar (API key button removed) -->
+    <!-- Bulk Actions Bar (fully retained) -->
     <div class="bulk-bar">
         <label>
-            <input type="checkbox" id="selectAllCheckbox">SELECT ALL</label>
+            <input type="checkbox" id="selectAllCheckbox">SELECT ALL
+        </label>
         <button id="bulkDeleteBtn" title="Delete selected rows">🗑️DELETE</button>
         <button id="bulkCopyBtn" title="Copy selected rows">📋COPY</button>
         <button id="bulkUpdateStatusBtn" title="Update status for selected rows">✏️UPDATE</button>
@@ -1226,27 +1217,23 @@
                 NOTES_COL: 14
             };
 
-            // Helper to get API key from localStorage
             function getGoogleApiKey() {
                 return localStorage.getItem('googleApiKey');
             }
 
-            // Set API key (called by the refresh/set button)
             function setGoogleApiKeyAndLoad() {
                 const newKey = prompt('Please enter your Google Sheets API key to load store data:\n(You can get it from Google Cloud Console)');
                 if (newKey && newKey.trim() !== '') {
                     localStorage.setItem('googleApiKey', newKey.trim());
                     showNotification('API key saved. Loading stores...');
-                    updateRefreshButtons();          // change button texts to REFRESH
-                    loadSheetData();                 // load data with new key
+                    updateRefreshButtons();
+                    loadSheetData();
                 } else if (newKey === '') {
                     localStorage.removeItem('googleApiKey');
                     showNotification('API key removed. Click the button again to set a new key.');
-                    updateRefreshButtons();          // buttons become SET API KEY again
-                    // Clear any existing store data
+                    updateRefreshButtons();
                     storeData = [];
                     clearSearchResults();
-                    // Update status messages
                     ['ticket', 'store', 'moolah'].forEach(prefix => {
                         const statusEl = document.getElementById(`${prefix}-loadStatus`);
                         if (statusEl) statusEl.innerHTML = '<span class="error">⚠️ API key not set. Click the button above to set it.</span>';
@@ -1536,10 +1523,8 @@
             function handleRefreshClick(prefix) {
                 const apiKey = getGoogleApiKey();
                 if (!apiKey) {
-                    // No key stored: act as "Set API Key" button
                     setGoogleApiKeyAndLoad();
                 } else {
-                    // Key exists: perform refresh
                     loadSheetData();
                 }
             }
@@ -1561,7 +1546,7 @@
             }
 
             // ---------------------------------------------------------------------
-            // 9. SEARCH & STORE SELECTION (unchanged)
+            // 9. SEARCH & STORE SELECTION
             // ---------------------------------------------------------------------
             function clearSearchResults() {
                 ['ticket', 'store', 'moolah'].forEach(prefix => {
@@ -1715,7 +1700,7 @@
             }
 
             // ---------------------------------------------------------------------
-            // 10. FORM DATA PERSISTENCE (unchanged)
+            // 10. FORM DATA PERSISTENCE
             // ---------------------------------------------------------------------
             function saveFormData(prefix) {
                 const fields = {
@@ -1769,7 +1754,7 @@
             }
 
             // ---------------------------------------------------------------------
-            // 12. PREVIEW FUNCTIONS (unchanged)
+            // 12. PREVIEW FUNCTIONS
             // ---------------------------------------------------------------------
             function moolahUpdatePreview() {
                 const portal = document.getElementById('moolah-portal').value.trim();
@@ -1897,7 +1882,7 @@ ${skuLine}`;
             }
 
             // ---------------------------------------------------------------------
-            // 13. CRUD OPERATIONS (unchanged)
+            // 13. CRUD OPERATIONS
             // ---------------------------------------------------------------------
             function addEntry(prefix) {
                 let requiredIds = [];
@@ -2256,7 +2241,7 @@ UPLOAD DATABASE - DONE✅`;
             }
 
             // ---------------------------------------------------------------------
-            // 15. BULK ACTIONS (unchanged)
+            // 15. BULK ACTIONS (fully retained)
             // ---------------------------------------------------------------------
             function getSelectedRowIds() {
                 const checkboxes = document.querySelectorAll('#entryTable tbody .row-checkbox:checked');
@@ -2426,7 +2411,7 @@ UPLOAD DATABASE - DONE✅`;
             }
 
             // ---------------------------------------------------------------------
-            // 16. EXPORT / IMPORT (unchanged)
+            // 16. EXPORT / IMPORT
             // ---------------------------------------------------------------------
             function exportToCSV() {
                 const headers = ['DATE','SHIFT','SUPPORT','PORTAL','STORE','ZIP','CONTACT','CONTACT#','MODULE','ISSUE','ESCALATED','STATUS','REMARKS','RESOLUTION'];
@@ -2554,7 +2539,7 @@ UPLOAD DATABASE - DONE✅`;
             }
 
             // ---------------------------------------------------------------------
-            // 17. SHIFT REPORT GENERATION (unchanged)
+            // 17. SHIFT REPORT GENERATION
             // ---------------------------------------------------------------------
             function generateShiftReport() {
                 const yesterday = new Date();
@@ -2920,14 +2905,11 @@ Use clear and proper escalation notes within the tracker to provide transparency
                     });
                 });
 
-                // Set button text based on key presence
                 updateRefreshButtons();
 
-                // If key already exists, load data after a short delay
                 if (getGoogleApiKey()) {
                     setTimeout(loadSheetData, 500);
                 } else {
-                    // Show message in load status
                     ['ticket', 'store', 'moolah'].forEach(prefix => {
                         const statusEl = document.getElementById(`${prefix}-loadStatus`);
                         if (statusEl) statusEl.innerHTML = '<span class="error">⚠️ API key not set. Click the button above to set it.</span>';
