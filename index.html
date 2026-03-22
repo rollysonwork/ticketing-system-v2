@@ -1142,7 +1142,7 @@
     <div style="overflow-x: auto;">
         <table id="entryTable">
             <thead>
-                 <tr>
+                <tr>
                     <th style="width:30px"></th>
                     <th>DATE</th>
                     <th>SHIFT</th>
@@ -1159,10 +1159,10 @@
                     <th>REMARKS</th>
                     <th>RESOLUTION</th>
                     <th>ACTIONS</th>
-                 </tr>
+                </tr>
             </thead>
             <tbody></tbody>
-          </table>
+        </table>
     </div>
 
     <div id="notification"></div>
@@ -2287,9 +2287,10 @@ UPLOAD DATABASE - DONE✅`;
                     updatePreviewWithEntry(entry);
                 }
 
+                // Update preview for moolah/store (but NOT for ticket – already done above)
                 if (prefix === 'moolah') moolahUpdatePreview();
                 if (prefix === 'store') storeUpdatePreview();
-                if (prefix === 'ticket') ticketUpdatePreview();
+                // (ticket preview was already set by updatePreviewWithEntry)
 
                 editId = entry.id;
                 const addBtn = document.querySelector(`#tab-${prefix} .add`);
