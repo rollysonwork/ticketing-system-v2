@@ -1,0 +1,3065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RetailzPOS · Unified Creation System</title>
+    <style>
+        /* ===== RESET / BASE ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f1f5f9;
+            padding: 24px;
+            color: #0b1c33;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        /* Dark mode variables */
+        body.dark-mode {
+            background: #1a202c;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .left-panel,
+        body.dark-mode .right-panel,
+        body.dark-mode .search-section,
+        body.dark-mode .tab-button,
+        body.dark-mode input,
+        body.dark-mode select,
+        body.dark-mode textarea,
+        body.dark-mode #entryTable td,
+        body.dark-mode #entryTable th,
+        body.dark-mode .result-item,
+        body.dark-mode .search-results,
+        body.dark-mode .bulk-bar {
+            background: #2d3748;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .tab-button.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        body.dark-mode .tab-button:hover {
+            background: #1e3a8a;
+        }
+
+        body.dark-mode .search-input-wrapper input {
+            background: #1a202c;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .icon-btn {
+            background: #4a5568;
+            color: white;
+        }
+
+        body.dark-mode .icon-btn.delete-btn {
+            background: #b91c1c;
+        }
+        body.dark-mode .icon-btn.edit-btn {
+            background: #1d4ed8;
+        }
+        body.dark-mode .icon-btn.copy-btn {
+            background: #15803d;
+        }
+
+        /* Fix for STORE SEARCH header in dark mode */
+        body.dark-mode .search-header {
+            color: #e2e8f0;
+        }
+
+        /* Ensure preview boxes have dark background in dark mode */
+        body.dark-mode .preview-multiline {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            color: #0a2942;
+            border-left: 6px solid #2563eb;
+            padding-left: 18px;
+            background: linear-gradient(to right, #ffffff50, transparent);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        body.dark-mode h1 {
+            color: #e2e8f0;
+            border-left-color: #60a5fa;
+        }
+
+        h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        body.dark-mode h3 {
+            color: #cbd5e0;
+        }
+
+        h3::before {
+            content: "▍";
+            font-size: 1.3rem;
+            color: #2563eb;
+        }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 40px;
+            transition: background 0.2s;
+        }
+        .theme-toggle:hover {
+            background: rgba(0,0,0,0.1);
+        }
+
+        /* ===== TAB NAVIGATION ===== */
+        .tab-container {
+            margin-bottom: 24px;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            background: white;
+            border: 1px solid #cdddee;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #1e293b;
+            text-transform: uppercase;
+            letter-spacing: 0.01em;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .tab-button:hover {
+            background: #f0f9ff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -8px #2563eb;
+        }
+
+        .tab-button.active {
+            background: #2563eb;
+            color: white;
+            border-color: #2563eb;
+            box-shadow: 0 8px 16px -8px #2563eb;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ===== MAIN LAYOUT ===== */
+        .container {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        /* ===== LEFT PANEL ===== */
+        .left-panel {
+            flex: 1.1;
+            min-width: 380px;
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(0,20,50,0.06);
+            border: 1px solid #e9eef3;
+        }
+
+        /* ===== RIGHT PANEL PREVIEW ===== */
+        .right-panel {
+            flex: 1;
+            min-width: 280px;
+            background: #fafdff;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 8px 30px rgba(0,20,50,0.04);
+            border: 1px solid #e2eaf2;
+            font-size: 15px;
+            line-height: 1.6;
+            height: auto;
+            overflow-y: auto;
+            position: sticky;
+            top: 24px;
+        }
+
+        /* Preview text uppercase for all except ticket module/contact */
+        .right-panel,
+        .right-panel * {
+            text-transform: uppercase;
+        }
+
+        #moolah-previewText,
+        #store-outputPreview {
+            white-space: pre-wrap;
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.5;
+        }
+
+        /* Ticket preview specific styles */
+        #ticket-previewPanel div {
+            margin-bottom: 6px;
+            border-bottom: 1px dashed #d0deeb;
+            padding-bottom: 4px;
+        }
+
+        #ticket-previewPanel strong {
+            font-weight: 600;
+            color: #1e3a5f;
+            min-width: 110px;
+            display: inline-block;
+        }
+
+        .preview-multiline {
+            white-space: pre-wrap;
+            display: inline-block;
+            background: #eef4fa;
+            padding: 4px 10px;
+            border-radius: 12px;
+            max-width: 100%;
+        }
+
+        /* Dark mode fix for ticket preview labels */
+        body.dark-mode #ticket-previewPanel strong,
+        body.dark-mode #ticket-previewPanel div {
+            color: #e2e8f0;
+        }
+
+        /* ===== TABLE STYLES ===== */
+        #entryTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            table-layout: auto;
+        }
+
+        #entryTable thead tr {
+            background: #e6edf5;
+        }
+
+        body.dark-mode #entryTable thead tr {
+            background: #2d3748;
+        }
+
+        #entryTable th {
+            color: #16324b;
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            padding: 12px 8px;
+            border: 1px solid #cdddee;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        body.dark-mode #entryTable th {
+            color: #cbd5e0;
+            border-color: #4a5568;
+        }
+
+        #entryTable td {
+            background: white;
+            padding: 12px 8px;
+            border: 1px solid #d9e2ec;
+            text-align: center;
+            vertical-align: middle;
+            white-space: normal;
+            word-wrap: break-word;
+            max-width: 300px;
+            text-transform: uppercase;
+        }
+
+        body.dark-mode #entryTable td {
+            background: #2d3748;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        /* Module column shouldn't be uppercase */
+        #entryTable td:nth-child(10) {
+            text-transform: none;
+        }
+
+        /* Multi-line columns */
+        #entryTable td:nth-child(11),
+        #entryTable td:nth-child(14),
+        #entryTable td:nth-child(15) {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            min-width: 200px;
+            max-width: 300px;
+            line-height: 1.4;
+        }
+
+        #entryTable tbody tr:hover td {
+            background: #f8fbfe;
+        }
+
+        body.dark-mode #entryTable tbody tr:hover td {
+            background: #4a5568;
+        }
+
+        /* Checkbox column */
+        #entryTable th:first-child,
+        #entryTable td:first-child {
+            width: 30px;
+            text-align: center;
+        }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-cell {
+            padding: 0;
+            height: 100%;
+            background: white;
+            border: 1px solid #d9e2ec;
+        }
+
+        .action-cell .action-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            padding: 12px 4px;
+        }
+
+        .icon-btn {
+            border: none;
+            border-radius: 30px;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.15s;
+            font-size: 16px;
+            background: transparent;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .icon-btn.delete-btn {
+            background: #dc2626;
+            color: white;
+        }
+        .icon-btn.delete-btn:hover {
+            background: #b91c1c;
+            transform: scale(1.05);
+        }
+
+        .icon-btn.edit-btn {
+            background: #2563eb;
+            color: white;
+        }
+        .icon-btn.edit-btn:hover {
+            background: #1d4ed8;
+            transform: scale(1.05);
+        }
+
+        .icon-btn.copy-btn {
+            background: #16a34a;
+            color: white;
+        }
+        .icon-btn.copy-btn:hover {
+            background: #15803d;
+            transform: scale(1.05);
+        }
+
+        /* ===== SEARCH SECTION ===== */
+        .search-section {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid #dde3ea;
+        }
+
+        body.dark-mode .search-section {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        .search-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            color: #1e3a5f;
+            font-weight: 600;
+        }
+
+        .search-header::before {
+            content: "🔍";
+            font-size: 1.2rem;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .search-input-wrapper input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #dde3ea;
+            border-radius: 40px;
+            font-size: 14px;
+            background: white;
+            text-transform: uppercase;
+        }
+
+        .search-input-wrapper input:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
+            outline: none;
+        }
+
+        .search-input-wrapper button {
+            padding: 12px 24px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .search-input-wrapper button:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -8px #2563eb;
+        }
+
+        .search-input-wrapper button:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+        }
+
+        .search-results {
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: 12px;
+            background: white;
+            border: 1px solid #e2eaf2;
+        }
+
+        body.dark-mode .search-results {
+            background: #1a202c;
+            border-color: #4a5568;
+        }
+
+        .result-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid #eef2f6;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        body.dark-mode .result-item {
+            border-bottom-color: #4a5568;
+        }
+
+        .result-item:hover {
+            background: #f0f9ff;
+        }
+
+        body.dark-mode .result-item:hover {
+            background: #4a5568;
+        }
+
+        .result-item.selected {
+            background: #e0f2fe;
+            border-left: 4px solid #2563eb;
+        }
+
+        body.dark-mode .result-item.selected {
+            background: #2c5282;
+        }
+
+        .result-store {
+            font-weight: 600;
+            color: #0f2b45;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            text-transform: uppercase;
+        }
+
+        body.dark-mode .result-store {
+            color: #e2e8f0;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active {
+            background: #22c55e20;
+            color: #16a34a;
+            border: 1px solid #22c55e40;
+        }
+
+        .status-deleted {
+            background: #ef444420;
+            color: #dc2626;
+            border: 1px solid #ef444440;
+        }
+
+        .status-deactive {
+            background: #f9731620;
+            color: #b45309;
+            border: 1px solid #f9731640;
+        }
+
+        .status-demo {
+            background: #6b728020;
+            color: #4b5563;
+            border: 1px solid #6b728040;
+        }
+
+        .result-details {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        body.dark-mode .result-details {
+            color: #a0aec0;
+        }
+
+        .result-details span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .result-zip {
+            background: #e6edf5;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 500;
+            color: #2563eb;
+        }
+
+        body.dark-mode .result-zip {
+            background: #4a5568;
+            color: #90cdf4;
+        }
+
+        .load-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .load-status .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #e2e8f0;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .load-status .success {
+            color: #16a34a;
+        }
+
+        .load-status .error {
+            color: #dc2626;
+        }
+
+        /* ===== FORM STYLES ===== */
+        .entry-form table,
+        .left-panel table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .entry-form table td,
+        .left-panel table td {
+            padding: 8px 4px;
+            border: none;
+            background: transparent;
+            font-weight: 500;
+            color: #1f3a5e;
+            vertical-align: middle;
+        }
+
+        body.dark-mode .left-panel table td {
+            color: #cbd5e0;
+        }
+
+        .entry-form table tr td:first-child,
+        .left-panel table tr td:first-child {
+            width: 38%;
+            font-size: 0.8rem;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            color: #476788;
+        }
+
+        input, select, textarea {
+            font-size: 14px;
+            padding: 10px 12px;
+            border: 1.5px solid #dde3ea;
+            border-radius: 14px;
+            background: white;
+            transition: 0.15s;
+            width: 100%;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body.dark-mode input,
+        body.dark-mode select,
+        body.dark-mode textarea {
+            background: #1a202c;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        /* Uppercase for most inputs */
+        input:not([type="date"]):not(#store-email):not(#store-password):not(#ticket-module):not(#ticket-contactNumber):not(.no-uppercase),
+        textarea:not(#store-email):not(#store-password):not(.no-uppercase),
+        select {
+            text-transform: uppercase;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #2563eb;
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+        }
+
+        input[readonly], input:disabled, select:disabled {
+            background: #f0f3f7;
+            color: #64748b;
+            border-color: #d0d9e4;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        body.dark-mode input[readonly],
+        body.dark-mode input:disabled,
+        body.dark-mode select:disabled {
+            background: #2d3748;
+            color: #a0aec0;
+            border-color: #4a5568;
+        }
+
+        /* Style for readonly password fields */
+        input[readonly].password-field {
+            background: #f0f3f7;
+            color: #64748b;
+            border-color: #d0d9e4;
+            pointer-events: none;
+            opacity: 0.8;
+            text-transform: none;
+        }
+
+        textarea {
+            resize: none;
+            overflow-y: hidden;
+            min-height: 60px;
+            height: auto;
+        }
+
+        .invalid {
+            border: 2px solid #dc2626 !important;
+            background: #fff2f2;
+        }
+
+        body.dark-mode .invalid {
+            background: #742a2a;
+        }
+
+        .section-header {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2563eb;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            padding: 12px 0 4px 0;
+            border-bottom: 1px dashed #cdddee;
+            margin-top: 8px;
+        }
+
+        /* ===== BUTTON ROW ===== */
+        .button-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .button-row button {
+            flex: 1 0 auto;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            background: white;
+            color: #1e293b;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            transition: all 0.2s;
+            border: 1px solid #cdddee;
+            text-transform: uppercase;
+            letter-spacing: 0.01em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .button-row .add {
+            background: #1d4ed8;
+            border: 1px solid #1d4ed8;
+            color: white;
+            box-shadow: 0 8px 14px -8px #1d4ed880;
+        }
+
+        .button-row .add::before {
+            content: "➕ ";
+            font-size: 12px;
+        }
+
+        .button-row .add.editing::before {
+            content: "✏️ ";
+        }
+
+        .button-row .clock {
+            background: #b45309;
+            border: 1px solid #b45309;
+            color: white;
+        }
+
+        .button-row .clock::before {
+            content: "⏱️ ";
+        }
+
+        .button-row .form-clear-btn {
+            background: #6b7280;
+            border: 1px solid #6b7280;
+            color: white;
+        }
+
+        .button-row .form-clear-btn::before {
+            content: "🧹 ";
+        }
+
+        .button-row .clear-all-btn {
+            background: #b91c1c;
+            border: 1px solid #b91c1c;
+            color: white;
+        }
+
+        .button-row .clear-all-btn::before {
+            content: "🗑️ ";
+        }
+
+        .button-row button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+            box-shadow: 0 10px 18px -8px currentColor;
+        }
+
+        /* ===== BULK ACTIONS BAR ===== */
+        .bulk-bar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+            margin-top: 24px;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 40px;
+            border: 1px solid #cdddee;
+        }
+
+        body.dark-mode .bulk-bar {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        .bulk-bar label {
+            text-transform: uppercase;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+        }
+
+        .bulk-bar button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            background: #e6edf5;
+            color: #1e293b;
+            transition: 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            text-transform: uppercase;
+        }
+
+        body.dark-mode .bulk-bar button {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        .bulk-bar button:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .bulk-bar .export-btn {
+            background: #16a34a;
+            color: white;
+        }
+        .bulk-bar .import-btn {
+            background: #b45309;
+            color: white;
+        }
+        .bulk-bar .undo-btn,
+        .bulk-bar .redo-btn {
+            background: #6b7280;
+            color: white;
+        }
+        .bulk-bar .shift-report-btn {
+            background: #8b5cf6;
+            color: white;
+        }
+
+        /* ===== NOTIFICATION ===== */
+        #notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #1e3a5fe0;
+            color: white;
+            padding: 14px 22px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 20px 35px -10px #0b1e33;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 999;
+            pointer-events: none;
+            backdrop-filter: blur(8px);
+            border: 1px solid #ffffff30;
+        }
+
+        #notification.show {
+            opacity: 1;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 700px) {
+            .container { 
+                flex-direction: column; 
+            }
+            .left-panel, .right-panel { 
+                width: 100%; 
+                max-height: none;
+                position: static;
+            }
+            .button-row button { 
+                min-width: 120px; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>
+        🏬 RetailzPOS · Unified Creation System
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+    </h1>
+    
+    <!-- Tab Navigation -->
+    <div class="tab-container">
+        <div class="tab-buttons">
+            <button class="tab-button active" onclick="switchTab('ticket', this)">TICKET CREATION</button>
+            <button class="tab-button" onclick="switchTab('store', this)">STORE CREATION</button>
+            <button class="tab-button" onclick="switchTab('moolah', this)">MOOLAH CREATION</button>
+        </div>
+    </div>
+
+    <!-- TICKET CREATION TAB -->
+    <div id="tab-ticket" class="tab-content active">
+        <div class="container">
+            <div class="left-panel">
+                <h3>📋 TICKET CREATION FORM</h3>
+                <div class="search-section">
+                    <div class="search-header">STORE SEARCH</div>
+                    <div class="search-input-wrapper">
+                        <input type="text" id="ticket-storeSearch" autocomplete="off" placeholder="SEARCH STORE...">
+                        <button id="ticket-refreshSheetsBtn" class="refresh-btn">⟳ REFRESH</button>
+                    </div>
+                    <div id="ticket-searchResults" class="search-results"></div>
+                    <div id="ticket-loadStatus" class="load-status"></div>
+                </div>
+                 <table>
+                    <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
+                    <tr>
+                        <td>SHIFT SCHEDULE</td>
+                        <td>
+                            <select id="ticket-shift">
+                                <option value="">-- SELECT --</option>
+                                <option value="8PM - 5AM">8PM - 5AM</option>
+                                <option value="9PM - 6AM">9PM - 6AM</option>
+                                <option value="10PM - 7AM">10PM - 7AM</option>
+                                <option value="11PM - 8AM">11PM - 8AM</option>
+                                <option value="1AM - 10AM">1AM - 10AM</option>
+                                <option value="2AM - 11AM">2AM - 11AM</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td></tr>
+                    <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td></tr>
+                    <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td></tr>
+                    <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td></tr>
+                    <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td></tr>
+                    <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
+                    <tr>
+                        <td>MODULE</td>
+                        <td>
+                            <input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off">
+                            <datalist id="ticket-moduleList"></datalist>
+                        </td>
+                    </tr>
+                    <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
+                    <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
+                    <tr>
+                        <td>STATUS</td>
+                        <td>
+                            <input id="ticket-status" list="ticket-statusList" autocomplete="off">
+                            <datalist id="ticket-statusList"></datalist>
+                        </td>
+                    </tr>
+                    <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
+                    <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="2"></textarea></td></tr>
+                </table>
+                <div class="button-row">
+                    <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
+                    <button class="form-clear-btn" onclick="clearFormOnly('ticket')">CLEAR FORM</button>
+                    <button class="clock" onclick="clock('IN', 'ticket')">CLOCK IN</button>
+                    <button class="clock" onclick="clock('OUT', 'ticket')">CLOCK OUT</button>
+                    <button class="clear-all-btn" onclick="clearAll('ticket')">CLEAR ALL</button>
+                </div>
+            </div>
+            <div class="right-panel" id="ticket-previewPanel">
+                <h3>🔍 PREVIEW</h3>
+                <div><strong>PORTAL:</strong> <span id="ticket-previewPortal"></span></div>
+                <div><strong>STORE NAME:</strong> <span id="ticket-previewStore"></span></div>
+                <div><strong>ZIPCODE:</strong> <span id="ticket-previewZip"></span></div>
+                <div><strong>CALLER NAME:</strong> <span id="ticket-previewCaller"></span></div>
+                <div><strong>CONTACT NUMBER:</strong> <span id="ticket-previewContact"></span></div>
+                <div><strong>ISSUE:</strong> <span id="ticket-previewIssue"></span></div>
+                <br>
+                <div><strong>📞 CONTACT:</strong></div>
+                <div>CALLER NAME: <span id="ticket-previewContactPerson"></span></div>
+                <div>CONTACT NUMBER: <span id="ticket-previewContactNumber"></span></div>
+                <br>
+                <div><strong>❗ ISSUE:</strong></div>
+                <div><span id="ticket-previewIssueDetails" class="preview-multiline"></span></div>
+                <br>
+                <div><strong>✅ RESOLUTION & TROUBLESHOOTING:</strong></div>
+                <div id="ticket-previewResolutionContainer" class="preview-multiline" style="white-space: pre-wrap;"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STORE CREATION TAB -->
+    <div id="tab-store" class="tab-content">
+        <div class="container">
+            <div class="left-panel">
+                <h3>📋 STORE CREATION FORM</h3>
+                <div class="search-section">
+                    <div class="search-header">STORE SEARCH</div>
+                    <div class="search-input-wrapper">
+                        <input type="text" id="store-storeSearch" autocomplete="off" placeholder="SEARCH STORE...">
+                        <button id="store-refreshSheetsBtn" class="refresh-btn">⟳ REFRESH</button>
+                    </div>
+                    <div id="store-searchResults" class="search-results"></div>
+                    <div id="store-loadStatus" class="load-status"></div>
+                </div>
+                <table>
+                    <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
+                    <tr>
+                        <td>SHIFT SCHEDULE</td>
+                        <td>
+                            <select id="store-shift" disabled>
+                                <option value="">-- SELECT --</option>
+                                <option value="8PM - 5AM">8PM - 5AM</option>
+                                <option value="9PM - 6AM">9PM - 6AM</option>
+                                <option value="10PM - 7AM">10PM - 7AM</option>
+                                <option value="11PM - 8AM">11PM - 8AM</option>
+                                <option value="1AM - 10AM">1AM - 10AM</option>
+                                <option value="2AM - 11AM">2AM - 11AM</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
+                    <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td></tr>
+                    <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td></tr>
+                    <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
+                    <tr><td>AGENT</td><td><input type="text" id="store-agent"></td></tr>
+                    <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
+                    <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
+                    <tr><td>SKU</td><td><input type="text" id="store-sku"></td></tr>
+                    <tr><td>DATABASE</td><td><input type="text" id="store-database"></td></tr>
+                    <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td></tr>
+                    <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
+                    <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
+                </table>
+                <div class="button-row">
+                    <button class="add" onclick="addEntry('store')">ADD ENTRY</button>
+                    <button class="form-clear-btn" onclick="clearFormOnly('store')">CLEAR FORM</button>
+                    <button class="clock" onclick="clock('IN', 'store')">CLOCK IN</button>
+                    <button class="clock" onclick="clock('OUT', 'store')">CLOCK OUT</button>
+                    <button class="clear-all-btn" onclick="clearAll('store')">CLEAR ALL</button>
+                </div>
+            </div>
+            <div class="right-panel">
+                <h3>🔍 PREVIEW</h3>
+                <div id="store-outputPreview"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MOOLAH CREATION TAB -->
+    <div id="tab-moolah" class="tab-content">
+        <div class="container">
+            <div class="left-panel">
+                <h3>📋 MOOLAH CREATION FORM</h3>
+                <div class="search-section">
+                    <div class="search-header">STORE SEARCH</div>
+                    <div class="search-input-wrapper">
+                        <input type="text" id="moolah-storeSearch" autocomplete="off" placeholder="SEARCH STORE...">
+                        <button id="moolah-refreshSheetsBtn" class="refresh-btn">⟳ REFRESH</button>
+                    </div>
+                    <div id="moolah-searchResults" class="search-results"></div>
+                    <div id="moolah-loadStatus" class="load-status"></div>
+                </div>
+                <table>
+                    <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
+                    <tr>
+                        <td>SHIFT SCHEDULE</td>
+                        <td>
+                            <select id="moolah-shift" disabled>
+                                <option value="">-- SELECT --</option>
+                                <option value="8PM - 5AM">8PM - 5AM</option>
+                                <option value="9PM - 6AM">9PM - 6AM</option>
+                                <option value="10PM - 7AM">10PM - 7AM</option>
+                                <option value="11PM - 8AM">11PM - 8AM</option>
+                                <option value="1AM - 10AM">1AM - 10AM</option>
+                                <option value="2AM - 11AM">2AM - 11AM</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
+                    <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
+                    <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
+                    <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
+                </table>
+                <div class="section-header">CLIENT CREDENTIALS (OPTIONAL)</div>
+                <table>
+                    <tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr>
+                    <tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr>
+                </table>
+                <div class="section-header">STORE CREDENTIALS (OPTIONAL)</div>
+                <table>
+                    <tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr>
+                    <tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr>
+                </table>
+                <div class="section-header">OUTLET CREDENTIALS (OPTIONAL)</div>
+                <table>
+                    <tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr>
+                    <tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr>
+                </table>
+                <table>
+                    <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
+                    <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
+                    <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
+                </table>
+                <div class="button-row">
+                    <button class="add" onclick="addEntry('moolah')">ADD ENTRY</button>
+                    <button class="form-clear-btn" onclick="clearFormOnly('moolah')">CLEAR FORM</button>
+                    <button class="clock" onclick="clock('IN', 'moolah')">CLOCK IN</button>
+                    <button class="clock" onclick="clock('OUT', 'moolah')">CLOCK OUT</button>
+                    <button class="clear-all-btn" onclick="clearAll('moolah')">CLEAR ALL</button>
+                </div>
+            </div>
+            <div class="right-panel">
+                <h3>🔍 PREVIEW</h3>
+                <div id="moolah-previewText"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions & Export/Import Bar (API key button removed) -->
+    <div class="bulk-bar">
+        <label>
+            <input type="checkbox" id="selectAllCheckbox">SELECT ALL</label>
+        <button id="bulkDeleteBtn" title="Delete selected rows">🗑️DELETE</button>
+        <button id="bulkCopyBtn" title="Copy selected rows">📋COPY</button>
+        <button id="bulkUpdateStatusBtn" title="Update status for selected rows">✏️UPDATE</button>
+        <button id="exportCsvBtn" class="export-btn">📥EXPORT</button>
+        <button id="importCsvBtn" class="import-btn">📤IMPORT</button>
+        <button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report">📋 SHIFT REPORT</button>
+        <button id="undoBtn" class="undo-btn" title="Undo">↩️ UNDO</button>
+        <button id="redoBtn" class="redo-btn" title="Redo">↪️ REDO</button>
+    </div>
+
+    <!-- Unified Database Table (with checkbox column) -->
+    <div style="overflow-x: auto;">
+        <table id="entryTable">
+            <thead>
+                <tr>
+                    <th style="width:30px"></th>
+                    <th>DATE</th>
+                    <th>SHIFT</th>
+                    <th>SUPPORT</th>
+                    <th>PORTAL</th>
+                    <th>STORE</th>
+                    <th>ZIP</th>
+                    <th>CONTACT</th>
+                    <th>CONTACT#</th>
+                    <th>MODULE</th>
+                    <th>ISSUE</th>
+                    <th>ESCALATED</th>
+                    <th>STATUS</th>
+                    <th>REMARKS</th>
+                    <th>RESOLUTION</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <div id="notification"></div>
+
+    <script>
+        // =========================================================================
+        // RETAILZPOS UNIFIED CREATION SYSTEM - SECURE API KEY VERSION
+        // Refresh buttons double as "Set API Key" when no key is stored.
+        // =========================================================================
+
+        (function() {
+            "use strict";
+
+            // ---------------------------------------------------------------------
+            // 1. GLOBAL CONSTANTS & CONFIGURATION
+            // ---------------------------------------------------------------------
+            const CONFIG = {
+                GOOGLE_SHEET_ID: '1IDsVjZrWCP0hXRn_EufLNgpOMtYFtV6jVZx9P5rvbcA',
+                SHEET_NAME: 'SERVER MANAGEMENT',
+                PORTAL_COL: 0,
+                STORE_NAME_COL: 2,
+                ZIP_CODE_COL: 3,
+                STATUS_COL: 11,
+                NOTES_COL: 14
+            };
+
+            // Helper to get API key from localStorage
+            function getGoogleApiKey() {
+                return localStorage.getItem('googleApiKey');
+            }
+
+            // Set API key (called by the refresh/set button)
+            function setGoogleApiKeyAndLoad() {
+                const newKey = prompt('Please enter your Google Sheets API key to load store data:\n(You can get it from Google Cloud Console)');
+                if (newKey && newKey.trim() !== '') {
+                    localStorage.setItem('googleApiKey', newKey.trim());
+                    showNotification('API key saved. Loading stores...');
+                    updateRefreshButtons();          // change button texts to REFRESH
+                    loadSheetData();                 // load data with new key
+                } else if (newKey === '') {
+                    localStorage.removeItem('googleApiKey');
+                    showNotification('API key removed. Click the button again to set a new key.');
+                    updateRefreshButtons();          // buttons become SET API KEY again
+                    // Clear any existing store data
+                    storeData = [];
+                    clearSearchResults();
+                    // Update status messages
+                    ['ticket', 'store', 'moolah'].forEach(prefix => {
+                        const statusEl = document.getElementById(`${prefix}-loadStatus`);
+                        if (statusEl) statusEl.innerHTML = '<span class="error">⚠️ API key not set. Click the button above to set it.</span>';
+                    });
+                }
+            }
+
+            const CLOCK_TIMES = {
+                '8PM - 5AM': ['08:00 PM', '05:00 AM'],
+                '9PM - 6AM': ['09:00 PM', '06:00 AM'],
+                '10PM - 7AM': ['10:00 PM', '07:00 AM'],
+                '11PM - 8AM': ['11:00 PM', '08:00 AM'],
+                '1AM - 10AM': ['01:00 AM', '10:00 AM'],
+                '2AM - 11AM': ['02:00 AM', '11:00 AM']
+            };
+
+            const CONSTANT_ISSUE = `CREATE MOOLAH ACCOUNT - DONE ✅\nINSTALL & UPDATE ALL APPS - DONE ✅\nASSIGN STORE - DONE ✅`;
+
+            const MODULE_OPTIONS = [
+                "POS", "Portal", "Mobile App", "Cash Register", "Item Management", "Inventory", "Back Office",
+                "Credit Card Terminal", "Printer", "Transactions", "Scan-Data", "Promotions", "Reports",
+                "Register Setup", "Store Creation", "Rocket Application", "Moolah", "API", "Database import/export",
+                "Gift Card", "Employee", "EDI", "Demo", "Training", "Credentials", "Other", "MIGRATION",
+                "VERSION UPDATE", "EBT", "Cash drawer", "LABEL PRINTER", "BULK CHANGE", "CRASH - APK", "SERVER",
+                "TOUCH SCREEN", "CHANGE STORE/EMAIL ID", "Customer Module", "Age Check", "Internet", "SYNC DATA",
+                "Surcharge", "Image set", "Scanner", "TENDER", "TIME CARD", "BANK DEPOSITE", "E-Commerce",
+                "Dual Price", "Lotto Guru", "Tax", "LABEL UTILITY", "FACTORY RESET", "DB EXPORT", "Adjustments",
+                "NVR", "RECEIPT", "RETAILZGO", "INVOICE", "SOLINK INTEGRATION", "Price Level"
+            ];
+
+            const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
+
+            const ZIP_TO_STATE = [
+                { min: 35000, max: 36999, state: "AL" }, { min: 99500, max: 99999, state: "AK" },
+                { min: 71600, max: 72999, state: "AR" }, { min: 85000, max: 86999, state: "AZ" },
+                { min: 90000, max: 96699, state: "CA" }, { min: 80000, max: 81699, state: "CO" },
+                { min: 6000, max: 6999, state: "CT" }, { min: 19700, max: 19999, state: "DE" },
+                { min: 32000, max: 34999, state: "FL" }, { min: 30000, max: 31999, state: "GA" },
+                { min: 96700, max: 96999, state: "HI" }, { min: 83200, max: 83999, state: "ID" },
+                { min: 60000, max: 62999, state: "IL" }, { min: 46000, max: 47999, state: "IN" },
+                { min: 50000, max: 52999, state: "IA" }, { min: 66000, max: 67999, state: "KS" },
+                { min: 40000, max: 42999, state: "KY" }, { min: 70000, max: 71599, state: "LA" },
+                { min: 3900, max: 4999, state: "MA" }, { min: 20600, max: 21999, state: "MD" },
+                { min: 1000, max: 2799, state: "ME" }, { min: 48000, max: 49999, state: "MI" },
+                { min: 55000, max: 56799, state: "MN" }, { min: 38600, max: 39999, state: "MS" },
+                { min: 63000, max: 65999, state: "MO" }, { min: 59000, max: 59999, state: "MT" },
+                { min: 27000, max: 28999, state: "NC" }, { min: 58000, max: 58999, state: "ND" },
+                { min: 68000, max: 69999, state: "NE" }, { min: 88900, max: 89999, state: "NV" },
+                { min: 3000, max: 3899, state: "NH" }, { min: 7000, max: 8999, state: "NJ" },
+                { min: 87000, max: 88499, state: "NM" }, { min: 10000, max: 14999, state: "NY" },
+                { min: 43000, max: 45999, state: "OH" }, { min: 73000, max: 74999, state: "OK" },
+                { min: 97000, max: 97999, state: "OR" }, { min: 15000, max: 19699, state: "PA" },
+                { min: 2800, max: 2999, state: "RI" }, { min: 29000, max: 29999, state: "SC" },
+                { min: 57000, max: 57999, state: "SD" }, { min: 37000, max: 38599, state: "TN" },
+                { min: 75000, max: 79999, state: "TX" }, { min: 84000, max: 84999, state: "UT" },
+                { min: 5000, max: 5999, state: "VT" }, { min: 22000, max: 24699, state: "VA" },
+                { min: 98000, max: 99499, state: "WA" }, { min: 24700, max: 26999, state: "WV" },
+                { min: 53000, max: 54999, state: "WI" }, { min: 82000, max: 83199, state: "WY" }
+            ];
+
+            // ---------------------------------------------------------------------
+            // 2. GLOBAL STATE
+            // ---------------------------------------------------------------------
+            let currentActiveTab = 'ticket';
+            let allEntries = [];
+            let storeData = [];
+            let editId = null;
+            let undoStack = [];
+            let redoStack = [];
+
+            const filteredResults = { moolah: [], store: [], ticket: [] };
+            const selectedIndex = { moolah: -1, store: -1, ticket: -1 };
+
+            // ---------------------------------------------------------------------
+            // 3. UTILITY FUNCTIONS
+            // ---------------------------------------------------------------------
+            function showNotification(message) {
+                const notification = document.getElementById('notification');
+                notification.textContent = message;
+                notification.classList.add('show');
+                setTimeout(() => notification.classList.remove('show'), 2000);
+            }
+
+            function autoGrow(textarea) {
+                textarea.style.height = 'auto';
+                textarea.style.height = textarea.scrollHeight + 'px';
+                syncPreviewHeight();
+            }
+
+            function escapeCSV(text) {
+                if (text.includes('\n') || text.includes('"')) {
+                    text = text.replace(/"/g, '""');
+                    return `"${text}"`;
+                }
+                return text;
+            }
+
+            function getStateFromZip(zip) {
+                const z = parseInt(zip, 10);
+                if (isNaN(z) || zip.length !== 5) return "";
+                const match = ZIP_TO_STATE.find(item => z >= item.min && z <= item.max);
+                return match ? match.state : "";
+            }
+
+            function storeGetFormattedDateMinusOne() {
+                const d = new Date();
+                d.setDate(d.getDate() - 1);
+                const mm = String(d.getMonth() + 1).padStart(2, '0');
+                const dd = String(d.getDate()).padStart(2, '0');
+                const yyyy = d.getFullYear();
+                return `${mm}/${dd}/${yyyy}`;
+            }
+
+            function ticketAddBulletsToResolution(text) {
+                if (!text || text.trim() === '') return '';
+                let lines = text.split('\n').filter(line => line.trim().length > 0);
+                if (lines.length === 1 && lines[0].includes('.')) {
+                    lines = lines[0].split('.').filter(s => s.trim().length > 0).map(s => s.trim() + '.');
+                }
+                return lines.map(line => '• ' + line).join('\n');
+            }
+
+            function cloneEntries(entries) {
+                return JSON.parse(JSON.stringify(entries));
+            }
+
+            function pushUndo() {
+                undoStack.push(cloneEntries(allEntries));
+                redoStack = [];
+            }
+
+            function undo() {
+                if (undoStack.length === 0) {
+                    showNotification('Nothing to undo');
+                    return;
+                }
+                const previous = undoStack.pop();
+                redoStack.push(cloneEntries(allEntries));
+                allEntries = previous;
+                saveAllEntries();
+                renderTable();
+                showNotification('Undo successful');
+            }
+
+            function redo() {
+                if (redoStack.length === 0) {
+                    showNotification('Nothing to redo');
+                    return;
+                }
+                const next = redoStack.pop();
+                undoStack.push(cloneEntries(allEntries));
+                allEntries = next;
+                saveAllEntries();
+                renderTable();
+                showNotification('Redo successful');
+            }
+
+            // ---------------------------------------------------------------------
+            // 4. PREVIEW HEIGHT SYNC
+            // ---------------------------------------------------------------------
+            function syncPreviewHeight() {
+                const leftPanel = document.querySelector(`#tab-${currentActiveTab} .left-panel`);
+                const rightPanel = document.querySelector(`#tab-${currentActiveTab} .right-panel`);
+                if (!leftPanel || !rightPanel) return;
+                const leftHeight = leftPanel.offsetHeight;
+                rightPanel.style.maxHeight = leftHeight + 'px';
+                rightPanel.style.overflowY = 'auto';
+            }
+
+            // ---------------------------------------------------------------------
+            // 5. TAB SWITCHING
+            // ---------------------------------------------------------------------
+            function switchTab(tabName, button) {
+                currentActiveTab = tabName;
+                localStorage.setItem('activeTab', tabName);
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.getElementById(`tab-${tabName}`).classList.add('active');
+                setTimeout(() => {
+                    document.querySelectorAll(`#tab-${tabName} textarea`).forEach(textarea => autoGrow(textarea));
+                    syncPreviewHeight();
+                }, 100);
+            }
+
+            // ---------------------------------------------------------------------
+            // 6. CLOCK FUNCTIONALITY
+            // ---------------------------------------------------------------------
+            function clock(type, prefix) {
+                const shift = document.getElementById(`${prefix}-shift`).value;
+                if (!shift) {
+                    showNotification('Set SHIFT');
+                    return;
+                }
+                if (!CLOCK_TIMES[shift]) {
+                    showNotification('Invalid SHIFT');
+                    return;
+                }
+                const now = new Date();
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const dateStr = now.toLocaleDateString('en-US');
+                const dayName = days[now.getDay()];
+                const timeStr = CLOCK_TIMES[shift][type === 'IN' ? 0 : 1];
+                const output = `${dateStr} - ${dayName} Shift\nClock ${type} - ${timeStr}`;
+                navigator.clipboard.writeText(output).then(
+                    () => showNotification(`Clock ${type} copied!`)
+                );
+            }
+
+            // ---------------------------------------------------------------------
+            // 7. GOOGLE SHEETS LOAD (with API key check)
+            // ---------------------------------------------------------------------
+            async function loadSheetData() {
+                const statusEls = {
+                    moolah: document.getElementById('moolah-loadStatus'),
+                    store: document.getElementById('store-loadStatus'),
+                    ticket: document.getElementById('ticket-loadStatus')
+                };
+                const refreshBtns = {
+                    moolah: document.getElementById('moolah-refreshSheetsBtn'),
+                    store: document.getElementById('store-refreshSheetsBtn'),
+                    ticket: document.getElementById('ticket-refreshSheetsBtn')
+                };
+
+                const apiKey = getGoogleApiKey();
+                if (!apiKey) {
+                    const msg = '⚠️ API key not set. Click the button above to set it.';
+                    Object.values(statusEls).forEach(el => {
+                        if (el) el.innerHTML = `<span class="error">${msg}</span>`;
+                    });
+                    return;
+                }
+
+                Object.values(statusEls).forEach(el => {
+                    if (el) el.innerHTML = '<div class="spinner"></div> Loading stores from Google Sheets...';
+                });
+                Object.values(refreshBtns).forEach(btn => { if (btn) btn.disabled = true; });
+
+                try {
+                    const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.GOOGLE_SHEET_ID}/values/${encodeURIComponent(CONFIG.SHEET_NAME)}?key=${apiKey}`;
+                    const response = await fetch(url);
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
+                    if (!data.values || data.values.length === 0) throw new Error('No data found in sheet');
+
+                    storeData = [];
+                    for (let i = 1; i < data.values.length; i++) {
+                        const row = data.values[i];
+                        const portal = (row[CONFIG.PORTAL_COL] || '').toString().trim();
+                        const storeName = (row[CONFIG.STORE_NAME_COL] || '').toString().trim();
+                        const zipCode = (row[CONFIG.ZIP_CODE_COL] || '').toString().trim();
+                        let status = (row[CONFIG.STATUS_COL] || '').toString().trim().toUpperCase();
+                        const notes = (row[CONFIG.NOTES_COL] || '').toString().trim().toUpperCase();
+
+                        if (!portal && !storeName) continue;
+                        if (!status) status = 'UNKNOWN';
+
+                        storeData.push({
+                            portal: portal || 'N/A',
+                            storeName: storeName.toUpperCase() || 'UNKNOWN STORE',
+                            zipCode: zipCode || 'N/A',
+                            status,
+                            notes
+                        });
+                    }
+                    storeData.sort((a, b) => a.storeName.localeCompare(b.storeName));
+
+                    Object.values(statusEls).forEach(el => {
+                        if (el) el.innerHTML = `<span class="success">✅ Loaded ${storeData.length} stores successfully!</span>`;
+                    });
+                    clearSearchResults();
+                    showNotification(`Loaded ${storeData.length} stores`);
+                } catch (error) {
+                    Object.values(statusEls).forEach(el => {
+                        if (el) el.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
+                    });
+                    storeData = [];
+                } finally {
+                    Object.values(refreshBtns).forEach(btn => { if (btn) btn.disabled = false; });
+                }
+                syncPreviewHeight();
+            }
+
+            // ---------------------------------------------------------------------
+            // 8. REFRESH BUTTON BEHAVIOR & TEXT UPDATE
+            // ---------------------------------------------------------------------
+            function handleRefreshClick(prefix) {
+                const apiKey = getGoogleApiKey();
+                if (!apiKey) {
+                    // No key stored: act as "Set API Key" button
+                    setGoogleApiKeyAndLoad();
+                } else {
+                    // Key exists: perform refresh
+                    loadSheetData();
+                }
+            }
+
+            function updateRefreshButtons() {
+                const hasKey = !!getGoogleApiKey();
+                const buttons = ['ticket', 'store', 'moolah'].map(prefix => document.getElementById(`${prefix}-refreshSheetsBtn`));
+                buttons.forEach(btn => {
+                    if (btn) {
+                        if (hasKey) {
+                            btn.textContent = '⟳ REFRESH';
+                            btn.title = 'Refresh store list';
+                        } else {
+                            btn.textContent = '🔑 SET API KEY';
+                            btn.title = 'Set Google Sheets API key';
+                        }
+                    }
+                });
+            }
+
+            // ---------------------------------------------------------------------
+            // 9. SEARCH & STORE SELECTION (unchanged)
+            // ---------------------------------------------------------------------
+            function clearSearchResults() {
+                ['ticket', 'store', 'moolah'].forEach(prefix => {
+                    document.getElementById(`${prefix}-storeSearch`).value = '';
+                    document.getElementById(`${prefix}-searchResults`).innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
+                });
+                filteredResults.moolah = [];
+                filteredResults.store = [];
+                filteredResults.ticket = [];
+                selectedIndex.moolah = -1;
+                selectedIndex.store = -1;
+                selectedIndex.ticket = -1;
+                syncPreviewHeight();
+            }
+
+            function getStatusClass(status) {
+                const s = status.toUpperCase();
+                if (s.includes('ACTIVE')) return 'status-active';
+                if (s.includes('DELETED')) return 'status-deleted';
+                if (s.includes('DEACTIVE')) return 'status-deactive';
+                return 'status-demo';
+            }
+
+            function performSearch(prefix) {
+                const searchTerm = document.getElementById(`${prefix}-storeSearch`).value.toUpperCase().trim();
+                const resultsContainer = document.getElementById(`${prefix}-searchResults`);
+
+                if (!storeData || storeData.length === 0) {
+                    resultsContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">No store data loaded. Click REFRESH to load.</div>';
+                    syncPreviewHeight();
+                    return;
+                }
+                if (!searchTerm) {
+                    resultsContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
+                    filteredResults[prefix] = [];
+                    syncPreviewHeight();
+                    return;
+                }
+
+                filteredResults[prefix] = storeData.filter(store =>
+                    store.storeName.includes(searchTerm) ||
+                    store.zipCode.includes(searchTerm) ||
+                    (store.notes && store.notes.includes(searchTerm))
+                ).slice(0, 100);
+
+                if (filteredResults[prefix].length === 0) {
+                    resultsContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">No stores found</div>';
+                    syncPreviewHeight();
+                    return;
+                }
+
+                let html = '';
+                filteredResults[prefix].forEach((store, index) => {
+                    const statusClass = getStatusClass(store.status);
+                    html += `
+                        <div class="result-item" onclick="selectStore('${prefix}', ${index})" onmouseenter="highlightResult('${prefix}', ${index})">
+                            <div class="result-info">
+                                <div class="result-store">
+                                    ${store.storeName || '?'}
+                                    <span class="status-badge ${statusClass}">${store.status}</span>
+                                </div>
+                                <div class="result-details">
+                                    <span>📌 PORTAL ${store.portal || 'N/A'}</span>
+                                    <span class="result-zip">📍 ${store.zipCode || 'N/A'}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+                resultsContainer.innerHTML = html;
+                syncPreviewHeight();
+            }
+
+            function selectStore(prefix, index) {
+                if (!filteredResults[prefix].length || index >= filteredResults[prefix].length) return;
+                const store = filteredResults[prefix][index];
+
+                if (prefix === 'moolah') {
+                    document.getElementById('moolah-portal').value = store.portal;
+                    document.getElementById('moolah-storeName').value = store.storeName;
+                    document.getElementById('moolah-zipcode').value = store.zipCode;
+                    moolahUpdatePreview();
+                    saveFormData('moolah');
+                } else if (prefix === 'store') {
+                    document.getElementById('store-portal').value = store.portal;
+                    document.getElementById('store-storeName').value = store.storeName;
+                    document.getElementById('store-zipcode').value = store.zipCode;
+                    storeUpdatePreview();
+                    saveFormData('store');
+                } else if (prefix === 'ticket') {
+                    document.getElementById('ticket-portal').value = store.portal;
+                    document.getElementById('ticket-store').value = store.storeName;
+                    document.getElementById('ticket-zip').value = store.zipCode;
+                    ticketUpdatePreview();
+                    saveFormData('ticket');
+                }
+
+                document.getElementById(`${prefix}-storeSearch`).value = '';
+                document.getElementById(`${prefix}-searchResults`).innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
+                filteredResults[prefix] = [];
+                selectedIndex[prefix] = -1;
+
+                showNotification(`Selected: ${store.storeName}`);
+                syncPreviewHeight();
+            }
+
+            function highlightResult(prefix, index) {
+                const items = document.querySelectorAll(`#${prefix}-searchResults .result-item`);
+                items.forEach((item, i) => {
+                    if (i === index) item.classList.add('selected');
+                    else item.classList.remove('selected');
+                });
+            }
+
+            function setupSearchKeyboard(prefix) {
+                const searchInput = document.getElementById(`${prefix}-storeSearch`);
+
+                searchInput.addEventListener('keydown', (e) => {
+                    const items = document.querySelectorAll(`#${prefix}-searchResults .result-item`);
+                    if (!items.length) return;
+
+                    if (e.key === 'ArrowDown') {
+                        e.preventDefault();
+                        selectedIndex[prefix] = Math.min(selectedIndex[prefix] + 1, items.length - 1);
+                        updateSelection(prefix, items, selectedIndex[prefix]);
+                    } else if (e.key === 'ArrowUp') {
+                        e.preventDefault();
+                        selectedIndex[prefix] = Math.max(selectedIndex[prefix] - 1, 0);
+                        updateSelection(prefix, items, selectedIndex[prefix]);
+                    } else if (e.key === 'Enter' && selectedIndex[prefix] >= 0) {
+                        e.preventDefault();
+                        selectStore(prefix, selectedIndex[prefix]);
+                    }
+                });
+
+                function updateSelection(prefix, items, index) {
+                    items.forEach((item, i) => {
+                        if (i === index) {
+                            item.classList.add('selected');
+                            item.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                        } else {
+                            item.classList.remove('selected');
+                        }
+                    });
+                }
+
+                searchInput.addEventListener('input', () => {
+                    selectedIndex[prefix] = -1;
+                    performSearch(prefix);
+                });
+            }
+
+            // ---------------------------------------------------------------------
+            // 10. FORM DATA PERSISTENCE (unchanged)
+            // ---------------------------------------------------------------------
+            function saveFormData(prefix) {
+                const fields = {
+                    moolah: ['shift', 'support', 'portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'storePass', 'outletUser', 'outletPass', 'sku', 'mokiId', 'anydeskId'],
+                    store: ['shift', 'support', 'portal', 'storeName', 'zipcode', 'agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'],
+                    ticket: ['shift', 'support', 'portal', 'store', 'zip', 'contactPerson', 'contactNumber', 'module', 'issue', 'escalated', 'status', 'remarks', 'resolution']
+                };
+                const formData = {};
+                fields[prefix].forEach(id => {
+                    const el = document.getElementById(`${prefix}-${id}`);
+                    if (el) formData[id] = el.value;
+                });
+                localStorage.setItem(`${prefix}FormData`, JSON.stringify(formData));
+            }
+
+            function loadFormData(prefix) {
+                const saved = localStorage.getItem(`${prefix}FormData`);
+                if (saved) {
+                    try {
+                        const formData = JSON.parse(saved);
+                        Object.keys(formData).forEach(id => {
+                            const el = document.getElementById(`${prefix}-${id}`);
+                            if (el && formData[id] !== undefined) {
+                                el.value = formData[id];
+                                if (el.tagName === 'TEXTAREA') autoGrow(el);
+                            }
+                        });
+                    } catch (e) { /* ignore */ }
+                }
+                if (prefix === 'moolah') moolahUpdatePreview();
+                if (prefix === 'store') storeUpdatePreview();
+                if (prefix === 'ticket') ticketUpdatePreview();
+            }
+
+            // ---------------------------------------------------------------------
+            // 11. SYNC SHIFT & SUPPORT FROM TICKET
+            // ---------------------------------------------------------------------
+            function syncShiftSupportFromTicket() {
+                const ticketShift = document.getElementById('ticket-shift').value;
+                const ticketSupport = document.getElementById('ticket-support').value;
+
+                document.getElementById('store-shift').value = ticketShift;
+                document.getElementById('store-support').value = ticketSupport;
+                document.getElementById('moolah-shift').value = ticketShift;
+                document.getElementById('moolah-support').value = ticketSupport;
+
+                storeUpdatePreview();
+                moolahUpdatePreview();
+                saveFormData('store');
+                saveFormData('moolah');
+            }
+
+            // ---------------------------------------------------------------------
+            // 12. PREVIEW FUNCTIONS (unchanged)
+            // ---------------------------------------------------------------------
+            function moolahUpdatePreview() {
+                const portal = document.getElementById('moolah-portal').value.trim();
+                const storeName = document.getElementById('moolah-storeName').value.trim();
+                const zipcode = document.getElementById('moolah-zipcode').value.trim();
+                const clientUser = document.getElementById('moolah-clientUser').value.trim();
+                const clientPass = document.getElementById('moolah-clientPass').value.trim();
+                const storeUser = document.getElementById('moolah-storeUser').value.trim();
+                const storePass = document.getElementById('moolah-storePass').value.trim();
+                const outletUser = document.getElementById('moolah-outletUser').value.trim();
+                const outletPass = document.getElementById('moolah-outletPass').value.trim();
+                const sku = document.getElementById('moolah-sku').value.trim();
+                const mokiId = document.getElementById('moolah-mokiId').value.trim();
+                const anydeskId = document.getElementById('moolah-anydeskId').value.trim();
+
+                const state = getStateFromZip(zipcode || '00000');
+                const statePart = state || '[STATE]';
+                const storeClean = storeName || '[STORENAME]';
+                const portalClean = portal || '[PORTAL]';
+                const zipClean = zipcode || '[ZIPCODE]';
+                const skuClean = sku || '[SKU]';
+
+                const namingLine = `${skuClean}_${statePart}_${storeClean}_LIVE-${portalClean}_${zipClean}_MOOLAH-1`;
+
+                const previewText = 
+`PORTAL: ${portal || '[PORTAL]'}
+STORE NAME: ${storeName || '[STORE]'}
+ZIPCODE: ${zipcode || '[ZIPCODE]'}
+
+CLIENT:
+USERNAME: ${clientUser || '[USER]'}
+PASSWORD: ${clientPass || '[PASS]'}
+
+STORE:
+USERNAME: ${storeUser || '[USER]'}
+PASSWORD: ${storePass || '[PASS]'}
+
+OUTLET:
+USERNAME: ${outletUser || '[USER]'}
+PASSWORD: ${outletPass || '[PASS]'}
+
+SKU: ${sku || '[SKU]'}
+MOKI ID: ${mokiId || '[MOKI]'}
+ANYDESK ID: ${anydeskId || '[ANYDESK]'}
+
+CREATE MOOLAH ACCOUNT - DONE ✅
+INSTALL & UPDATE ALL APPS - DONE ✅
+ASSIGN STORE - DONE ✅
+
+${namingLine}`;
+
+                document.getElementById('moolah-previewText').textContent = previewText;
+                syncPreviewHeight();
+            }
+
+            function storeUpdatePreview() {
+                const data = {
+                    portal: document.getElementById('store-portal').value.trim(),
+                    storeName: document.getElementById('store-storeName').value.trim(),
+                    zipcode: document.getElementById('store-zipcode').value.trim(),
+                    agent: document.getElementById('store-agent').value.trim(),
+                    email: document.getElementById('store-email').value.trim(),
+                    password: document.getElementById('store-password').value.trim(),
+                    sku: document.getElementById('store-sku').value.trim(),
+                    database: document.getElementById('store-database').value.trim(),
+                    noOfReg: document.getElementById('store-noOfReg').value.trim(),
+                    mokiId: document.getElementById('store-mokiId').value.trim(),
+                    anydeskId: document.getElementById('store-anydeskId').value.trim()
+                };
+
+                const url = data.portal ? `https://portal${data.portal}.retailzpos.com/` : 'https://portal[PORTAL].retailzpos.com/';
+                const state = data.zipcode ? getStateFromZip(data.zipcode) : '';
+
+                const skuPart = data.sku || '[SKU]';
+                const statePart = state || '[STATE]';
+                const storeNamePart = data.storeName || '[STORENAME]';
+                const portalPart = data.portal || '[PORTAL]';
+                const zipPart = data.zipcode || '[ZIPCODE]';
+
+                const skuLine = `${skuPart}_${statePart}_${storeNamePart}_LIVE-${portalPart}_${zipPart}_REG-1`;
+
+                const outputText = `URL:- ${url}
+STORE CREATION DATE: ${storeGetFormattedDateMinusOne()}
+STORE NAME: ${data.storeName || '[STORE NAME]'}
+ZIPCODE: ${data.zipcode || '[ZIPCODE]'}
+PORTAL: ${data.portal || '[PORTAL]'}
+AGENT: ${data.agent || '[AGENT]'}
+EMAIL ID: ${data.email || '[EMAIL]'}
+PASSWORD: ${data.password || '[PASSWORD]'}
+ACCESS PIN: 1122
+SKU: ${data.sku || '[SKU]'}
+DATABASE: ${data.database || '[DATABASE]'}
+NO OF REG.: ${data.noOfReg || '[NO OF REG]'}
+MOKI ID: ${data.mokiId || '[MOKI ID]'}
+ANYDESK ID: ${data.anydeskId || '[ANYDESK ID]'}
+
+NEW STORE CREATION FORM SENT - DONE ✅
+STORE CREATION - DONE✅
+INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE✅
+UPLOAD DATABASE - DONE✅
+
+${skuLine}`;
+
+                document.getElementById('store-outputPreview').textContent = outputText;
+                syncPreviewHeight();
+            }
+
+            function ticketUpdatePreview() {
+                document.getElementById('ticket-previewPortal').textContent = document.getElementById('ticket-portal').value.toUpperCase();
+                document.getElementById('ticket-previewStore').textContent = document.getElementById('ticket-store').value.toUpperCase();
+                document.getElementById('ticket-previewZip').textContent = document.getElementById('ticket-zip').value.toUpperCase();
+                const contactPerson = document.getElementById('ticket-contactPerson').value.toUpperCase();
+                document.getElementById('ticket-previewContactPerson').textContent = contactPerson;
+                document.getElementById('ticket-previewCaller').textContent = contactPerson;
+                document.getElementById('ticket-previewContactNumber').textContent = document.getElementById('ticket-contactNumber').value;
+                document.getElementById('ticket-previewContact').textContent = document.getElementById('ticket-contactNumber').value;
+                const issueVal = document.getElementById('ticket-issue').value.toUpperCase();
+                document.getElementById('ticket-previewIssue').textContent = issueVal;
+                document.getElementById('ticket-previewIssueDetails').textContent = issueVal;
+
+                const resEl = document.getElementById('ticket-resolution');
+                const bulletText = ticketAddBulletsToResolution(resEl.value);
+                document.getElementById('ticket-previewResolutionContainer').textContent = bulletText;
+                syncPreviewHeight();
+            }
+
+            // ---------------------------------------------------------------------
+            // 13. CRUD OPERATIONS (unchanged)
+            // ---------------------------------------------------------------------
+            function addEntry(prefix) {
+                let requiredIds = [];
+                if (prefix === 'moolah') {
+                    requiredIds = ['moolah-portal', 'moolah-storeName', 'moolah-zipcode'];
+                } else if (prefix === 'store') {
+                    requiredIds = ['store-portal', 'store-storeName', 'store-zipcode'];
+                } else if (prefix === 'ticket') {
+                    requiredIds = ['ticket-portal', 'ticket-store', 'ticket-zip'];
+                }
+
+                let valid = true;
+                requiredIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    el.classList.remove('invalid');
+                    if (!el.value.trim()) {
+                        el.classList.add('invalid');
+                        valid = false;
+                    }
+                });
+
+                if (!valid) {
+                    showNotification('Please fill PORTAL, STORE NAME, and ZIP CODE!');
+                    return;
+                }
+
+                pushUndo();
+
+                const dateStr = document.getElementById(`${prefix}-date`).value;
+                const formattedDate = new Date(dateStr).toLocaleDateString('en-US');
+                const shift = document.getElementById(`${prefix}-shift`).value;
+                const support = document.getElementById(`${prefix}-support`).value.toUpperCase();
+                const portal = document.getElementById(`${prefix}-portal`).value;
+                let storeName, zipcode;
+
+                if (prefix === 'moolah') {
+                    storeName = document.getElementById('moolah-storeName').value;
+                    zipcode = document.getElementById('moolah-zipcode').value;
+                } else if (prefix === 'store') {
+                    storeName = document.getElementById('store-storeName').value;
+                    zipcode = document.getElementById('store-zipcode').value;
+                } else {
+                    storeName = document.getElementById('ticket-store').value;
+                    zipcode = document.getElementById('ticket-zip').value;
+                }
+
+                let contactPerson = 'SHIPPING TEAM';
+                let contactNumber = '(000) 000-0000';
+                if (prefix === 'ticket') {
+                    contactPerson = document.getElementById('ticket-contactPerson').value;
+                    contactNumber = document.getElementById('ticket-contactNumber').value;
+                }
+
+                let module, issue, escalated, status, remarks, resolution;
+                if (prefix === 'moolah') {
+                    module = 'Moolah';
+                    issue = CONSTANT_ISSUE;
+                    escalated = '';
+                    status = 'OTHER TASK';
+                    remarks = '';
+                    resolution = '';
+                } else if (prefix === 'store') {
+                    module = 'Store Creation';
+                    issue = `NEW STORE CREATION FORM SENT - DONE ✅
+STORE CREATION - DONE✅
+INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE✅
+UPLOAD DATABASE - DONE✅`;
+                    escalated = '';
+                    status = 'OTHER TASK';
+                    remarks = '';
+                    resolution = '';
+                } else {
+                    module = document.getElementById('ticket-module').value;
+                    issue = document.getElementById('ticket-issue').value;
+                    escalated = document.getElementById('ticket-escalated').value;
+                    status = document.getElementById('ticket-status').value;
+                    remarks = document.getElementById('ticket-remarks').value;
+                    resolution = document.getElementById('ticket-resolution').value;
+                }
+
+                const newEntry = {
+                    id: editId || Date.now(),
+                    date: formattedDate,
+                    shift,
+                    support,
+                    portal,
+                    store: storeName,
+                    zip: zipcode,
+                    contact: contactPerson,
+                    contactNumber,
+                    module,
+                    issue,
+                    escalated,
+                    status,
+                    remarks,
+                    resolution,
+                    moduleData: {},
+                    source: prefix
+                };
+
+                if (prefix === 'moolah') {
+                    newEntry.moduleData = {
+                        clientUser: document.getElementById('moolah-clientUser').value,
+                        clientPass: document.getElementById('moolah-clientPass').value,
+                        storeUser: document.getElementById('moolah-storeUser').value,
+                        storePass: document.getElementById('moolah-storePass').value,
+                        outletUser: document.getElementById('moolah-outletUser').value,
+                        outletPass: document.getElementById('moolah-outletPass').value,
+                        sku: document.getElementById('moolah-sku').value,
+                        mokiId: document.getElementById('moolah-mokiId').value,
+                        anydeskId: document.getElementById('moolah-anydeskId').value
+                    };
+                } else if (prefix === 'store') {
+                    newEntry.moduleData = {
+                        agent: document.getElementById('store-agent').value,
+                        email: document.getElementById('store-email').value,
+                        password: document.getElementById('store-password').value,
+                        sku: document.getElementById('store-sku').value,
+                        database: document.getElementById('store-database').value,
+                        noOfReg: document.getElementById('store-noOfReg').value,
+                        mokiId: document.getElementById('store-mokiId').value,
+                        anydeskId: document.getElementById('store-anydeskId').value
+                    };
+                }
+
+                if (editId) {
+                    const index = allEntries.findIndex(e => e.id === editId);
+                    if (index !== -1) allEntries[index] = newEntry;
+                    showNotification('Entry updated!');
+                    editId = null;
+                    const addBtn = document.querySelector(`#tab-${prefix} .add`);
+                    addBtn.textContent = 'ADD ENTRY';
+                    addBtn.classList.remove('editing');
+                } else {
+                    allEntries.unshift(newEntry);
+                    showNotification('Entry added!');
+                }
+
+                clearFormFields(prefix);
+                saveAllEntries();
+                renderTable();
+                syncPreviewHeight();
+            }
+
+            function clearFormFields(prefix) {
+                const fieldsToClear = {
+                    moolah: ['portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'storePass', 'outletUser', 'outletPass', 'sku', 'mokiId', 'anydeskId'],
+                    store: ['portal', 'storeName', 'zipcode', 'agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'],
+                    ticket: ['portal', 'store', 'zip', 'contactPerson', 'contactNumber', 'module', 'issue', 'escalated', 'status', 'remarks', 'resolution']
+                };
+                fieldsToClear[prefix].forEach(id => {
+                    const el = document.getElementById(`${prefix}-${id}`);
+                    if (el) el.value = '';
+                });
+
+                if (prefix === 'moolah') moolahUpdatePreview();
+                if (prefix === 'store') storeUpdatePreview();
+                if (prefix === 'ticket') ticketUpdatePreview();
+                saveFormData(prefix);
+            }
+
+            function clearFormOnly(prefix) {
+                clearFormFields(prefix);
+                if (editId) {
+                    editId = null;
+                    document.querySelector('#tab-moolah .add').textContent = 'ADD ENTRY';
+                    document.querySelector('#tab-moolah .add').classList.remove('editing');
+                    document.querySelector('#tab-store .add').textContent = 'ADD ENTRY';
+                    document.querySelector('#tab-store .add').classList.remove('editing');
+                    document.querySelector('#tab-ticket .add').textContent = 'ADD ENTRY';
+                    document.querySelector('#tab-ticket .add').classList.remove('editing');
+                }
+                showNotification('Form cleared!');
+                syncPreviewHeight();
+            }
+
+            function clearAll(prefix) {
+                pushUndo();
+                allEntries = [];
+                saveAllEntries();
+                renderTable();
+                clearFormFields(prefix);
+                if (editId) {
+                    editId = null;
+                    document.querySelector('#tab-moolah .add').textContent = 'ADD ENTRY';
+                    document.querySelector('#tab-moolah .add').classList.remove('editing');
+                    document.querySelector('#tab-store .add').textContent = 'ADD ENTRY';
+                    document.querySelector('#tab-store .add').classList.remove('editing');
+                    document.querySelector('#tab-ticket .add').textContent = 'ADD ENTRY';
+                    document.querySelector('#tab-ticket .add').classList.remove('editing');
+                }
+                showNotification('All entries cleared! (Shift/Support preserved)');
+                syncPreviewHeight();
+            }
+
+            function editEntry(button) {
+                const row = button.closest('tr');
+                const id = row.dataset.id;
+                const entry = allEntries.find(e => e.id == id);
+                if (!entry) return;
+
+                let prefix = entry.source;
+                if (!prefix) {
+                    if (entry.module === 'Moolah') {
+                        prefix = 'moolah';
+                    } else if (entry.module === 'Store Creation') {
+                        prefix = 'store';
+                    } else {
+                        prefix = 'ticket';
+                    }
+                }
+
+                const tabBtn = Array.from(document.querySelectorAll('.tab-button')).find(
+                    btn => btn.textContent.trim().toLowerCase().includes(prefix)
+                );
+                if (tabBtn) switchTab(prefix, tabBtn);
+
+                const dateParts = entry.date.split('/');
+                if (dateParts.length === 3) {
+                    const month = dateParts[0].padStart(2, '0');
+                    const day = dateParts[1].padStart(2, '0');
+                    const year = dateParts[2];
+                    document.getElementById(`${prefix}-date`).value = `${year}-${month}-${day}`;
+                }
+
+                document.getElementById(`${prefix}-shift`).value = entry.shift;
+                document.getElementById(`${prefix}-support`).value = entry.support;
+                document.getElementById(`${prefix}-portal`).value = entry.portal;
+                if (prefix === 'moolah' || prefix === 'store') {
+                    document.getElementById(`${prefix}-storeName`).value = entry.store;
+                    document.getElementById(`${prefix}-zipcode`).value = entry.zip;
+                } else {
+                    document.getElementById(`${prefix}-store`).value = entry.store;
+                    document.getElementById(`${prefix}-zip`).value = entry.zip;
+                    document.getElementById(`${prefix}-contactPerson`).value = entry.contact;
+                    document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
+                }
+
+                if (prefix === 'moolah') {
+                    document.getElementById('moolah-clientUser').value = entry.moduleData?.clientUser || '';
+                    document.getElementById('moolah-clientPass').value = entry.moduleData?.clientPass || '';
+                    document.getElementById('moolah-storeUser').value = entry.moduleData?.storeUser || '';
+                    document.getElementById('moolah-storePass').value = entry.moduleData?.storePass || '';
+                    document.getElementById('moolah-outletUser').value = entry.moduleData?.outletUser || '';
+                    document.getElementById('moolah-outletPass').value = entry.moduleData?.outletPass || '';
+                    document.getElementById('moolah-sku').value = entry.moduleData?.sku || '';
+                    document.getElementById('moolah-mokiId').value = entry.moduleData?.mokiId || '';
+                    document.getElementById('moolah-anydeskId').value = entry.moduleData?.anydeskId || '';
+                } else if (prefix === 'store') {
+                    document.getElementById('store-agent').value = entry.moduleData?.agent || '';
+                    document.getElementById('store-email').value = entry.moduleData?.email || '';
+                    document.getElementById('store-password').value = entry.moduleData?.password || '';
+                    document.getElementById('store-sku').value = entry.moduleData?.sku || '';
+                    document.getElementById('store-database').value = entry.moduleData?.database || '';
+                    document.getElementById('store-noOfReg').value = entry.moduleData?.noOfReg || '';
+                    document.getElementById('store-mokiId').value = entry.moduleData?.mokiId || '';
+                    document.getElementById('store-anydeskId').value = entry.moduleData?.anydeskId || '';
+                } else {
+                    document.getElementById('ticket-module').value = entry.module;
+                    document.getElementById('ticket-issue').value = entry.issue;
+                    document.getElementById('ticket-escalated').value = entry.escalated;
+                    document.getElementById('ticket-status').value = entry.status;
+                    document.getElementById('ticket-remarks').value = entry.remarks;
+                    document.getElementById('ticket-resolution').value = entry.resolution;
+                }
+
+                if (prefix === 'moolah') moolahUpdatePreview();
+                if (prefix === 'store') storeUpdatePreview();
+                if (prefix === 'ticket') ticketUpdatePreview();
+
+                editId = entry.id;
+                const addBtn = document.querySelector(`#tab-${prefix} .add`);
+                addBtn.textContent = 'EDIT ENTRY';
+                addBtn.classList.add('editing');
+
+                document.querySelectorAll(`#tab-${prefix} textarea`).forEach(ta => autoGrow(ta));
+                syncPreviewHeight();
+            }
+
+            function deleteEntry(button) {
+                const row = button.closest('tr');
+                const id = row.dataset.id;
+                pushUndo();
+                allEntries = allEntries.filter(e => e.id != id);
+                saveAllEntries();
+                renderTable();
+                showNotification('Entry deleted');
+
+                if (editId == id) {
+                    editId = null;
+                    document.querySelector('#tab-moolah .add').textContent = 'ADD ENTRY';
+                    document.querySelector('#tab-moolah .add').classList.remove('editing');
+                    document.querySelector('#tab-store .add').textContent = 'ADD ENTRY';
+                    document.querySelector('#tab-store .add').classList.remove('editing');
+                    document.querySelector('#tab-ticket .add').textContent = 'ADD ENTRY';
+                    document.querySelector('#tab-ticket .add').classList.remove('editing');
+                }
+            }
+
+            function copyRow(button) {
+                const tds = button.closest('tr').querySelectorAll('td');
+                const values = [...tds].slice(1, -1).map(td => escapeCSV(td.textContent));
+                navigator.clipboard.writeText(values.join('\t')).then(() => showNotification('Row copied!'));
+            }
+
+            // ---------------------------------------------------------------------
+            // 14. TABLE RENDERING & PERSISTENCE
+            // ---------------------------------------------------------------------
+            function renderTable() {
+                const tbody = document.querySelector('#entryTable tbody');
+                tbody.innerHTML = '';
+                allEntries.forEach(entry => {
+                    const row = document.createElement('tr');
+                    row.dataset.id = entry.id;
+                    row.innerHTML = `
+                        <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+                        <td>${entry.date}</td>
+                        <td>${entry.shift}</td>
+                        <td>${entry.support}</td>
+                        <td>${entry.portal}</td>
+                        <td>${entry.store}</td>
+                        <td>${entry.zip}</td>
+                        <td>${entry.contact}</td>
+                        <td>${entry.contactNumber}</td>
+                        <td>${entry.module}</td>
+                        <td style="white-space: pre-wrap;">${entry.issue}</td>
+                        <td>${entry.escalated}</td>
+                        <td>${entry.status}</td>
+                        <td>${entry.remarks}</td>
+                        <td>${entry.resolution}</td>
+                        <td class="action-cell">
+                            <div class="action-container">
+                                <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy">📋</button>
+                                <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit">✏️</button>
+                                <button class="icon-btn delete-btn" onclick="deleteEntry(this)" title="Delete">🗑️</button>
+                            </div>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+                updateSelectAllCheckboxState();
+            }
+
+            function saveAllEntries() {
+                localStorage.setItem('unifiedEntries', JSON.stringify(allEntries));
+            }
+
+            function loadAllEntries() {
+                const saved = localStorage.getItem('unifiedEntries');
+                if (saved) {
+                    try {
+                        allEntries = JSON.parse(saved);
+                    } catch (e) { /* ignore */ }
+                }
+                renderTable();
+            }
+
+            // ---------------------------------------------------------------------
+            // 15. BULK ACTIONS (unchanged)
+            // ---------------------------------------------------------------------
+            function getSelectedRowIds() {
+                const checkboxes = document.querySelectorAll('#entryTable tbody .row-checkbox:checked');
+                return Array.from(checkboxes).map(cb => cb.value);
+            }
+
+            function bulkDelete() {
+                const ids = getSelectedRowIds();
+                if (ids.length === 0) {
+                    showNotification('No rows selected');
+                    return;
+                }
+                if (!confirm(`Delete ${ids.length} selected entries?`)) return;
+                pushUndo();
+                allEntries = allEntries.filter(entry => !ids.includes(entry.id.toString()));
+                saveAllEntries();
+                renderTable();
+                showNotification(`Deleted ${ids.length} entries`);
+            }
+
+            function bulkCopy() {
+                const ids = getSelectedRowIds();
+                if (ids.length === 0) {
+                    showNotification('No rows selected');
+                    return;
+                }
+                const selectedRows = allEntries.filter(entry => ids.includes(entry.id.toString()));
+                selectedRows.reverse();
+
+                const csvContent = selectedRows.map(row => [
+                    row.date, row.shift, row.support, row.portal, row.store, row.zip,
+                    row.contact, row.contactNumber, row.module, row.issue,
+                    row.escalated, row.status, row.remarks, row.resolution
+                ].map(field => escapeCSV(field)).join('\t')).join('\n');
+
+                navigator.clipboard.writeText(csvContent).then(() => showNotification(`Copied ${selectedRows.length} rows (newest last, no headers)`));
+            }
+
+            function bulkUpdateStatus() {
+                const ids = getSelectedRowIds();
+                if (ids.length === 0) {
+                    showNotification('No rows selected');
+                    return;
+                }
+
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.top = '50%';
+                modal.style.left = '50%';
+                modal.style.transform = 'translate(-50%, -50%)';
+                modal.style.backgroundColor = '#fff';
+                modal.style.padding = '24px';
+                modal.style.borderRadius = '16px';
+                modal.style.boxShadow = '0 20px 35px -10px rgba(0,0,0,0.3)';
+                modal.style.zIndex = '1000';
+                modal.style.minWidth = '320px';
+                modal.style.border = '1px solid #cdddee';
+
+                if (document.body.classList.contains('dark-mode')) {
+                    modal.style.backgroundColor = '#2d3748';
+                    modal.style.borderColor = '#4a5568';
+                    modal.style.color = '#e2e8f0';
+                }
+
+                const title = document.createElement('h3');
+                title.textContent = 'SELECT NEW STATUS';
+                title.style.marginBottom = '16px';
+                title.style.fontSize = '1.2rem';
+                modal.appendChild(title);
+
+                const options = ['RESOLVED', 'PENDING', 'OTHER TASK', 'UNSOLVED'];
+                let selectedStatus = options[0];
+
+                options.forEach(status => {
+                    const label = document.createElement('label');
+                    label.style.display = 'flex';
+                    label.style.alignItems = 'center';
+                    label.style.marginBottom = '12px';
+                    label.style.cursor = 'pointer';
+                    label.style.gap = '8px';
+
+                    const radio = document.createElement('input');
+                    radio.type = 'radio';
+                    radio.name = 'status';
+                    radio.value = status;
+                    radio.checked = status === selectedStatus;
+                    radio.style.width = '16px';
+                    radio.style.height = '16px';
+                    radio.style.margin = '0';
+                    radio.style.cursor = 'pointer';
+                    radio.addEventListener('change', () => { selectedStatus = status; });
+
+                    const span = document.createElement('span');
+                    span.textContent = status;
+                    span.style.flex = '1';
+
+                    label.appendChild(radio);
+                    label.appendChild(span);
+                    modal.appendChild(label);
+                });
+
+                const buttonRow = document.createElement('div');
+                buttonRow.style.display = 'flex';
+                buttonRow.style.justifyContent = 'flex-end';
+                buttonRow.style.gap = '8px';
+                buttonRow.style.marginTop = '20px';
+
+                const cancelBtn = document.createElement('button');
+                cancelBtn.textContent = 'CANCEL';
+                cancelBtn.style.padding = '8px 16px';
+                cancelBtn.style.border = 'none';
+                cancelBtn.style.borderRadius = '30px';
+                cancelBtn.style.cursor = 'pointer';
+                cancelBtn.style.backgroundColor = '#6b7280';
+                cancelBtn.style.color = 'white';
+                cancelBtn.style.fontWeight = '600';
+                cancelBtn.style.textTransform = 'uppercase';
+                cancelBtn.addEventListener('click', () => {
+                    document.body.removeChild(backdrop);
+                    document.body.removeChild(modal);
+                });
+
+                const applyBtn = document.createElement('button');
+                applyBtn.textContent = 'APPLY';
+                applyBtn.style.padding = '8px 16px';
+                applyBtn.style.border = 'none';
+                applyBtn.style.borderRadius = '30px';
+                applyBtn.style.cursor = 'pointer';
+                applyBtn.style.backgroundColor = '#2563eb';
+                applyBtn.style.color = 'white';
+                applyBtn.style.fontWeight = '600';
+                applyBtn.style.textTransform = 'uppercase';
+                applyBtn.addEventListener('click', () => {
+                    pushUndo();
+                    allEntries = allEntries.map(entry => {
+                        if (ids.includes(entry.id.toString())) {
+                            entry.status = selectedStatus;
+                        }
+                        return entry;
+                    });
+                    saveAllEntries();
+                    renderTable();
+                    document.body.removeChild(backdrop);
+                    document.body.removeChild(modal);
+                    showNotification(`Updated ${ids.length} entries to ${selectedStatus}`);
+                });
+
+                buttonRow.appendChild(cancelBtn);
+                buttonRow.appendChild(applyBtn);
+                modal.appendChild(buttonRow);
+
+                const backdrop = document.createElement('div');
+                backdrop.style.position = 'fixed';
+                backdrop.style.top = '0';
+                backdrop.style.left = '0';
+                backdrop.style.width = '100%';
+                backdrop.style.height = '100%';
+                backdrop.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                backdrop.style.zIndex = '999';
+                backdrop.addEventListener('click', () => {
+                    document.body.removeChild(backdrop);
+                    document.body.removeChild(modal);
+                });
+
+                document.body.appendChild(backdrop);
+                document.body.appendChild(modal);
+            }
+
+            // ---------------------------------------------------------------------
+            // 16. EXPORT / IMPORT (unchanged)
+            // ---------------------------------------------------------------------
+            function exportToCSV() {
+                const headers = ['DATE','SHIFT','SUPPORT','PORTAL','STORE','ZIP','CONTACT','CONTACT#','MODULE','ISSUE','ESCALATED','STATUS','REMARKS','RESOLUTION'];
+                const rows = allEntries.map(entry => [
+                    entry.date, entry.shift, entry.support, entry.portal, entry.store, entry.zip,
+                    entry.contact, entry.contactNumber, entry.module, entry.issue,
+                    entry.escalated, entry.status, entry.remarks, entry.resolution
+                ].map(field => escapeCSV(field)).join(','));
+                const csv = [headers.join(','), ...rows].join('\n');
+                const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `retailzpos_export_${new Date().toISOString().slice(0,10)}.csv`;
+                a.click();
+                URL.revokeObjectURL(url);
+                showNotification('Export started');
+            }
+
+            function parseCSV(text) {
+                const rows = [];
+                let row = [];
+                let field = '';
+                let inQuotes = false;
+                for (let i = 0; i < text.length; i++) {
+                    const c = text[i];
+                    const next = text[i + 1];
+                    if (inQuotes) {
+                        if (c === '"' && next === '"') {
+                            field += '"';
+                            i++;
+                        } else if (c === '"') {
+                            inQuotes = false;
+                        } else {
+                            field += c;
+                        }
+                    } else {
+                        if (c === '"') {
+                            inQuotes = true;
+                        } else if (c === ',') {
+                            row.push(field);
+                            field = '';
+                        } else if (c === '\n' || c === '\r') {
+                            if (c === '\r' && next === '\n') i++;
+                            row.push(field);
+                            rows.push(row);
+                            row = [];
+                            field = '';
+                        } else {
+                            field += c;
+                        }
+                    }
+                }
+                if (field !== '' || inQuotes) row.push(field);
+                if (row.length > 0) rows.push(row);
+                return rows;
+            }
+
+            function importFromCSV(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.readAsText(file, 'UTF-8');
+                reader.onload = (e) => {
+                    const text = e.target.result;
+                    const cleanText = text.charCodeAt(0) === 0xFEFF ? text.slice(1) : text;
+                    const rows = parseCSV(cleanText);
+                    if (rows.length === 0) {
+                        showNotification('CSV file is empty');
+                        return;
+                    }
+                    const headers = rows[0];
+                    const expected = ['DATE','SHIFT','SUPPORT','PORTAL','STORE','ZIP','CONTACT','CONTACT#','MODULE','ISSUE','ESCALATED','STATUS','REMARKS','RESOLUTION'];
+                    if (!expected.every((h, i) => h === headers[i])) {
+                        showNotification('CSV headers do not match expected format');
+                        return;
+                    }
+                    const newEntries = [];
+                    let skippedEmptyDate = 0;
+                    for (let i = 1; i < rows.length; i++) {
+                        const values = rows[i];
+                        if (values.length < expected.length) continue;
+                        const dateValue = values[0] ? values[0].trim() : '';
+                        if (!dateValue) {
+                            skippedEmptyDate++;
+                            continue;
+                        }
+                        const entry = {
+                            id: Date.now() + i + Math.random(),
+                            date: values[0],
+                            shift: values[1],
+                            support: values[2],
+                            portal: values[3],
+                            store: values[4],
+                            zip: values[5],
+                            contact: values[6],
+                            contactNumber: values[7],
+                            module: values[8],
+                            issue: values[9],
+                            escalated: values[10],
+                            status: values[11],
+                            remarks: values[12],
+                            resolution: values[13],
+                            moduleData: {},
+                            source: 'ticket'
+                        };
+                        newEntries.push(entry);
+                    }
+                    if (newEntries.length === 0) {
+                        showNotification(skippedEmptyDate ? `No valid entries found (${skippedEmptyDate} rows had empty date)` : 'No valid entries found in CSV');
+                        return;
+                    }
+                    pushUndo();
+                    allEntries = [...newEntries, ...allEntries];
+                    saveAllEntries();
+                    renderTable();
+                    let msg = `Imported ${newEntries.length} entries`;
+                    if (skippedEmptyDate) msg += `, skipped ${skippedEmptyDate} rows with empty date`;
+                    showNotification(msg);
+                };
+                reader.onerror = () => {
+                    showNotification('Error reading file');
+                };
+                event.target.value = '';
+            }
+
+            // ---------------------------------------------------------------------
+            // 17. SHIFT REPORT GENERATION (unchanged)
+            // ---------------------------------------------------------------------
+            function generateShiftReport() {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const dateStr = yesterday.toLocaleDateString('en-US');
+                const dayName = days[yesterday.getDay()];
+                const dateLine = `Date: ${dateStr} - ${dayName} Shift`;
+
+                const uniqueShifts = [...new Set(allEntries.map(e => e.shift).filter(s => s))];
+                const shiftLine = `Shift: ${uniqueShifts.join(', ')}`;
+
+                const pendingEntries = allEntries.filter(e => e.status?.toUpperCase() === 'PENDING');
+                const pendingCount = pendingEntries.length;
+                let pendingList = '';
+                if (pendingCount > 0) {
+                    pendingList = pendingEntries.map(e => {
+                        const storePart = e.store || 'Unknown Store';
+                        const issuePart = e.issue || 'No issue details';
+                        return `${storePart} - ${issuePart}`;
+                    }).join('\n');
+                }
+
+                const totalCalls = allEntries.filter(e => e.status?.toUpperCase() !== 'OTHER TASK').length;
+
+                const otherEntries = allEntries.filter(e => e.status?.toUpperCase() === 'OTHER TASK');
+                const otherCount = otherEntries.length;
+                let otherList = '';
+                if (otherCount > 0) {
+                    const uniqueItems = new Set();
+                    otherEntries.forEach(e => {
+                        const moduleName = (e.module && e.module.trim()) ? e.module : '';
+                        if (moduleName.toUpperCase() === 'OTHER') {
+                            const issueText = e.issue ? e.issue.trim() : '';
+                            const display = issueText || 'Other';
+                            uniqueItems.add(display);
+                        } else {
+                            const display = moduleName || 'Other';
+                            uniqueItems.add(display);
+                        }
+                    });
+                    otherList = Array.from(uniqueItems).join('\n');
+                }
+
+                const trainingEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING');
+                const demoEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO');
+
+                const trainingList = trainingEntries.length > 0
+                    ? trainingEntries.map(e => `Scheduled Training: ${e.support || 'Unknown Support'} - `).join('\n')
+                    : 'No Training for today';
+                const demoList = demoEntries.length > 0
+                    ? demoEntries.map(e => `Scheduled Demo: ${e.support || 'Unknown Support'} - `).join('\n')
+                    : 'No Demo for today';
+
+                const staticSections = `
+4. Scheduled Training/Demo (Merchant)
+${trainingList}
+${demoList}
+
+5. Updates / Notices
+The current latest versions:
+RetailzPOS: Version Code 208 (Portal 1, 2, 3, 4, 5, 6, 7, 8)
+Moolah Points: Version Code 35  (Portal 1, 2, 3, 4, 5, 6, 7, 8)
+
+Reminders for Retailz team members:
+Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.
+Ask seniors assistance for issue that needed to be escalated to the India team
+Observe professional call etiquette at all times when handling calls.
+Follow up on any pending tickets and ensure timely updates.
+Review pending issues and escalations using the newly added features in our existing workload tracker
+Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.
+Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.
+
+6. Training (Retailz Members): No training for today
+
+7. Tasks/Tickets to be Delegated: No delegated task for today`;
+
+                const reportLines = [
+                    dateLine,
+                    shiftLine,
+                    '',
+                    'Good day everyone,',
+                    '',
+                    'Please find below the shift report for today,',
+                    ''
+                ];
+
+                reportLines.push(`1. Pending Tickets: ${pendingCount}`);
+                if (pendingList) {
+                    reportLines.push(pendingList);
+                }
+
+                reportLines.push('');
+                reportLines.push(`2. Total Calls: ${totalCalls}`);
+
+                reportLines.push('');
+                reportLines.push(`3. Total Other Tasks: ${otherCount}`);
+                if (otherList) {
+                    reportLines.push(otherList);
+                }
+
+                reportLines.push('');
+                reportLines.push(staticSections.trim());
+
+                return reportLines.join('\n');
+            }
+
+            function showShiftReportModal() {
+                const reportText = generateShiftReport();
+
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.top = '50%';
+                modal.style.left = '50%';
+                modal.style.transform = 'translate(-50%, -50%)';
+                modal.style.backgroundColor = '#fff';
+                modal.style.padding = '24px';
+                modal.style.borderRadius = '16px';
+                modal.style.boxShadow = '0 20px 35px -10px rgba(0,0,0,0.3)';
+                modal.style.zIndex = '1000';
+                modal.style.minWidth = '600px';
+                modal.style.maxWidth = '800px';
+                modal.style.maxHeight = '80vh';
+                modal.style.overflowY = 'auto';
+                modal.style.border = '1px solid #cdddee';
+
+                if (document.body.classList.contains('dark-mode')) {
+                    modal.style.backgroundColor = '#2d3748';
+                    modal.style.borderColor = '#4a5568';
+                    modal.style.color = '#e2e8f0';
+                }
+
+                const title = document.createElement('h3');
+                title.textContent = 'End‑of‑Shift Report';
+                title.style.marginBottom = '16px';
+                title.style.fontSize = '1.2rem';
+                modal.appendChild(title);
+
+                const textarea = document.createElement('textarea');
+                textarea.value = reportText;
+                textarea.style.width = '100%';
+                textarea.style.minHeight = '300px';
+                textarea.style.padding = '12px';
+                textarea.style.border = '1px solid #cdddee';
+                textarea.style.borderRadius = '8px';
+                textarea.style.fontFamily = 'monospace';
+                textarea.style.fontSize = '13px';
+                textarea.style.resize = 'none';
+                textarea.readOnly = true;
+
+                if (document.body.classList.contains('dark-mode')) {
+                    textarea.style.backgroundColor = '#1a202c';
+                    textarea.style.color = '#e2e8f0';
+                    textarea.style.borderColor = '#4a5568';
+                }
+                modal.appendChild(textarea);
+
+                const buttonRow = document.createElement('div');
+                buttonRow.style.display = 'flex';
+                buttonRow.style.justifyContent = 'flex-end';
+                buttonRow.style.gap = '8px';
+                buttonRow.style.marginTop = '16px';
+
+                const copyBtn = document.createElement('button');
+                copyBtn.textContent = 'Copy to Clipboard';
+                copyBtn.style.padding = '8px 16px';
+                copyBtn.style.border = 'none';
+                copyBtn.style.borderRadius = '30px';
+                copyBtn.style.cursor = 'pointer';
+                copyBtn.style.backgroundColor = '#2563eb';
+                copyBtn.style.color = 'white';
+                copyBtn.addEventListener('click', () => {
+                    navigator.clipboard.writeText(reportText).then(() => {
+                        showNotification('Report copied to clipboard!');
+                    });
+                });
+
+                const closeBtn = document.createElement('button');
+                closeBtn.textContent = 'Close';
+                closeBtn.style.padding = '8px 16px';
+                closeBtn.style.border = 'none';
+                closeBtn.style.borderRadius = '30px';
+                closeBtn.style.cursor = 'pointer';
+                closeBtn.style.backgroundColor = '#6b7280';
+                closeBtn.style.color = 'white';
+                closeBtn.addEventListener('click', () => {
+                    document.body.removeChild(backdrop);
+                    document.body.removeChild(modal);
+                });
+
+                buttonRow.appendChild(copyBtn);
+                buttonRow.appendChild(closeBtn);
+                modal.appendChild(buttonRow);
+
+                const backdrop = document.createElement('div');
+                backdrop.style.position = 'fixed';
+                backdrop.style.top = '0';
+                backdrop.style.left = '0';
+                backdrop.style.width = '100%';
+                backdrop.style.height = '100%';
+                backdrop.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                backdrop.style.zIndex = '999';
+                backdrop.addEventListener('click', () => {
+                    document.body.removeChild(backdrop);
+                    document.body.removeChild(modal);
+                });
+
+                document.body.appendChild(backdrop);
+                document.body.appendChild(modal);
+
+                textarea.style.height = 'auto';
+                textarea.style.height = textarea.scrollHeight + 'px';
+            }
+
+            // ---------------------------------------------------------------------
+            // 18. CHECKBOX HANDLING
+            // ---------------------------------------------------------------------
+            function updateSelectAllCheckboxState() {
+                const selectAllBar = document.getElementById('selectAllCheckbox');
+                const rowCheckboxes = document.querySelectorAll('#entryTable tbody .row-checkbox');
+                const allChecked = rowCheckboxes.length > 0 && Array.from(rowCheckboxes).every(cb => cb.checked);
+                selectAllBar.checked = allChecked;
+            }
+
+            function handleSelectAll(checkbox) {
+                const checked = checkbox.checked;
+                document.querySelectorAll('#entryTable tbody .row-checkbox').forEach(cb => cb.checked = checked);
+                updateSelectAllCheckboxState();
+            }
+
+            // ---------------------------------------------------------------------
+            // 19. DARK MODE
+            // ---------------------------------------------------------------------
+            function initTheme() {
+                const savedTheme = localStorage.getItem('theme');
+                if (savedTheme === 'dark') {
+                    document.body.classList.add('dark-mode');
+                    document.getElementById('themeToggle').textContent = '☀️';
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    document.getElementById('themeToggle').textContent = '🌙';
+                }
+            }
+
+            function toggleTheme() {
+                const isDark = document.body.classList.toggle('dark-mode');
+                localStorage.setItem('theme', isDark ? 'dark' : 'light');
+                document.getElementById('themeToggle').textContent = isDark ? '☀️' : '🌙';
+                syncPreviewHeight();
+            }
+
+            // ---------------------------------------------------------------------
+            // 20. PASSWORD SYNC, AUTOCOMPLETE, ETC.
+            // ---------------------------------------------------------------------
+            function setupPasswordSync() {
+                const clientPass = document.getElementById('moolah-clientPass');
+                const storePass = document.getElementById('moolah-storePass');
+                const outletPass = document.getElementById('moolah-outletPass');
+                if (clientPass && storePass && outletPass) {
+                    clientPass.addEventListener('input', function() {
+                        storePass.value = this.value;
+                        outletPass.value = this.value;
+                        moolahUpdatePreview();
+                        saveFormData('moolah');
+                    });
+                }
+            }
+
+            function setupAutocomplete(inputId, options, nextFieldId) {
+                const input = document.getElementById(inputId);
+                const listId = inputId + 'List';
+                const datalist = document.getElementById(listId);
+
+                datalist.innerHTML = '';
+                options.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt;
+                    datalist.appendChild(option);
+                });
+
+                input.addEventListener('input', function() {
+                    const val = this.value.toLowerCase();
+                    datalist.innerHTML = '';
+                    const filtered = options.filter(opt => opt.toLowerCase().includes(val));
+                    filtered.forEach(opt => {
+                        const option = document.createElement('option');
+                        option.value = opt;
+                        datalist.appendChild(option);
+                    });
+                    if (filtered.length === 0) {
+                        options.forEach(opt => {
+                            const option = document.createElement('option');
+                            option.value = opt;
+                            datalist.appendChild(option);
+                        });
+                    }
+                });
+
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Tab') {
+                        const options = Array.from(datalist.children);
+                        if (options.length > 0 && this.value) {
+                            const matches = options.filter(opt =>
+                                opt.value.toLowerCase().includes(this.value.toLowerCase())
+                            );
+                            if (matches.length > 0) {
+                                e.preventDefault();
+                                this.value = matches[0].value;
+                                const event = new Event('input', { bubbles: true });
+                                this.dispatchEvent(event);
+                                if (nextFieldId) {
+                                    setTimeout(() => document.getElementById(nextFieldId).focus(), 10);
+                                }
+                            }
+                        } else if (options.length > 0) {
+                            e.preventDefault();
+                            this.value = options[0].value;
+                            const event = new Event('input', { bubbles: true });
+                            this.dispatchEvent(event);
+                            if (nextFieldId) {
+                                setTimeout(() => document.getElementById(nextFieldId).focus(), 10);
+                            }
+                        }
+                    }
+                });
+            }
+
+            // ---------------------------------------------------------------------
+            // 21. INITIALIZATION
+            // ---------------------------------------------------------------------
+            function init() {
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const yyyy = yesterday.getFullYear();
+                const mm = String(yesterday.getMonth() + 1).padStart(2, '0');
+                const dd = String(yesterday.getDate()).padStart(2, '0');
+                const yesterdayStr = `${yyyy}-${mm}-${dd}`;
+                document.getElementById('moolah-date').value = yesterdayStr;
+                document.getElementById('store-date').value = yesterdayStr;
+                document.getElementById('ticket-date').value = yesterdayStr;
+
+                const savedTab = localStorage.getItem('activeTab') || 'ticket';
+                const tabButton = Array.from(document.querySelectorAll('.tab-button')).find(
+                    btn => btn.textContent.trim().toLowerCase().includes(savedTab)
+                );
+                if (tabButton) switchTab(savedTab, tabButton);
+
+                loadFormData('moolah');
+                loadFormData('store');
+                loadFormData('ticket');
+                syncShiftSupportFromTicket();
+                loadAllEntries();
+
+                ['moolah', 'store', 'ticket'].forEach(prefix => {
+                    setupSearchKeyboard(prefix);
+                    const refreshBtn = document.getElementById(`${prefix}-refreshSheetsBtn`);
+                    refreshBtn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        handleRefreshClick(prefix);
+                    });
+                    document.getElementById(`${prefix}-storeSearch`).addEventListener('input', () => {
+                        performSearch(prefix);
+                    });
+                });
+
+                // Set button text based on key presence
+                updateRefreshButtons();
+
+                // If key already exists, load data after a short delay
+                if (getGoogleApiKey()) {
+                    setTimeout(loadSheetData, 500);
+                } else {
+                    // Show message in load status
+                    ['ticket', 'store', 'moolah'].forEach(prefix => {
+                        const statusEl = document.getElementById(`${prefix}-loadStatus`);
+                        if (statusEl) statusEl.innerHTML = '<span class="error">⚠️ API key not set. Click the button above to set it.</span>';
+                    });
+                }
+
+                document.querySelectorAll('textarea').forEach(ta => autoGrow(ta));
+
+                setupPasswordSync();
+                setupAutocomplete('ticket-module', MODULE_OPTIONS, 'ticket-issue');
+                setupAutocomplete('ticket-status', STATUS_OPTIONS, 'ticket-remarks');
+
+                document.getElementById('ticket-contactNumber').addEventListener('input', function() {
+                    let v = this.value.replace(/\D/g, '');
+                    if (v.length > 0) v = '(' + v;
+                    if (v.length > 4) v = v.slice(0, 4) + ') ' + v.slice(4);
+                    if (v.length > 9) v = v.slice(0, 9) + '-' + v.slice(9, 13);
+                    this.value = v.slice(0, 14);
+                    saveFormData('ticket');
+                });
+
+                document.getElementById('moolah-support').addEventListener('input', () => {
+                    saveFormData('moolah');
+                    moolahUpdatePreview();
+                });
+                document.getElementById('moolah-shift').addEventListener('change', () => saveFormData('moolah'));
+
+                document.getElementById('store-support').addEventListener('input', () => {
+                    saveFormData('store');
+                    storeUpdatePreview();
+                });
+                document.getElementById('store-shift').addEventListener('change', () => saveFormData('store'));
+
+                document.getElementById('ticket-support').addEventListener('input', () => {
+                    saveFormData('ticket');
+                    ticketUpdatePreview();
+                });
+                document.getElementById('ticket-shift').addEventListener('change', () => saveFormData('ticket'));
+
+                const moolahFields = ['portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'outletUser', 'sku', 'mokiId', 'anydeskId'];
+                moolahFields.forEach(id => {
+                    const el = document.getElementById(`moolah-${id}`);
+                    if (el) el.addEventListener('input', () => { moolahUpdatePreview(); saveFormData('moolah'); });
+                });
+
+                const storeFields = ['portal', 'storeName', 'zipcode', 'agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'];
+                storeFields.forEach(id => {
+                    const el = document.getElementById(`store-${id}`);
+                    if (el) el.addEventListener('input', () => { storeUpdatePreview(); saveFormData('store'); });
+                });
+
+                const ticketFields = ['portal', 'store', 'zip', 'contactPerson', 'contactNumber', 'issue', 'escalated', 'status', 'remarks', 'resolution'];
+                ticketFields.forEach(id => {
+                    const el = document.getElementById(`ticket-${id}`);
+                    if (el) el.addEventListener('input', () => { ticketUpdatePreview(); saveFormData('ticket'); });
+                });
+
+                document.querySelectorAll('input:not([type="date"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach(el => {
+                    if (el.id.includes('password')) return;
+                    el.addEventListener('input', function() {
+                        if (!this.value) return;
+                        const start = this.selectionStart;
+                        const end = this.selectionEnd;
+                        this.value = this.value.toUpperCase();
+                        this.setSelectionRange(start, end);
+                    });
+                    el.addEventListener('blur', function() {
+                        if (this.value) this.value = this.value.toUpperCase();
+                    });
+                });
+
+                initTheme();
+                document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+
+                document.getElementById('bulkDeleteBtn').addEventListener('click', bulkDelete);
+                document.getElementById('bulkCopyBtn').addEventListener('click', bulkCopy);
+                document.getElementById('bulkUpdateStatusBtn').addEventListener('click', bulkUpdateStatus);
+                document.getElementById('exportCsvBtn').addEventListener('click', exportToCSV);
+
+                const importBtn = document.getElementById('importCsvBtn');
+                const fileInput = document.createElement('input');
+                fileInput.type = 'file';
+                fileInput.accept = '.csv';
+                fileInput.style.display = 'none';
+                fileInput.addEventListener('change', importFromCSV);
+                document.body.appendChild(fileInput);
+                importBtn.addEventListener('click', () => fileInput.click());
+
+                document.getElementById('shiftReportBtn').addEventListener('click', showShiftReportModal);
+
+                document.getElementById('undoBtn').addEventListener('click', undo);
+                document.getElementById('redoBtn').addEventListener('click', redo);
+
+                const selectAllBar = document.getElementById('selectAllCheckbox');
+                selectAllBar.addEventListener('change', (e) => handleSelectAll(e.target));
+
+                document.addEventListener('change', (e) => {
+                    if (e.target.classList.contains('row-checkbox')) {
+                        updateSelectAllCheckboxState();
+                    }
+                });
+
+                document.addEventListener('keydown', (e) => {
+                    if (e.ctrlKey && e.key === 'z') {
+                        e.preventDefault();
+                        undo();
+                    } else if (e.ctrlKey && e.key === 'y') {
+                        e.preventDefault();
+                        redo();
+                    }
+                });
+
+                window.addEventListener('resize', syncPreviewHeight);
+
+                document.getElementById('ticket-shift').addEventListener('change', syncShiftSupportFromTicket);
+                document.getElementById('ticket-support').addEventListener('input', syncShiftSupportFromTicket);
+            }
+
+            // Expose functions to global for inline event handlers
+            window.switchTab = switchTab;
+            window.clock = clock;
+            window.addEntry = addEntry;
+            window.clearFormOnly = clearFormOnly;
+            window.clearAll = clearAll;
+            window.editEntry = editEntry;
+            window.deleteEntry = deleteEntry;
+            window.copyRow = copyRow;
+            window.selectStore = selectStore;
+            window.highlightResult = highlightResult;
+
+            document.addEventListener('DOMContentLoaded', init);
+        })();
+    </script>
+</body>
+</html>
