@@ -947,12 +947,11 @@
                     <div class="search-header">STORE SEARCH</div>
                     <div class="search-input-wrapper">
                         <input type="text" id="ticket-storeSearch" autocomplete="off" placeholder="SEARCH STORE...">
-                        <!-- Refresh button removed -->
                     </div>
                     <div id="ticket-searchResults" class="search-results"></div>
                     <div id="ticket-loadStatus" class="load-status"></div>
                 </div>
-                  <table>
+                <table>
                     <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
                     <tr>
                         <td>SHIFT SCHEDULE</td>
@@ -991,7 +990,8 @@
                         </td>
                     </tr>
                     <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
-                    <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="2"></textarea></td></tr>
+                    <!-- Only one textbox: RESOLUTION - user enters step-by-step here -->
+                    <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="4"></textarea></td></tr>
                 </table>
                 <div class="button-row">
                     <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
@@ -1017,13 +1017,18 @@
                 <div><strong>❗ ISSUE:</strong></div>
                 <div><span id="ticket-previewIssueDetails" class="preview-multiline"></span></div>
                 <br>
-                <div><strong>✅ RESOLUTION & TROUBLESHOOTING:</strong></div>
-                <div id="ticket-previewResolutionContainer" class="preview-multiline" style="white-space: pre-wrap;"></div>
+                <!-- Troubleshooting section shows exact user input (with bullet formatting) -->
+                <div><strong>🔧 TROUBLESHOOTING:</strong></div>
+                <div id="ticket-previewTroubleshooting" class="preview-multiline" style="white-space: pre-wrap;"></div>
+                <br>
+                <!-- Resolution section shows AI summary -->
+                <div><strong>✅ RESOLUTION:</strong></div>
+                <div id="ticket-previewResolution" class="preview-multiline" style="white-space: pre-wrap;"></div>
             </div>
         </div>
     </div>
 
-    <!-- STORE CREATION TAB -->
+    <!-- STORE CREATION TAB (unchanged) -->
     <div id="tab-store" class="tab-content">
         <div class="container">
             <div class="left-panel">
@@ -1038,20 +1043,7 @@
                 </div>
                 <table>
                     <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
-                    <tr>
-                        <td>SHIFT SCHEDULE</td>
-                        <td>
-                            <select id="store-shift" disabled>
-                                <option value="">-- SELECT --</option>
-                                <option value="8PM - 5AM">8PM - 5AM</option>
-                                <option value="9PM - 6AM">9PM - 6AM</option>
-                                <option value="10PM - 7AM">10PM - 7AM</option>
-                                <option value="11PM - 8AM">11PM - 8AM</option>
-                                <option value="1AM - 10AM">1AM - 10AM</option>
-                                <option value="2AM - 11AM">2AM - 11AM</option>
-                            </select>
-                        </td>
-                    </tr>
+                    <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
                     <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
                     <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td></tr>
                     <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td></tr>
@@ -1080,7 +1072,7 @@
         </div>
     </div>
 
-    <!-- MOOLAH CREATION TAB -->
+    <!-- MOOLAH CREATION TAB (unchanged) -->
     <div id="tab-moolah" class="tab-content">
         <div class="container">
             <div class="left-panel">
@@ -1095,40 +1087,21 @@
                 </div>
                 <table>
                     <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
-                    <tr>
-                        <td>SHIFT SCHEDULE</td>
-                        <td>
-                            <select id="moolah-shift" disabled>
-                                <option value="">-- SELECT --</option>
-                                <option value="8PM - 5AM">8PM - 5AM</option>
-                                <option value="9PM - 6AM">9PM - 6AM</option>
-                                <option value="10PM - 7AM">10PM - 7AM</option>
-                                <option value="11PM - 8AM">11PM - 8AM</option>
-                                <option value="1AM - 10AM">1AM - 10AM</option>
-                                <option value="2AM - 11AM">2AM - 11AM</option>
-                            </select>
-                        </td>
-                    </tr>
+                    <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
                     <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
                     <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
                     <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
                     <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
                 </table>
                 <div class="section-header">CLIENT CREDENTIALS (OPTIONAL)</div>
-                <table>
-                    <tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr>
-                    <tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr>
-                </table>
+                <table><tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr>
+                <tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr></table>
                 <div class="section-header">STORE CREDENTIALS (OPTIONAL)</div>
-                <table>
-                    <tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr>
-                    <tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr>
-                </table>
+                <table><tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr>
+                <tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr></table>
                 <div class="section-header">OUTLET CREDENTIALS (OPTIONAL)</div>
-                <table>
-                    <tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr>
-                    <tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr>
-                </table>
+                <table><tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr>
+                <tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr></table>
                 <table>
                     <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
                     <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
@@ -1151,9 +1124,7 @@
 
     <!-- Bulk Actions Bar -->
     <div class="bulk-bar">
-        <label>
-            <input type="checkbox" id="selectAllCheckbox">SELECT ALL
-        </label>
+        <label><input type="checkbox" id="selectAllCheckbox">SELECT ALL</label>
         <button id="bulkDeleteBtn" title="Delete selected rows">🗑️DELETE</button>
         <button id="bulkCopyBtn" title="Copy selected rows">📋COPY</button>
         <button id="bulkUpdateStatusBtn" title="Update status for selected rows">✏️UPDATE</button>
@@ -1171,7 +1142,7 @@
     <div style="overflow-x: auto;">
         <table id="entryTable">
             <thead>
-                <tr>
+                 <tr>
                     <th style="width:30px"></th>
                     <th>DATE</th>
                     <th>SHIFT</th>
@@ -1188,17 +1159,18 @@
                     <th>REMARKS</th>
                     <th>RESOLUTION</th>
                     <th>ACTIONS</th>
-                </tr>
+                 </tr>
             </thead>
             <tbody></tbody>
-        </table>
+          </table>
     </div>
 
     <div id="notification"></div>
 
     <script>
         // =========================================================================
-        // RETAILZPOS UNIFIED CREATION SYSTEM - SECURE API KEY VERSION
+        // RETAILZPOS UNIFIED CREATION SYSTEM - with AI summarization
+        // Single resolution textbox (user enters step-by-step), preview shows both
         // =========================================================================
 
         (function() {
@@ -1345,7 +1317,7 @@
                 return `${mm}/${dd}/${yyyy}`;
             }
 
-            function ticketAddBulletsToResolution(text) {
+            function formatWithBullets(text) {
                 if (!text || text.trim() === '') return '';
                 let lines = text.split('\n').filter(line => line.trim().length > 0);
                 if (lines.length === 1 && lines[0].includes('.')) {
@@ -1825,6 +1797,7 @@ ${skuLine}`;
             }
 
             function ticketUpdatePreview() {
+                // Update basic fields
                 document.getElementById('ticket-previewPortal').textContent = document.getElementById('ticket-portal').value.toUpperCase();
                 document.getElementById('ticket-previewStore').textContent = document.getElementById('ticket-store').value.toUpperCase();
                 document.getElementById('ticket-previewZip').textContent = document.getElementById('ticket-zip').value.toUpperCase();
@@ -1837,49 +1810,47 @@ ${skuLine}`;
                 document.getElementById('ticket-previewIssue').textContent = issueVal;
                 document.getElementById('ticket-previewIssueDetails').textContent = issueVal;
 
-                const resEl = document.getElementById('ticket-resolution');
-                const bulletText = ticketAddBulletsToResolution(resEl.value);
-                document.getElementById('ticket-previewResolutionContainer').textContent = bulletText;
+                // Show troubleshooting (original user input, with bullets)
+                const troubleshootingText = document.getElementById('ticket-resolution').value;
+                document.getElementById('ticket-previewTroubleshooting').textContent = formatWithBullets(troubleshootingText);
+                
+                // Clear the resolution preview when not editing (it will be set by updatePreviewWithEntry during edit)
+                document.getElementById('ticket-previewResolution').textContent = '';
+                syncPreviewHeight();
+            }
+
+            // Called during edit to load entry data into preview
+            function updatePreviewWithEntry(entry) {
+                document.getElementById('ticket-previewPortal').textContent = entry.portal.toUpperCase();
+                document.getElementById('ticket-previewStore').textContent = entry.store.toUpperCase();
+                document.getElementById('ticket-previewZip').textContent = entry.zip.toUpperCase();
+                document.getElementById('ticket-previewContactPerson').textContent = entry.contact.toUpperCase();
+                document.getElementById('ticket-previewCaller').textContent = entry.contact.toUpperCase();
+                document.getElementById('ticket-previewContactNumber').textContent = entry.contactNumber;
+                document.getElementById('ticket-previewContact').textContent = entry.contactNumber;
+                document.getElementById('ticket-previewIssue').textContent = entry.issue.toUpperCase();
+                document.getElementById('ticket-previewIssueDetails').textContent = entry.issue.toUpperCase();
+                document.getElementById('ticket-previewTroubleshooting').textContent = formatWithBullets(entry.troubleshooting);
+                document.getElementById('ticket-previewResolution').textContent = entry.resolution;
                 syncPreviewHeight();
             }
 
             // ---------------------------------------------------------------------
-            // 12. AI SUMMARIZE ENTRY FUNCTION (with updated model list)
+            // 12. AI SUMMARIZE FUNCTION (uses troubleshooting, updates resolution)
             // ---------------------------------------------------------------------
-            async function summarizeEntryResolution(entryId) {
-                const entry = allEntries.find(e => e.id == entryId);
-                if (!entry) {
-                    showNotification('Entry not found.');
-                    return;
-                }
-
-                const originalText = entry.originalResolution || entry.resolution;
-                if (!originalText || originalText.trim() === '') {
-                    showNotification('No resolution text to summarize.');
-                    return;
-                }
-
+            async function summarizeText(text) {
                 let apiKey = localStorage.getItem('geminiApiKey');
                 if (!apiKey) {
                     apiKey = prompt('Enter your Google Gemini API key (get one at makersuite.google.com/app/apikey):');
-                    if (!apiKey || apiKey.trim() === '') return;
+                    if (!apiKey || apiKey.trim() === '') return null;
                     localStorage.setItem('geminiApiKey', apiKey.trim());
                 }
 
-                // Disable the button temporarily
-                const allSummarizeBtns = document.querySelectorAll('.summarize-row-btn');
-                const targetBtn = Array.from(allSummarizeBtns).find(btn => btn.dataset.id == entryId);
-                if (targetBtn) {
-                    targetBtn.disabled = true;
-                    targetBtn.textContent = '⏳';
-                }
-
-                // Updated model list based on user's available models
                 const models = [
                     'gemini-2.0-flash',
                     'gemini-2.5-flash',
-                    'gemini-2.5-pro',
                     'gemini-2.5-flash-lite',
+                    'gemini-2.5-pro',
                     'gemini-3.1-pro-preview',
                     'gemini-3-pro-preview',
                     'gemini-3-flash-preview',
@@ -1895,7 +1866,7 @@ ${skuLine}`;
                             body: JSON.stringify({
                                 contents: [{
                                     parts: [{
-                                        text: `Summarize the following bullet points into one clear, concise sentence. Keep it professional and in uppercase if needed. Only output the summarized sentence.\n\n${originalText}`
+                                        text: `Summarize the following step‑by‑step troubleshooting steps into one clear, concise sentence. Keep it professional and in all uppercase always. Only output the summarized sentence.\n\n${text}`
                                     }]
                                 }]
                             })
@@ -1907,78 +1878,48 @@ ${skuLine}`;
                         }
 
                         const data = await response.json();
-                        const summary = data.candidates[0].content.parts[0].text.trim();
-
-                        // Update the entry's resolution (display version)
-                        entry.resolution = summary;
-                        if (!entry.originalResolution) {
-                            entry.originalResolution = originalText; // ensure original is stored
-                        }
-
-                        saveAllEntries();
-                        renderTable(); // refresh table to show summary
-                        showNotification('Resolution summarized!');
-                        return; // success, exit function
+                        return data.candidates[0].content.parts[0].text.trim();
                     } catch (error) {
                         console.warn(`Model ${model} failed:`, error);
                         lastError = error;
-                        // Continue to next model
                     }
                 }
 
-                // If all models failed, ask user to manually enter a model name
-                const manualModel = prompt(`Summarization failed with all standard models.\n\nError: ${lastError?.message || 'Unknown error'}\n\nPlease enter a Gemini model name that works with your API key (e.g., gemini-2.5-flash).\nIf unsure, click Cancel to list available models.`);
-                if (manualModel && manualModel.trim()) {
-                    try {
-                        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${manualModel.trim()}:generateContent?key=${apiKey}`, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({
-                                contents: [{
-                                    parts: [{
-                                        text: `Summarize the following bullet points into one clear, concise sentence. Keep it professional and in uppercase if needed. Only output the summarized sentence.\n\n${originalText}`
-                                    }]
-                                }]
-                            })
-                        });
-                        if (!response.ok) {
-                            const errorData = await response.json();
-                            throw new Error(errorData.error?.message || `HTTP ${response.status}`);
-                        }
-                        const data = await response.json();
-                        const summary = data.candidates[0].content.parts[0].text.trim();
-
-                        entry.resolution = summary;
-                        if (!entry.originalResolution) {
-                            entry.originalResolution = originalText;
-                        }
-                        saveAllEntries();
-                        renderTable();
-                        showNotification('Resolution summarized!');
-                        return;
-                    } catch (error) {
-                        showNotification(`Manual model failed: ${error.message}`);
-                    }
-                } else {
-                    // Offer to list models
-                    const listModels = confirm('Would you like to see which models are available with your API key?');
-                    if (listModels) {
-                        try {
-                            const listResp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-                            if (!listResp.ok) throw new Error(`HTTP ${listResp.status}`);
-                            const modelData = await listResp.json();
-                            const modelNames = modelData.models.map(m => m.name).join('\n');
-                            alert(`Available models:\n${modelNames}\n\nYou can use one of these names in the prompt next time.`);
-                        } catch (e) {
-                            alert(`Could not fetch model list: ${e.message}`);
-                        }
-                    }
-                }
-
-                showNotification(`Summarization failed. ${lastError?.message || 'No suitable model found.'}`);
+                showNotification(`Summarization failed: ${lastError?.message || 'No suitable model found.'}`);
                 if (lastError?.message.includes('API key not valid') || lastError?.message.includes('403')) {
                     localStorage.removeItem('geminiApiKey');
                     showNotification('API key invalid. Please set a new one.');
+                }
+                return null;
+            }
+
+            async function summarizeEntryResolution(entryId) {
+                const entry = allEntries.find(e => e.id == entryId);
+                if (!entry) {
+                    showNotification('Entry not found.');
+                    return;
+                }
+
+                const troubleshootingText = entry.troubleshooting;
+                if (!troubleshootingText || troubleshootingText.trim() === '') {
+                    showNotification('No troubleshooting steps to summarize.');
+                    return;
+                }
+
+                // Disable the button temporarily
+                const allSummarizeBtns = document.querySelectorAll('.summarize-row-btn');
+                const targetBtn = Array.from(allSummarizeBtns).find(btn => btn.dataset.id == entryId);
+                if (targetBtn) {
+                    targetBtn.disabled = true;
+                    targetBtn.textContent = '⏳';
+                }
+
+                const summary = await summarizeText(troubleshootingText);
+                if (summary) {
+                    entry.resolution = summary;
+                    saveAllEntries();
+                    renderTable();
+                    showNotification('Resolution summarized!');
                 }
 
                 if (targetBtn) {
@@ -1988,16 +1929,110 @@ ${skuLine}`;
             }
 
             // ---------------------------------------------------------------------
-            // 13. CRUD OPERATIONS
+            // 13. CRUD OPERATIONS (UPDATED FOR SINGLE TEXTBOX)
             // ---------------------------------------------------------------------
-            function addEntry(prefix) {
+            async function addEntry(prefix) {
+                if (prefix !== 'ticket') {
+                    addEntryLegacy(prefix);
+                    return;
+                }
+
+                // Ticket specific
+                let requiredIds = ['ticket-portal', 'ticket-store', 'ticket-zip'];
+                let valid = true;
+                requiredIds.forEach(id => {
+                    const el = document.getElementById(id);
+                    el.classList.remove('invalid');
+                    if (!el.value.trim()) {
+                        el.classList.add('invalid');
+                        valid = false;
+                    }
+                });
+
+                if (!valid) {
+                    showNotification('Please fill PORTAL, STORE NAME, and ZIP CODE!');
+                    return;
+                }
+
+                pushUndo();
+
+                const dateStr = document.getElementById('ticket-date').value;
+                const formattedDate = new Date(dateStr).toLocaleDateString('en-US');
+                const shift = document.getElementById('ticket-shift').value;
+                const support = document.getElementById('ticket-support').value.toUpperCase();
+                const portal = document.getElementById('ticket-portal').value;
+                const storeName = document.getElementById('ticket-store').value;
+                const zipcode = document.getElementById('ticket-zip').value;
+                const contactPerson = document.getElementById('ticket-contactPerson').value;
+                const contactNumber = document.getElementById('ticket-contactNumber').value;
+                const module = document.getElementById('ticket-module').value;
+                const issue = document.getElementById('ticket-issue').value;
+                const escalated = document.getElementById('ticket-escalated').value;
+                const status = document.getElementById('ticket-status').value;
+                const remarks = document.getElementById('ticket-remarks').value;
+                const troubleshooting = document.getElementById('ticket-resolution').value; // user input
+
+                // Show loading on add button
+                const addBtn = document.querySelector('#tab-ticket .add');
+                const originalBtnText = addBtn.textContent;
+                addBtn.textContent = '⏳ SUMMARIZING...';
+                addBtn.disabled = true;
+
+                let resolution = '';
+                if (troubleshooting.trim()) {
+                    const summary = await summarizeText(troubleshooting);
+                    if (summary) resolution = summary;
+                }
+
+                addBtn.textContent = originalBtnText;
+                addBtn.disabled = false;
+
+                const newEntry = {
+                    id: editId || Date.now(),
+                    date: formattedDate,
+                    shift,
+                    support,
+                    portal,
+                    store: storeName,
+                    zip: zipcode,
+                    contact: contactPerson,
+                    contactNumber,
+                    module,
+                    issue,
+                    escalated,
+                    status,
+                    remarks,
+                    troubleshooting: troubleshooting,
+                    resolution: resolution,
+                    moduleData: {},
+                    source: 'ticket'
+                };
+
+                if (editId) {
+                    const index = allEntries.findIndex(e => e.id === editId);
+                    if (index !== -1) allEntries[index] = newEntry;
+                    showNotification('Entry updated!');
+                    editId = null;
+                    addBtn.textContent = 'ADD ENTRY';
+                    addBtn.classList.remove('editing');
+                } else {
+                    allEntries.unshift(newEntry);
+                    showNotification('Entry added!');
+                }
+
+                clearFormFields('ticket');
+                saveAllEntries();
+                renderTable();
+                syncPreviewHeight();
+            }
+
+            // Legacy for store/moolah (no AI)
+            function addEntryLegacy(prefix) {
                 let requiredIds = [];
                 if (prefix === 'moolah') {
                     requiredIds = ['moolah-portal', 'moolah-storeName', 'moolah-zipcode'];
                 } else if (prefix === 'store') {
                     requiredIds = ['store-portal', 'store-storeName', 'store-zipcode'];
-                } else if (prefix === 'ticket') {
-                    requiredIds = ['ticket-portal', 'ticket-store', 'ticket-zip'];
                 }
 
                 let valid = true;
@@ -2027,19 +2062,9 @@ ${skuLine}`;
                 if (prefix === 'moolah') {
                     storeName = document.getElementById('moolah-storeName').value;
                     zipcode = document.getElementById('moolah-zipcode').value;
-                } else if (prefix === 'store') {
+                } else {
                     storeName = document.getElementById('store-storeName').value;
                     zipcode = document.getElementById('store-zipcode').value;
-                } else {
-                    storeName = document.getElementById('ticket-store').value;
-                    zipcode = document.getElementById('ticket-zip').value;
-                }
-
-                let contactPerson = 'SHIPPING TEAM';
-                let contactNumber = '(000) 000-0000';
-                if (prefix === 'ticket') {
-                    contactPerson = document.getElementById('ticket-contactPerson').value;
-                    contactNumber = document.getElementById('ticket-contactNumber').value;
                 }
 
                 let module, issue, escalated, status, remarks, resolution;
@@ -2050,7 +2075,7 @@ ${skuLine}`;
                     status = 'OTHER TASK';
                     remarks = '';
                     resolution = '';
-                } else if (prefix === 'store') {
+                } else {
                     module = 'Store Creation';
                     issue = `NEW STORE CREATION FORM SENT - DONE ✅
 STORE CREATION - DONE✅
@@ -2060,13 +2085,6 @@ UPLOAD DATABASE - DONE✅`;
                     status = 'OTHER TASK';
                     remarks = '';
                     resolution = '';
-                } else {
-                    module = document.getElementById('ticket-module').value;
-                    issue = document.getElementById('ticket-issue').value;
-                    escalated = document.getElementById('ticket-escalated').value;
-                    status = document.getElementById('ticket-status').value;
-                    remarks = document.getElementById('ticket-remarks').value;
-                    resolution = document.getElementById('ticket-resolution').value;
                 }
 
                 const newEntry = {
@@ -2077,15 +2095,15 @@ UPLOAD DATABASE - DONE✅`;
                     portal,
                     store: storeName,
                     zip: zipcode,
-                    contact: contactPerson,
-                    contactNumber,
+                    contact: 'SHIPPING TEAM',
+                    contactNumber: '(000) 000-0000',
                     module,
                     issue,
                     escalated,
                     status,
                     remarks,
-                    resolution,
-                    originalResolution: resolution, // store original
+                    troubleshooting: '',
+                    resolution: resolution,
                     moduleData: {},
                     source: prefix
                 };
@@ -2135,19 +2153,29 @@ UPLOAD DATABASE - DONE✅`;
             }
 
             function clearFormFields(prefix) {
-                const fieldsToClear = {
-                    moolah: ['portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'storePass', 'outletUser', 'outletPass', 'sku', 'mokiId', 'anydeskId'],
-                    store: ['portal', 'storeName', 'zipcode', 'agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'],
-                    ticket: ['portal', 'store', 'zip', 'contactPerson', 'contactNumber', 'module', 'issue', 'escalated', 'status', 'remarks', 'resolution']
-                };
-                fieldsToClear[prefix].forEach(id => {
-                    const el = document.getElementById(`${prefix}-${id}`);
-                    if (el) el.value = '';
-                });
+                if (prefix === 'ticket') {
+                    const fields = ['portal', 'store', 'zip', 'contactPerson', 'contactNumber', 'module', 'issue', 'escalated', 'status', 'remarks', 'resolution'];
+                    fields.forEach(id => {
+                        const el = document.getElementById(`ticket-${id}`);
+                        if (el) el.value = '';
+                    });
+                } else if (prefix === 'store') {
+                    const fields = ['portal', 'storeName', 'zipcode', 'agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'];
+                    fields.forEach(id => {
+                        const el = document.getElementById(`store-${id}`);
+                        if (el) el.value = '';
+                    });
+                } else if (prefix === 'moolah') {
+                    const fields = ['portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'storePass', 'outletUser', 'outletPass', 'sku', 'mokiId', 'anydeskId'];
+                    fields.forEach(id => {
+                        const el = document.getElementById(`moolah-${id}`);
+                        if (el) el.value = '';
+                    });
+                }
 
-                if (prefix === 'moolah') moolahUpdatePreview();
-                if (prefix === 'store') storeUpdatePreview();
                 if (prefix === 'ticket') ticketUpdatePreview();
+                if (prefix === 'store') storeUpdatePreview();
+                if (prefix === 'moolah') moolahUpdatePreview();
                 saveFormData(prefix);
             }
 
@@ -2218,6 +2246,7 @@ UPLOAD DATABASE - DONE✅`;
                 document.getElementById(`${prefix}-shift`).value = entry.shift;
                 document.getElementById(`${prefix}-support`).value = entry.support;
                 document.getElementById(`${prefix}-portal`).value = entry.portal;
+
                 if (prefix === 'moolah' || prefix === 'store') {
                     document.getElementById(`${prefix}-storeName`).value = entry.store;
                     document.getElementById(`${prefix}-zipcode`).value = entry.zip;
@@ -2253,7 +2282,9 @@ UPLOAD DATABASE - DONE✅`;
                     document.getElementById('ticket-escalated').value = entry.escalated;
                     document.getElementById('ticket-status').value = entry.status;
                     document.getElementById('ticket-remarks').value = entry.remarks;
-                    document.getElementById('ticket-resolution').value = entry.originalResolution || entry.resolution;
+                    document.getElementById('ticket-resolution').value = entry.troubleshooting || '';
+                    // Update preview with entry's stored values
+                    updatePreviewWithEntry(entry);
                 }
 
                 if (prefix === 'moolah') moolahUpdatePreview();
@@ -2343,13 +2374,22 @@ UPLOAD DATABASE - DONE✅`;
                 if (saved) {
                     try {
                         allEntries = JSON.parse(saved);
+                        // Ensure legacy entries have troubleshooting field
+                        allEntries.forEach(entry => {
+                            if (entry.troubleshooting === undefined) {
+                                entry.troubleshooting = entry.originalResolution || entry.resolution || '';
+                            }
+                            if (entry.resolution === undefined && entry.originalResolution) {
+                                entry.resolution = entry.originalResolution;
+                            }
+                        });
                     } catch (e) { /* ignore */ }
                 }
                 renderTable();
             }
 
             // ---------------------------------------------------------------------
-            // 15. BULK ACTIONS (fully retained)
+            // 15. BULK ACTIONS (unchanged, omitted for brevity)
             // ---------------------------------------------------------------------
             function getSelectedRowIds() {
                 const checkboxes = document.querySelectorAll('#entryTable tbody .row-checkbox:checked');
@@ -2623,7 +2663,7 @@ UPLOAD DATABASE - DONE✅`;
                             status: values[11],
                             remarks: values[12],
                             resolution: values[13],
-                            originalResolution: values[13], // import as both original and display
+                            troubleshooting: '', // imported entries have no troubleshooting
                             moduleData: {},
                             source: 'ticket'
                         };
