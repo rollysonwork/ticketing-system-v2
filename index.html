@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>RetailzPOS · Unified Creation System</title>
     <style>
-        /* ===== RESET / BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -135,7 +134,6 @@
             background: rgba(0,0,0,0.1);
         }
 
-        /* ===== TAB NAVIGATION ===== */
         .tab-container {
             margin-bottom: 24px;
         }
@@ -182,7 +180,6 @@
             display: block;
         }
 
-        /* ===== MAIN LAYOUT ===== */
         .container {
             display: flex;
             gap: 24px;
@@ -190,7 +187,6 @@
             flex-wrap: wrap;
         }
 
-        /* ===== LEFT PANEL ===== */
         .left-panel {
             flex: 1.1;
             min-width: 380px;
@@ -201,7 +197,6 @@
             border: 1px solid #e9eef3;
         }
 
-        /* ===== RIGHT PANEL PREVIEW ===== */
         .right-panel {
             flex: 1;
             min-width: 280px;
@@ -257,7 +252,6 @@
             max-width: 100%;
         }
 
-        /* ===== TABLE STYLES ===== */
         #entryTable {
             width: 100%;
             border-collapse: collapse;
@@ -330,14 +324,12 @@
             background: #4a5568;
         }
 
-        /* Checkbox column */
         #entryTable th:first-child,
         #entryTable td:first-child {
             width: 30px;
             text-align: center;
         }
 
-        /* ===== ACTION BUTTONS ===== */
         .action-cell {
             padding: 0;
             height: 100%;
@@ -407,7 +399,6 @@
             transform: scale(1.05);
         }
 
-        /* ===== SEARCH SECTION ===== */
         .search-section {
             background: #f8fafc;
             border-radius: 16px;
@@ -606,7 +597,6 @@
             color: #dc2626;
         }
 
-        /* ===== FORM STYLES ===== */
         .entry-form table,
         .left-panel table {
             width: 100%;
@@ -720,7 +710,6 @@
             margin-top: 8px;
         }
 
-        /* ===== BUTTON ROW ===== */
         .button-row {
             display: flex;
             gap: 8px;
@@ -801,7 +790,6 @@
             box-shadow: 0 10px 18px -8px currentColor;
         }
 
-        /* ===== BULK ACTIONS BAR ===== */
         .bulk-bar {
             display: flex;
             gap: 12px;
@@ -883,7 +871,6 @@
             color: white;
         }
 
-        /* ===== NOTIFICATION ===== */
         #notification {
             position: fixed;
             bottom: 30px;
@@ -907,7 +894,6 @@
             opacity: 1;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 700px) {
             .container { 
                 flex-direction: column; 
@@ -929,7 +915,6 @@
         <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
     </h1>
     
-    <!-- Tab Navigation -->
     <div class="tab-container">
         <div class="tab-buttons">
             <button class="tab-button active" onclick="switchTab('ticket', this)">TICKET CREATION</button>
@@ -938,7 +923,6 @@
         </div>
     </div>
 
-    <!-- TICKET CREATION TAB -->
     <div id="tab-ticket" class="tab-content active">
         <div class="container">
             <div class="left-panel">
@@ -951,7 +935,7 @@
                     <div id="ticket-searchResults" class="search-results"></div>
                     <div id="ticket-loadStatus" class="load-status"></div>
                 </div>
-                <table>
+                 <table>
                     <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
                     <tr>
                         <td>SHIFT SCHEDULE</td>
@@ -990,7 +974,6 @@
                         </td>
                     </tr>
                     <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
-                    <!-- Only one textbox: RESOLUTION - user enters step-by-step here -->
                     <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="4"></textarea></td></tr>
                 </table>
                 <div class="button-row">
@@ -1017,18 +1000,15 @@
                 <div><strong>❗ ISSUE:</strong></div>
                 <div><span id="ticket-previewIssueDetails" class="preview-multiline"></span></div>
                 <br>
-                <!-- Troubleshooting section shows exact user input (with bullet formatting) -->
                 <div><strong>🔧 TROUBLESHOOTING:</strong></div>
                 <div id="ticket-previewTroubleshooting" class="preview-multiline" style="white-space: pre-wrap;"></div>
                 <br>
-                <!-- Resolution section shows AI summary -->
                 <div><strong>✅ RESOLUTION:</strong></div>
                 <div id="ticket-previewResolution" class="preview-multiline" style="white-space: pre-wrap;"></div>
             </div>
         </div>
     </div>
 
-    <!-- STORE CREATION TAB (unchanged) -->
     <div id="tab-store" class="tab-content">
         <div class="container">
             <div class="left-panel">
@@ -1072,7 +1052,6 @@
         </div>
     </div>
 
-    <!-- MOOLAH CREATION TAB (unchanged) -->
     <div id="tab-moolah" class="tab-content">
         <div class="container">
             <div class="left-panel">
@@ -1122,7 +1101,6 @@
         </div>
     </div>
 
-    <!-- Bulk Actions Bar -->
     <div class="bulk-bar">
         <label><input type="checkbox" id="selectAllCheckbox">SELECT ALL</label>
         <button id="bulkDeleteBtn" title="Delete selected rows">🗑️DELETE</button>
@@ -1138,7 +1116,6 @@
         <button id="listModelsBtn" class="list-models-btn">📋 LIST MODELS</button>
     </div>
 
-    <!-- Unified Database Table (with checkbox column) -->
     <div style="overflow-x: auto;">
         <table id="entryTable">
             <thead>
@@ -1168,17 +1145,9 @@
     <div id="notification"></div>
 
     <script>
-        // =========================================================================
-        // RETAILZPOS UNIFIED CREATION SYSTEM - with AI summarization
-        // Single resolution textbox (user enters step-by-step), preview shows both
-        // =========================================================================
-
         (function() {
             "use strict";
 
-            // ---------------------------------------------------------------------
-            // 1. GLOBAL CONSTANTS & CONFIGURATION
-            // ---------------------------------------------------------------------
             const CONFIG = {
                 GOOGLE_SHEET_ID: '1IDsVjZrWCP0hXRn_EufLNgpOMtYFtV6jVZx9P5rvbcA',
                 SHEET_NAME: 'SERVER MANAGEMENT',
@@ -1264,9 +1233,6 @@
                 { min: 53000, max: 54999, state: "WI" }, { min: 82000, max: 83199, state: "WY" }
             ];
 
-            // ---------------------------------------------------------------------
-            // 2. GLOBAL STATE
-            // ---------------------------------------------------------------------
             let currentActiveTab = 'ticket';
             let allEntries = [];
             let storeData = [];
@@ -1277,9 +1243,6 @@
             const filteredResults = { moolah: [], store: [], ticket: [] };
             const selectedIndex = { moolah: -1, store: -1, ticket: -1 };
 
-            // ---------------------------------------------------------------------
-            // 3. UTILITY FUNCTIONS
-            // ---------------------------------------------------------------------
             function showNotification(message) {
                 const notification = document.getElementById('notification');
                 notification.textContent = message;
@@ -1361,9 +1324,6 @@
                 showNotification('Redo successful');
             }
 
-            // ---------------------------------------------------------------------
-            // 4. PREVIEW HEIGHT SYNC
-            // ---------------------------------------------------------------------
             function syncPreviewHeight() {
                 const leftPanel = document.querySelector(`#tab-${currentActiveTab} .left-panel`);
                 const rightPanel = document.querySelector(`#tab-${currentActiveTab} .right-panel`);
@@ -1373,9 +1333,6 @@
                 rightPanel.style.overflowY = 'auto';
             }
 
-            // ---------------------------------------------------------------------
-            // 5. TAB SWITCHING
-            // ---------------------------------------------------------------------
             function switchTab(tabName, button) {
                 currentActiveTab = tabName;
                 localStorage.setItem('activeTab', tabName);
@@ -1389,9 +1346,6 @@
                 }, 100);
             }
 
-            // ---------------------------------------------------------------------
-            // 6. CLOCK FUNCTIONALITY
-            // ---------------------------------------------------------------------
             function clock(type, prefix) {
                 const shift = document.getElementById(`${prefix}-shift`).value;
                 if (!shift) {
@@ -1413,9 +1367,6 @@
                 );
             }
 
-            // ---------------------------------------------------------------------
-            // 7. GOOGLE SHEETS LOAD (with API key check)
-            // ---------------------------------------------------------------------
             async function loadSheetData() {
                 const statusEls = {
                     moolah: document.getElementById('moolah-loadStatus'),
@@ -1479,9 +1430,6 @@
                 syncPreviewHeight();
             }
 
-            // ---------------------------------------------------------------------
-            // 8. SEARCH & STORE SELECTION
-            // ---------------------------------------------------------------------
             function clearSearchResults() {
                 ['ticket', 'store', 'moolah'].forEach(prefix => {
                     document.getElementById(`${prefix}-storeSearch`).value = '';
@@ -1633,9 +1581,6 @@
                 });
             }
 
-            // ---------------------------------------------------------------------
-            // 9. FORM DATA PERSISTENCE
-            // ---------------------------------------------------------------------
             function saveFormData(prefix) {
                 const fields = {
                     moolah: ['shift', 'support', 'portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'storePass', 'outletUser', 'outletPass', 'sku', 'mokiId', 'anydeskId'],
@@ -1662,16 +1607,13 @@
                                 if (el.tagName === 'TEXTAREA') autoGrow(el);
                             }
                         });
-                    } catch (e) { /* ignore */ }
+                    } catch (e) { }
                 }
                 if (prefix === 'moolah') moolahUpdatePreview();
                 if (prefix === 'store') storeUpdatePreview();
                 if (prefix === 'ticket') ticketUpdatePreview();
             }
 
-            // ---------------------------------------------------------------------
-            // 10. SYNC SHIFT & SUPPORT FROM TICKET
-            // ---------------------------------------------------------------------
             function syncShiftSupportFromTicket() {
                 const ticketShift = document.getElementById('ticket-shift').value;
                 const ticketSupport = document.getElementById('ticket-support').value;
@@ -1687,9 +1629,6 @@
                 saveFormData('moolah');
             }
 
-            // ---------------------------------------------------------------------
-            // 11. PREVIEW FUNCTIONS
-            // ---------------------------------------------------------------------
             function moolahUpdatePreview() {
                 const portal = document.getElementById('moolah-portal').value.trim();
                 const storeName = document.getElementById('moolah-storeName').value.trim();
@@ -1797,7 +1736,6 @@ ${skuLine}`;
             }
 
             function ticketUpdatePreview() {
-                // Update basic fields
                 document.getElementById('ticket-previewPortal').textContent = document.getElementById('ticket-portal').value.toUpperCase();
                 document.getElementById('ticket-previewStore').textContent = document.getElementById('ticket-store').value.toUpperCase();
                 document.getElementById('ticket-previewZip').textContent = document.getElementById('ticket-zip').value.toUpperCase();
@@ -1810,16 +1748,13 @@ ${skuLine}`;
                 document.getElementById('ticket-previewIssue').textContent = issueVal;
                 document.getElementById('ticket-previewIssueDetails').textContent = issueVal;
 
-                // Show troubleshooting (original user input, with bullets)
                 const troubleshootingText = document.getElementById('ticket-resolution').value;
                 document.getElementById('ticket-previewTroubleshooting').textContent = formatWithBullets(troubleshootingText);
                 
-                // Clear the resolution preview when not editing (it will be set by updatePreviewWithEntry during edit)
                 document.getElementById('ticket-previewResolution').textContent = '';
                 syncPreviewHeight();
             }
 
-            // Called during edit to load entry data into preview
             function updatePreviewWithEntry(entry) {
                 document.getElementById('ticket-previewPortal').textContent = entry.portal.toUpperCase();
                 document.getElementById('ticket-previewStore').textContent = entry.store.toUpperCase();
@@ -1835,9 +1770,6 @@ ${skuLine}`;
                 syncPreviewHeight();
             }
 
-            // ---------------------------------------------------------------------
-            // 12. AI SUMMARIZE FUNCTION (uses troubleshooting, updates resolution)
-            // ---------------------------------------------------------------------
             async function summarizeText(text) {
                 let apiKey = localStorage.getItem('geminiApiKey');
                 if (!apiKey) {
@@ -1906,7 +1838,6 @@ ${skuLine}`;
                     return;
                 }
 
-                // Disable the button temporarily
                 const allSummarizeBtns = document.querySelectorAll('.summarize-row-btn');
                 const targetBtn = Array.from(allSummarizeBtns).find(btn => btn.dataset.id == entryId);
                 if (targetBtn) {
@@ -1928,16 +1859,12 @@ ${skuLine}`;
                 }
             }
 
-            // ---------------------------------------------------------------------
-            // 13. CRUD OPERATIONS (UPDATED FOR SINGLE TEXTBOX)
-            // ---------------------------------------------------------------------
             async function addEntry(prefix) {
                 if (prefix !== 'ticket') {
                     addEntryLegacy(prefix);
                     return;
                 }
 
-                // Ticket specific
                 let requiredIds = ['ticket-portal', 'ticket-store', 'ticket-zip'];
                 let valid = true;
                 requiredIds.forEach(id => {
@@ -1970,9 +1897,8 @@ ${skuLine}`;
                 const escalated = document.getElementById('ticket-escalated').value;
                 const status = document.getElementById('ticket-status').value;
                 const remarks = document.getElementById('ticket-remarks').value;
-                const troubleshooting = document.getElementById('ticket-resolution').value; // user input
+                const troubleshooting = document.getElementById('ticket-resolution').value;
 
-                // Show loading on add button
                 const addBtn = document.querySelector('#tab-ticket .add');
                 const originalBtnText = addBtn.textContent;
                 addBtn.textContent = '⏳ SUMMARIZING...';
@@ -2026,7 +1952,6 @@ ${skuLine}`;
                 syncPreviewHeight();
             }
 
-            // Legacy for store/moolah (no AI)
             function addEntryLegacy(prefix) {
                 let requiredIds = [];
                 if (prefix === 'moolah') {
@@ -2283,14 +2208,11 @@ UPLOAD DATABASE - DONE✅`;
                     document.getElementById('ticket-status').value = entry.status;
                     document.getElementById('ticket-remarks').value = entry.remarks;
                     document.getElementById('ticket-resolution').value = entry.troubleshooting || '';
-                    // Update preview with entry's stored values
                     updatePreviewWithEntry(entry);
                 }
 
-                // Update preview for moolah/store (but NOT for ticket – already done above)
                 if (prefix === 'moolah') moolahUpdatePreview();
                 if (prefix === 'store') storeUpdatePreview();
-                // (ticket preview was already set by updatePreviewWithEntry)
 
                 editId = entry.id;
                 const addBtn = document.querySelector(`#tab-${prefix} .add`);
@@ -2327,9 +2249,6 @@ UPLOAD DATABASE - DONE✅`;
                 navigator.clipboard.writeText(values.join('\t')).then(() => showNotification('Row copied!'));
             }
 
-            // ---------------------------------------------------------------------
-            // 14. TABLE RENDERING & PERSISTENCE
-            // ---------------------------------------------------------------------
             function renderTable() {
                 const tbody = document.querySelector('#entryTable tbody');
                 tbody.innerHTML = '';
@@ -2375,7 +2294,6 @@ UPLOAD DATABASE - DONE✅`;
                 if (saved) {
                     try {
                         allEntries = JSON.parse(saved);
-                        // Ensure legacy entries have troubleshooting field
                         allEntries.forEach(entry => {
                             if (entry.troubleshooting === undefined) {
                                 entry.troubleshooting = entry.originalResolution || entry.resolution || '';
@@ -2384,14 +2302,11 @@ UPLOAD DATABASE - DONE✅`;
                                 entry.resolution = entry.originalResolution;
                             }
                         });
-                    } catch (e) { /* ignore */ }
+                    } catch (e) { }
                 }
                 renderTable();
             }
 
-            // ---------------------------------------------------------------------
-            // 15. BULK ACTIONS (unchanged, omitted for brevity)
-            // ---------------------------------------------------------------------
             function getSelectedRowIds() {
                 const checkboxes = document.querySelectorAll('#entryTable tbody .row-checkbox:checked');
                 return Array.from(checkboxes).map(cb => cb.value);
@@ -2559,9 +2474,6 @@ UPLOAD DATABASE - DONE✅`;
                 document.body.appendChild(modal);
             }
 
-            // ---------------------------------------------------------------------
-            // 16. EXPORT / IMPORT
-            // ---------------------------------------------------------------------
             function exportToCSV() {
                 const headers = ['DATE','SHIFT','SUPPORT','PORTAL','STORE','ZIP','CONTACT','CONTACT#','MODULE','ISSUE','ESCALATED','STATUS','REMARKS','RESOLUTION'];
                 const rows = allEntries.map(entry => [
@@ -2664,7 +2576,7 @@ UPLOAD DATABASE - DONE✅`;
                             status: values[11],
                             remarks: values[12],
                             resolution: values[13],
-                            troubleshooting: '', // imported entries have no troubleshooting
+                            troubleshooting: '',
                             moduleData: {},
                             source: 'ticket'
                         };
@@ -2688,9 +2600,6 @@ UPLOAD DATABASE - DONE✅`;
                 event.target.value = '';
             }
 
-            // ---------------------------------------------------------------------
-            // 17. SHIFT REPORT GENERATION
-            // ---------------------------------------------------------------------
             function generateShiftReport() {
                 const yesterday = new Date();
                 yesterday.setDate(yesterday.getDate() - 1);
@@ -2904,9 +2813,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 textarea.style.height = textarea.scrollHeight + 'px';
             }
 
-            // ---------------------------------------------------------------------
-            // 18. CHECKBOX HANDLING
-            // ---------------------------------------------------------------------
             function updateSelectAllCheckboxState() {
                 const selectAllBar = document.getElementById('selectAllCheckbox');
                 const rowCheckboxes = document.querySelectorAll('#entryTable tbody .row-checkbox');
@@ -2920,9 +2826,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 updateSelectAllCheckboxState();
             }
 
-            // ---------------------------------------------------------------------
-            // 19. DARK MODE
-            // ---------------------------------------------------------------------
             function initTheme() {
                 const savedTheme = localStorage.getItem('theme');
                 if (savedTheme === 'dark') {
@@ -2941,9 +2844,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 syncPreviewHeight();
             }
 
-            // ---------------------------------------------------------------------
-            // 20. PASSWORD SYNC, AUTOCOMPLETE, ETC.
-            // ---------------------------------------------------------------------
             function setupPasswordSync() {
                 const clientPass = document.getElementById('moolah-clientPass');
                 const storePass = document.getElementById('moolah-storePass');
@@ -3017,9 +2917,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 });
             }
 
-            // ---------------------------------------------------------------------
-            // 21. INITIALIZATION
-            // ---------------------------------------------------------------------
             function init() {
                 const yesterday = new Date();
                 yesterday.setDate(yesterday.getDate() - 1);
@@ -3050,7 +2947,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
                     });
                 });
 
-                // Set API key handlers in bulk bar
                 document.getElementById('setSheetsKeyBtn').addEventListener('click', setGoogleApiKeyAndLoad);
                 document.getElementById('setGeminiKeyBtn').addEventListener('click', () => {
                     const newKey = prompt('Enter your Google Gemini API key:');
@@ -3079,7 +2975,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
                     }
                 });
 
-                // Initial load if sheets key exists
                 if (getGoogleApiKey()) {
                     setTimeout(loadSheetData, 500);
                 } else {
@@ -3201,7 +3096,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 document.getElementById('ticket-support').addEventListener('input', syncShiftSupportFromTicket);
             }
 
-            // Expose functions to global for inline event handlers
             window.switchTab = switchTab;
             window.clock = clock;
             window.addEntry = addEntry;
