@@ -87,6 +87,21 @@
             color: #2563eb;
             border-bottom: 1px solid #cdddee;
             margin: 12px 0 8px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .month-header:hover {
+            color: #1e40af;
+        }
+        body.dark-mode .month-header:hover {
+            color: #93c5fd;
+        }
+        .month-arrow {
+            font-size: 0.7rem;
+            transition: transform 0.2s;
         }
 
         .date-group {
@@ -100,6 +115,25 @@
             color: #64748b;
             letter-spacing: 0.02em;
             margin-top: 8px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .date-header:hover {
+            color: #2563eb;
+        }
+        body.dark-mode .date-header:hover {
+            color: #60a5fa;
+        }
+        .date-arrow {
+            font-size: 0.7rem;
+            transition: transform 0.2s;
+        }
+
+        .date-entries {
+            margin-left: 0;
         }
 
         .sidebar-card {
@@ -182,7 +216,7 @@
             transition: flex 0.3s ease;
         }
 
-        /* centered title */
+        /* centered title with theme toggle on far right */
         h1 {
             text-align: center;
             font-size: 1.8rem;
@@ -193,18 +227,13 @@
             border-left: none;
             padding-left: 0;
             background: none;
+            position: relative;
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 20px;
+            align-items: center;
         }
         body.dark-mode h1 {
             color: #e2e8f0;
-        }
-        .header-buttons {
-            display: flex;
-            gap: 12px;
-            align-items: center;
         }
         .theme-toggle {
             background: transparent;
@@ -214,6 +243,10 @@
             padding: 8px 12px;
             border-radius: 40px;
             transition: background 0.2s;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
         }
         .theme-toggle:hover {
             background: rgba(0,0,0,0.1);
@@ -977,11 +1010,12 @@
         }
 
         .bulk-bar label {
-            text-transform: uppercase;
+            text-transform: none;
             display: inline-flex;
             align-items: center;
             gap: 4px;
             cursor: pointer;
+            white-space: nowrap;
         }
 
         .bulk-bar button {
@@ -1085,15 +1119,19 @@
             .left-panel table td:first-child {
                 white-space: normal;
             }
+            h1 {
+                font-size: 1.4rem;
+            }
+            .theme-toggle {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
 <body>
     <h1>
         🏬 RetailzPOS · Unified Creation System
-        <div class="header-buttons">
-            <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
-        </div>
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
     </h1>
 
     <div class="app-container">
@@ -1129,70 +1167,27 @@
                             <div id="ticket-searchResults" class="search-results"></div>
                             <div id="ticket-loadStatus" class="load-status"></div>
                         </div>
-                         <table>
-                             <tr>
-                                 <td>DATE</td>
-                                 <td><input type="date" id="ticket-date" disabled></td>
-                             </tr>
-                             <tr>
-                                 <td>SHIFT SCHEDULE</td>
-                                 <td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
-                             </tr>
-                             <tr>
-                                 <td>SUPPORT NAME</td>
-                                 <td><input type="text" id="ticket-support"></td>
-                             </tr>
-                             <tr>
-                                 <td>PORTAL NUMBER *</td>
-                                 <td><input type="text" id="ticket-portal"></td>
-                             </tr>
-                             <tr>
-                                 <td>STORE NAME *</td>
-                                 <td><input type="text" id="ticket-store"></td>
-                             </tr>
-                             <tr>
-                                 <td>ZIP CODE *</td>
-                                 <td><input type="text" id="ticket-zip"></td>
-                             </tr>
-                             <tr>
-                                 <td>CONTACT PERSON</td>
-                                 <td><input type="text" id="ticket-contactPerson"></td>
-                             </tr>
-                             <tr>
-                                 <td>CONTACT #</td>
-                                 <td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td>
-                             </tr>
-                             <tr>
-                                 <td>MODULE</td>
-                                 <td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td>
-                             </tr>
-                             <tr>
-                                 <td>ISSUE</td>
-                                 <td><textarea id="ticket-issue" rows="2"></textarea></td>
-                             </tr>
-                             <tr>
-                                 <td>ESCALATED PERSON</td>
-                                 <td><input type="text" id="ticket-escalated"></td>
-                             </tr>
-                             <tr>
-                                 <td>STATUS</td>
-                                 <td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td>
-                             </tr>
-                             <tr>
-                                 <td>REMARKS</td>
-                                 <td><textarea id="ticket-remarks" rows="2"></textarea></td>
-                             </tr>
-                             <tr>
-                                 <td>RESOLUTION</td>
-                                 <td><textarea id="ticket-resolution" rows="4"></textarea></td>
-                             </tr>
-                         </table>
+                          <table>
+                              <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
+                              <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                              <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td></tr>
+                              <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td></tr>
+                              <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td></tr>
+                              <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td></tr>
+                              <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td></tr>
+                              <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
+                              <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td></tr>
+                              <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
+                              <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
+                              <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
+                              <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
+                              <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="4"></textarea></td></tr>
+                          </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('ticket')">CLEAR FORM</button>
                             <button class="clock" onclick="clock('IN', 'ticket')">CLOCK IN</button>
                             <button class="clock" onclick="clock('OUT', 'ticket')">CLOCK OUT</button>
-                            <!-- CLEAR ALL BUTTON REMOVED -->
                         </div>
                     </div>
                     <div class="right-panel" id="ticket-previewPanel">
@@ -1233,70 +1228,27 @@
                             <div id="store-searchResults" class="search-results"></div>
                             <div id="store-loadStatus" class="load-status"></div>
                         </div>
-                         <table>
-                             <tr>
-                                 <td>DATE</td>
-                                 <td><input type="date" id="store-date" readonly></td>
-                             </tr>
-                             <tr>
-                                 <td>SHIFT SCHEDULE</td>
-                                 <td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
-                             </tr>
-                             <tr>
-                                 <td>SUPPORT NAME</td>
-                                 <td><input type="text" id="store-support" readonly></td>
-                             </tr>
-                             <tr>
-                                 <td>PORTAL NUMBER *</td>
-                                 <td><input type="text" id="store-portal" class="required-field"></td>
-                             </tr>
-                             <tr>
-                                 <td>STORE NAME *</td>
-                                 <td><input type="text" id="store-storeName" class="required-field"></td>
-                             </tr>
-                             <tr>
-                                 <td>ZIP CODE *</td>
-                                 <td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td>
-                             </tr>
-                             <tr>
-                                 <td>AGENT</td>
-                                 <td><input type="text" id="store-agent"></td>
-                             </tr>
-                             <tr>
-                                 <td>EMAIL ID</td>
-                                 <td><input type="email" id="store-email" class="no-uppercase"></td>
-                             </tr>
-                             <tr>
-                                 <td>PASSWORD</td>
-                                 <td><input type="text" id="store-password" class="no-uppercase"></td>
-                             </tr>
-                             <tr>
-                                 <td>SKU</td>
-                                 <td><input type="text" id="store-sku"></td>
-                             </tr>
-                             <tr>
-                                 <td>DATABASE</td>
-                                 <td><input type="text" id="store-database"></td>
-                             </tr>
-                             <tr>
-                                 <td>NO OF REG.</td>
-                                 <td><input type="number" id="store-noOfReg"></td>
-                             </tr>
-                             <tr>
-                                 <td>MOKI ID</td>
-                                 <td><textarea id="store-mokiId" rows="2"></textarea></td>
-                             </tr>
-                             <tr>
-                                 <td>ANYDESK ID</td>
-                                 <td><textarea id="store-anydeskId" rows="2"></textarea></td>
-                             </tr>
-                         </table>
+                          <table>
+                              <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
+                              <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                              <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
+                              <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td></tr>
+                              <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td></tr>
+                              <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
+                              <tr><td>AGENT</td><td><input type="text" id="store-agent"></td></tr>
+                              <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
+                              <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
+                              <tr><td>SKU</td><td><input type="text" id="store-sku"></td></tr>
+                              <tr><td>DATABASE</td><td><input type="text" id="store-database"></td></tr>
+                              <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td></tr>
+                              <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
+                              <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
+                          </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('store')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('store')">CLEAR FORM</button>
                             <button class="clock" onclick="clock('IN', 'store')">CLOCK IN</button>
                             <button class="clock" onclick="clock('OUT', 'store')">CLOCK OUT</button>
-                            <!-- CLEAR ALL BUTTON REMOVED -->
                         </div>
                     </div>
                     <div class="right-panel">
@@ -1319,85 +1271,39 @@
                             <div id="moolah-searchResults" class="search-results"></div>
                             <div id="moolah-loadStatus" class="load-status"></div>
                         </div>
-                         <table>
-                             <tr>
-                                 <td>DATE</td>
-                                 <td><input type="date" id="moolah-date" readonly></td>
-                             </tr>
-                             <tr>
-                                 <td>SHIFT SCHEDULE</td>
-                                 <td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
-                             </tr>
-                             <tr>
-                                 <td>SUPPORT NAME</td>
-                                 <td><input type="text" id="moolah-support" readonly></td>
-                             </tr>
-                             <tr>
-                                 <td>PORTAL NUMBER *</td>
-                                 <td><input type="text" id="moolah-portal" class="required"></td>
-                             </tr>
-                             <tr>
-                                 <td>STORE NAME *</td>
-                                 <td><input type="text" id="moolah-storeName" class="required"></td>
-                             </tr>
-                             <tr>
-                                 <td>ZIP CODE *</td>
-                                 <td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td>
-                             </tr>
-                         </table>
+                          <table>
+                              <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
+                              <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                              <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
+                              <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
+                              <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
+                              <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
+                          </table>
                         <div class="section-header">CLIENT CREDENTIALS (OPTIONAL)</div>
-                         <table>
-                             <tr>
-                                 <td>USERNAME</td>
-                                 <td><input type="text" id="moolah-clientUser"></td>
-                             </tr>
-                             <tr>
-                                 <td>PASSWORD</td>
-                                 <td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td>
-                             </tr>
-                         </table>
+                          <table>
+                              <tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr>
+                              <tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr>
+                          </table>
                         <div class="section-header">STORE CREDENTIALS (OPTIONAL)</div>
-                         <table>
-                             <tr>
-                                 <td>USERNAME</td>
-                                 <td><input type="text" id="moolah-storeUser"></td>
-                             </tr>
-                             <tr>
-                                 <td>PASSWORD</td>
-                                 <td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td>
-                             </tr>
-                         </table>
+                          <table>
+                              <tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr>
+                              <tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr>
+                          </table>
                         <div class="section-header">OUTLET CREDENTIALS (OPTIONAL)</div>
-                         <table>
-                             <tr>
-                                 <td>USERNAME</td>
-                                 <td><input type="text" id="moolah-outletUser"></td>
-                             </tr>
-                             <tr>
-                                 <td>PASSWORD</td>
-                                 <td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td>
-                             </tr>
-                         </table>
-                         <table>
-                             <tr>
-                                 <td>SKU (6 DIGITS)</td>
-                                 <td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td>
-                             </tr>
-                             <tr>
-                                 <td>MOKI ID</td>
-                                 <td><textarea id="moolah-mokiId" rows="2"></textarea></td>
-                             </tr>
-                             <tr>
-                                 <td>ANYDESK ID</td>
-                                 <td><textarea id="moolah-anydeskId" rows="2"></textarea></td>
-                             </tr>
-                         </table>
+                          <table>
+                              <tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr>
+                              <tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr>
+                          </table>
+                          <table>
+                              <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
+                              <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
+                              <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
+                          </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('moolah')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('moolah')">CLEAR FORM</button>
                             <button class="clock" onclick="clock('IN', 'moolah')">CLOCK IN</button>
                             <button class="clock" onclick="clock('OUT', 'moolah')">CLOCK OUT</button>
-                            <!-- CLEAR ALL BUTTON REMOVED -->
                         </div>
                     </div>
                     <div class="right-panel">
@@ -1408,7 +1314,7 @@
             </div>
 
             <div class="bulk-bar">
-                <label><input type="checkbox" id="selectAllCheckbox">SELECT ALL</label>
+                <label><input type="checkbox" id="selectAllCheckbox"> Select All</label>
                 <button id="bulkDeleteBtn" title="Delete selected rows (only from main table)">🗑️DELETE</button>
                 <button id="bulkCopyBtn" title="Copy selected rows">📋COPY</button>
                 <button id="bulkUpdateStatusBtn" title="Update status for selected rows">✏️UPDATE</button>
@@ -1425,7 +1331,7 @@
             <div style="overflow-x: auto;">
                 <table id="entryTable">
                     <thead>
-                         <tr>
+                        <tr>
                             <th style="width:30px"></th>
                             <th>DATE</th><th>SHIFT</th><th>SUPPORT</th><th>PORTAL</th><th>STORE</th><th>ZIP</th>
                             <th>CONTACT</th><th>CONTACT#</th><th>MODULE</th><th>ISSUE</th><th>ESCALATED</th>
@@ -1433,14 +1339,15 @@
                          </tr>
                     </thead>
                     <tbody></tbody>
-                 </table>
+                </table>
             </div>
         </div>
     </div>
 
     <div id="notification"></div>
-    
+
     <script>
+        
         (function() {
             "use strict";
 
