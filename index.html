@@ -129,6 +129,19 @@
             color: #475569;
         }
 
+        /* Issue item styling: bold + larger font */
+        .sidebar-card .preview-item.issue-item {
+            font-size: 0.85rem;
+            font-weight: 700;
+        }
+        .sidebar-card .preview-item.issue-item strong {
+            font-weight: 700;
+            color: #2563eb;
+        }
+        body.dark-mode .sidebar-card .preview-item.issue-item strong {
+            color: #60a5fa;
+        }
+
         body.dark-mode .sidebar-card .preview-item strong {
             color: #a0aec0;
         }
@@ -169,7 +182,25 @@
             transition: flex 0.3s ease;
         }
 
-        /* header button row */
+        /* centered title */
+        h1 {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            margin-bottom: 1.5rem;
+            color: #0a2942;
+            border-left: none;
+            padding-left: 0;
+            background: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+        body.dark-mode h1 {
+            color: #e2e8f0;
+        }
         .header-buttons {
             display: flex;
             gap: 12px;
@@ -293,45 +324,6 @@
         body.dark-mode .preview-multiline {
             background: #4a5568;
             color: #e2e8f0;
-        }
-
-        h1 {
-            font-size: 1.8rem;
-            font-weight: 600;
-            letter-spacing: -0.02em;
-            margin-bottom: 1.5rem;
-            color: #0a2942;
-            border-left: 6px solid #2563eb;
-            padding-left: 18px;
-            background: linear-gradient(to right, #ffffff50, transparent);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        body.dark-mode h1 {
-            color: #e2e8f0;
-            border-left-color: #60a5fa;
-        }
-
-        h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #1e293b;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        body.dark-mode h3 {
-            color: #cbd5e0;
-        }
-
-        h3::before {
-            content: "▍";
-            font-size: 1.3rem;
-            color: #2563eb;
         }
 
         .tab-button {
@@ -974,6 +966,7 @@
             display: flex;
             gap: 12px;
             align-items: center;
+            justify-content: center;
             flex-wrap: wrap;
             margin-bottom: 24px;
             margin-top: 24px;
@@ -1138,62 +1131,21 @@
                             <div id="ticket-searchResults" class="search-results"></div>
                             <div id="ticket-loadStatus" class="load-status"></div>
                         </div>
-                         <tr>
-                              <td>DATE</td>
-                              <td><input type="date" id="ticket-date" disabled></td>
-                            </tr>
-                            <tr>
-                              <td>SHIFT SCHEDULE</td>
-                              <td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
-                            </tr>
-                            <tr>
-                              <td>SUPPORT NAME</td>
-                              <td><input type="text" id="ticket-support"></td>
-                            </tr>
-                            <tr>
-                              <td>PORTAL NUMBER *</td>
-                              <td><input type="text" id="ticket-portal"></td>
-                            </tr>
-                            <tr>
-                              <td>STORE NAME *</td>
-                              <td><input type="text" id="ticket-store"></td>
-                            </tr>
-                            <tr>
-                              <td>ZIP CODE *</td>
-                              <td><input type="text" id="ticket-zip"></td>
-                            </tr>
-                            <tr>
-                              <td>CONTACT PERSON</td>
-                              <td><input type="text" id="ticket-contactPerson"></td>
-                            </tr>
-                            <tr>
-                              <td>CONTACT #</td>
-                              <td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td>
-                            </tr>
-                            <tr>
-                              <td>MODULE</td>
-                              <td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td>
-                            </tr>
-                            <tr>
-                              <td>ISSUE</td>
-                              <td><textarea id="ticket-issue" rows="2"></textarea></td>
-                            </tr>
-                            <tr>
-                              <td>ESCALATED PERSON</td>
-                              <td><input type="text" id="ticket-escalated"></td>
-                            </tr>
-                            <tr>
-                              <td>STATUS</td>
-                              <td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td>
-                            </tr>
-                            <tr>
-                              <td>REMARKS</td>
-                              <td><textarea id="ticket-remarks" rows="2"></textarea></td>
-                            </tr>
-                            <tr>
-                              <td>RESOLUTION</td>
-                              <td><textarea id="ticket-resolution" rows="4"></textarea></td>
-                            </tr>
+                          <table>
+                              <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
+                              <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                              <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td></tr>
+                              <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td></tr>
+                              <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td></tr>
+                              <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td></tr>
+                              <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td></tr>
+                              <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
+                              <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td></tr>
+                              <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
+                              <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
+                              <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
+                              <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
+                              <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="4"></textarea></td></tr>
                           </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
@@ -1241,7 +1193,7 @@
                             <div id="store-searchResults" class="search-results"></div>
                             <div id="store-loadStatus" class="load-status"></div>
                         </div>
-                         <table>
+                        <table>
                             <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
                             <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
                             <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
@@ -1256,7 +1208,7 @@
                             <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td></tr>
                             <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
                             <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
-                         </table>
+                        </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('store')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('store')">CLEAR FORM</button>
@@ -1285,25 +1237,25 @@
                             <div id="moolah-searchResults" class="search-results"></div>
                             <div id="moolah-loadStatus" class="load-status"></div>
                         </div>
-                         <table>
+                        <table>
                             <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
                             <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
                             <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
                             <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
                             <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
                             <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
-                         </table>
+                        </table>
                         <div class="section-header">CLIENT CREDENTIALS (OPTIONAL)</div>
-                         <table><tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr><tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr></table>
+                        <table><tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr></table>
                         <div class="section-header">STORE CREDENTIALS (OPTIONAL)</div>
-                         <table><tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr><tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr></table>
+                        <table><tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr></table>
                         <div class="section-header">OUTLET CREDENTIALS (OPTIONAL)</div>
-                         <table><tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr><tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr></table>
-                         <table>
+                        <table><tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr></table>
+                        <table>
                             <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
                             <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
                             <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
-                         </table>
+                        </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('moolah')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('moolah')">CLEAR FORM</button>
@@ -2483,20 +2435,20 @@ UPLOAD DATABASE - DONE✅`;
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
                     row.innerHTML = `
-                          <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-                          <td>${entry.date}</td>
-                          <td>${entry.shift}</td>
-                          <td>${entry.support}</td>
-                          <td>${entry.portal}</td>
-                          <td>${entry.store}</td>
-                          <td>${entry.zip}</td>
-                          <td>${entry.contact}</td>
-                          <td>${entry.contactNumber}</td>
-                          <td>${entry.module}</td>
+                        <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+                        <td>${entry.date}</td>
+                        <td>${entry.shift}</td>
+                        <td>${entry.support}</td>
+                        <td>${entry.portal}</td>
+                        <td>${entry.store}</td>
+                        <td>${entry.zip}</td>
+                        <td>${entry.contact}</td>
+                        <td>${entry.contactNumber}</td>
+                        <td>${entry.module}</td>
                         <td style="white-space: pre-wrap;">${entry.issue}</td>
-                          <td>${entry.escalated}</td>
-                          <td>${entry.status}</td>
-                          <td>${entry.remarks}</td>
+                        <td>${entry.escalated}</td>
+                        <td>${entry.status}</td>
+                        <td>${entry.remarks}</td>
                         <td style="white-space: pre-wrap;">${entry.resolution}</td>
                         <td class="action-cell">
                             <div class="action-container">
@@ -2505,7 +2457,7 @@ UPLOAD DATABASE - DONE✅`;
                                 <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit">✏️</button>
                                 <button class="icon-btn delete-btn" onclick="deleteEntry(this)" title="Delete">🗑️</button>
                             </div>
-                          </td>
+                        </td>
                     `;
                     tbody.appendChild(row);
                 });
@@ -2546,17 +2498,21 @@ UPLOAD DATABASE - DONE✅`;
                     sortedDates.forEach(dateKey => {
                         html += `<div class="date-group"><div class="date-header">${dateKey}</div>`;
                         dates[dateKey].forEach(entry => {
+                            // Determine what to show for "Issue" – if status is OTHER TASK, show module instead
+                            let issueDisplay = entry.issue || '-';
+                            if (entry.status && entry.status.toUpperCase() === 'OTHER TASK') {
+                                issueDisplay = entry.module || 'OTHER TASK';
+                            }
                             html += `
                                 <div class="sidebar-card" data-id="${entry.id}">
-                                    <div class="preview-item"><strong>Issue:</strong> ${entry.issue || '-'}</div>
+                                    <div class="preview-item issue-item"><strong>Issue:</strong> ${issueDisplay}</div>
                                     <div class="preview-item"><strong>Portal:</strong> ${entry.portal || '-'}</div>
                                     <div class="preview-item"><strong>Store:</strong> ${entry.store || '-'}</div>
                                     <div class="preview-item"><strong>Zip:</strong> ${entry.zip || '-'}</div>
                                     <div class="card-actions">
-                                        <button class="copy-store" data-id="${entry.id}">📋 Store</button>
-                                        <button class="copy-details" data-id="${entry.id}">📋 Details</button>
+                                        <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
+                                        <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
                                         <button class="edit-entry" data-id="${entry.id}">✏️ Edit</button>
-                                        <button class="delete-entry" data-id="${entry.id}">🗑️ Delete</button>
                                     </div>
                                 </div>
                             `;
@@ -2578,9 +2534,9 @@ UPLOAD DATABASE - DONE✅`;
                         const id = btn.dataset.id;
                         const entry = allEntries.find(e => e.id == id);
                         if (entry) {
-                            const storeDetails = `PORTAL: ${entry.portal}\nSTORE NAME: ${entry.store}\nZIPCODE: ${entry.zip}\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\nISSUE: ${entry.issue}`;
-                            navigator.clipboard.writeText(storeDetails);
-                            showNotification('Store details copied');
+                            const details = `PORTAL: ${entry.portal}\nSTORE NAME: ${entry.store}\nZIPCODE: ${entry.zip}\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\nISSUE: ${entry.issue}`;
+                            navigator.clipboard.writeText(details);
+                            showNotification('Details copied');
                         }
                     });
                 });
@@ -2590,9 +2546,9 @@ UPLOAD DATABASE - DONE✅`;
                         const id = btn.dataset.id;
                         const entry = allEntries.find(e => e.id == id);
                         if (entry) {
-                            const details = `📞 CONTACT:\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\n\n❗ ISSUE:\n${entry.issue}\n\n🔧 TROUBLESHOOTING:\n${entry.troubleshooting || ''}\n\n✅ RESOLUTION:\n${entry.resolution || ''}`;
-                            navigator.clipboard.writeText(details);
-                            showNotification('Details copied');
+                            const hrms = `📞 CONTACT:\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\n\n❗ ISSUE:\n${entry.issue}\n\n🔧 TROUBLESHOOTING:\n${entry.troubleshooting || ''}\n\n✅ RESOLUTION:\n${entry.resolution || ''}`;
+                            navigator.clipboard.writeText(hrms);
+                            showNotification('HRMS details copied');
                         }
                     });
                 });
@@ -2603,21 +2559,6 @@ UPLOAD DATABASE - DONE✅`;
                         const fakeBtn = document.createElement('button');
                         fakeBtn.closest = () => ({ dataset: { id: id } });
                         editEntry(fakeBtn);
-                    });
-                });
-                container.querySelectorAll('.delete-entry').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const id = btn.dataset.id;
-                        const entry = allEntries.find(e => e.id == id);
-                        if (entry && confirm(`Delete entry for ${entry.store} from history? This will permanently remove it.`)) {
-                            pushUndo();
-                            allEntries = allEntries.filter(e => e.id != id);
-                            saveAllEntries();
-                            renderTable();
-                            renderSidebar();
-                            showNotification('Entry permanently deleted');
-                        }
                     });
                 });
             }
@@ -3452,7 +3393,7 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 }
                 setInterval(checkAndRefreshTable, 60000);
 
-                // Sidebar toggle (new location)
+                // Sidebar toggle
                 const sidebar = document.getElementById('ticketSidebar');
                 const toggleBtn = document.getElementById('sidebarToggleTabBtn');
                 const savedSidebarState = localStorage.getItem('sidebarHidden');
