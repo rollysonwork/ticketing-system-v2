@@ -1045,11 +1045,6 @@
             background: #b45309;
             color: white;
         }
-        .bulk-bar .undo-btn,
-        .bulk-bar .redo-btn {
-            background: #6b7280;
-            color: white;
-        }
         .bulk-bar .shift-report-btn {
             background: #8b5cf6;
             color: white;
@@ -1060,10 +1055,6 @@
         }
         .bulk-bar .gemini-key-btn {
             background: #8b5cf6;
-            color: white;
-        }
-        .bulk-bar .list-models-btn {
-            background: #6b7280;
             color: white;
         }
 
@@ -1363,11 +1354,8 @@
                 <button id="exportCsvBtn" class="export-btn">📥EXPORT</button>
                 <button id="importCsvBtn" class="import-btn">📤IMPORT</button>
                 <button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report">📋 SHIFT REPORT</button>
-                <button id="undoBtn" class="undo-btn" title="Undo">↩️ UNDO</button>
-                <button id="redoBtn" class="redo-btn" title="Redo">↪️ REDO</button>
                 <button id="setSheetsKeyBtn" class="sheets-key-btn">🔑 SET SHEETS KEY</button>
                 <button id="setGeminiKeyBtn" class="gemini-key-btn">🤖 SET GEMINI KEY</button>
-                <button id="listModelsBtn" class="list-models-btn">📋 LIST MODELS</button>
             </div>
 
             <div style="overflow-x: auto;">
@@ -1436,66 +1424,15 @@
             const CONSTANT_ISSUE = `CREATE MOOLAH ACCOUNT - DONE ✅\nINSTALL & UPDATE ALL APPS - DONE ✅\nASSIGN STORE - DONE ✅`;
 
             const MODULE_OPTIONS = [
-                "POS", 
-                "Portal", 
-                "Mobile App", 
-                "Cash Register", 
-                "Item Management", 
-                "Inventory", 
-                "Back Office",
-                "Credit Card Terminal", 
-                "Printer", 
-                "Transactions", 
-                "Scan-Data", 
-                "Promotions", 
-                "Reports",
-                "Register Setup", 
-                "Store Creation", 
-                "Rocket Application", 
-                "Moolah", 
-                "API", 
-                "Database import/export",
-                "Gift Card", 
-                "Employee", 
-                "EDI", 
-                "Demo", 
-                "Training", 
-                "Credentials", 
-                "Other", 
-                "MIGRATION",
-                "VERSION UPDATE", 
-                "EBT", 
-                "Cash drawer", 
-                "LABEL PRINTER", 
-                "BULK CHANGE", 
-                "CRASH - APK", 
-                "SERVER",
-                "TOUCH SCREEN", 
-                "CHANGE STORE/EMAIL ID", 
-                "Customer Module", 
-                "Age Check", 
-                "Internet", 
-                "SYNC DATA",
-                "Surcharge", 
-                "Image set", 
-                "Scanner", 
-                "TENDER", 
-                "TIME CARD", 
-                "BANK DEPOSITE", 
-                "E-Commerce",
-                "Dual Price", 
-                "Lotto Guru", 
-                "Tax", 
-                "LABEL UTILITY", 
-                "FACTORY RESET", 
-                "DB EXPORT", 
-                "Adjustments",
-                "NVR", 
-                "RECEIPT", 
-                "RETAILZGO", 
-                "INVOICE", 
-                "SOLINK INTEGRATION", 
-                "Price Level"
+                "POS", "Portal", "Mobile App", "Cash Register", "Item Management", "Inventory", "Back Office",
+                "Credit Card Terminal", "Printer", "Transactions", "Scan-Data", "Promotions", "Reports",
+                "Register Setup", "Store Creation", "Rocket Application", "Moolah", "API", "Database import/export",
+                "Gift Card", "Employee", "EDI", "Demo", "Training", "Credentials", "Other", "MIGRATION",
+                "VERSION UPDATE", "EBT", "Cash drawer", "LABEL PRINTER", "BULK CHANGE", "CRASH - APK", "SERVER",
+                "TOUCH SCREEN", "CHANGE STORE/EMAIL ID", "Customer Module", "Age Check", "Internet", "SYNC DATA",
+                "Surcharge", "Image set", "Scanner", "TENDER", "TIME CARD", "BANK DEPOSITE", "E-Commerce",
+                "Dual Price", "Lotto Guru", "Tax", "LABEL UTILITY", "FACTORY RESET", "DB EXPORT", "Adjustments",
+                "NVR", "RECEIPT", "RETAILZGO", "INVOICE", "SOLINK INTEGRATION", "Price Level"
             ];
 
             const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
@@ -1549,56 +1486,31 @@
 
             function getStateFromZip(zip) {
                 const ZIP_TO_STATE = [
-                    { min: 35000, max: 36999, state: "AL" }, 
-                    { min: 99500, max: 99999, state: "AK" },
-                    { min: 71600, max: 72999, state: "AR" }, 
-                    { min: 85000, max: 86999, state: "AZ" },
-                    { min: 90000, max: 96699, state: "CA" }, 
-                    { min: 80000, max: 81699, state: "CO" },
-                    { min: 6000, max: 6999, state: "CT" },
-                    { min: 19700, max: 19999, state: "DE" },
-                    { min: 32000, max: 34999, state: "FL" }, 
-                    { min: 30000, max: 31999, state: "GA" },
-                    { min: 96700, max: 96999, state: "HI" }, 
-                    { min: 83200, max: 83999, state: "ID" },
-                    { min: 60000, max: 62999, state: "IL" }, 
-                    { min: 46000, max: 47999, state: "IN" },
-                    { min: 50000, max: 52999, state: "IA" }, 
-                    { min: 66000, max: 67999, state: "KS" },
-                    { min: 40000, max: 42999, state: "KY" }, 
-                    { min: 70000, max: 71599, state: "LA" },
-                    { min: 3900, max: 4999, state: "MA" }, 
-                    { min: 20600, max: 21999, state: "MD" },
-                    { min: 1000, max: 2799, state: "ME" }, 
-                    { min: 48000, max: 49999, state: "MI" },
-                    { min: 55000, max: 56799, state: "MN" }, 
-                    { min: 38600, max: 39999, state: "MS" },
-                    { min: 63000, max: 65999, state: "MO" }, 
-                    { min: 59000, max: 59999, state: "MT" },
-                    { min: 27000, max: 28999, state: "NC" }, 
-                    { min: 58000, max: 58999, state: "ND" },
-                    { min: 68000, max: 69999, state: "NE" }, 
-                    { min: 88900, max: 89999, state: "NV" },
-                    { min: 3000, max: 3899, state: "NH" }, 
-                    { min: 7000, max: 8999, state: "NJ" },
-                    { min: 87000, max: 88499, state: "NM" }, 
-                    { min: 10000, max: 14999, state: "NY" },
-                    { min: 43000, max: 45999, state: "OH" }, 
-                    { min: 73000, max: 74999, state: "OK" },
-                    { min: 97000, max: 97999, state: "OR" }, 
-                    { min: 15000, max: 19699, state: "PA" },
-                    { min: 2800, max: 2999, state: "RI" }, 
-                    { min: 29000, max: 29999, state: "SC" },
-                    { min: 57000, max: 57999, state: "SD" }, 
-                    { min: 37000, max: 38599, state: "TN" },
-                    { min: 75000, max: 79999, state: "TX" }, 
-                    { min: 84000, max: 84999, state: "UT" },
-                    { min: 5000, max: 5999, state: "VT" }, 
-                    { min: 22000, max: 24699, state: "VA" },
-                    { min: 98000, max: 99499, state: "WA" }, 
-                    { min: 24700, max: 26999, state: "WV" },
-                    { min: 53000, max: 54999, state: "WI" }, 
-                    { min: 82000, max: 83199, state: "WY" }
+                    { min: 35000, max: 36999, state: "AL" }, { min: 99500, max: 99999, state: "AK" },
+                    { min: 71600, max: 72999, state: "AR" }, { min: 85000, max: 86999, state: "AZ" },
+                    { min: 90000, max: 96699, state: "CA" }, { min: 80000, max: 81699, state: "CO" },
+                    { min: 6000, max: 6999, state: "CT" }, { min: 19700, max: 19999, state: "DE" },
+                    { min: 32000, max: 34999, state: "FL" }, { min: 30000, max: 31999, state: "GA" },
+                    { min: 96700, max: 96999, state: "HI" }, { min: 83200, max: 83999, state: "ID" },
+                    { min: 60000, max: 62999, state: "IL" }, { min: 46000, max: 47999, state: "IN" },
+                    { min: 50000, max: 52999, state: "IA" }, { min: 66000, max: 67999, state: "KS" },
+                    { min: 40000, max: 42999, state: "KY" }, { min: 70000, max: 71599, state: "LA" },
+                    { min: 3900, max: 4999, state: "MA" }, { min: 20600, max: 21999, state: "MD" },
+                    { min: 1000, max: 2799, state: "ME" }, { min: 48000, max: 49999, state: "MI" },
+                    { min: 55000, max: 56799, state: "MN" }, { min: 38600, max: 39999, state: "MS" },
+                    { min: 63000, max: 65999, state: "MO" }, { min: 59000, max: 59999, state: "MT" },
+                    { min: 27000, max: 28999, state: "NC" }, { min: 58000, max: 58999, state: "ND" },
+                    { min: 68000, max: 69999, state: "NE" }, { min: 88900, max: 89999, state: "NV" },
+                    { min: 3000, max: 3899, state: "NH" }, { min: 7000, max: 8999, state: "NJ" },
+                    { min: 87000, max: 88499, state: "NM" }, { min: 10000, max: 14999, state: "NY" },
+                    { min: 43000, max: 45999, state: "OH" }, { min: 73000, max: 74999, state: "OK" },
+                    { min: 97000, max: 97999, state: "OR" }, { min: 15000, max: 19699, state: "PA" },
+                    { min: 2800, max: 2999, state: "RI" }, { min: 29000, max: 29999, state: "SC" },
+                    { min: 57000, max: 57999, state: "SD" }, { min: 37000, max: 38599, state: "TN" },
+                    { min: 75000, max: 79999, state: "TX" }, { min: 84000, max: 84999, state: "UT" },
+                    { min: 5000, max: 5999, state: "VT" }, { min: 22000, max: 24699, state: "VA" },
+                    { min: 98000, max: 99499, state: "WA" }, { min: 24700, max: 26999, state: "WV" },
+                    { min: 53000, max: 54999, state: "WI" }, { min: 82000, max: 83199, state: "WY" }
                 ];
                 const z = parseInt(zip, 10);
                 if (isNaN(z) || zip.length !== 5) return "";
@@ -2573,7 +2485,7 @@ UPLOAD DATABASE - DONE✅`;
                 filteredEntries.forEach(entry => {
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
-                    row.innerHTML = `\n                        <td><input type=\"checkbox\" class=\"row-checkbox\" value=\"${entry.id}\"></td>\n                        <td>${entry.date}</td>\n                        <td>${entry.shift}</td>\n                        <td>${entry.support}</td>\n                        <td>${entry.portal}</td>\n                        <td>${entry.store}</td>\n                        <td>${entry.zip}</td>\n                        <td>${entry.contact}</td>\n                        <td>${entry.contactNumber}</td>\n                        <td>${entry.module}</td>\n                        <td style=\"white-space: pre-wrap;\">${entry.issue}</td>\n                        <td>${entry.escalated}</td>\n                        <td>${entry.status}</td>\n                        <td>${entry.remarks}</td>\n                        <td style=\"white-space: pre-wrap;\">${entry.resolution}</td>\n                        <td class=\"action-cell\">\n                            <div class=\"action-container\">\n                                <button class=\"icon-btn copy-btn\" onclick=\"copyRow(this)\" title=\"Copy\">📋</button>\n                                <button class=\"icon-btn summarize-row-btn\" data-id=\"${entry.id}\" onclick=\"summarizeEntryResolution(${entry.id})\" title=\"Summarize Resolution\">🔄</button>\n                                <button class=\"icon-btn edit-btn\" onclick=\"editEntry(this)\" title=\"Edit\">✏️</button>\n                                <button class=\"icon-btn delete-btn\" onclick=\"deleteEntry(this)\" title=\"Delete\">🗑️</button>\n                            </div>\n                        </td>\n                    `;
+                    row.innerHTML = `\n                         <td><input type=\"checkbox\" class=\"row-checkbox\" value=\"${entry.id}\"></td>\n                         <td>${entry.date}</td>\n                         <td>${entry.shift}</td>\n                         <td>${entry.support}</td>\n                         <td>${entry.portal}</td>\n                         <td>${entry.store}</td>\n                         <td>${entry.zip}</td>\n                         <td>${entry.contact}</td>\n                         <td>${entry.contactNumber}</td>\n                         <td>${entry.module}</td>\n                        <td style=\"white-space: pre-wrap;\">${entry.issue}</td>\n                         <td>${entry.escalated}</td>\n                         <td>${entry.status}</td>\n                         <td>${entry.remarks}</td>\n                        <td style=\"white-space: pre-wrap;\">${entry.resolution}</td>\n                        <td class=\"action-cell\">\n                            <div class=\"action-container\">\n                                <button class=\"icon-btn copy-btn\" onclick=\"copyRow(this)\" title=\"Copy\">📋</button>\n                                <button class=\"icon-btn summarize-row-btn\" data-id=\"${entry.id}\" onclick=\"summarizeEntryResolution(${entry.id})\" title=\"Summarize Resolution\">🔄</button>\n                                <button class=\"icon-btn edit-btn\" onclick=\"editEntry(this)\" title=\"Edit\">✏️</button>\n                                <button class=\"icon-btn delete-btn\" onclick=\"deleteEntry(this)\" title=\"Delete\">🗑️</button>\n                            </div>\n                        </td>\n                    `;
                     tbody.appendChild(row);
                 });
                 updateSelectAllCheckboxState();
@@ -3412,22 +3324,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
                         showNotification('Gemini API key removed.');
                     }
                 });
-                document.getElementById('listModelsBtn').addEventListener('click', async () => {
-                    const apiKey = localStorage.getItem('geminiApiKey');
-                    if (!apiKey) {
-                        showNotification('No Gemini API key set. Use SET GEMINI KEY first.');
-                        return;
-                    }
-                    try {
-                        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${apiKey}`);
-                        if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
-                        const data = await resp.json();
-                        const modelNames = data.models.map(m => m.name).join('\n');
-                        alert(`Available models:\n${modelNames}`);
-                    } catch (e) {
-                        alert(`Could not fetch models: ${e.message}`);
-                    }
-                });
 
                 if (getGoogleApiKey()) {
                     setTimeout(loadSheetData, 500);
@@ -3521,9 +3417,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 importBtn.addEventListener('click', () => fileInput.click());
 
                 document.getElementById('shiftReportBtn').addEventListener('click', showShiftReportModal);
-
-                document.getElementById('undoBtn').addEventListener('click', undo);
-                document.getElementById('redoBtn').addEventListener('click', redo);
 
                 const selectAllBar = document.getElementById('selectAllCheckbox');
                 selectAllBar.addEventListener('change', (e) => handleSelectAll(e.target));
