@@ -2003,11 +2003,7 @@
                 const troubleshootingSentence = toSentenceCase(bulletedRaw);
                 document.getElementById('ticket-previewTroubleshooting').textContent = troubleshootingSentence;
                 
-                const resolutionRaw = document.getElementById('ticket-resolution').value; // resolution field is empty in preview currently; but we keep as is
-                // We'll also set previewResolution similarly if needed, but it's currently empty.
-                // For consistency, apply sentence case to any resolution text if present.
-                const resolutionVal = document.getElementById('ticket-resolution').value;
-                document.getElementById('ticket-previewResolution').textContent = toSentenceCase(resolutionVal);
+                const resolutionRaw = document.getElementById('ticket-resolution').value; 
                 
                 syncPreviewHeight();
             }
@@ -2355,6 +2351,7 @@ UPLOAD DATABASE - DONE✅`;
                         const el = document.getElementById(`ticket-${id}`);
                         if (el) el.value = '';
                     });
+                        document.getElementById('ticket-previewResolution').textContent = '';
                 } else if (prefix === 'store') {
                     const fields = ['portal', 'storeName', 'zipcode', 'agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'];
                     fields.forEach(id => {
