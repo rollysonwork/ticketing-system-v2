@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>RetailzPOS · Unified Creation System</title>
     <style>
+        /* ... (all CSS unchanged from the previous working version) ... */
+        /* For brevity, the full CSS is included in the final answer. */
         * {
             margin: 0;
             padding: 0;
@@ -1167,7 +1169,7 @@
                             <div id="ticket-searchResults" class="search-results"></div>
                             <div id="ticket-loadStatus" class="load-status"></div>
                         </div>
-                          <table>
+                         <table>
                               <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
                               <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
                               <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td></tr>
@@ -1182,7 +1184,7 @@
                               <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
                               <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
                               <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="4"></textarea></td></tr>
-                          </table>
+                           </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('ticket')">CLEAR FORM</button>
@@ -1228,22 +1230,22 @@
                             <div id="store-searchResults" class="search-results"></div>
                             <div id="store-loadStatus" class="load-status"></div>
                         </div>
-                          <table>
-                              <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
-                              <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                              <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
-                              <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td></tr>
-                              <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td></tr>
-                              <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
-                              <tr><td>AGENT</td><td><input type="text" id="store-agent"></td></tr>
-                              <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
-                              <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
-                              <tr><td>SKU</td><td><input type="text" id="store-sku"></td></tr>
-                              <tr><td>DATABASE</td><td><input type="text" id="store-database"></td></tr>
-                              <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td></tr>
-                              <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
-                              <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
-                          </table>
+                         <table>
+                             <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
+                             <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                             <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
+                             <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td></tr>
+                             <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td></tr>
+                             <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
+                             <tr><td>AGENT</td><td><input type="text" id="store-agent"></td></tr>
+                             <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
+                             <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
+                             <tr><td>SKU</td><td><input type="text" id="store-sku"></td></tr>
+                             <tr><td>DATABASE</td><td><input type="text" id="store-database"></td></tr>
+                             <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td></tr>
+                             <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
+                             <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
+                         </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('store')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('store')">CLEAR FORM</button>
@@ -1271,34 +1273,34 @@
                             <div id="moolah-searchResults" class="search-results"></div>
                             <div id="moolah-loadStatus" class="load-status"></div>
                         </div>
-                          <table>
-                              <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
-                              <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                              <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
-                              <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
-                              <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
-                              <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
-                          </table>
+                         <table>
+                             <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
+                             <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                             <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
+                             <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
+                             <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
+                             <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
+                         </table>
                         <div class="section-header">CLIENT CREDENTIALS (OPTIONAL)</div>
-                          <table>
-                              <tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr>
-                              <tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr>
-                          </table>
+                         <table>
+                             <tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr>
+                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr>
+                         </table>
                         <div class="section-header">STORE CREDENTIALS (OPTIONAL)</div>
-                          <table>
-                              <tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr>
-                              <tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr>
-                          </table>
+                         <table>
+                             <tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr>
+                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr>
+                         </table>
                         <div class="section-header">OUTLET CREDENTIALS (OPTIONAL)</div>
-                          <table>
-                              <tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr>
-                              <tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr>
-                          </table>
-                          <table>
-                              <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
-                              <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
-                              <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
-                          </table>
+                         <table>
+                             <tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr>
+                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr>
+                         </table>
+                         <table>
+                             <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
+                             <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
+                             <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
+                         </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('moolah')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('moolah')">CLEAR FORM</button>
@@ -1331,7 +1333,7 @@
             <div style="overflow-x: auto;">
                 <table id="entryTable">
                     <thead>
-                        <tr>
+                         <tr>
                             <th style="width:30px"></th>
                             <th>DATE</th><th>SHIFT</th><th>SUPPORT</th><th>PORTAL</th><th>STORE</th><th>ZIP</th>
                             <th>CONTACT</th><th>CONTACT#</th><th>MODULE</th><th>ISSUE</th><th>ESCALATED</th>
@@ -1339,7 +1341,7 @@
                          </tr>
                     </thead>
                     <tbody></tbody>
-                </table>
+                 </table>
             </div>
         </div>
     </div>
@@ -1347,10 +1349,10 @@
     <div id="notification"></div>
 
     <script>
-        
         (function() {
             "use strict";
 
+            // ========== CONFIGURATION ==========
             const CONFIG = {
                 GOOGLE_SHEET_ID: '1IDsVjZrWCP0hXRn_EufLNgpOMtYFtV6jVZx9P5rvbcA',
                 SHEET_NAME: 'SERVER MANAGEMENT',
@@ -2157,7 +2159,8 @@ ${skuLine}`;
                     resolution: resolution,
                     moduleData: {},
                     source: 'ticket',
-                    deleted: false
+                    deleted: false,
+                    imported: false
                 };
 
                 if (editId) {
@@ -2258,7 +2261,8 @@ UPLOAD DATABASE - DONE✅`;
                     resolution: resolution,
                     moduleData: {},
                     source: prefix,
-                    deleted: false
+                    deleted: false,
+                    imported: false
                 };
 
                 if (prefix === 'moolah') {
@@ -2429,6 +2433,12 @@ UPLOAD DATABASE - DONE✅`;
                 addBtn.textContent = 'EDIT ENTRY';
                 addBtn.classList.add('editing');
 
+                // If the entry was imported, mark it as no longer imported after edit
+                if (entry.imported) {
+                    entry.imported = false;
+                    saveAllEntries();
+                }
+
                 document.querySelectorAll(`#tab-${prefix} textarea`).forEach(ta => autoGrow(ta));
                 syncPreviewHeight();
             }
@@ -2478,20 +2488,20 @@ UPLOAD DATABASE - DONE✅`;
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
                     row.innerHTML = `
-                        <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-                        <td>${entry.date}</td>
-                        <td>${entry.shift}</td>
-                        <td>${entry.support}</td>
-                        <td>${entry.portal}</td>
-                        <td>${entry.store}</td>
-                        <td>${entry.zip}</td>
-                        <td>${entry.contact}</td>
-                        <td>${entry.contactNumber}</td>
-                        <td>${entry.module}</td>
+                         <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+                         <td>${entry.date}</td>
+                         <td>${entry.shift}</td>
+                         <td>${entry.support}</td>
+                         <td>${entry.portal}</td>
+                         <td>${entry.store}</td>
+                         <td>${entry.zip}</td>
+                         <td>${entry.contact}</td>
+                         <td>${entry.contactNumber}</td>
+                         <td>${entry.module}</td>
                         <td style="white-space: pre-wrap;">${entry.issue}</td>
-                        <td>${entry.escalated}</td>
-                        <td>${entry.status}</td>
-                        <td>${entry.remarks}</td>
+                         <td>${entry.escalated}</td>
+                         <td>${entry.status}</td>
+                         <td>${entry.remarks}</td>
                         <td style="white-space: pre-wrap;">${entry.resolution}</td>
                         <td class="action-cell">
                             <div class="action-container">
@@ -2500,19 +2510,56 @@ UPLOAD DATABASE - DONE✅`;
                                 <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit">✏️</button>
                                 <button class="icon-btn delete-btn" onclick="deleteEntry(this)" title="Delete">🗑️</button>
                             </div>
-                        </td>
+                         </td>
                     `;
                     tbody.appendChild(row);
                 });
                 updateSelectAllCheckboxState();
             }
 
+            // ---------- SIDEBAR WITH COLLAPSIBLE MONTHS/DATES AND IMPORT FILTER ----------
+            // Store collapse states in localStorage
+            const collapseState = {
+                months: {},
+                dates: {}
+            };
+
+            function loadCollapseState() {
+                const saved = localStorage.getItem('sidebarCollapseState');
+                if (saved) {
+                    try {
+                        const parsed = JSON.parse(saved);
+                        collapseState.months = parsed.months || {};
+                        collapseState.dates = parsed.dates || {};
+                    } catch(e) {}
+                }
+            }
+
+            function saveCollapseState() {
+                localStorage.setItem('sidebarCollapseState', JSON.stringify({ months: collapseState.months, dates: collapseState.dates }));
+            }
+
+            function toggleMonth(monthKey) {
+                collapseState.months[monthKey] = !collapseState.months[monthKey];
+                saveCollapseState();
+                renderSidebar(); // re-render to apply collapsed state
+            }
+
+            function toggleDate(dateKey) {
+                collapseState.dates[dateKey] = !collapseState.dates[dateKey];
+                saveCollapseState();
+                renderSidebar(); // re-render to apply collapsed state
+            }
+
             function renderSidebar() {
                 const container = document.getElementById('sidebarContent');
                 if (!container) return;
 
+                // Filter out imported entries (imported === true)
+                const historyEntries = allEntries.filter(entry => !entry.imported);
+
                 const grouped = {};
-                allEntries.forEach(entry => {
+                historyEntries.forEach(entry => {
                     if (!entry.date) return;
                     const parts = entry.date.split('/');
                     if (parts.length !== 3) return;
@@ -2535,42 +2582,58 @@ UPLOAD DATABASE - DONE✅`;
 
                 let html = '';
                 sortedMonths.forEach(month => {
-                    html += `<div class="sidebar-group"><div class="month-header">${month}</div>`;
-                    const dates = grouped[month];
-                    const sortedDates = Object.keys(dates).sort((a,b) => new Date(b) - new Date(a));
-                    sortedDates.forEach(dateKey => {
-                        html += `<div class="date-group"><div class="date-header">${dateKey}</div>`;
-                        dates[dateKey].forEach(entry => {
-                            // Determine what to show for "Issue" – if status is OTHER TASK, show module instead
-                            let issueDisplay = entry.issue || '-';
-                            if (entry.status && entry.status.toUpperCase() === 'OTHER TASK') {
-                                issueDisplay = entry.module || 'OTHER TASK';
+                    const isMonthCollapsed = collapseState.months[month] === true;
+                    const monthArrow = isMonthCollapsed ? '▶' : '▼';
+                    html += `<div class="sidebar-group">
+                                <div class="month-header" onclick="toggleMonth('${month.replace(/'/g, "\\'")}')">
+                                    <span class="month-arrow">${monthArrow}</span> ${month}
+                                </div>`;
+                    if (!isMonthCollapsed) {
+                        const dates = grouped[month];
+                        const sortedDates = Object.keys(dates).sort((a,b) => new Date(b) - new Date(a));
+                        sortedDates.forEach(dateKey => {
+                            const isDateCollapsed = collapseState.dates[dateKey] === true;
+                            const dateArrow = isDateCollapsed ? '▶' : '▼';
+                            html += `<div class="date-group">
+                                        <div class="date-header" onclick="toggleDate('${dateKey.replace(/'/g, "\\'")}')">
+                                            <span class="date-arrow">${dateArrow}</span> ${dateKey}
+                                        </div>`;
+                            if (!isDateCollapsed) {
+                                html += `<div class="date-entries">`;
+                                dates[dateKey].forEach(entry => {
+                                    let issueDisplay = entry.issue || '-';
+                                    if (entry.status && entry.status.toUpperCase() === 'OTHER TASK') {
+                                        issueDisplay = entry.module || 'OTHER TASK';
+                                    }
+                                    html += `
+                                        <div class="sidebar-card" data-id="${entry.id}">
+                                            <div class="preview-item issue-item"><strong>Issue:</strong> ${issueDisplay}</div>
+                                            <div class="preview-item"><strong>Portal:</strong> ${entry.portal || '-'}</div>
+                                            <div class="preview-item"><strong>Store:</strong> ${entry.store || '-'}</div>
+                                            <div class="preview-item"><strong>Zip:</strong> ${entry.zip || '-'}</div>
+                                            <div class="card-actions">
+                                                <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
+                                                <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
+                                                <button class="edit-entry" data-id="${entry.id}">✏️ Edit</button>
+                                            </div>
+                                        </div>
+                                    `;
+                                });
+                                html += `</div>`;
                             }
-                            html += `
-                                <div class="sidebar-card" data-id="${entry.id}">
-                                    <div class="preview-item issue-item"><strong>Issue:</strong> ${issueDisplay}</div>
-                                    <div class="preview-item"><strong>Portal:</strong> ${entry.portal || '-'}</div>
-                                    <div class="preview-item"><strong>Store:</strong> ${entry.store || '-'}</div>
-                                    <div class="preview-item"><strong>Zip:</strong> ${entry.zip || '-'}</div>
-                                    <div class="card-actions">
-                                        <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
-                                        <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
-                                        <button class="edit-entry" data-id="${entry.id}">✏️ Edit</button>
-                                    </div>
-                                </div>
-                            `;
+                            html += `</div>`;
                         });
-                        html += `</div>`;
-                    });
+                    }
                     html += `</div>`;
                 });
 
-                if (allEntries.length === 0) {
+                if (historyEntries.length === 0) {
                     html = '<div style="padding:20px; text-align:center; color:#64748b;">No entries yet.</div>';
                 }
 
                 container.innerHTML = html;
 
+                // Attach event listeners to buttons
                 container.querySelectorAll('.copy-store').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -2619,6 +2682,7 @@ UPLOAD DATABASE - DONE✅`;
                             if (entry.troubleshooting === undefined) entry.troubleshooting = entry.resolution || '';
                             if (entry.resolution === undefined && entry.originalResolution) entry.resolution = entry.originalResolution;
                             if (entry.deleted === undefined) entry.deleted = false;
+                            if (entry.imported === undefined) entry.imported = false;
                         });
                     } catch (e) { }
                 }
@@ -2903,7 +2967,8 @@ UPLOAD DATABASE - DONE✅`;
                             troubleshooting: '',
                             moduleData: {},
                             source: 'ticket',
-                            deleted: false
+                            deleted: false,
+                            imported: true   // Mark as imported so it won't appear in sidebar
                         };
                         newEntries.push(entry);
                     }
@@ -2916,7 +2981,7 @@ UPLOAD DATABASE - DONE✅`;
                     saveAllEntries();
                     renderTable();
                     renderSidebar();
-                    let msg = `Imported ${newEntries.length} entries`;
+                    let msg = `Imported ${newEntries.length} entries (not added to history)`;
                     if (skippedEmptyDate) msg += `, skipped ${skippedEmptyDate} rows with empty date`;
                     showNotification(msg);
                 };
@@ -3452,8 +3517,14 @@ Use clear and proper escalation notes within the tracker to provide transparency
                     toggleBtn.textContent = isHidden ? '▶' : '◀';
                     setTimeout(() => syncPreviewHeight(), 200);
                 });
+
+                // Load collapse states for sidebar
+                loadCollapseState();
             }
 
+            // Expose toggle functions globally
+            window.toggleMonth = toggleMonth;
+            window.toggleDate = toggleDate;
             window.switchTab = switchTab;
             window.clock = clock;
             window.addEntry = addEntry;
