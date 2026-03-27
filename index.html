@@ -460,12 +460,6 @@
             line-height: 1.5;
         }
 
-        #ticket-previewPanel div {
-            margin-bottom: 6px;
-            border-bottom: 1px dashed #d0deeb;
-            padding-bottom: 4px;
-        }
-
         #ticket-previewPanel strong {
             font-weight: 600;
             color: #1e3a5f;
@@ -1268,7 +1262,6 @@
                         <div><strong>SKU:</strong> <span id="store-preview-sku"></span></div>
                         <div><strong>DATABASE:</strong> <span id="store-preview-database"></span></div>
                         <div><strong>NO OF REG.:</strong> <span id="store-preview-noOfReg"></span></div>
-                        <br>
                         <div><strong>MOKI ID:</strong><br><span id="store-preview-mokiId" class="preview-multiline"></span></div>
                         <div><strong>ANYDESK ID:</strong><br><span id="store-preview-anydeskId" class="preview-multiline"></span></div>
                         <br>
@@ -1303,17 +1296,17 @@
                             <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
                             <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
                         </table>
-                        <div class="section-header">CLIENT CREDENTIALS </div>
+                        <div class="section-header">CLIENT CREDENTIALS (OPTIONAL)</div>
                         <table>
                             <tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr>
                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr>
                         </table>
-                        <div class="section-header">STORE CREDENTIALS </div>
+                        <div class="section-header">STORE CREDENTIALS (OPTIONAL)</div>
                         <table>
                             <tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr>
                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr>
                         </table>
-                        <div class="section-header">OUTLET CREDENTIALS </div>
+                        <div class="section-header">OUTLET CREDENTIALS (OPTIONAL)</div>
                         <table>
                             <tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr>
                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr>
@@ -1350,7 +1343,6 @@
                         <div><strong>PASSWORD:</strong> <span id="moolah-preview-outletPass"></span></div>
                         <br>
                         <div><strong>SKU:</strong> <span id="moolah-preview-sku"></span></div>
-                        <br>
                         <div><strong>MOKI ID:</strong><br><span id="moolah-preview-mokiId" class="preview-multiline"></span></div>
                         <div><strong>ANYDESK ID:</strong><br><span id="moolah-preview-anydeskId" class="preview-multiline"></span></div>
                         <br>
