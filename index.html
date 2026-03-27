@@ -1162,12 +1162,12 @@
                             <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td></tr>
                             <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
                             <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td></tr>
-                            <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
+                            <tr><td>ISSUE</td><td><textarea id="ticket-issue"></textarea></td></tr>
                             <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
                             <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
-                            <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
-                            <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="4"></textarea></td></tr>
-                            <tr><td>NOTE</td><td><textarea id="ticket-note" rows="2"></textarea></td></tr>
+                            <tr><td>REMARKS</td><td><textarea id="ticket-remarks"></textarea></td></tr>
+                            <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="5"></textarea></td></tr>
+                            <tr><td>NOTE</td><td><textarea id="ticket-note" rows="5"></textarea></td></tr>
                         </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
@@ -2634,8 +2634,8 @@ UPLOAD DATABASE - DONE✅`;
                                             <div class="card-actions">
                                                 <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
                                                 <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
-                                                <button class="edit-entry" data-id="${entry.id}">✏️ Edit</button>
-                                                <button class="delete-entry" data-id="${entry.id}">🗑️ Delete</button>
+                                                <button class="edit-entry" data-id="${entry.id}">✏️</button>
+                                                <button class="delete-entry" data-id="${entry.id}">🗑️</button>
                                             </div>
                                         </div>
                                     `;
