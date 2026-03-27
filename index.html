@@ -304,7 +304,6 @@
             display: table !important;
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 16px;
         }
         .left-panel table tr {
             display: table-row !important;
@@ -318,7 +317,6 @@
         .left-panel table td:first-child {
             width: 38%;
             white-space: nowrap;
-            font-weight: 500;
         }
 
         /* existing styles - keep everything else */
@@ -527,7 +525,7 @@
             border: 1px solid #d9e2ec;
             text-align: center;
             vertical-align: middle;
-            white-space: pre-wrap;
+            white-space: normal;
             word-wrap: break-word;
             max-width: 300px;
             text-transform: uppercase;
@@ -832,6 +830,11 @@
 
         .load-status .error {
             color: #dc2626;
+        }
+
+        .entry-form table,
+        .left-panel table {
+            margin-bottom: 16px;
         }
 
         input, select, textarea {
@@ -1164,22 +1167,22 @@
                             <div id="ticket-searchResults" class="search-results"></div>
                             <div id="ticket-loadStatus" class="load-status"></div>
                         </div>
-                         <table>
-                             <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
-                             <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                             <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td></tr>
-                             <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td></tr>
-                             <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td></tr>
-                             <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td></tr>
-                             <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td></tr>
-                             <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
-                             <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td></tr>
-                             <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
-                             <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
-                             <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
-                             <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
-                             <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="4"></textarea></td></tr>
-                         </table>
+                        <table>
+                              <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
+                              <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                              <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td></tr>
+                              <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td></tr>
+                              <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td></tr>
+                              <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td></tr>
+                              <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td></tr>
+                              <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
+                              <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td></tr>
+                              <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
+                              <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
+                              <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
+                              <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
+                              <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="4"></textarea></td></tr>
+                            </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('ticket')">CLEAR FORM</button>
@@ -1225,22 +1228,22 @@
                             <div id="store-searchResults" class="search-results"></div>
                             <div id="store-loadStatus" class="load-status"></div>
                         </div>
-                         <table>
-                             <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
-                             <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                             <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
-                             <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td></tr>
-                             <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td></tr>
-                             <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
-                             <tr><td>AGENT</td><td><input type="text" id="store-agent"></td></tr>
-                             <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
-                             <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
-                             <tr><td>SKU</td><td><input type="text" id="store-sku"></td></tr>
-                             <tr><td>DATABASE</td><td><input type="text" id="store-database"></td></tr>
-                             <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td></tr>
-                             <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
-                             <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
-                         </table>
+                        <table>
+                            <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
+                            <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                            <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
+                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td></tr>
+                            <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td></tr>
+                            <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
+                            <tr><td>AGENT</td><td><input type="text" id="store-agent"></td></tr>
+                            <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
+                            <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
+                            <tr><td>SKU</td><td><input type="text" id="store-sku"></td></tr>
+                            <tr><td>DATABASE</td><td><input type="text" id="store-database"></td></tr>
+                            <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td></tr>
+                            <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
+                            <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
+                        </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('store')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('store')">CLEAR FORM</button>
@@ -1268,34 +1271,34 @@
                             <div id="moolah-searchResults" class="search-results"></div>
                             <div id="moolah-loadStatus" class="load-status"></div>
                         </div>
-                         <table>
-                             <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
-                             <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                             <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
-                             <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
-                             <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
-                             <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
-                         </table>
+                        <table>
+                            <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
+                            <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                            <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
+                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
+                            <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
+                            <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
+                        </table>
                         <div class="section-header">CLIENT CREDENTIALS (OPTIONAL)</div>
-                         <table>
-                             <tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr>
-                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr>
-                         </table>
+                        <table>
+                            <tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr>
+                            <tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr>
+                        </table>
                         <div class="section-header">STORE CREDENTIALS (OPTIONAL)</div>
-                         <table>
-                             <tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr>
-                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr>
-                         </table>
+                        <table>
+                            <tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr>
+                            <tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr>
+                        </table>
                         <div class="section-header">OUTLET CREDENTIALS (OPTIONAL)</div>
-                         <table>
-                             <tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr>
-                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr>
-                         </table>
-                         <table>
-                             <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
-                             <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
-                             <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
-                         </table>
+                        <table>
+                            <tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr>
+                            <tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr>
+                        </table>
+                        <table>
+                            <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
+                            <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
+                            <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
+                        </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('moolah')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('moolah')">CLEAR FORM</button>
@@ -1333,7 +1336,7 @@
                             <th>DATE</th><th>SHIFT</th><th>SUPPORT</th><th>PORTAL</th><th>STORE</th><th>ZIP</th>
                             <th>CONTACT</th><th>CONTACT#</th><th>MODULE</th><th>ISSUE</th><th>ESCALATED</th>
                             <th>STATUS</th><th>REMARKS</th><th>RESOLUTION</th><th>ACTIONS</th>
-                        </tr>
+                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
@@ -1347,7 +1350,6 @@
         (function() {
             "use strict";
 
-            // ========== CONFIGURATION ==========
             const CONFIG = {
                 GOOGLE_SHEET_ID: '1IDsVjZrWCP0hXRn_EufLNgpOMtYFtV6jVZx9P5rvbcA',
                 SHEET_NAME: 'SERVER MANAGEMENT',
@@ -1416,29 +1418,6 @@
             const selectedIndex = { moolah: -1, store: -1, ticket: -1 };
 
             // ========== UTILITY FUNCTIONS ==========
-            function cleanString(str) {
-                if (!str) return str;
-                // Replace literal "\n" with actual newline characters
-                return str.replace(/\\n/g, '\n');
-            }
-
-            function cleanEntry(entry) {
-                if (entry.issue) entry.issue = cleanString(entry.issue);
-                if (entry.troubleshooting) entry.troubleshooting = cleanString(entry.troubleshooting);
-                if (entry.resolution) entry.resolution = cleanString(entry.resolution);
-                if (entry.remarks) entry.remarks = cleanString(entry.remarks);
-                if (entry.contact) entry.contact = cleanString(entry.contact);
-                if (entry.contactNumber) entry.contactNumber = cleanString(entry.contactNumber);
-                if (entry.module) entry.module = cleanString(entry.module);
-                if (entry.store) entry.store = cleanString(entry.store);
-                if (entry.portal) entry.portal = cleanString(entry.portal);
-                if (entry.zip) entry.zip = cleanString(entry.zip);
-                if (entry.support) entry.support = cleanString(entry.support);
-                if (entry.escalated) entry.escalated = cleanString(entry.escalated);
-                if (entry.status) entry.status = cleanString(entry.status);
-                return entry;
-            }
-
             function getESTDateString() {
                 const now = new Date();
                 const estDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
@@ -1686,9 +1665,10 @@
 
             function getStatusClass(status) {
                 const s = status.toUpperCase();
-                if (s.includes('ACTIVE')) return 'status-active';
-                if (s.includes('DELETED')) return 'status-deleted';
+                // Order matters: 'DEACTIVE' contains 'ACTIVE'
                 if (s.includes('DEACTIVE')) return 'status-deactive';
+                if (s.includes('DELETED')) return 'status-deleted';
+                if (s.includes('ACTIVE')) return 'status-active';
                 return 'status-demo';
             }
 
@@ -1843,7 +1823,7 @@
                         Object.keys(formData).forEach(id => {
                             const el = document.getElementById(`${prefix}-${id}`);
                             if (el && formData[id] !== undefined) {
-                                el.value = cleanString(formData[id]);
+                                el.value = formData[id];
                                 if (el.tagName === 'TEXTAREA') autoGrow(el);
                             }
                         });
@@ -2451,6 +2431,7 @@ UPLOAD DATABASE - DONE✅`;
                 addBtn.textContent = 'EDIT ENTRY';
                 addBtn.classList.add('editing');
 
+                // If the entry was imported, mark it as no longer imported after edit
                 if (entry.imported) {
                     entry.imported = false;
                     saveAllEntries();
@@ -2504,36 +2485,13 @@ UPLOAD DATABASE - DONE✅`;
                 filteredEntries.forEach(entry => {
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
-                    row.innerHTML = `
-                        <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-                        <td>${entry.date}</td>
-                        <td>${entry.shift}</td>
-                        <td>${entry.support}</td>
-                        <td>${entry.portal}</td>
-                        <td>${entry.store}</td>
-                        <td>${entry.zip}</td>
-                        <td>${entry.contact}</td>
-                        <td>${entry.contactNumber}</td>
-                        <td>${entry.module}</td>
-                        <td style="white-space: pre-wrap;">${entry.issue}</td>
-                        <td>${entry.escalated}</td>
-                        <td>${entry.status}</td>
-                        <td>${entry.remarks}</td>
-                        <td style="white-space: pre-wrap;">${entry.resolution}</td>
-                        <td class="action-cell">
-                            <div class="action-container">
-                                <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy">📋</button>
-                                <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution">🔄</button>
-                                <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit">✏️</button>
-                                <button class="icon-btn delete-btn" onclick="deleteEntry(this)" title="Delete">🗑️</button>
-                            </div>
-                        </td>
-                    `;
+                    row.innerHTML = `\n                        <td><input type=\"checkbox\" class=\"row-checkbox\" value=\"${entry.id}\"></td>\n                        <td>${entry.date}</td>\n                        <td>${entry.shift}</td>\n                        <td>${entry.support}</td>\n                        <td>${entry.portal}</td>\n                        <td>${entry.store}</td>\n                        <td>${entry.zip}</td>\n                        <td>${entry.contact}</td>\n                        <td>${entry.contactNumber}</td>\n                        <td>${entry.module}</td>\n                        <td style=\"white-space: pre-wrap;\">${entry.issue}</td>\n                        <td>${entry.escalated}</td>\n                        <td>${entry.status}</td>\n                        <td>${entry.remarks}</td>\n                        <td style=\"white-space: pre-wrap;\">${entry.resolution}</td>\n                        <td class=\"action-cell\">\n                            <div class=\"action-container\">\n                                <button class=\"icon-btn copy-btn\" onclick=\"copyRow(this)\" title=\"Copy\">📋</button>\n                                <button class=\"icon-btn summarize-row-btn\" data-id=\"${entry.id}\" onclick=\"summarizeEntryResolution(${entry.id})\" title=\"Summarize Resolution\">🔄</button>\n                                <button class=\"icon-btn edit-btn\" onclick=\"editEntry(this)\" title=\"Edit\">✏️</button>\n                                <button class=\"icon-btn delete-btn\" onclick=\"deleteEntry(this)\" title=\"Delete\">🗑️</button>\n                            </div>\n                        </td>\n                    `;
                     tbody.appendChild(row);
                 });
                 updateSelectAllCheckboxState();
             }
 
+            // ---------- SIDEBAR WITH COLLAPSIBLE MONTHS/DATES AND IMPORT FILTER ----------
             const collapseState = { months: {}, dates: {} };
 
             function loadCollapseState() {
@@ -2567,7 +2525,7 @@ UPLOAD DATABASE - DONE✅`;
                 const container = document.getElementById('sidebarContent');
                 if (!container) return;
 
-                // Filter out imported entries
+                // Filter out imported entries (imported === true)
                 const historyEntries = allEntries.filter(entry => !entry.imported);
 
                 const grouped = {};
@@ -2645,6 +2603,7 @@ UPLOAD DATABASE - DONE✅`;
 
                 container.innerHTML = html;
 
+                // Attach event listeners to buttons
                 container.querySelectorAll('.copy-store').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -2694,7 +2653,6 @@ UPLOAD DATABASE - DONE✅`;
                             if (entry.resolution === undefined && entry.originalResolution) entry.resolution = entry.originalResolution;
                             if (entry.deleted === undefined) entry.deleted = false;
                             if (entry.imported === undefined) entry.imported = false;
-                            cleanEntry(entry);
                         });
                     } catch (e) { }
                 }
@@ -2980,7 +2938,7 @@ UPLOAD DATABASE - DONE✅`;
                             moduleData: {},
                             source: 'ticket',
                             deleted: false,
-                            imported: true
+                            imported: true   // Mark as imported so it won't appear in sidebar
                         };
                         newEntries.push(entry);
                     }
@@ -3355,9 +3313,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
 
                 ['moolah', 'store', 'ticket'].forEach(prefix => {
                     setupSearchKeyboard(prefix);
-                    document.getElementById(`${prefix}-storeSearch`).addEventListener('input', () => {
-                        performSearch(prefix);
-                    });
                 });
 
                 document.getElementById('setSheetsKeyBtn').addEventListener('click', setGoogleApiKeyAndLoad);
@@ -3530,6 +3485,7 @@ Use clear and proper escalation notes within the tracker to provide transparency
                     setTimeout(() => syncPreviewHeight(), 200);
                 });
 
+                // Load collapse states for sidebar
                 loadCollapseState();
             }
 
