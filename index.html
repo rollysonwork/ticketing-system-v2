@@ -2612,7 +2612,7 @@ UPLOAD DATABASE - DONE✅`;
                                     }
                                     html += `
                                         <div class="sidebar-card" data-id="${entry.id}">
-                                            <div class="preview-item issue-item"><strong>Issue:</strong> ${issueDisplay}</div>
+                                            <div class="preview-item issue-item">${issueDisplay}</div>
                                             <div class="preview-item"><strong>Portal:</strong> ${entry.portal || '-'}</div>
                                             <div class="preview-item"><strong>Store:</strong> ${entry.store || '-'}</div>
                                             <div class="preview-item"><strong>Zip:</strong> ${entry.zip || '-'}</div>
@@ -2620,6 +2620,7 @@ UPLOAD DATABASE - DONE✅`;
                                                 <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
                                                 <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
                                                 <button class="edit-entry" data-id="${entry.id}">✏️ Edit</button>
+                                                <button class="delete-entry" data-id="${entry.id}">🗑️ Delete</button>
                                             </div>
                                         </div>
                                     `;
