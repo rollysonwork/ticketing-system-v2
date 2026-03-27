@@ -2561,7 +2561,7 @@ UPLOAD DATABASE - DONE✅`;
                 const container = document.getElementById('sidebarContent');
                 if (!container) return;
 
-                const historyEntries = allEntries.filter(entry => !entry.imported);
+                const historyEntries = allEntries.filter(entry => !entry.imported && !entry.deleted);
 
                 const grouped = {};
                 historyEntries.forEach(entry => {
@@ -2674,6 +2674,23 @@ UPLOAD DATABASE - DONE✅`;
                         const fakeBtn = document.createElement('button');
                         fakeBtn.closest = () => ({ dataset: { id: id } });
                         editEntry(fakeBtn);
+                    });
+                });
+                container.querySelectorAll('.delete-entry').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = btn.dataset.id;
+                    if (confirm('Delete this entry permanently?')) {
+                        pushUndo();
+                        const entry = allEntries.find(e => e.id == id);
+                    if (entry) {
+                        entry.deleted = true;
+                        saveAllEntries();
+                        renderTable();
+                        renderSidebar();
+                        showNotification('Entry deleted');
+                            }
+                        }
                     });
                 });
             }
