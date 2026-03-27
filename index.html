@@ -1536,6 +1536,31 @@
                 return lines.map(line => '• ' + line).join('\n');
             }
 
+            // --- New function to convert text to sentence case (first letter uppercase per line)
+            function toSentenceCase(text) {
+                if (!text) return '';
+                // Split by newline, process each line independently
+                const lines = text.split(/\r?\n/);
+                const processedLines = lines.map(line => {
+                    if (line.trim() === '') return line;
+                    // Lowercase the whole line first
+                    let lowerLine = line.toLowerCase();
+                    // Capitalize first character of the line
+                    lowerLine = lowerLine.charAt(0).toUpperCase() + lowerLine.slice(1);
+                    // Additionally, for bullet lines (starting with "• "), keep bullet and capitalize the next character
+                    if (lowerLine.startsWith('•')) {
+                        // Already has bullet; ensure character after bullet is uppercase
+                        if (lowerLine.length > 2 && lowerLine[2] === ' ') {
+                            // Format: "• xyz" -> after bullet space, capitalize next
+                            lowerLine = lowerLine.substring(0, 3) + lowerLine[3].toUpperCase() + lowerLine.substring(4);
+                        }
+                    }
+                    return lowerLine;
+                });
+                return processedLines.join('\n');
+            }
+            // --------------------------------------
+
             function cloneEntries(entries) {
                 return JSON.parse(JSON.stringify(entries));
             }
@@ -1960,6 +1985,7 @@
                 syncPreviewHeight();
             }
 
+            // UPDATED: ticketUpdatePreview now uses toSentenceCase for issue, troubleshooting, and resolution
             function ticketUpdatePreview() {
                 document.getElementById('ticket-previewPortal').textContent = document.getElementById('ticket-portal').value.toUpperCase();
                 document.getElementById('ticket-previewStore').textContent = document.getElementById('ticket-store').value.toUpperCase();
@@ -1969,14 +1995,23 @@
                 document.getElementById('ticket-previewCaller').textContent = contactPerson;
                 document.getElementById('ticket-previewContactNumber').textContent = document.getElementById('ticket-contactNumber').value;
                 document.getElementById('ticket-previewContact').textContent = document.getElementById('ticket-contactNumber').value;
-                const issueVal = document.getElementById('ticket-issue').value.toUpperCase();
-                document.getElementById('ticket-previewIssue').textContent = issueVal;
-                document.getElementById('ticket-previewIssueDetails').textContent = issueVal;
-
-                const troubleshootingText = document.getElementById('ticket-resolution').value;
-                document.getElementById('ticket-previewTroubleshooting').textContent = formatWithBullets(troubleshootingText);
                 
-                document.getElementById('ticket-previewResolution').textContent = '';
+                const issueRaw = document.getElementById('ticket-issue').value.toUpperCase();
+                const issueSentence = toSentenceCase(issueRaw);
+                document.getElementById('ticket-previewIssue').textContent = issueSentence;
+                document.getElementById('ticket-previewIssueDetails').textContent = issueSentence;
+
+                const troubleshootingRaw = document.getElementById('ticket-resolution').value;
+                const bulletedRaw = formatWithBullets(troubleshootingRaw);
+                const troubleshootingSentence = toSentenceCase(bulletedRaw);
+                document.getElementById('ticket-previewTroubleshooting').textContent = troubleshootingSentence;
+                
+                const resolutionRaw = document.getElementById('ticket-resolution').value; // resolution field is empty in preview currently; but we keep as is
+                // We'll also set previewResolution similarly if needed, but it's currently empty.
+                // For consistency, apply sentence case to any resolution text if present.
+                const resolutionVal = document.getElementById('ticket-resolution').value;
+                document.getElementById('ticket-previewResolution').textContent = toSentenceCase(resolutionVal);
+                
                 syncPreviewHeight();
             }
 
@@ -1988,10 +2023,17 @@
                 document.getElementById('ticket-previewCaller').textContent = entry.contact.toUpperCase();
                 document.getElementById('ticket-previewContactNumber').textContent = entry.contactNumber;
                 document.getElementById('ticket-previewContact').textContent = entry.contactNumber;
-                document.getElementById('ticket-previewIssue').textContent = entry.issue.toUpperCase();
-                document.getElementById('ticket-previewIssueDetails').textContent = entry.issue.toUpperCase();
-                document.getElementById('ticket-previewTroubleshooting').textContent = formatWithBullets(entry.troubleshooting);
-                document.getElementById('ticket-previewResolution').textContent = entry.resolution;
+                
+                const issueSentence = toSentenceCase(entry.issue.toUpperCase());
+                document.getElementById('ticket-previewIssue').textContent = issueSentence;
+                document.getElementById('ticket-previewIssueDetails').textContent = issueSentence;
+                
+                const bulletedRaw = formatWithBullets(entry.troubleshooting);
+                const troubleshootingSentence = toSentenceCase(bulletedRaw);
+                document.getElementById('ticket-previewTroubleshooting').textContent = troubleshootingSentence;
+                
+                const resolutionSentence = toSentenceCase(entry.resolution || '');
+                document.getElementById('ticket-previewResolution').textContent = resolutionSentence;
                 syncPreviewHeight();
             }
 
@@ -2485,7 +2527,7 @@ UPLOAD DATABASE - DONE✅`;
                 filteredEntries.forEach(entry => {
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
-                    row.innerHTML = `\n                         <td><input type=\"checkbox\" class=\"row-checkbox\" value=\"${entry.id}\"></td>\n                         <td>${entry.date}</td>\n                         <td>${entry.shift}</td>\n                         <td>${entry.support}</td>\n                         <td>${entry.portal}</td>\n                         <td>${entry.store}</td>\n                         <td>${entry.zip}</td>\n                         <td>${entry.contact}</td>\n                         <td>${entry.contactNumber}</td>\n                         <td>${entry.module}</td>\n                        <td style=\"white-space: pre-wrap;\">${entry.issue}</td>\n                         <td>${entry.escalated}</td>\n                         <td>${entry.status}</td>\n                         <td>${entry.remarks}</td>\n                        <td style=\"white-space: pre-wrap;\">${entry.resolution}</td>\n                        <td class=\"action-cell\">\n                            <div class=\"action-container\">\n                                <button class=\"icon-btn copy-btn\" onclick=\"copyRow(this)\" title=\"Copy\">📋</button>\n                                <button class=\"icon-btn summarize-row-btn\" data-id=\"${entry.id}\" onclick=\"summarizeEntryResolution(${entry.id})\" title=\"Summarize Resolution\">🔄</button>\n                                <button class=\"icon-btn edit-btn\" onclick=\"editEntry(this)\" title=\"Edit\">✏️</button>\n                                <button class=\"icon-btn delete-btn\" onclick=\"deleteEntry(this)\" title=\"Delete\">🗑️</button>\n                            </div>\n                        </td>\n                    `;
+                    row.innerHTML = `\n                          <td><input type=\"checkbox\" class=\"row-checkbox\" value=\"${entry.id}\"></td>\n                          <td>${entry.date}</td>\n                          <td>${entry.shift}</td>\n                          <td>${entry.support}</td>\n                          <td>${entry.portal}</td>\n                          <td>${entry.store}</td>\n                          <td>${entry.zip}</td>\n                          <td>${entry.contact}</td>\n                          <td>${entry.contactNumber}</td>\n                          <td>${entry.module}</td>\n                        <td style=\"white-space: pre-wrap;\">${entry.issue}</td>\n                          <td>${entry.escalated}</td>\n                          <td>${entry.status}</td>\n                          <td>${entry.remarks}</td>\n                        <td style=\"white-space: pre-wrap;\">${entry.resolution}</td>\n                        <td class=\"action-cell\">\n                            <div class=\"action-container\">\n                                <button class=\"icon-btn copy-btn\" onclick=\"copyRow(this)\" title=\"Copy\">📋</button>\n                                <button class=\"icon-btn summarize-row-btn\" data-id=\"${entry.id}\" onclick=\"summarizeEntryResolution(${entry.id})\" title=\"Summarize Resolution\">🔄</button>\n                                <button class=\"icon-btn edit-btn\" onclick=\"editEntry(this)\" title=\"Edit\">✏️</button>\n                                <button class=\"icon-btn delete-btn\" onclick=\"deleteEntry(this)\" title=\"Delete\">🗑️</button>\n                            </div>\n                        </td>\n                    `;
                     tbody.appendChild(row);
                 });
                 updateSelectAllCheckboxState();
@@ -2620,7 +2662,12 @@ UPLOAD DATABASE - DONE✅`;
                         const id = btn.dataset.id;
                         const entry = allEntries.find(e => e.id == id);
                         if (entry) {
-                            const hrms = `📞 CONTACT:\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\n\n❗ ISSUE:\n${entry.issue}\n\n🔧 TROUBLESHOOTING:\n${entry.troubleshooting || ''}\n\n✅ RESOLUTION:\n${entry.resolution || ''}`;
+                            const formattedTroubleshooting = formatWithBullets(entry.troubleshooting || '');
+                            const formattedIssue = entry.issue ? entry.issue.toUpperCase() : '';
+                            const formattedResolution = entry.resolution || '';
+
+                            const hrms = `📞 CONTACT:\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\n\n❗ ISSUE:\n${formattedIssue}\n\n🔧 TROUBLESHOOTING:\n${formattedTroubleshooting}\n\n✅ RESOLUTION:\n${formattedResolution}`;
+
                             navigator.clipboard.writeText(hrms);
                             showNotification('HRMS details copied');
                         }
