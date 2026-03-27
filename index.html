@@ -1168,21 +1168,21 @@
                             <div id="ticket-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                              <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
-                              <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                              <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td></tr>
-                              <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td></tr>
-                              <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td></tr>
-                              <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td></tr>
-                              <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td></tr>
-                              <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
-                              <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td></tr>
-                              <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
-                              <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
-                              <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
-                              <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
-                              <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="4"></textarea></td></tr>
-                            </table>
+                            <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
+                            <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                            <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td></tr>
+                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td></tr>
+                            <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td></tr>
+                            <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td></tr>
+                            <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td></tr>
+                            <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
+                            <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td></tr>
+                            <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
+                            <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
+                            <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
+                            <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
+                            <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="4"></textarea></td></tr>
+                        </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('ticket')">CLEAR FORM</button>
@@ -1192,6 +1192,7 @@
                     </div>
                     <div class="right-panel" id="ticket-previewPanel">
                         <h3>🔍 PREVIEW</h3>
+                        <br>
                         <div><strong>PORTAL:</strong> <span id="ticket-previewPortal"></span></div>
                         <div><strong>STORE NAME:</strong> <span id="ticket-previewStore"></span></div>
                         <div><strong>ZIPCODE:</strong> <span id="ticket-previewZip"></span></div>
@@ -1207,10 +1208,11 @@
                         <div><span id="ticket-previewIssueDetails" class="preview-multiline"></span></div>
                         <br>
                         <div><strong>🔧 TROUBLESHOOTING:</strong></div>
-                        <div id="ticket-previewTroubleshooting" class="preview-multiline" style="white-space: pre-wrap;"></div>
+                        <div id="ticket-previewTroubleshooting" class="preview-multiline"></div>
                         <br>
                         <div><strong>✅ RESOLUTION:</strong></div>
-                        <div id="ticket-previewResolution" class="preview-multiline" style="white-space: pre-wrap;"></div>
+                        <div id="ticket-previewResolution" class="preview-multiline"></div>
+                        <br>
                     </div>
                 </div>
             </div>
@@ -1251,9 +1253,30 @@
                             <button class="clock" onclick="clock('OUT', 'store')">CLOCK OUT</button>
                         </div>
                     </div>
-                    <div class="right-panel">
+                    <div class="right-panel" id="store-previewPanel">
                         <h3>🔍 PREVIEW</h3>
-                        <div id="store-outputPreview"></div>
+                        <br>
+                        <div><strong>URL:-</strong> <span id="store-preview-url">https://portal[PORTAL].retailzpos.com/</span></div>
+                        <div><strong>STORE CREATION DATE:</strong> <span id="store-preview-date"></span></div>
+                        <div><strong>STORE NAME:</strong> <span id="store-preview-storeName"></span></div>
+                        <div><strong>ZIPCODE:</strong> <span id="store-preview-zipcode"></span></div>
+                        <div><strong>PORTAL:</strong> <span id="store-preview-portal"></span></div>
+                        <div><strong>AGENT:</strong> <span id="store-preview-agent"></span></div>
+                        <div><strong>EMAIL ID:</strong> <span id="store-preview-email"></span></div>
+                        <div><strong>PASSWORD:</strong> <span id="store-preview-password"></span></div>
+                        <div><strong>ACCESS PIN:</strong> 1122</div>
+                        <div><strong>SKU:</strong> <span id="store-preview-sku"></span></div>
+                        <div><strong>DATABASE:</strong> <span id="store-preview-database"></span></div>
+                        <div><strong>NO OF REG.:</strong> <span id="store-preview-noOfReg"></span></div>
+                        <div><strong>MOKI ID:</strong><br><span id="store-preview-mokiId" class="preview-multiline"></span></div>
+                        <div><strong>ANYDESK ID:</strong><br><span id="store-preview-anydeskId" class="preview-multiline"></span></div>
+                        <br>
+                        <div>NEW STORE CREATION FORM SENT - DONE ✅</div>
+                        <div>STORE CREATION - DONE✅</div>
+                        <div>INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE✅</div>
+                        <div>UPLOAD DATABASE - DONE✅</div>
+                        <br>
+                        <div><strong id="store-preview-skuLine"></strong></div>
                     </div>
                 </div>
             </div>
@@ -1306,9 +1329,34 @@
                             <button class="clock" onclick="clock('OUT', 'moolah')">CLOCK OUT</button>
                         </div>
                     </div>
-                    <div class="right-panel">
+                    <div class="right-panel" id="moolah-previewPanel">
                         <h3>🔍 PREVIEW</h3>
-                        <div id="moolah-previewText"></div>
+                        <br>
+                        <div><strong>PORTAL:</strong> <span id="moolah-preview-portal"></span></div>
+                        <div><strong>STORE NAME:</strong> <span id="moolah-preview-storeName"></span></div>
+                        <div><strong>ZIPCODE:</strong> <span id="moolah-preview-zipcode"></span></div>
+                        <br>
+                        <div><strong>CLIENT:</strong></div>
+                        <div><strong>USERNAME:</strong> <span id="moolah-preview-clientUser"></span></div>
+                        <div><strong>PASSWORD:</strong> <span id="moolah-preview-clientPass"></span></div>
+                        <br>
+                        <div><strong>STORE:</strong></div>
+                        <div><strong>USERNAME:</strong> <span id="moolah-preview-storeUser"></span></div>
+                        <div><strong>PASSWORD:</strong> <span id="moolah-preview-storePass"></span></div>
+                        <br>
+                        <div><strong>OUTLET:</strong></div>
+                        <div><strong>USERNAME:</strong> <span id="moolah-preview-outletUser"></span></div>
+                        <div><strong>PASSWORD:</strong> <span id="moolah-preview-outletPass"></span></div>
+                        <br>
+                        <div><strong>SKU:</strong> <span id="moolah-preview-sku"></span></div>
+                        <div><strong>MOKI ID:</strong><br><span id="moolah-preview-mokiId" class="preview-multiline"></span></div>
+                        <div><strong>ANYDESK ID:</strong><br><span id="moolah-preview-anydeskId" class="preview-multiline"></span></div>
+                        <br>
+                        <div>CREATE MOOLAH ACCOUNT - DONE ✅</div>
+                        <div>INSTALL & UPDATE ALL APPS - DONE ✅</div>
+                        <div>ASSIGN STORE - DONE ✅</div>
+                        <br>
+                        <div><strong id="moolah-preview-namingLine"></strong></div>
                     </div>
                 </div>
             </div>
@@ -1336,7 +1384,7 @@
                             <th>DATE</th><th>SHIFT</th><th>SUPPORT</th><th>PORTAL</th><th>STORE</th><th>ZIP</th>
                             <th>CONTACT</th><th>CONTACT#</th><th>MODULE</th><th>ISSUE</th><th>ESCALATED</th>
                             <th>STATUS</th><th>REMARKS</th><th>RESOLUTION</th><th>ACTIONS</th>
-                         </tr>
+                        </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
@@ -1394,15 +1442,66 @@
             const CONSTANT_ISSUE = `CREATE MOOLAH ACCOUNT - DONE ✅\nINSTALL & UPDATE ALL APPS - DONE ✅\nASSIGN STORE - DONE ✅`;
 
             const MODULE_OPTIONS = [
-                "POS", "Portal", "Mobile App", "Cash Register", "Item Management", "Inventory", "Back Office",
-                "Credit Card Terminal", "Printer", "Transactions", "Scan-Data", "Promotions", "Reports",
-                "Register Setup", "Store Creation", "Rocket Application", "Moolah", "API", "Database import/export",
-                "Gift Card", "Employee", "EDI", "Demo", "Training", "Credentials", "Other", "MIGRATION",
-                "VERSION UPDATE", "EBT", "Cash drawer", "LABEL PRINTER", "BULK CHANGE", "CRASH - APK", "SERVER",
-                "TOUCH SCREEN", "CHANGE STORE/EMAIL ID", "Customer Module", "Age Check", "Internet", "SYNC DATA",
-                "Surcharge", "Image set", "Scanner", "TENDER", "TIME CARD", "BANK DEPOSITE", "E-Commerce",
-                "Dual Price", "Lotto Guru", "Tax", "LABEL UTILITY", "FACTORY RESET", "DB EXPORT", "Adjustments",
-                "NVR", "RECEIPT", "RETAILZGO", "INVOICE", "SOLINK INTEGRATION", "Price Level"
+                "POS", 
+                "Portal", 
+                "Mobile App", 
+                "Cash Register", 
+                "Item Management", 
+                "Inventory", 
+                "Back Office",
+                "Credit Card Terminal", 
+                "Printer", 
+                "Transactions", 
+                "Scan-Data", 
+                "Promotions", 
+                "Reports",
+                "Register Setup", 
+                "Store Creation", 
+                "Rocket Application", 
+                "Moolah", 
+                "API", 
+                "Database import/export",
+                "Gift Card", 
+                "Employee", 
+                "EDI", 
+                "Demo", 
+                "Training", 
+                "Credentials", 
+                "Other", 
+                "MIGRATION",
+                "VERSION UPDATE", 
+                "EBT", 
+                "Cash drawer", 
+                "LABEL PRINTER", 
+                "BULK CHANGE", 
+                "CRASH - APK", 
+                "SERVER",
+                "TOUCH SCREEN", 
+                "CHANGE STORE/EMAIL ID", 
+                "Customer Module", 
+                "Age Check", 
+                "Internet", 
+                "SYNC DATA",
+                "Surcharge", 
+                "Image set", 
+                "Scanner", 
+                "TENDER", 
+                "TIME CARD", 
+                "BANK DEPOSITE", 
+                "E-Commerce",
+                "Dual Price", 
+                "Lotto Guru", 
+                "Tax", 
+                "LABEL UTILITY", 
+                "FACTORY RESET", 
+                "DB EXPORT", 
+                "Adjustments",
+                "NVR", 
+                "RECEIPT", 
+                "RETAILZGO", 
+                "INVOICE", 
+                "SOLINK INTEGRATION", 
+                "Price Level"
             ];
 
             const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
@@ -1456,31 +1555,56 @@
 
             function getStateFromZip(zip) {
                 const ZIP_TO_STATE = [
-                    { min: 35000, max: 36999, state: "AL" }, { min: 99500, max: 99999, state: "AK" },
-                    { min: 71600, max: 72999, state: "AR" }, { min: 85000, max: 86999, state: "AZ" },
-                    { min: 90000, max: 96699, state: "CA" }, { min: 80000, max: 81699, state: "CO" },
-                    { min: 6000, max: 6999, state: "CT" }, { min: 19700, max: 19999, state: "DE" },
-                    { min: 32000, max: 34999, state: "FL" }, { min: 30000, max: 31999, state: "GA" },
-                    { min: 96700, max: 96999, state: "HI" }, { min: 83200, max: 83999, state: "ID" },
-                    { min: 60000, max: 62999, state: "IL" }, { min: 46000, max: 47999, state: "IN" },
-                    { min: 50000, max: 52999, state: "IA" }, { min: 66000, max: 67999, state: "KS" },
-                    { min: 40000, max: 42999, state: "KY" }, { min: 70000, max: 71599, state: "LA" },
-                    { min: 3900, max: 4999, state: "MA" }, { min: 20600, max: 21999, state: "MD" },
-                    { min: 1000, max: 2799, state: "ME" }, { min: 48000, max: 49999, state: "MI" },
-                    { min: 55000, max: 56799, state: "MN" }, { min: 38600, max: 39999, state: "MS" },
-                    { min: 63000, max: 65999, state: "MO" }, { min: 59000, max: 59999, state: "MT" },
-                    { min: 27000, max: 28999, state: "NC" }, { min: 58000, max: 58999, state: "ND" },
-                    { min: 68000, max: 69999, state: "NE" }, { min: 88900, max: 89999, state: "NV" },
-                    { min: 3000, max: 3899, state: "NH" }, { min: 7000, max: 8999, state: "NJ" },
-                    { min: 87000, max: 88499, state: "NM" }, { min: 10000, max: 14999, state: "NY" },
-                    { min: 43000, max: 45999, state: "OH" }, { min: 73000, max: 74999, state: "OK" },
-                    { min: 97000, max: 97999, state: "OR" }, { min: 15000, max: 19699, state: "PA" },
-                    { min: 2800, max: 2999, state: "RI" }, { min: 29000, max: 29999, state: "SC" },
-                    { min: 57000, max: 57999, state: "SD" }, { min: 37000, max: 38599, state: "TN" },
-                    { min: 75000, max: 79999, state: "TX" }, { min: 84000, max: 84999, state: "UT" },
-                    { min: 5000, max: 5999, state: "VT" }, { min: 22000, max: 24699, state: "VA" },
-                    { min: 98000, max: 99499, state: "WA" }, { min: 24700, max: 26999, state: "WV" },
-                    { min: 53000, max: 54999, state: "WI" }, { min: 82000, max: 83199, state: "WY" }
+                    { min: 35000, max: 36999, state: "AL" }, 
+                    { min: 99500, max: 99999, state: "AK" },
+                    { min: 71600, max: 72999, state: "AR" }, 
+                    { min: 85000, max: 86999, state: "AZ" },
+                    { min: 90000, max: 96699, state: "CA" }, 
+                    { min: 80000, max: 81699, state: "CO" },
+                    { min: 6000, max: 6999, state: "CT" },
+                    { min: 19700, max: 19999, state: "DE" },
+                    { min: 32000, max: 34999, state: "FL" }, 
+                    { min: 30000, max: 31999, state: "GA" },
+                    { min: 96700, max: 96999, state: "HI" }, 
+                    { min: 83200, max: 83999, state: "ID" },
+                    { min: 60000, max: 62999, state: "IL" }, 
+                    { min: 46000, max: 47999, state: "IN" },
+                    { min: 50000, max: 52999, state: "IA" }, 
+                    { min: 66000, max: 67999, state: "KS" },
+                    { min: 40000, max: 42999, state: "KY" }, 
+                    { min: 70000, max: 71599, state: "LA" },
+                    { min: 3900, max: 4999, state: "MA" }, 
+                    { min: 20600, max: 21999, state: "MD" },
+                    { min: 1000, max: 2799, state: "ME" }, 
+                    { min: 48000, max: 49999, state: "MI" },
+                    { min: 55000, max: 56799, state: "MN" }, 
+                    { min: 38600, max: 39999, state: "MS" },
+                    { min: 63000, max: 65999, state: "MO" }, 
+                    { min: 59000, max: 59999, state: "MT" },
+                    { min: 27000, max: 28999, state: "NC" }, 
+                    { min: 58000, max: 58999, state: "ND" },
+                    { min: 68000, max: 69999, state: "NE" }, 
+                    { min: 88900, max: 89999, state: "NV" },
+                    { min: 3000, max: 3899, state: "NH" }, 
+                    { min: 7000, max: 8999, state: "NJ" },
+                    { min: 87000, max: 88499, state: "NM" }, 
+                    { min: 10000, max: 14999, state: "NY" },
+                    { min: 43000, max: 45999, state: "OH" }, 
+                    { min: 73000, max: 74999, state: "OK" },
+                    { min: 97000, max: 97999, state: "OR" }, 
+                    { min: 15000, max: 19699, state: "PA" },
+                    { min: 2800, max: 2999, state: "RI" }, 
+                    { min: 29000, max: 29999, state: "SC" },
+                    { min: 57000, max: 57999, state: "SD" }, 
+                    { min: 37000, max: 38599, state: "TN" },
+                    { min: 75000, max: 79999, state: "TX" }, 
+                    { min: 84000, max: 84999, state: "UT" },
+                    { min: 5000, max: 5999, state: "VT" }, 
+                    { min: 22000, max: 24699, state: "VA" },
+                    { min: 98000, max: 99499, state: "WA" }, 
+                    { min: 24700, max: 26999, state: "WV" },
+                    { min: 53000, max: 54999, state: "WI" }, 
+                    { min: 82000, max: 83199, state: "WY" }
                 ];
                 const z = parseInt(zip, 10);
                 if (isNaN(z) || zip.length !== 5) return "";
@@ -1665,7 +1789,6 @@
 
             function getStatusClass(status) {
                 const s = status.toUpperCase();
-                // Order matters: 'DEACTIVE' contains 'ACTIVE'
                 if (s.includes('DEACTIVE')) return 'status-deactive';
                 if (s.includes('DELETED')) return 'status-deleted';
                 if (s.includes('ACTIVE')) return 'status-active';
@@ -1864,98 +1987,70 @@
                 const anydeskId = document.getElementById('moolah-anydeskId').value.trim();
 
                 const state = getStateFromZip(zipcode || '00000');
-                const statePart = state || '[STATE]';
                 const storeClean = storeName || '[STORENAME]';
                 const portalClean = portal || '[PORTAL]';
                 const zipClean = zipcode || '[ZIPCODE]';
                 const skuClean = sku || '[SKU]';
+                const statePart = state || '[STATE]';
+
+                document.getElementById('moolah-preview-portal').textContent = portal || '[PORTAL]';
+                document.getElementById('moolah-preview-storeName').textContent = storeName || '[STORE]';
+                document.getElementById('moolah-preview-zipcode').textContent = zipcode || '[ZIPCODE]';
+                document.getElementById('moolah-preview-clientUser').textContent = clientUser || '[USER]';
+                document.getElementById('moolah-preview-clientPass').textContent = clientPass || '[PASS]';
+                document.getElementById('moolah-preview-storeUser').textContent = storeUser || '[USER]';
+                document.getElementById('moolah-preview-storePass').textContent = storePass || '[PASS]';
+                document.getElementById('moolah-preview-outletUser').textContent = outletUser || '[USER]';
+                document.getElementById('moolah-preview-outletPass').textContent = outletPass || '[PASS]';
+                document.getElementById('moolah-preview-sku').textContent = sku || '[SKU]';
+                document.getElementById('moolah-preview-mokiId').textContent = mokiId || '[MOKI]';
+                document.getElementById('moolah-preview-anydeskId').textContent = anydeskId || '[ANYDESK]';
 
                 const namingLine = `${skuClean}_${statePart}_${storeClean}_LIVE-${portalClean}_${zipClean}_MOOLAH-1`;
+                document.getElementById('moolah-preview-namingLine').textContent = namingLine;
 
-                const previewText = 
-`PORTAL: ${portal || '[PORTAL]'}
-STORE NAME: ${storeName || '[STORE]'}
-ZIPCODE: ${zipcode || '[ZIPCODE]'}
-
-CLIENT:
-USERNAME: ${clientUser || '[USER]'}
-PASSWORD: ${clientPass || '[PASS]'}
-
-STORE:
-USERNAME: ${storeUser || '[USER]'}
-PASSWORD: ${storePass || '[PASS]'}
-
-OUTLET:
-USERNAME: ${outletUser || '[USER]'}
-PASSWORD: ${outletPass || '[PASS]'}
-
-SKU: ${sku || '[SKU]'}
-MOKI ID: 
-${mokiId || '[MOKI]'}
-ANYDESK ID: 
-${anydeskId || '[ANYDESK]'}
-
-CREATE MOOLAH ACCOUNT - DONE ✅
-INSTALL & UPDATE ALL APPS - DONE ✅
-ASSIGN STORE - DONE ✅
-
-${namingLine}`;
-
-                document.getElementById('moolah-previewText').textContent = previewText;
                 syncPreviewHeight();
             }
 
             function storeUpdatePreview() {
-                const data = {
-                    portal: document.getElementById('store-portal').value.trim(),
-                    storeName: document.getElementById('store-storeName').value.trim(),
-                    zipcode: document.getElementById('store-zipcode').value.trim(),
-                    agent: document.getElementById('store-agent').value.trim(),
-                    email: document.getElementById('store-email').value.trim(),
-                    password: document.getElementById('store-password').value.trim(),
-                    sku: document.getElementById('store-sku').value.trim(),
-                    database: document.getElementById('store-database').value.trim(),
-                    noOfReg: document.getElementById('store-noOfReg').value.trim(),
-                    mokiId: document.getElementById('store-mokiId').value.trim(),
-                    anydeskId: document.getElementById('store-anydeskId').value.trim()
-                };
+                const portal = document.getElementById('store-portal').value.trim();
+                const storeName = document.getElementById('store-storeName').value.trim();
+                const zipcode = document.getElementById('store-zipcode').value.trim();
+                const agent = document.getElementById('store-agent').value.trim();
+                const email = document.getElementById('store-email').value.trim();
+                const password = document.getElementById('store-password').value.trim();
+                const sku = document.getElementById('store-sku').value.trim();
+                const database = document.getElementById('store-database').value.trim();
+                const noOfReg = document.getElementById('store-noOfReg').value.trim();
+                const mokiId = document.getElementById('store-mokiId').value.trim();
+                const anydeskId = document.getElementById('store-anydeskId').value.trim();
 
-                const url = data.portal ? `https://portal${data.portal}.retailzpos.com/` : 'https://portal[PORTAL].retailzpos.com/';
-                const state = data.zipcode ? getStateFromZip(data.zipcode) : '';
+                const url = portal ? `https://portal${portal}.retailzpos.com/` : 'https://portal[PORTAL].retailzpos.com/';
+                const state = zipcode ? getStateFromZip(zipcode) : '';
+                const dateStr = storeGetFormattedDateMinusOne();
 
-                const skuPart = data.sku || '[SKU]';
+                document.getElementById('store-preview-url').textContent = url;
+                document.getElementById('store-preview-date').textContent = dateStr;
+                document.getElementById('store-preview-storeName').textContent = storeName || '[STORE NAME]';
+                document.getElementById('store-preview-zipcode').textContent = zipcode || '[ZIPCODE]';
+                document.getElementById('store-preview-portal').textContent = portal || '[PORTAL]';
+                document.getElementById('store-preview-agent').textContent = agent || '[AGENT]';
+                document.getElementById('store-preview-email').textContent = email || '[EMAIL]';
+                document.getElementById('store-preview-password').textContent = password || '[PASSWORD]';
+                document.getElementById('store-preview-sku').textContent = sku || '[SKU]';
+                document.getElementById('store-preview-database').textContent = database || '[DATABASE]';
+                document.getElementById('store-preview-noOfReg').textContent = noOfReg || '[NO OF REG]';
+                document.getElementById('store-preview-mokiId').textContent = mokiId || '[MOKI ID]';
+                document.getElementById('store-preview-anydeskId').textContent = anydeskId || '[ANYDESK ID]';
+
+                const skuPart = sku || '[SKU]';
                 const statePart = state || '[STATE]';
-                const storeNamePart = data.storeName || '[STORENAME]';
-                const portalPart = data.portal || '[PORTAL]';
-                const zipPart = data.zipcode || '[ZIPCODE]';
-
+                const storeNamePart = storeName || '[STORENAME]';
+                const portalPart = portal || '[PORTAL]';
+                const zipPart = zipcode || '[ZIPCODE]';
                 const skuLine = `${skuPart}_${statePart}_${storeNamePart}_LIVE-${portalPart}_${zipPart}_REG-1`;
+                document.getElementById('store-preview-skuLine').textContent = skuLine;
 
-                const outputText = `URL:- ${url}
-STORE CREATION DATE: ${storeGetFormattedDateMinusOne()}
-STORE NAME: ${data.storeName || '[STORE NAME]'}
-ZIPCODE: ${data.zipcode || '[ZIPCODE]'}
-PORTAL: ${data.portal || '[PORTAL]'}
-AGENT: ${data.agent || '[AGENT]'}
-EMAIL ID: ${data.email || '[EMAIL]'}
-PASSWORD: ${data.password || '[PASSWORD]'}
-ACCESS PIN: 1122
-SKU: ${data.sku || '[SKU]'}
-DATABASE: ${data.database || '[DATABASE]'}
-NO OF REG.: ${data.noOfReg || '[NO OF REG]'}
-MOKI ID: 
-${data.mokiId || '[MOKI ID]'}
-ANYDESK ID: 
-${data.anydeskId || '[ANYDESK ID]'}
-
-NEW STORE CREATION FORM SENT - DONE ✅
-STORE CREATION - DONE✅
-INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE✅
-UPLOAD DATABASE - DONE✅
-
-${skuLine}`;
-
-                document.getElementById('store-outputPreview').textContent = outputText;
                 syncPreviewHeight();
             }
 
@@ -2261,7 +2356,7 @@ UPLOAD DATABASE - DONE✅`;
                     source: prefix,
                     deleted: false,
                     imported: false
-                };
+                 };
 
                 if (prefix === 'moolah') {
                     newEntry.moduleData = {
@@ -2431,7 +2526,6 @@ UPLOAD DATABASE - DONE✅`;
                 addBtn.textContent = 'EDIT ENTRY';
                 addBtn.classList.add('editing');
 
-                // If the entry was imported, mark it as no longer imported after edit
                 if (entry.imported) {
                     entry.imported = false;
                     saveAllEntries();
@@ -2525,7 +2619,6 @@ UPLOAD DATABASE - DONE✅`;
                 const container = document.getElementById('sidebarContent');
                 if (!container) return;
 
-                // Filter out imported entries (imported === true)
                 const historyEntries = allEntries.filter(entry => !entry.imported);
 
                 const grouped = {};
@@ -2603,7 +2696,6 @@ UPLOAD DATABASE - DONE✅`;
 
                 container.innerHTML = html;
 
-                // Attach event listeners to buttons
                 container.querySelectorAll('.copy-store').forEach(btn => {
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
@@ -2938,7 +3030,7 @@ UPLOAD DATABASE - DONE✅`;
                             moduleData: {},
                             source: 'ticket',
                             deleted: false,
-                            imported: true   // Mark as imported so it won't appear in sidebar
+                            imported: true
                         };
                         newEntries.push(entry);
                     }
@@ -3021,7 +3113,7 @@ ${demoList}
 
 5. Updates / Notices
 The current latest versions:
-RetailzPOS: Version Code 208 (Portal 1, 2, 3, 4, 5, 6, 7, 8)
+RetailzPOS: Version Code 210 (Portal 1, 2, 3, 4, 5, 6, 7, 8)
 Moolah Points: Version Code 35  (Portal 1, 2, 3, 4, 5, 6, 7, 8)
 
 Reminders for Retailz team members:
@@ -3468,7 +3560,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 }
                 setInterval(checkAndRefreshTable, 60000);
 
-                // Sidebar toggle
                 const sidebar = document.getElementById('ticketSidebar');
                 const toggleBtn = document.getElementById('sidebarToggleTabBtn');
                 const savedSidebarState = localStorage.getItem('sidebarHidden');
@@ -3485,7 +3576,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
                     setTimeout(() => syncPreviewHeight(), 200);
                 });
 
-                // Load collapse states for sidebar
                 loadCollapseState();
             }
 
