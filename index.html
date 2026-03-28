@@ -2601,31 +2601,31 @@ UPLOAD DATABASE - DONE✅`;
                 filteredEntries.forEach(entry => {
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
-                    row.innerHTML = `
-                        <td><input type="checkbox" class="row-checkbox" value="${entry.id}">
-                        <td>${entry.date}
-                        <td>${entry.shift}
-                        <td>${entry.support}
-                        <td>${entry.portal}
-                        <td>${entry.store}
-                        <td>${entry.zip}
-                        <td>${entry.contact}
-                        <td>${entry.contactNumber}
-                        <td>${entry.module}
-                        <td style="white-space: pre-wrap;">${entry.issue}
-                        <td>${entry.escalated}
-                        <td>${entry.status}
-                        <td>${entry.remarks}
-                        <td style="white-space: pre-wrap;">${entry.resolution}
-                        <td class="action-cell">
-                            <div class="action-container">
-                                <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy">📋</button>
-                                <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution">🔄</button>
-                                <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit">✏️</button>
-                                <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove">🗑️</button>
-                            </div>
-                        </td>
-                    `;
+                    row.innerHTML = `\n                             <tr>
+                            <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+                            <td>${entry.date}</td>
+                            <td>${entry.shift}</td>
+                            <td>${entry.support}</td>
+                            <td>${entry.portal}</td>
+                            <td>${entry.store}</td>
+                            <td>${entry.zip}</td>
+                            <td>${entry.contact}</td>
+                            <td>${entry.contactNumber}</td>
+                            <td>${entry.module}</td>
+                            <td style="white-space: pre-wrap;">${entry.issue}</td>
+                            <td>${entry.escalated}</td>
+                            <td>${entry.status}</td>
+                            <td>${entry.remarks}</td>
+                            <td style="white-space: pre-wrap;">${entry.resolution}</td>
+                            <td class="action-cell">
+                                <div class="action-container">
+                                    <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy">📋</button>
+                                    <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution">🔄</button>
+                                    <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit">✏️</button>
+                                    <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove">🗑️</button>
+                                </div>
+                            </td>
+                        </tr>`;
                     tbody.appendChild(row);
                 });
                 updateSelectAllCheckboxState();
