@@ -5,7 +5,7 @@
     <title>RetailzPOS · Unified Creation System</title>
     <style>
         * {
-            margin: 1;
+            margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
@@ -23,7 +23,6 @@
             color: #e2e8f0;
         }
 
-        /* sidebar styles */
         .app-container {
             display: flex;
             gap: 24px;
@@ -163,7 +162,6 @@
             color: #475569;
         }
 
-        /* Issue item styling: bold + larger font */
         .sidebar-card .preview-item.issue-item {
             font-size: 0.85rem;
             font-weight: 700;
@@ -216,7 +214,6 @@
             transition: flex 0.3s ease;
         }
 
-        /* centered title with theme toggle on far right */
         h1 {
             text-align: center;
             font-size: 1.8rem;
@@ -255,7 +252,6 @@
             background: rgba(255,255,255,0.1);
         }
 
-        /* tab container with toggle button */
         .tab-container {
             margin-bottom: 24px;
             display: flex;
@@ -299,7 +295,6 @@
             flex-wrap: wrap;
         }
 
-        /* Force table layout for left-panel forms */
         .left-panel table {
             display: table !important;
             width: 100%;
@@ -319,7 +314,6 @@
             white-space: nowrap;
         }
 
-        /* existing styles - keep everything else */
         body.dark-mode .left-panel,
         body.dark-mode .right-panel,
         body.dark-mode .search-section,
@@ -1355,11 +1349,11 @@
 
             <div class="bulk-bar">
                 <label><input type="checkbox" id="selectAllCheckbox"> Select All</label>
-                <button id="bulkDeleteBtn" title="Delete selected rows (only from main table)">🗑️DELETE</button>
-                <button id="bulkCopyBtn" title="Copy selected rows">📋COPY</button>
-                <button id="bulkUpdateStatusBtn" title="Update status for selected rows">✏️UPDATE</button>
-                <button id="exportCsvBtn" class="export-btn">📥EXPORT</button>
-                <button id="importCsvBtn" class="import-btn">📤IMPORT</button>
+                <button id="bulkDeleteBtn" title="Remove selected rows (only from main table)">🗑️ REMOVE</button>
+                <button id="bulkCopyBtn" title="Copy selected rows">📋 COPY</button>
+                <button id="bulkUpdateStatusBtn" title="Update status for selected rows">✏️ UPDATE</button>
+                <button id="exportCsvBtn" class="export-btn">📥 EXPORT</button>
+                <button id="importCsvBtn" class="import-btn">📤 IMPORT</button>
                 <button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report">📋 SHIFT REPORT</button>
                 <button id="setSheetsKeyBtn" class="sheets-key-btn">🔑 SET SHEETS KEY</button>
                 <button id="setGeminiKeyBtn" class="gemini-key-btn">🤖 SET GEMINI KEY</button>
@@ -2017,8 +2011,6 @@
                 const troubleshootingSentence = toSentenceCase(bulletedRaw);
                 document.getElementById('ticket-previewTroubleshooting').textContent = troubleshootingSentence;
                 
-                // Resolution preview no longer updated live
-                
                 syncPreviewHeight();
             }
 
@@ -2370,7 +2362,6 @@ UPLOAD DATABASE - DONE✅`;
                         const el = document.getElementById(`ticket-${id}`);
                         if (el) el.value = '';
                     });
-                    // Clear resolution preview
                     document.getElementById('ticket-previewResolution').textContent = '';
                 } else if (prefix === 'store') {
                     const fields = ['portal', 'storeName', 'zipcode', 'agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'];
@@ -2498,7 +2489,8 @@ UPLOAD DATABASE - DONE✅`;
                 syncPreviewHeight();
             }
 
-            function deleteEntry(button) {
+            // Soft delete: marks entry as deleted (hides from main table, stays in sidebar)
+            function softDeleteEntry(button) {
                 const row = button.closest('tr');
                 const id = row.dataset.id;
                 pushUndo();
@@ -2508,7 +2500,7 @@ UPLOAD DATABASE - DONE✅`;
                     saveAllEntries();
                     renderTable();
                     renderSidebar();
-                    showNotification('Entry moved to history (hidden from main table)');
+                    showNotification('Entry removed from main table (still in history)');
                 }
 
                 if (editId == id) {
@@ -2519,6 +2511,38 @@ UPLOAD DATABASE - DONE✅`;
                     document.querySelector('#tab-store .add').classList.remove('editing');
                     document.querySelector('#tab-ticket .add').textContent = 'ADD ENTRY';
                     document.querySelector('#tab-ticket .add').classList.remove('editing');
+                }
+            }
+
+            // Hard delete: completely removes entry from localStorage
+            function hardDeleteEntry(entryId) {
+                const entry = allEntries.find(e => e.id == entryId);
+                if (!entry) {
+                    showNotification('Entry not found.');
+                    return;
+                }
+
+                if (confirm('Delete this entry permanently? This action cannot be undone.')) {
+                    pushUndo();
+                    const index = allEntries.findIndex(e => e.id == entryId);
+                    if (index !== -1) {
+                        allEntries.splice(index, 1);
+                        saveAllEntries();
+                        renderTable();
+                        renderSidebar();
+                        if (editId == entryId) {
+                            editId = null;
+                            document.querySelector('#tab-moolah .add').textContent = 'ADD ENTRY';
+                            document.querySelector('#tab-moolah .add').classList.remove('editing');
+                            document.querySelector('#tab-store .add').textContent = 'ADD ENTRY';
+                            document.querySelector('#tab-store .add').classList.remove('editing');
+                            document.querySelector('#tab-ticket .add').textContent = 'ADD ENTRY';
+                            document.querySelector('#tab-ticket .add').classList.remove('editing');
+                        }
+                        showNotification('Entry permanently deleted.');
+                    } else {
+                        showNotification('Entry not found.');
+                    }
                 }
             }
 
@@ -2542,13 +2566,37 @@ UPLOAD DATABASE - DONE✅`;
                 filteredEntries.forEach(entry => {
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
-                    row.innerHTML = `\n                            <td><input type=\"checkbox\" class=\"row-checkbox\" value=\"${entry.id}\">固\n                            <td>${entry.date}固\n                            <td>${entry.shift}固\n                            <td>${entry.support}固\n                            <td>${entry.portal}固\n                            <td>${entry.store}固\n                            <td>${entry.zip}固\n                            <td>${entry.contact}固\n                            <td>${entry.contactNumber}固\n                            <td>${entry.module}固\n                        <td style=\"white-space: pre-wrap;\">${entry.issue}固\n                            <td>${entry.escalated}固\n                            <td>${entry.status}固\n                            <td>${entry.remarks}固\n                        <td style=\"white-space: pre-wrap;\">${entry.resolution}固\n                        <td class=\"action-cell\">\n                            <div class=\"action-container\">\n                                <button class=\"icon-btn copy-btn\" onclick=\"copyRow(this)\" title=\"Copy\">📋</button>\n                                <button class=\"icon-btn summarize-row-btn\" data-id=\"${entry.id}\" onclick=\"summarizeEntryResolution(${entry.id})\" title=\"Summarize Resolution\">🔄</button>\n                                <button class=\"icon-btn edit-btn\" onclick=\"editEntry(this)\" title=\"Edit\">✏️</button>\n                                <button class=\"icon-btn delete-btn\" onclick=\"deleteEntry(this)\" title=\"Delete\">🗑️</button>\n                            </div>\n                        固\n                    `;
+                    row.innerHTML = `
+                        <td><input type="checkbox" class="row-checkbox" value="${entry.id}">
+                        <td>${entry.date}
+                        <td>${entry.shift}
+                        <td>${entry.support}
+                        <td>${entry.portal}
+                        <td>${entry.store}
+                        <td>${entry.zip}
+                        <td>${entry.contact}
+                        <td>${entry.contactNumber}
+                        <td>${entry.module}
+                        <td style="white-space: pre-wrap;">${entry.issue}
+                        <td>${entry.escalated}
+                        <td>${entry.status}
+                        <td>${entry.remarks}
+                        <td style="white-space: pre-wrap;">${entry.resolution}
+                        <td class="action-cell">
+                            <div class="action-container">
+                                <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy">📋</button>
+                                <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution">🔄</button>
+                                <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit">✏️</button>
+                                <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove">🗑️</button>
+                            </div>
+                        </td>
+                    `;
                     tbody.appendChild(row);
                 });
                 updateSelectAllCheckboxState();
             }
 
-            // ---------- SIDEBAR WITH COLLAPSIBLE MONTHS/DATES AND DELETE BUTTON ----------
+            // ---------- SIDEBAR WITH COLLAPSIBLE MONTHS/DATES AND HARD DELETE BUTTON ----------
             const collapseState = { months: {}, dates: {} };
 
             function loadCollapseState() {
@@ -2582,8 +2630,8 @@ UPLOAD DATABASE - DONE✅`;
                 const container = document.getElementById('sidebarContent');
                 if (!container) return;
 
-                // Exclude imported entries and deleted entries
-                const historyEntries = allEntries.filter(entry => !entry.imported && !entry.deleted);
+                // Show all non-imported entries (including deleted ones) in history
+                const historyEntries = allEntries.filter(entry => !entry.imported);
 
                 const grouped = {};
                 historyEntries.forEach(entry => {
@@ -2632,7 +2680,6 @@ UPLOAD DATABASE - DONE✅`;
                                     if (entry.status && entry.status.toUpperCase() === 'OTHER TASK') {
                                         issueDisplay = entry.module || 'OTHER TASK';
                                     }
-                                    // Removed "Issue:" label
                                     html += `
                                         <div class="sidebar-card" data-id="${entry.id}">
                                             <div class="preview-item issue-item">${issueDisplay}</div>
@@ -2738,17 +2785,7 @@ UPLOAD DATABASE - DONE✅`;
                     btn.addEventListener('click', (e) => {
                         e.stopPropagation();
                         const id = btn.dataset.id;
-                        if (confirm('Delete this entry permanently?')) {
-                            pushUndo();
-                            const entry = allEntries.find(e => e.id == id);
-                            if (entry) {
-                                entry.deleted = true;
-                                saveAllEntries();
-                                renderTable();
-                                renderSidebar();
-                                showNotification('Entry deleted');
-                            }
-                        }
+                        hardDeleteEntry(Number(id));
                     });
                 });
             }
@@ -2786,7 +2823,7 @@ UPLOAD DATABASE - DONE✅`;
                     showNotification('No rows selected');
                     return;
                 }
-                if (!confirm(`Mark ${ids.length} selected entries as deleted? They will remain in history.`)) return;
+                if (!confirm(`Remove ${ids.length} selected entries from main table? They will remain in history.`)) return;
                 pushUndo();
                 ids.forEach(id => {
                     const entry = allEntries.find(e => e.id == id);
@@ -3589,7 +3626,7 @@ Use clear and proper escalation notes within the tracker to provide transparency
             window.addEntry = addEntry;
             window.clearFormOnly = clearFormOnly;
             window.editEntry = editEntry;
-            window.deleteEntry = deleteEntry;
+            window.softDeleteEntry = softDeleteEntry;
             window.copyRow = copyRow;
             window.selectStore = selectStore;
             window.highlightResult = highlightResult;
