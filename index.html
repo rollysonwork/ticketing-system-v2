@@ -1147,7 +1147,7 @@
                             <div id="ticket-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                            <tr><td>DATE</td><td><input type="date" id="ticket-date" disabled></td></tr>
+                            <tr><td>DATE</td><td><input type="date" id="ticket-date"></td></tr>
                             <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
                             <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td></tr>
                             <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td></tr>
@@ -1156,10 +1156,10 @@
                             <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td></tr>
                             <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
                             <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td></tr>
-                            <tr><td>ISSUE</td><td><textarea id="ticket-issue"></textarea></td></tr>
+                            <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
                             <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
                             <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
-                            <tr><td>REMARKS</td><td><textarea id="ticket-remarks"></textarea></td></tr>
+                            <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
                             <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="5"></textarea></td></tr>
                             <tr><td>NOTE</td><td><textarea id="ticket-note" rows="5"></textarea></td></tr>
                         </table>
@@ -1894,11 +1894,15 @@
             function syncShiftSupportFromTicket() {
                 const ticketShift = document.getElementById('ticket-shift').value;
                 const ticketSupport = document.getElementById('ticket-support').value;
+                const ticketDate = document.getElementById('ticket-date').value;
 
                 document.getElementById('store-shift').value = ticketShift;
                 document.getElementById('store-support').value = ticketSupport;
+                document.getElementById('store-date').value = ticketDate;
+
                 document.getElementById('moolah-shift').value = ticketShift;
                 document.getElementById('moolah-support').value = ticketSupport;
+                document.getElementById('moolah-date').value = ticketDate;
 
                 storeUpdatePreview();
                 moolahUpdatePreview();
@@ -2203,13 +2207,16 @@
                     resolution: resolution,
                     moduleData: {},
                     source: 'ticket',
-                    deleted: false,
+                    deleted: false,   // ensure new entries are visible
                     imported: false
                 };
 
                 if (editId) {
                     const index = allEntries.findIndex(e => e.id === editId);
-                    if (index !== -1) allEntries[index] = newEntry;
+                    if (index !== -1) {
+                        newEntry.deleted = false; // restore if it was deleted
+                        allEntries[index] = newEntry;
+                    }
                     showNotification('Entry updated!');
                     editId = null;
                     addBtn.textContent = 'ADD ENTRY';
@@ -2337,7 +2344,10 @@ UPLOAD DATABASE - DONE✅`;
 
                 if (editId) {
                     const index = allEntries.findIndex(e => e.id === editId);
-                    if (index !== -1) allEntries[index] = newEntry;
+                    if (index !== -1) {
+                        newEntry.deleted = false;
+                        allEntries[index] = newEntry;
+                    }
                     showNotification('Entry updated!');
                     editId = null;
                     const addBtn = document.querySelector(`#tab-${prefix} .add`);
@@ -2362,6 +2372,9 @@ UPLOAD DATABASE - DONE✅`;
                         const el = document.getElementById(`ticket-${id}`);
                         if (el) el.value = '';
                     });
+                    // Reset textarea heights
+                    const textareas = document.querySelectorAll(`#tab-ticket textarea`);
+                    textareas.forEach(ta => autoGrow(ta));
                     document.getElementById('ticket-previewResolution').textContent = '';
                 } else if (prefix === 'store') {
                     const fields = ['portal', 'storeName', 'zipcode', 'agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'];
@@ -2369,12 +2382,16 @@ UPLOAD DATABASE - DONE✅`;
                         const el = document.getElementById(`store-${id}`);
                         if (el) el.value = '';
                     });
+                    const textareas = document.querySelectorAll(`#tab-store textarea`);
+                    textareas.forEach(ta => autoGrow(ta));
                 } else if (prefix === 'moolah') {
                     const fields = ['portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'storePass', 'outletUser', 'outletPass', 'sku', 'mokiId', 'anydeskId'];
                     fields.forEach(id => {
                         const el = document.getElementById(`moolah-${id}`);
                         if (el) el.value = '';
                     });
+                    const textareas = document.querySelectorAll(`#tab-moolah textarea`);
+                    textareas.forEach(ta => autoGrow(ta));
                 }
 
                 if (prefix === 'ticket') ticketUpdatePreview();
@@ -2489,7 +2506,6 @@ UPLOAD DATABASE - DONE✅`;
                 syncPreviewHeight();
             }
 
-            // Soft delete: marks entry as deleted (hides from main table, stays in sidebar)
             function softDeleteEntry(button) {
                 const row = button.closest('tr');
                 const id = row.dataset.id;
@@ -2544,6 +2560,25 @@ UPLOAD DATABASE - DONE✅`;
                         showNotification('Entry not found.');
                     }
                 }
+            }
+
+            // Restore a soft-deleted entry back to main table
+            function restoreEntry(entryId) {
+                const entry = allEntries.find(e => e.id == entryId);
+                if (!entry) {
+                    showNotification('Entry not found.');
+                    return;
+                }
+                if (!entry.deleted) {
+                    showNotification('Entry is already visible.');
+                    return;
+                }
+                pushUndo();
+                entry.deleted = false;
+                saveAllEntries();
+                renderTable();
+                renderSidebar();
+                showNotification('Entry restored to main table.');
             }
 
             function copyRow(button) {
@@ -2690,6 +2725,7 @@ UPLOAD DATABASE - DONE✅`;
                                                 <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
                                                 <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
                                                 <button class="edit-entry" data-id="${entry.id}">✏️</button>
+                                                <button class="return-entry" data-id="${entry.id}">↩️</button>
                                                 <button class="delete-entry" data-id="${entry.id}">🗑️</button>
                                             </div>
                                         </div>
@@ -2778,6 +2814,14 @@ UPLOAD DATABASE - DONE✅`;
                         const fakeBtn = document.createElement('button');
                         fakeBtn.closest = () => ({ dataset: { id: id } });
                         editEntry(fakeBtn);
+                    });
+                });
+
+                container.querySelectorAll('.return-entry').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        const id = btn.dataset.id;
+                        restoreEntry(Number(id));
                     });
                 });
 
@@ -3521,6 +3565,9 @@ Use clear and proper escalation notes within the tracker to provide transparency
                     ticketUpdatePreview();
                 });
                 document.getElementById('ticket-shift').addEventListener('change', () => saveFormData('ticket'));
+
+                // Sync ticket date to store/moolah when it changes
+                document.getElementById('ticket-date').addEventListener('change', syncShiftSupportFromTicket);
 
                 const moolahFields = ['portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'outletUser', 'sku', 'mokiId', 'anydeskId'];
                 moolahFields.forEach(id => {
