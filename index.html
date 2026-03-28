@@ -23,6 +23,7 @@
             color: #e2e8f0;
         }
 
+        /* sidebar styles */
         .app-container {
             display: flex;
             gap: 24px;
@@ -161,6 +162,8 @@
             min-width: 70px;
             color: #475569;
         }
+
+        /* Issue item styling: bold + larger font */
         .sidebar-card .preview-item.issue-item {
             font-size: 0.85rem;
             font-weight: 700;
@@ -212,7 +215,8 @@
             min-width: 0;
             transition: flex 0.3s ease;
         }
-        
+
+        /* centered title with theme toggle on far right */
         h1 {
             text-align: center;
             font-size: 1.8rem;
@@ -251,6 +255,7 @@
             background: rgba(255,255,255,0.1);
         }
 
+        /* tab container with toggle button */
         .tab-container {
             margin-bottom: 24px;
             display: flex;
@@ -293,7 +298,8 @@
             gap: 8px;
             flex-wrap: wrap;
         }
-        
+
+        /* Force table layout for left-panel forms */
         .left-panel table {
             display: table !important;
             width: 100%;
@@ -313,6 +319,7 @@
             white-space: nowrap;
         }
 
+        /* existing styles - keep everything else */
         body.dark-mode .left-panel,
         body.dark-mode .right-panel,
         body.dark-mode .search-section,
@@ -1184,11 +1191,8 @@
                         <div><span id="ticket-previewNote" class="preview-multiline"></span></div>
                         <br>
                         <div><strong>📞 CONTACT:</strong></div>
-                        <div><strong>CALLER NAME: <span id="ticket-previewContactPerson"></span></div>
-                        <div><strong>CONTACT NUMBER: <span id="ticket-previewContactNumber"></span></div>
-                        <br>
-                        <div><strong>❗ ISSUE:</strong></div>
-                        <div><span id="ticket-previewIssueDetails" class="preview-multiline"></span></div>
+                        <div><strong>CALLER NAME: <span id="ticket-previewContactPerson"></span></strong></div>
+                        <div><strong>CONTACT NUMBER: <span id="ticket-previewContactNumber"></span></strong></div>
                         <br>
                         <div><strong>🔧 TROUBLESHOOTING:</strong></div>
                         <div><span id="ticket-previewTroubleshooting" class="preview-multiline"></span></div>
@@ -1995,7 +1999,6 @@
                 
                 const issueRaw = document.getElementById('ticket-issue').value.toUpperCase();
                 const issueSentence = toSentenceCase(issueRaw);
-                document.getElementById('ticket-previewIssue').textContent = issueSentence;
                 document.getElementById('ticket-previewIssueDetails').textContent = issueSentence;
 
                 const noteRaw = document.getElementById('ticket-note').value;
@@ -2005,8 +2008,10 @@
                 const bulletedRaw = formatWithBullets(troubleshootingRaw);
                 const troubleshootingSentence = toSentenceCase(bulletedRaw);
                 document.getElementById('ticket-previewTroubleshooting').textContent = troubleshootingSentence;
-                
-                // Resolution preview no longer updated live
+
+                const resolutionRaw = document.getElementById('ticket-resolution').value; // We'll keep resolution same as troubleshooting for preview, but could be different. For now, just show it.
+                const resolutionSentence = toSentenceCase(resolutionRaw);
+                document.getElementById('ticket-previewResolution').textContent = resolutionSentence;
                 
                 syncPreviewHeight();
             }
@@ -2021,7 +2026,6 @@
                 document.getElementById('ticket-previewContact').textContent = entry.contactNumber;
                 
                 const issueSentence = toSentenceCase(entry.issue.toUpperCase());
-                document.getElementById('ticket-previewIssue').textContent = issueSentence;
                 document.getElementById('ticket-previewIssueDetails').textContent = issueSentence;
                 
                 document.getElementById('ticket-previewNote').textContent = entry.note ? toSentenceCase(entry.note) : '';
@@ -2172,13 +2176,15 @@
                 addBtn.disabled = true;
 
                 let resolution = '';
-                if (troubleshooting.trim()) {
-                    const summary = await summarizeText(troubleshooting);
-                    if (summary) resolution = summary;
+                try {
+                    if (troubleshooting.trim()) {
+                        const summary = await summarizeText(troubleshooting);
+                        if (summary) resolution = summary;
+                    }
+                } finally {
+                    addBtn.textContent = originalBtnText;
+                    addBtn.disabled = false;
                 }
-
-                addBtn.textContent = originalBtnText;
-                addBtn.disabled = false;
 
                 const newEntry = {
                     id: editId || Date.now(),
@@ -2359,25 +2365,24 @@ UPLOAD DATABASE - DONE✅`;
                         const el = document.getElementById(`ticket-${id}`);
                         if (el) el.value = '';
                     });
-                    // Clear resolution preview
-                    document.getElementById('ticket-previewResolution').textContent = '';
+                    // Clear preview via update function
+                    ticketUpdatePreview();
                 } else if (prefix === 'store') {
                     const fields = ['portal', 'storeName', 'zipcode', 'agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'];
                     fields.forEach(id => {
                         const el = document.getElementById(`store-${id}`);
                         if (el) el.value = '';
                     });
+                    storeUpdatePreview();
                 } else if (prefix === 'moolah') {
                     const fields = ['portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'storePass', 'outletUser', 'outletPass', 'sku', 'mokiId', 'anydeskId'];
                     fields.forEach(id => {
                         const el = document.getElementById(`moolah-${id}`);
                         if (el) el.value = '';
                     });
+                    moolahUpdatePreview();
                 }
 
-                if (prefix === 'ticket') ticketUpdatePreview();
-                if (prefix === 'store') storeUpdatePreview();
-                if (prefix === 'moolah') moolahUpdatePreview();
                 saveFormData(prefix);
             }
 
@@ -2531,7 +2536,31 @@ UPLOAD DATABASE - DONE✅`;
                 filteredEntries.forEach(entry => {
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
-                    row.innerHTML = `\n                            <td><input type=\"checkbox\" class=\"row-checkbox\" value=\"${entry.id}\">\n                            <td>${entry.date}\n                            <td>${entry.shift}\n                            <td>${entry.support}\n                            <td>${entry.portal}\n                            <td>${entry.store}\n                            <td>${entry.zip}\n                            <td>${entry.contact}\n                            <td>${entry.contactNumber}\n                            <td>${entry.module}\n                        <td style=\"white-space: pre-wrap;\">${entry.issue}\n                            <td>${entry.escalated}\n                            <td>${entry.status}\n                            <td>${entry.remarks}\n                        <td style=\"white-space: pre-wrap;\">${entry.resolution}\n                        <td class=\"action-cell\">\n                            <div class=\"action-container\">\n                                <button class=\"icon-btn copy-btn\" onclick=\"copyRow(this)\" title=\"Copy\">📋</button>\n                                <button class=\"icon-btn summarize-row-btn\" data-id=\"${entry.id}\" onclick=\"summarizeEntryResolution(${entry.id})\" title=\"Summarize Resolution\">🔄</button>\n                                <button class=\"icon-btn edit-btn\" onclick=\"editEntry(this)\" title=\"Edit\">✏️</button>\n                                <button class=\"icon-btn delete-btn\" onclick=\"deleteEntry(this)\" title=\"Delete\">🗑️</button>\n                            </div>\n                        \n                    `;
+                    row.innerHTML = `
+                        <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+                        <td>${entry.date}</td>
+                        <td>${entry.shift}</td>
+                        <td>${entry.support}</td>
+                        <td>${entry.portal}</td>
+                        <td>${entry.store}</td>
+                        <td>${entry.zip}</td>
+                        <td>${entry.contact}</td>
+                        <td>${entry.contactNumber}</td>
+                        <td>${entry.module}</td>
+                        <td style="white-space: pre-wrap;">${entry.issue}</td>
+                        <td>${entry.escalated}</td>
+                        <td>${entry.status}</td>
+                        <td>${entry.remarks}</td>
+                        <td style="white-space: pre-wrap;">${entry.resolution}</td>
+                        <td class="action-cell">
+                            <div class="action-container">
+                                <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy">📋</button>
+                                <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution">🔄</button>
+                                <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit">✏️</button>
+                                <button class="icon-btn delete-btn" onclick="deleteEntry(this)" title="Delete">🗑️</button>
+                            </div>
+                        </td>
+                    `;
                     tbody.appendChild(row);
                 });
                 updateSelectAllCheckboxState();
@@ -2621,7 +2650,6 @@ UPLOAD DATABASE - DONE✅`;
                                     if (entry.status && entry.status.toUpperCase() === 'OTHER TASK') {
                                         issueDisplay = entry.module || 'OTHER TASK';
                                     }
-                                    // Removed "Issue:" label
                                     html += `
                                         <div class="sidebar-card" data-id="${entry.id}">
                                             <div class="preview-item issue-item">${issueDisplay}</div>
@@ -2937,8 +2965,10 @@ UPLOAD DATABASE - DONE✅`;
             }
 
             function exportToCSV() {
+                // Filter out deleted entries
+                const activeEntries = allEntries.filter(e => !e.deleted);
                 const headers = ['DATE','SHIFT','SUPPORT','PORTAL','STORE','ZIP','CONTACT','CONTACT#','MODULE','ISSUE','ESCALATED','STATUS','REMARKS','RESOLUTION'];
-                const rows = allEntries.map(entry => [
+                const rows = activeEntries.map(entry => [
                     entry.date, entry.shift, entry.support, entry.portal, entry.store, entry.zip,
                     entry.contact, entry.contactNumber, entry.module, entry.issue,
                     entry.escalated, entry.status, entry.remarks, entry.resolution
@@ -3022,6 +3052,10 @@ UPLOAD DATABASE - DONE✅`;
                             skippedEmptyDate++;
                             continue;
                         }
+                        const moduleVal = values[8] ? values[8].trim() : '';
+                        let source = 'ticket';
+                        if (moduleVal.toUpperCase().includes('MOOLAH')) source = 'moolah';
+                        else if (moduleVal.toUpperCase().includes('STORE CREATION')) source = 'store';
                         const entry = {
                             id: Date.now() + i + Math.random(),
                             date: values[0],
@@ -3032,7 +3066,7 @@ UPLOAD DATABASE - DONE✅`;
                             zip: values[5],
                             contact: values[6],
                             contactNumber: values[7],
-                            module: values[8],
+                            module: moduleVal,
                             issue: values[9],
                             escalated: values[10],
                             status: values[11],
@@ -3041,7 +3075,7 @@ UPLOAD DATABASE - DONE✅`;
                             troubleshooting: '',
                             note: '',
                             moduleData: {},
-                            source: 'ticket',
+                            source: source,
                             deleted: false,
                             imported: true
                         };
