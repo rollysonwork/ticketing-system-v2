@@ -926,8 +926,8 @@
                         <div><span id="ticket-previewNote" class="preview-multiline"></span></div>
                         <br>
                         <div><strong>📞 CONTACT:</strong></div>
-                        <div><strong>CALLER NAME: </strong><span id="ticket-previewContactPerson"></span></div>
-                        <div><strong>CONTACT NUMBER: </strong><span id="ticket-previewContactNumber"></span></div>
+                        <div><strong>CALLER NAME:&nbsp;</strong><span id="ticket-previewContactPerson"></span></div>
+                        <div><strong>CONTACT NUMBER:&nbsp;</strong><span id="ticket-previewContactNumber"></span></div>
                         <br>
                         <div><strong>❗ ISSUE:</strong></div>
                         <div><span id="ticket-previewIssueDetails" class="preview-multiline"></span></div>
@@ -1743,19 +1743,19 @@
                 document.getElementById('ticket-previewContactNumber').textContent = document.getElementById('ticket-contactNumber').value;
                 document.getElementById('ticket-previewContact').textContent = document.getElementById('ticket-contactNumber').value;
                 
-                const issueRaw = document.getElementById('ticket-issue').value.toUpperCase();
-                const issueSentence = toSentenceCase(issueRaw);
-                document.getElementById('ticket-previewIssue').textContent = issueSentence;
-                document.getElementById('ticket-previewIssueDetails').textContent = issueSentence;
+                
+		const issueUpper = document.getElementById('ticket-issue').value.toUpperCase();
+		document.getElementById('ticket-previewIssue').textContent = issueUpper;
+		document.getElementById('ticket-previewIssueDetails').textContent = issueUpper;
+
 
                 const noteRaw = document.getElementById('ticket-note').value;
                 document.getElementById('ticket-previewNote').textContent = noteRaw ? toSentenceCase(noteRaw) : '';
 
                 const troubleshootingRaw = document.getElementById('ticket-resolution').value;
                 const bulletedRaw = formatWithBullets(troubleshootingRaw);
-                const troubleshootingSentence = toSentenceCase(bulletedRaw);
-                document.getElementById('ticket-previewTroubleshooting').textContent = troubleshootingSentence;
-                
+                document.getElementById('ticket-previewTroubleshooting').textContent = bulletedRaw.toUpperCase();
+
                 syncPreviewHeight();
             }
 
@@ -1767,20 +1767,18 @@
                 document.getElementById('ticket-previewCaller').textContent = entry.contact.toUpperCase();
                 document.getElementById('ticket-previewContactNumber').textContent = entry.contactNumber;
                 document.getElementById('ticket-previewContact').textContent = entry.contactNumber;
+
+                document.getElementById('ticket-previewIssue').textContent = (entry.issue || '').toUpperCase();
+		document.getElementById('ticket-previewIssueDetails').textContent = (entry.issue || '').toUpperCase();
+
+		document.getElementById('ticket-previewNote').textContent = entry.note ? toSentenceCase(entry.note) : '';
                 
-                const issueSentence = toSentenceCase(entry.issue.toUpperCase());
-                document.getElementById('ticket-previewIssue').textContent = issueSentence;
-                document.getElementById('ticket-previewIssueDetails').textContent = issueSentence;
                 
-                document.getElementById('ticket-previewNote').textContent = entry.note ? toSentenceCase(entry.note) : '';
+		document.getElementById('ticket-previewTroubleshooting').textContent = formatWithBullets(entry.troubleshooting || '').toUpperCase();
+		
+		document.getElementById('ticket-previewResolution').textContent = entry.resolution ? toSentenceCase(entry.resolution) : '';
                 
-                const bulletedRaw = formatWithBullets(entry.troubleshooting);
-                const troubleshootingSentence = toSentenceCase(bulletedRaw);
-                document.getElementById('ticket-previewTroubleshooting').textContent = troubleshootingSentence;
-                
-                const resolutionSentence = toSentenceCase(entry.resolution || '');
-                document.getElementById('ticket-previewResolution').textContent = resolutionSentence;
-                syncPreviewHeight();
+		syncPreviewHeight();
             }
 
             async function summarizeText(text) {
@@ -1811,7 +1809,7 @@
                             body: JSON.stringify({
                                 contents: [{
                                     parts: [{
-                                        text: `Summarize the following step‑by‑step troubleshooting steps into one to two clear, concise sentences. Keep it professional . Only output the summarized sentences.\n\n${text}`
+                                        text: `Summarize the following step‑by‑step troubleshooting steps into two to three clear & concise sentences. Keep it professional . Only output the summarized sentences.\n\n${text}`
                                     }]
                                 }]
                             })
@@ -2403,7 +2401,7 @@ UPLOAD DATABASE - DONE✅`;
                                     <td>${entry.escalated}</td>
                                     <td>${entry.status}</td>
                                     <td>${entry.remarks}</td>
-                                    <td style="white-space: pre-wrap;">${entry.resolution}</td>
+                                    <td style="white-space: pre-wrap;">${(entry.resolution || '').toUpperCase()}</td>
                                     <td class="action-cell">
                                         <div class="action-container">
                                             <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy">📋</button>
@@ -2553,7 +2551,7 @@ UPLOAD DATABASE - DONE✅`;
                             const formattedResolution = entry.resolution || '';
                             const formattedNote = entry.note ? entry.note : '';
 
-                            const plainText = `📞 CONTACT:\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\n\n❗ ISSUE:\n${formattedIssue}\n\n📝 NOTE:\n${formattedNote}\n\n🔧 TROUBLESHOOTING:\n${formattedTroubleshooting}\n\n✅ RESOLUTION:\n${formattedResolution}`;
+                            const plainText = `📞 CONTACT:\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\n\n❗ ISSUE:\n${formattedIssue}\n\n🔧 TROUBLESHOOTING:\n${formattedTroubleshooting}\n\n✅ RESOLUTION:\n${formattedResolution}`;
 
                             const htmlCopy = `
                                 📞 CONTACT:<br>
