@@ -1744,9 +1744,9 @@
                 document.getElementById('ticket-previewContact').textContent = document.getElementById('ticket-contactNumber').value;
                 
                 
-		const issueUpper = document.getElementById('ticket-issue').value.toUpperCase();
-		document.getElementById('ticket-previewIssue').textContent = issueUpper;
-		document.getElementById('ticket-previewIssueDetails').textContent = issueUpper;
+				const issueUpper = document.getElementById('ticket-issue').value.toUpperCase();
+				document.getElementById('ticket-previewIssue').textContent = issueUpper;
+				document.getElementById('ticket-previewIssueDetails').textContent = issueUpper;
 
 
                 const noteRaw = document.getElementById('ticket-note').value;
@@ -1769,16 +1769,16 @@
                 document.getElementById('ticket-previewContact').textContent = entry.contactNumber;
 
                 document.getElementById('ticket-previewIssue').textContent = (entry.issue || '').toUpperCase();
-		document.getElementById('ticket-previewIssueDetails').textContent = (entry.issue || '').toUpperCase();
+				document.getElementById('ticket-previewIssueDetails').textContent = (entry.issue || '').toUpperCase();
 
-		document.getElementById('ticket-previewNote').textContent = entry.note ? toSentenceCase(entry.note) : '';
+				document.getElementById('ticket-previewNote').textContent = entry.note ? toSentenceCase(entry.note) : '';
                 
                 
-		document.getElementById('ticket-previewTroubleshooting').textContent = formatWithBullets(entry.troubleshooting || '').toUpperCase();
+				document.getElementById('ticket-previewTroubleshooting').textContent = formatWithBullets(entry.troubleshooting || '').toUpperCase();
 		
-		document.getElementById('ticket-previewResolution').textContent = entry.resolution ? toSentenceCase(entry.resolution) : '';
+				document.getElementById('ticket-previewResolution').textContent = entry.resolution ? toSentenceCase(entry.resolution) : '';
                 
-		syncPreviewHeight();
+				syncPreviewHeight();
             }
 
             async function summarizeText(text) {
@@ -2368,10 +2368,24 @@ UPLOAD DATABASE - DONE✅`;
             }
 
             function copyRow(button) {
-                const tds = button.closest('tr').querySelectorAll('td');
-                const values = [...tds].slice(1, -1).map(td => escapeCSV(td.textContent));
-                navigator.clipboard.writeText(values.join('\t')).then(() => showNotification('Row copied!'));
-            }
+  				const tds = button.closest('tr').querySelectorAll('td');
+
+  				// slice(1, -1) = all data columns excluding checkbox + actions
+  				const dataTds = [...tds].slice(1, -1);
+
+  				// Resolution is the last data column in your table before Actions
+  				// (DATE..REMARKS, RESOLUTION) => resolution index = dataTds.length - 1
+  				const values = dataTds.map((td, idx) => {
+    				let text = td.textContent || '';
+    			if (idx === dataTds.length - 1) {
+      				text = text.toUpperCase(); // ✅ uppercase ONLY resolution on copy
+    			}
+    				return escapeCSV(text);
+  				});
+
+  				navigator.clipboard.writeText(values.join('\t'))
+    				.then(() => showNotification('Row copied!'));
+				}
 
             function renderTable() {
                 const todayEST = getESTDateString();
