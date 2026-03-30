@@ -2684,11 +2684,13 @@ UPLOAD DATABASE - DONE✅`;
                 const selectedRows = allEntries.filter(entry => ids.includes(entry.id.toString()));
                 selectedRows.reverse();
 
-                const csvContent = selectedRows.map(row => [
-                    row.date, row.shift, row.support, row.portal, row.store, row.zip,
-                    row.contact, row.contactNumber, row.module, row.issue,
-                    row.escalated, row.status, row.remarks, row.resolution
-                ].map(field => escapeCSV(field)).join('\t')).join('\n');
+                
+				const csvContent = selectedRows.map(row => [
+  					row.date, row.shift, row.support, row.portal, row.store, row.zip,
+  					row.contact, row.contactNumber, row.module, row.issue,
+  					row.escalated, row.status, row.remarks,
+ 				 (row.resolution || '').toUpperCase()   // ✅ uppercase ONLY on copy
+					].map(field => escapeCSV(String(field ?? ''))).join('\t')).join('\n');
 
                 navigator.clipboard.writeText(csvContent).then(() => showNotification(`Copied ${selectedRows.length} rows (newest last, no headers)`));
             }
