@@ -929,9 +929,6 @@
                         <div><strong>CALLER NAME:&nbsp;</strong><span id="ticket-previewContactPerson"></span></div>
                         <div><strong>CONTACT NUMBER:&nbsp;</strong><span id="ticket-previewContactNumber"></span></div>
                         <br>
-                        <div><strong>❗ ISSUE:</strong></div>
-                        <div><span id="ticket-previewIssueDetails" class="preview-multiline"></span></div>
-                        <br>
                         <div><strong>🔧 TROUBLESHOOTING:</strong></div>
                         <div><span id="ticket-previewTroubleshooting" class="preview-multiline"></span></div>
                         <br>
@@ -2565,18 +2562,12 @@ UPLOAD DATABASE - DONE✅`;
                             const formattedResolution = entry.resolution || '';
                             const formattedNote = entry.note ? entry.note : '';
 
-                            const plainText = `📞 CONTACT:\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\n\n❗ ISSUE:\n${formattedIssue}\n\n🔧 TROUBLESHOOTING:\n${formattedTroubleshooting}\n\n✅ RESOLUTION:\n${formattedResolution}`;
+                            const plainText = `📞 CONTACT:\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\n\n🔧 TROUBLESHOOTING:\n${formattedTroubleshooting}\n\n✅ RESOLUTION:\n${formattedResolution}`;
 
                             const htmlCopy = `
                                 📞 CONTACT:<br>
                                 <strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
                                 <strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
-                                <br>
-                                ❗ ISSUE:<br>
-                                ${escapeHtml(formattedIssue).replace(/\n/g, '<br>')}<br>
-                                <br>
-                                📝 NOTE:<br>
-                                ${escapeHtml(formattedNote).replace(/\n/g, '<br>')}<br>
                                 <br>
                                 🔧 TROUBLESHOOTING:<br>
                                 ${escapeHtml(formattedTroubleshooting).replace(/\n/g, '<br>')}<br>
