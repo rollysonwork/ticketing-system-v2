@@ -4,849 +4,869 @@
     <meta charset="UTF-8">
     <title>RetailzPOS · Unified Creation System</title>
     <style>
-    /* ----- CSS Variables for Light/Dark Mode ----- */
-    :root {
-        --bg-primary: #f8fafc;
-        --bg-secondary: #ffffff;
-        --bg-tertiary: #f1f5f9;
-        --text-primary: #0f172a;
-        --text-secondary: #334155;
-        --text-muted: #64748b;
-        --border-color: #e2e8f0;
-        --accent-color: #3b82f6;
-        --accent-hover: #2563eb;
-        --accent-soft: #eff6ff;
-        --danger: #ef4444;
-        --danger-hover: #dc2626;
-        --success: #10b981;
-        --warning: #f59e0b;
-        --card-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
-        --card-shadow-hover: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-        --transition: all 0.2s ease;
-    }
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --accent-soft: #eff6ff;
+            --danger: #ef4444;
+            --danger-hover: #dc2626;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --card-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+            --card-shadow-hover: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --transition: all 0.2s ease;
+        }
+
+        body.dark-mode {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-tertiary: #0f172a;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --accent-soft: #1e293b;
+            --card-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            --card-shadow-hover: 0 4px 6px -1px rgba(0,0,0,0.4);
+        }
+
+        * {
+            margin: 1;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    body.dark-mode {
-        --bg-primary: #0f172a;
-        --bg-secondary: #1e293b;
-        --bg-tertiary: #0f172a;
-        --text-primary: #f1f5f9;
-        --text-secondary: #cbd5e1;
-        --text-muted: #94a3b8;
-        --border-color: #334155;
-        --accent-soft: #1e293b;
-        --card-shadow: 0 1px 3px rgba(0,0,0,0.3);
-        --card-shadow-hover: 0 4px 6px -1px rgba(0,0,0,0.4);
-    }
-
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-
-    body {
-        font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        background: var(--bg-primary);
-        color: var(--text-primary);
-        padding: 24px;
-        transition: var(--transition);
-        line-height: 1.5;
-    }
-
-    /* ----- App Container ----- */
-    .app-container {
-        display: flex;
-        gap: 24px;
-        align-items: flex-start;
-        max-width: 1600px;
-        margin: 0 auto;
-    }
-
-    /* ----- Sidebar ----- */
-    .sidebar {
-        flex: 0 0 320px;
-        background: var(--bg-secondary);
-        border-radius: 20px;
-        padding: 20px 16px;
-        box-shadow: var(--card-shadow);
-        border: 1px solid var(--border-color);
-        overflow-y: auto;
-        max-height: calc(100vh - 140px);
-        position: sticky;
-        top: 24px;
-        transition: flex 0.3s ease, padding 0.3s ease, opacity 0.2s ease, background var(--transition);
-    }
-
-    .sidebar.hidden {
-        flex: 0 0 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        opacity: 0;
-        visibility: hidden;
-    }
-
-    .sidebar-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 12px;
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    .sidebar-header h3 {
-        font-size: 0.9rem;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: var(--accent-color);
-        margin: 0;
-    }
-
-    /* Month & Date Headers */
-    .month-header {
-        font-weight: 700;
-        font-size: 0.9rem;
-        padding: 8px 0 4px;
-        color: var(--accent-color);
-        border-bottom: 1px solid var(--border-color);
-        margin: 12px 0 8px;
-        cursor: pointer;
-        user-select: none;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        transition: var(--transition);
-    }
-
-    .month-header:hover {
-        color: var(--accent-hover);
-    }
-
-    .date-group {
-        margin-bottom: 16px;
-    }
-
-    .date-header {
-        font-weight: 600;
-        font-size: 0.75rem;
-        padding: 4px 0;
-        color: var(--text-muted);
-        letter-spacing: 0.02em;
-        margin-top: 8px;
-        cursor: pointer;
-        user-select: none;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        transition: var(--transition);
-    }
-
-    .date-header:hover {
-        color: var(--accent-color);
-    }
-
-    .month-arrow, .date-arrow {
-        font-size: 0.7rem;
-        transition: transform 0.2s;
-    }
-
-    .date-entries {
-        margin-left: 0;
-    }
-
-    /* Sidebar Cards */
-    .sidebar-card {
-        background: var(--bg-tertiary);
-        border-radius: 12px;
-        padding: 12px;
-        margin-bottom: 12px;
-        border-left: 3px solid var(--accent-color);
-        transition: var(--transition);
-        box-shadow: var(--card-shadow);
-    }
-
-    .sidebar-card:hover {
-        transform: translateY(-2px);
-        box-shadow: var(--card-shadow-hover);
-    }
-
-    .sidebar-card .preview-item {
-        font-size: 0.75rem;
-        margin-bottom: 4px;
-        display: flex;
-        gap: 6px;
-        flex-wrap: wrap;
-        color: var(--text-secondary);
-    }
-
-    .sidebar-card .preview-item strong {
-        min-width: 70px;
-        color: var(--text-muted);
-        font-weight: 500;
-    }
-
-    .sidebar-card .preview-item.issue-item {
-        font-size: 0.85rem;
-        font-weight: 700;
-        color: var(--text-primary);
-    }
-
-    .card-actions {
-        display: flex;
-        gap: 8px;
-        margin-top: 10px;
-        flex-wrap: wrap;
-    }
-
-    .card-actions button {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        border-radius: 20px;
-        padding: 4px 10px;
-        font-size: 0.7rem;
-        font-weight: 500;
-        cursor: pointer;
-        transition: var(--transition);
-        color: var(--text-secondary);
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
-    }
-
-    .card-actions button:hover {
-        background: var(--accent-color);
-        color: white;
-        border-color: var(--accent-color);
-    }
-
-    /* ----- Main Content ----- */
-    .main-content {
-        flex: 1;
-        min-width: 0;
-        transition: flex 0.3s ease;
-    }
-
-    /* Header */
-    h1 {
-        text-align: center;
-        font-size: 1.8rem;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-        margin-bottom: 2rem;
-        color: var(--text-primary);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 12px;
-        position: relative;
-    }
-
-    .theme-toggle {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        font-size: 1.5rem;
-        cursor: pointer;
-        padding: 8px 12px;
-        border-radius: 40px;
-        transition: var(--transition);
-        line-height: 1;
-    }
-
-    .theme-toggle:hover {
-        background: var(--accent-soft);
-        transform: scale(1.05);
-    }
-
-    /* Tabs */
-    .tab-container {
-        margin-bottom: 24px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        flex-wrap: wrap;
-    }
-
-    .sidebar-toggle-tab {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        font-size: 1.2rem;
-        cursor: pointer;
-        padding: 8px 12px;
-        border-radius: 40px;
-        transition: var(--transition);
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.01em;
-        color: var(--text-secondary);
-    }
-
-    .sidebar-toggle-tab:hover {
-        background: var(--accent-soft);
-        transform: translateY(-2px);
-    }
-
-    .tab-buttons {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-    }
-
-    .tab-button {
-        padding: 10px 24px;
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        border-radius: 40px;
-        font-weight: 600;
-        font-size: 14px;
-        cursor: pointer;
-        transition: var(--transition);
-        color: var(--text-secondary);
-        text-transform: uppercase;
-        letter-spacing: 0.01em;
-    }
-
-    .tab-button:hover {
-        background: var(--accent-soft);
-        transform: translateY(-2px);
-    }
-
-    .tab-button.active {
-        background: var(--accent-color);
-        color: white;
-        border-color: var(--accent-color);
-        box-shadow: 0 4px 12px rgba(59,130,246,0.3);
-    }
-
-    .tab-content {
-        display: none;
-    }
-
-    .tab-content.active {
-        display: block;
-        animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn {
-        from { opacity: 0; transform: translateY(4px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Container for left/right panels */
-    .container {
-        display: flex;
-        gap: 24px;
-        align-items: flex-start;
-        flex-wrap: wrap;
-    }
-
-    .left-panel, .right-panel {
-        background: var(--bg-secondary);
-        border-radius: 20px;
-        padding: 24px;
-        box-shadow: var(--card-shadow);
-        border: 1px solid var(--border-color);
-        transition: var(--transition);
-    }
-
-    .left-panel {
-        flex: 1.1;
-        min-width: 380px;
-    }
-
-    .right-panel {
-        flex: 1;
-        min-width: 280px;
-        position: sticky;
-        top: 24px;
-        max-height: calc(100vh - 140px);
-        overflow-y: auto;
-    }
-
-    .right-panel * {
-        text-transform: uppercase;
-    }
-
-    .right-panel strong {
-        color: var(--accent-color);
-        display: inline-block;
-        min-width: 110px;
-        margin-right: 8px;
-    }
-
-    .preview-multiline {
-        white-space: pre-wrap;
-        display: inline-block;
-        background: var(--bg-tertiary);
-        padding: 6px 12px;
-        border-radius: 12px;
-        width: 100%;
-        margin-top: 4px;
-        border: 1px solid var(--border-color);
-        font-size: 0.85rem;
-    }
-
-    /* Search Section */
-    .search-section {
-        background: var(--bg-tertiary);
-        border-radius: 16px;
-        padding: 16px;
-        margin-bottom: 24px;
-        border: 1px solid var(--border-color);
-    }
-
-    .search-header {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 12px;
-        font-weight: 600;
-        color: var(--text-primary);
-    }
-
-    .search-header::before {
-        content: "🔍";
-        font-size: 1.2rem;
-    }
-
-    .search-input-wrapper {
-        display: flex;
-        gap: 8px;
-        margin-bottom: 12px;
-    }
-
-    .search-input-wrapper input {
-        flex: 1;
-        padding: 10px 16px;
-        border: 1px solid var(--border-color);
-        border-radius: 40px;
-        font-size: 14px;
-        background: var(--bg-secondary);
-        color: var(--text-primary);
-        transition: var(--transition);
-    }
-
-    .search-input-wrapper input:focus {
-        border-color: var(--accent-color);
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
-    }
-
-    .search-results {
-        max-height: 300px;
-        overflow-y: auto;
-        border-radius: 12px;
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-    }
-
-    .result-item {
-        padding: 12px 16px;
-        border-bottom: 1px solid var(--border-color);
-        cursor: pointer;
-        transition: var(--transition);
-    }
-
-    .result-item:hover {
-        background: var(--accent-soft);
-    }
-
-    .result-item.selected {
-        background: var(--accent-soft);
-        border-left: 3px solid var(--accent-color);
-    }
-
-    .result-store {
-        font-weight: 600;
-        color: var(--text-primary);
-        margin-bottom: 4px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        flex-wrap: wrap;
-        text-transform: uppercase;
-    }
-
-    .status-badge {
-        display: inline-block;
-        padding: 2px 8px;
-        border-radius: 20px;
-        font-size: 10px;
-        font-weight: 600;
-        text-transform: uppercase;
-    }
-
-    .status-active { background: #10b98120; color: #10b981; border: 1px solid #10b98140; }
-    .status-deleted { background: #ef444420; color: #ef4444; border: 1px solid #ef444440; }
-    .status-deactive { background: #f59e0b20; color: #f59e0b; border: 1px solid #f59e0b40; }
-    .status-demo { background: #6b728020; color: #6b7280; border: 1px solid #6b728040; }
-
-    .result-details {
-        display: flex;
-        gap: 16px;
-        font-size: 12px;
-        color: var(--text-muted);
-    }
-
-    .result-details span {
-        display: flex;
-        align-items: center;
-        gap: 4px;
-    }
-
-    .result-zip {
-        background: var(--bg-tertiary);
-        padding: 2px 8px;
-        border-radius: 20px;
-        font-weight: 500;
-        color: var(--accent-color);
-    }
-
-    .load-status {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        font-size: 12px;
-        margin-top: 8px;
-    }
-
-    .load-status .spinner {
-        width: 16px;
-        height: 16px;
-        border: 2px solid var(--border-color);
-        border-top-color: var(--accent-color);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-        to { transform: rotate(360deg); }
-    }
-
-    /* Forms */
-    .left-panel table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 16px;
-    }
-
-    .left-panel table td {
-        padding: 8px 4px;
-        border: none;
-        vertical-align: top;
-    }
-
-    .left-panel table td:first-child {
-        width: 38%;
-        font-weight: 500;
-        color: var(--text-secondary);
-    }
-
-    input, select, textarea {
-        font-size: 14px;
-        padding: 10px 12px;
-        border: 1px solid var(--border-color);
-        border-radius: 12px;
-        background: var(--bg-secondary);
-        color: var(--text-primary);
-        transition: var(--transition);
-        width: 100%;
-        font-family: inherit;
-    }
-
-    input:focus, select:focus, textarea:focus {
-        border-color: var(--accent-color);
-        outline: none;
-        box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
-    }
-
-    input[readonly], input:disabled, select:disabled {
-        background: var(--bg-tertiary);
-        color: var(--text-muted);
-        cursor: not-allowed;
-        opacity: 0.8;
-    }
-
-    textarea {
-        resize: none;
-        overflow-y: hidden;
-        min-height: 60px;
-    }
-
-    .invalid {
-        border-color: var(--danger) !important;
-        background: rgba(239,68,68,0.1);
-    }
-
-    .section-header {
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: var(--accent-color);
-        text-transform: uppercase;
-        letter-spacing: 0.02em;
-        padding: 12px 0 4px 0;
-        border-bottom: 1px dashed var(--border-color);
-        margin-top: 8px;
-    }
-
-    /* Buttons */
-    .button-row {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-        margin-top: 20px;
-    }
-
-    .button-row button {
-        flex: 1 0 auto;
-        font-size: 13px;
-        font-weight: 600;
-        padding: 10px 12px;
-        border: none;
-        border-radius: 40px;
-        cursor: pointer;
-        transition: var(--transition);
-        background: var(--bg-secondary);
-        color: var(--text-secondary);
-        border: 1px solid var(--border-color);
-        text-transform: uppercase;
-        letter-spacing: 0.01em;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        gap: 4px;
-    }
-
-    .button-row .add {
-        background: var(--accent-color);
-        border-color: var(--accent-color);
-        color: white;
-    }
-
-    .button-row .add::before {
-        content: "➕ ";
-        font-size: 12px;
-    }
-
-    .button-row .add.editing::before {
-        content: "✏️ ";
-    }
-
-    .button-row .clock {
-        background: var(--warning);
-        border-color: var(--warning);
-        color: white;
-    }
-
-    .button-row .clock::before {
-        content: "⏱️ ";
-    }
-
-    .button-row .form-clear-btn {
-        background: var(--text-muted);
-        border-color: var(--text-muted);
-        color: white;
-    }
-
-    .button-row .form-clear-btn::before {
-        content: "🧹 ";
-    }
-
-    .button-row button:hover {
-        transform: translateY(-2px);
-        filter: brightness(1.05);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-    /* Bulk Bar */
-    .bulk-bar {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin: 24px 0;
-        padding: 12px 16px;
-        background: var(--bg-secondary);
-        border-radius: 40px;
-        border: 1px solid var(--border-color);
-    }
-
-    .bulk-bar label {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        cursor: pointer;
-        white-space: nowrap;
-        color: var(--text-secondary);
-    }
-
-    .bulk-bar button {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 30px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-        background: var(--bg-tertiary);
-        color: var(--text-secondary);
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        text-transform: uppercase;
-        font-size: 12px;
-        border: 1px solid var(--border-color);
-    }
-
-    .bulk-bar button:hover {
-        background: var(--accent-color);
-        color: white;
-        border-color: var(--accent-color);
-    }
-
-    .bulk-bar .export-btn { background: var(--success); color: white; border-color: var(--success); }
-    .bulk-bar .import-btn { background: var(--warning); color: white; border-color: var(--warning); }
-    .bulk-bar .shift-report-btn { background: #8b5cf6; color: white; border-color: #8b5cf6; }
-    .bulk-bar .sheets-key-btn { background: var(--accent-color); color: white; border-color: var(--accent-color); }
-    .bulk-bar .gemini-key-btn { background: #8b5cf6; color: white; border-color: #8b5cf6; }
-
-    /* Table */
-    #entryTable {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13px;
-        background: var(--bg-secondary);
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: var(--card-shadow);
-    }
-
-    #entryTable th {
-        background: var(--bg-tertiary);
-        color: var(--text-primary);
-        font-weight: 600;
-        font-size: 0.7rem;
-        letter-spacing: 0.03em;
-        text-transform: uppercase;
-        padding: 12px 8px;
-        border: 1px solid var(--border-color);
-        text-align: center;
-    }
-
-    #entryTable td {
-        background: var(--bg-secondary);
-        padding: 12px 8px;
-        border: 1px solid var(--border-color);
-        text-align: center;
-        vertical-align: middle;
-        word-wrap: break-word;
-        max-width: 300px;
-        color: var(--text-primary);
-    }
-
-    #entryTable tbody tr:hover td {
-        background: var(--bg-tertiary);
-    }
-
-    .action-cell {
-        padding: 0;
-    }
-
-    .action-cell .action-container {
-        display: flex;
-        flex-direction: column;
-        gap: 4px;
-        justify-content: center;
-        align-items: center;
-        padding: 12px 4px;
-    }
-
-    .icon-btn {
-        border: none;
-        border-radius: 30px;
-        width: 32px;
-        height: 32px;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: var(--transition);
-        font-size: 16px;
-        background: var(--bg-tertiary);
-        color: var(--text-secondary);
-        border: 1px solid var(--border-color);
-    }
-
-    .icon-btn:hover {
-        transform: scale(1.05);
-        filter: brightness(1.05);
-    }
-
-    .icon-btn.delete-btn { background: var(--danger); color: white; border-color: var(--danger); }
-    .icon-btn.edit-btn { background: var(--accent-color); color: white; border-color: var(--accent-color); }
-    .icon-btn.copy-btn { background: var(--success); color: white; border-color: var(--success); }
-    .icon-btn.summarize-row-btn { background: #8b5cf6; color: white; border-color: #8b5cf6; }
-
-    /* Notification */
-    #notification {
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        background: var(--accent-color);
-        color: white;
-        padding: 12px 20px;
-        border-radius: 40px;
-        font-size: 14px;
-        font-weight: 500;
-        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
-        opacity: 0;
-        transition: opacity 0.2s ease;
-        z-index: 999;
-        pointer-events: none;
-        backdrop-filter: blur(4px);
-    }
-
-    #notification.show {
-        opacity: 1;
-    }
-
-    /* Responsive */
-    @media (max-width: 900px) {
         body {
-            padding: 16px;
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            padding: 24px;
+            transition: var(--transition);
+            line-height: 1.5;
         }
+
         .app-container {
-            flex-direction: column;
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            max-width: 1600px;
+            margin: 0 auto;
         }
+
         .sidebar {
-            width: 100%;
-            max-height: 400px;
-            position: static;
+            flex: 0 0 320px;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 20px 16px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            overflow-y: auto;
+            max-height: calc(100vh - 140px);
+            position: sticky;
+            top: 24px;
+            transition: flex 0.3s ease, padding 0.3s ease, opacity 0.2s ease, background var(--transition);
         }
-        .container {
-            flex-direction: column;
+
+        .sidebar.hidden {
+            flex: 0 0 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            opacity: 0;
+            visibility: hidden;
         }
-        .left-panel, .right-panel {
-            width: 100%;
-            max-height: none;
-            position: static;
+
+        .sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
         }
-        .button-row button {
-            min-width: 120px;
+
+        .sidebar-header h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent-color);
+            margin: 0;
         }
+
+        .month-header {
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 8px 0 4px;
+            color: var(--accent-color);
+            border-bottom: 1px solid var(--border-color);
+            margin: 12px 0 8px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .month-header:hover {
+            color: var(--accent-hover);
+        }
+
+        .date-group {
+            margin-bottom: 16px;
+        }
+
+        .date-header {
+            font-weight: 600;
+            font-size: 0.75rem;
+            padding: 4px 0;
+            color: var(--text-muted);
+            letter-spacing: 0.02em;
+            margin-top: 8px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: var(--transition);
+        }
+
+        .date-header:hover {
+            color: var(--accent-color);
+        }
+
+        .month-arrow, .date-arrow {
+            font-size: 0.7rem;
+            transition: transform 0.2s;
+        }
+
+        .date-entries {
+            margin-left: 0;
+        }
+
+        .sidebar-card {
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 3px solid var(--accent-color);
+            transition: var(--transition);
+            box-shadow: var(--card-shadow);
+        }
+
+        .sidebar-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--card-shadow-hover);
+        }
+
+        .sidebar-card .preview-item {
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            color: var(--text-secondary);
+        }
+
+        .sidebar-card .preview-item strong {
+            min-width: 70px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .sidebar-card .preview-item.issue-item {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .card-actions button {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .card-actions button:hover {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .main-content {
+            flex: 1;
+            min-width: 0;
+            transition: flex 0.3s ease;
+        }
+
         h1 {
-            font-size: 1.4rem;
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 2rem;
+            color: var(--text-primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            position: relative;
         }
+
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 40px;
+            transition: var(--transition);
+            line-height: 1;
+        }
+
+        .theme-toggle:hover {
+            background: var(--accent-soft);
+            transform: scale(1.05);
+        }
+
+        .tab-container {
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .sidebar-toggle-tab {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 40px;
+            transition: var(--transition);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.01em;
+            color: var(--text-secondary);
+        }
+
+        .sidebar-toggle-tab:hover {
+            background: var(--accent-soft);
+            transform: translateY(-2px);
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
         .tab-button {
-            padding: 8px 16px;
+            padding: 10px 24px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.01em;
+        }
+
+        .tab-button:hover {
+            background: var(--accent-soft);
+            transform: translateY(-2px);
+        }
+
+        .tab-button.active {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.3);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container {
+            display: flex;
+            gap: 24px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+
+        .left-panel, .right-panel {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            transition: var(--transition);
+        }
+
+        .left-panel {
+            flex: 1.1;
+            min-width: 380px;
+        }
+
+        .right-panel {
+            flex: 1;
+            min-width: 280px;
+            position: sticky;
+            top: 24px;
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+        }
+
+        .right-panel * {
+            text-transform: uppercase;
+        }
+
+        .right-panel strong {
+            color: var(--accent-color);
+            display: inline-block;
+            min-width: 110px;
+            margin-right: 8px;
+        }
+
+        .preview-multiline {
+            white-space: pre-wrap;
+            display: inline-block;
+            background: var(--bg-tertiary);
+            padding: 6px 12px;
+            border-radius: 12px;
+            width: 100%;
+            margin-top: 4px;
+            border: 1px solid var(--border-color);
+            font-size: 0.85rem;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+        }
+
+        /* Fix for lists inside preview */
+        .preview-multiline ul, .preview-multiline ol {
+            margin: 8px 0 8px 20px;
+            padding-left: 0;
+        }
+        .preview-multiline li {
+            margin: 4px 0;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .search-section {
+            background: var(--bg-tertiary);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border-color);
+        }
+
+        .search-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .search-header::before {
+            content: "🔍";
+            font-size: 1.2rem;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .search-input-wrapper input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 40px;
+            font-size: 14px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: var(--transition);
+        }
+
+        .search-input-wrapper input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        .search-results {
+            max-height: 300px;
+            overflow-y: auto;
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .result-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .result-item:hover {
+            background: var(--accent-soft);
+        }
+
+        .result-item.selected {
+            background: var(--accent-soft);
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .result-store {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            text-transform: uppercase;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-active { background: #10b98120; color: #10b981; border: 1px solid #10b98140; }
+        .status-deleted { background: #ef444420; color: #ef4444; border: 1px solid #ef444440; }
+        .status-deactive { background: #f59e0b20; color: #f59e0b; border: 1px solid #f59e0b40; }
+        .status-demo { background: #6b728020; color: #6b7280; border: 1px solid #6b728040; }
+
+        .result-details {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .result-details span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .result-zip {
+            background: var(--bg-tertiary);
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 500;
+            color: var(--accent-color);
+        }
+
+        .load-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+
+        .load-status .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--border-color);
+            border-top-color: var(--accent-color);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .left-panel table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 16px;
+        }
+
+        .left-panel table td {
+            padding: 8px 4px;
+            border: none;
+            vertical-align: top;
+        }
+
+        .left-panel table td:first-child {
+            width: 38%;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        input, select, textarea {
+            font-size: 14px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: var(--transition);
+            width: 100%;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        input[readonly], input:disabled, select:disabled {
+            background: var(--bg-tertiary);
+            color: var(--text-muted);
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        textarea {
+            resize: none;
+            overflow-y: hidden;
+            min-height: 60px;
+        }
+
+        .invalid {
+            border-color: var(--danger) !important;
+            background: rgba(239,68,68,0.1);
+        }
+
+        .section-header {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            padding: 12px 0 4px 0;
+            border-bottom: 1px dashed var(--border-color);
+            margin-top: 8px;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .button-row button {
+            flex: 1 0 auto;
+            font-size: 13px;
+            font-weight: 600;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            text-transform: uppercase;
+            letter-spacing: 0.01em;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .button-row .add {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: white;
+        }
+
+        .button-row .add::before {
+            content: "➕ ";
             font-size: 12px;
         }
-    }
 
-    /* Utility Classes */
-    .no-uppercase {
-        text-transform: none !important;
-    }
-</style>
+        .button-row .add.editing::before {
+            content: "✏️ ";
+        }
+
+        .button-row .clock {
+            background: var(--warning);
+            border-color: var(--warning);
+            color: white;
+        }
+
+        .button-row .clock::before {
+            content: "⏱️ ";
+        }
+
+        .button-row .form-clear-btn {
+            background: var(--text-muted);
+            border-color: var(--text-muted);
+            color: white;
+        }
+
+        .button-row .form-clear-btn::before {
+            content: "🧹 ";
+        }
+
+        .button-row button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .bulk-bar {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 24px 0;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: 40px;
+            border: 1px solid var(--border-color);
+        }
+
+        .bulk-bar label {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            white-space: nowrap;
+            color: var(--text-secondary);
+        }
+
+        .bulk-bar button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            text-transform: uppercase;
+            font-size: 12px;
+            border: 1px solid var(--border-color);
+        }
+
+        .bulk-bar button:hover {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .bulk-bar .export-btn { background: var(--success); color: white; border-color: var(--success); }
+        .bulk-bar .import-btn { background: var(--warning); color: white; border-color: var(--warning); }
+        .bulk-bar .shift-report-btn { background: #8b5cf6; color: white; border-color: #8b5cf6; }
+        .bulk-bar .sheets-key-btn { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+        .bulk-bar .gemini-key-btn { background: #8b5cf6; color: white; border-color: #8b5cf6; }
+
+        #entryTable {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        #entryTable th {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 0.7rem;
+            letter-spacing: 0.03em;
+            text-transform: uppercase;
+            padding: 12px 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        #entryTable td {
+            background: var(--bg-secondary);
+            padding: 12px 8px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            vertical-align: middle;
+            word-wrap: break-word;
+            max-width: 300px;
+            color: var(--text-primary);
+        }
+
+        #entryTable tbody tr:hover td {
+            background: var(--bg-tertiary);
+        }
+
+        .action-cell {
+            padding: 0;
+        }
+
+        .action-cell .action-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 4px;
+        }
+
+        .icon-btn {
+            border: none;
+            border-radius: 30px;
+            width: 32px;
+            height: 32px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 16px;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .icon-btn:hover {
+            transform: scale(1.05);
+            filter: brightness(1.05);
+        }
+
+        .icon-btn.delete-btn { background: var(--danger); color: white; border-color: var(--danger); }
+        .icon-btn.edit-btn { background: var(--accent-color); color: white; border-color: var(--accent-color); }
+        .icon-btn.copy-btn { background: var(--success); color: white; border-color: var(--success); }
+        .icon-btn.summarize-row-btn { background: #8b5cf6; color: white; border-color: #8b5cf6; }
+
+        #notification {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent-color);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            z-index: 999;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+        }
+
+        #notification.show {
+            opacity: 1;
+        }
+
+        .ql-toolbar.ql-snow {
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+            background: var(--bg-tertiary);
+            border-color: var(--border-color);
+        }
+        .ql-container.ql-snow {
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            border-color: var(--border-color);
+            font-family: inherit;
+        }
+        .ql-editor {
+            min-height: 120px;
+        }
+        /* Visual uppercase for the Quill editor */
+        #ticket-resolution-editor .ql-editor {
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 900px) {
+            body {
+                padding: 16px;
+            }
+            .app-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                max-height: 400px;
+                position: static;
+            }
+            .container {
+                flex-direction: column;
+            }
+            .left-panel, .right-panel {
+                width: 100%;
+                max-height: none;
+                position: static;
+            }
+            .button-row button {
+                min-width: 120px;
+            }
+            h1 {
+                font-size: 1.4rem;
+            }
+            .tab-button {
+                padding: 8px 16px;
+                font-size: 12px;
+            }
+        }
+
+        .no-uppercase {
+            text-transform: none !important;
+        }
+
+        </style>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 </head>
 <body>
     <h1>
@@ -855,7 +875,6 @@
     </h1>
 
     <div class="app-container">
-        <!-- SIDEBAR -->
         <div class="sidebar" id="ticketSidebar">
             <div class="sidebar-header">
                 <h3>📋 TICKET HISTORY</h3>
@@ -863,7 +882,6 @@
             <div id="sidebarContent"></div>
         </div>
 
-        <!-- MAIN CONTENT -->
         <div class="main-content">
             <div class="tab-container">
                 <button class="sidebar-toggle-tab" id="sidebarToggleTabBtn" title="Toggle sidebar">◀</button>
@@ -874,7 +892,6 @@
                 </div>
             </div>
 
-            <!-- TICKET TAB -->
             <div id="tab-ticket" class="tab-content active">
                 <div class="container">
                     <div class="left-panel">
@@ -901,7 +918,7 @@
                             <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
                             <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
                             <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
-                            <tr><td>RESOLUTION</td><td><textarea id="ticket-resolution" rows="5"></textarea></td></tr>
+                            <tr><td>RESOLUTION</td><td><div id="ticket-resolution-editor" style="height: 200px;"></div><textarea id="ticket-resolution" style="display:none;"></textarea></td></tr>
                             <tr><td>NOTE</td><td><textarea id="ticket-note" rows="5"></textarea></td></tr>
                         </table>
                         <div class="button-row">
@@ -929,9 +946,6 @@
                         <div><strong>CALLER NAME:&nbsp;</strong><span id="ticket-previewContactPerson"></span></div>
                         <div><strong>CONTACT NUMBER:&nbsp;</strong><span id="ticket-previewContactNumber"></span></div>
                         <br>
-                        <div><strong>❗ ISSUE:</strong></div>
-                        <div><span id="ticket-previewIssueDetails" class="preview-multiline"></span></div>
-                        <br>
                         <div><strong>🔧 TROUBLESHOOTING:</strong></div>
                         <div><span id="ticket-previewTroubleshooting" class="preview-multiline"></span></div>
                         <br>
@@ -942,7 +956,6 @@
                 </div>
             </div>
 
-            <!-- STORE TAB -->
             <div id="tab-store" class="tab-content">
                 <div class="container">
                     <div class="left-panel">
@@ -955,22 +968,22 @@
                             <div id="store-searchResults" class="search-results"></div>
                             <div id="store-loadStatus" class="load-status"></div>
                         </div>
-                         <table>
-                             <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
-                             <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                             <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
-                             <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td></tr>
-                             <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td></tr>
-                             <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
-                             <tr><td>AGENT</td><td><input type="text" id="store-agent"></td></tr>
-                             <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
-                             <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
-                             <tr><td>SKU</td><td><input type="text" id="store-sku"></td></tr>
-                             <tr><td>DATABASE</td><td><input type="text" id="store-database"></td></tr>
-                             <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td></tr>
-                             <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
-                             <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
-                         </table>
+                        <table>
+                            <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
+                            <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                            <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
+                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td></tr>
+                            <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td></tr>
+                            <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
+                            <tr><td>AGENT</td><td><input type="text" id="store-agent"></td></tr>
+                            <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
+                            <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
+                            <tr><td>SKU</td><td><input type="text" id="store-sku"></td></tr>
+                            <tr><td>DATABASE</td><td><input type="text" id="store-database"></td></tr>
+                            <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td></tr>
+                            <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
+                            <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
+                        </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('store')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('store')">CLEAR FORM</button>
@@ -1003,11 +1016,12 @@
                         <div>PENDING❌</div>
                         <br>
                         <div><strong id="store-preview-skuLine"></strong></div>
+                        <br>
+                        <div><strong>TIMEZONE:</strong> <span id="store-preview-timezoneLine"></span></div>
                     </div>
                 </div>
             </div>
 
-            <!-- MOOLAH TAB -->
             <div id="tab-moolah" class="tab-content">
                 <div class="container">
                     <div class="left-panel">
@@ -1021,33 +1035,24 @@
                             <div id="moolah-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                             <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
-                             <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                             <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
-                             <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
-                             <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
-                             <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
-                         </table>
+                            <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
+                            <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                            <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
+                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
+                            <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
+                            <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
+                        </table>
                         <div class="section-header">CLIENT CREDENTIALS </div>
-                        <table>
-                             <tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr>
-                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr>
-                         </table>
+                        <table><tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr><tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr></table>
                         <div class="section-header">STORE CREDENTIALS </div>
-                        <table>
-                             <tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr>
-                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr>
-                         </table>
+                        <table><tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr><tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr></table>
                         <div class="section-header">OUTLET CREDENTIALS </div>
+                        <table><tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr><tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr></table>
                         <table>
-                             <tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr>
-                             <tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr>
-                         </table>
-                        <table>
-                             <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
-                             <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
-                             <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
-                         </table>
+                            <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
+                            <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
+                            <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
+                        </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('moolah')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('moolah')">CLEAR FORM</button>
@@ -1084,6 +1089,8 @@
                         <div>PENDING❌</div>
                         <br>
                         <div><strong id="moolah-preview-namingLine"></strong></div>
+                        <br>
+                        <div><strong>TIMEZONE:</strong> <span id="moolah-preview-timezoneLine"></span></div>
                     </div>
                 </div>
             </div>
@@ -1108,7 +1115,7 @@
                             <th>DATE</th><th>SHIFT</th><th>SUPPORT</th><th>PORTAL</th><th>STORE</th><th>ZIP</th>
                             <th>CONTACT</th><th>CONTACT#</th><th>MODULE</th><th>ISSUE</th><th>ESCALATED</th>
                             <th>STATUS</th><th>REMARKS</th><th>RESOLUTION</th><th>ACTIONS</th>
-                         </tr>
+                        </tr>
                     </thead>
                     <tbody></tbody>
                 </table>
@@ -1189,7 +1196,8 @@
             const filteredResults = { moolah: [], store: [], ticket: [] };
             const selectedIndex = { moolah: -1, store: -1, ticket: -1 };
 
-            // ========== UTILITY FUNCTIONS ==========
+            let quillEditor = null;
+
             function getESTDateString() {
                 const now = new Date();
                 const estDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
@@ -1268,6 +1276,50 @@
                 if (isNaN(z) || zip.length !== 5) return "";
                 const match = ZIP_TO_STATE.find(item => z >= item.min && z <= item.max);
                 return match ? match.state : "";
+            }
+
+            function getTimeZoneFromZip(zip) {
+                const z = parseInt(zip, 10);
+                if (isNaN(z) || String(zip).trim().length !== 5) return '';
+                const state = getStateFromZip(String(zip));
+                if (!state) return '';
+                const EASTERN = new Set(['CT','DE','GA','ME','MD','MA','NH','NJ','NY','NC','OH','PA','RI','SC','VT','VA','WV','DC']);
+                const CENTRAL = new Set(['AL','AR','IL','IA','LA','MN','MS','MO','OK','WI']);
+                const MOUNTAIN = new Set(['AZ','CO','MT','NM','UT','WY']);
+                const PACIFIC  = new Set(['CA','NV','WA']);
+                const ALASKA   = new Set(['AK']);
+                const HAWAII   = new Set(['HI']);
+                if (state === 'FL') return (z >= 32400 && z <= 32599) ? 'CT' : 'ET';
+                if (state === 'IN') return ((z >= 46300 && z <= 46499) || (z >= 47000 && z <= 47799)) ? 'CT' : 'ET';
+                if (state === 'KY') return (z >= 42000 && z <= 42799) ? 'CT' : 'ET';
+                if (state === 'TN') return (z >= 37600 && z <= 37999) ? 'ET' : 'CT';
+                if (state === 'MI') return (z >= 49800 && z <= 49999) ? 'CT' : 'ET';
+                if (state === 'TX') return (z >= 79800 && z <= 79999) ? 'MT' : 'CT';
+                if (state === 'KS') return (z >= 67700 && z <= 67799) ? 'MT' : 'CT';
+                if (state === 'NE') return (z >= 69300 && z <= 69399) ? 'MT' : 'CT';
+                if (state === 'SD') return (z >= 57700 && z <= 57799) ? 'MT' : 'CT';
+                if (state === 'ND') return (z >= 58600 && z <= 58699) ? 'MT' : 'CT';
+                if (state === 'ID') return (z >= 83200 && z <= 83899) ? 'MT' : 'PT';
+                if (state === 'OR') return (z >= 97900 && z <= 97999) ? 'MT' : 'PT';
+                if (EASTERN.has(state)) return 'ET';
+                if (CENTRAL.has(state)) return 'CT';
+                if (MOUNTAIN.has(state)) return 'MT';
+                if (PACIFIC.has(state)) return 'PT';
+                if (ALASKA.has(state)) return 'AKT';
+                if (HAWAII.has(state)) return 'HT';
+                return 'ET';
+            }
+
+            function getTimeZoneLabel(tzCode) {
+                switch ((tzCode || '').toUpperCase()) {
+                    case 'ET': return 'EASTERN TIME (ET)';
+                    case 'CT': return 'CENTRAL TIME (CT)';
+                    case 'MT': return 'MOUNTAIN TIME (MT)';
+                    case 'PT': return 'PACIFIC TIME (PT)';
+                    case 'AKT': return 'ALASKA TIME (AKT)';
+                    case 'HT': return 'HAWAII-ALEUTIAN TIME (HT)';
+                    default: return '';
+                }
             }
 
             function storeGetFormattedDateMinusOne() {
@@ -1651,6 +1703,25 @@
                 saveFormData('moolah');
             }
 
+            // --- Helper for uppercase HTML preserving tags
+            function uppercaseTextNodes(element) {
+                Array.from(element.childNodes).forEach(node => {
+                    if (node.nodeType === Node.TEXT_NODE) {
+                        node.textContent = node.textContent.toUpperCase();
+                    } else if (node.nodeType === Node.ELEMENT_NODE) {
+                        uppercaseTextNodes(node);
+                    }
+                });
+            }
+
+            function uppercaseHtmlPreserveTags(html) {
+                if (!html) return '';
+                const temp = document.createElement('div');
+                temp.innerHTML = html;
+                uppercaseTextNodes(temp);
+                return temp.innerHTML;
+            }
+
             function moolahUpdatePreview() {
                 const portal = document.getElementById('moolah-portal').value.trim();
                 const storeName = document.getElementById('moolah-storeName').value.trim();
@@ -1666,6 +1737,8 @@
                 const anydeskId = document.getElementById('moolah-anydeskId').value.trim();
 
                 const state = getStateFromZip(zipcode || '00000');
+                const tzCode = zipcode ? getTimeZoneFromZip(zipcode) : '';
+                const tzLabel = tzCode ? getTimeZoneLabel(tzCode) : '';
                 const storeClean = storeName || '[STORENAME]';
                 const portalClean = portal || '[PORTAL]';
                 const zipClean = zipcode || '[ZIPCODE]';
@@ -1687,6 +1760,7 @@
 
                 const namingLine = `${skuClean}_${statePart}_${storeClean}_LIVE-${portalClean}_${zipClean}_MOOLAH-1`;
                 document.getElementById('moolah-preview-namingLine').textContent = namingLine;
+                document.getElementById('moolah-preview-timezoneLine').textContent = tzLabel;
 
                 syncPreviewHeight();
             }
@@ -1706,6 +1780,8 @@
 
                 const url = portal ? `https://portal${portal}.retailzpos.com/` : 'https://portal[PORTAL].retailzpos.com/';
                 const state = zipcode ? getStateFromZip(zipcode) : '';
+                const tzCode = zipcode ? getTimeZoneFromZip(zipcode) : '';
+                const tzLabel = tzCode ? getTimeZoneLabel(tzCode) : '';
                 const dateStr = storeGetFormattedDateMinusOne();
 
                 document.getElementById('store-preview-url').textContent = url;
@@ -1729,6 +1805,7 @@
                 const zipPart = zipcode || '[ZIPCODE]';
                 const skuLine = `${skuPart}_${statePart}_${storeNamePart}_LIVE-${portalPart}_${zipPart}_REG-1`;
                 document.getElementById('store-preview-skuLine').textContent = skuLine;
+                document.getElementById('store-preview-timezoneLine').textContent = tzLabel;
 
                 syncPreviewHeight();
             }
@@ -1743,19 +1820,15 @@
                 document.getElementById('ticket-previewContactNumber').textContent = document.getElementById('ticket-contactNumber').value;
                 document.getElementById('ticket-previewContact').textContent = document.getElementById('ticket-contactNumber').value;
                 
-                
-				const issueUpper = document.getElementById('ticket-issue').value.toUpperCase();
-				document.getElementById('ticket-previewIssue').textContent = issueUpper;
-				document.getElementById('ticket-previewIssueDetails').textContent = issueUpper;
-
+                const issueUpper = document.getElementById('ticket-issue').value.toUpperCase();
+                document.getElementById('ticket-previewIssue').textContent = issueUpper;
 
                 const noteRaw = document.getElementById('ticket-note').value;
                 document.getElementById('ticket-previewNote').textContent = noteRaw ? toSentenceCase(noteRaw) : '';
 
                 const troubleshootingRaw = document.getElementById('ticket-resolution').value;
-                const bulletedRaw = formatWithBullets(troubleshootingRaw);
-                document.getElementById('ticket-previewTroubleshooting').textContent = bulletedRaw.toUpperCase();
-
+                document.getElementById('ticket-previewTroubleshooting').innerHTML = troubleshootingRaw ? uppercaseHtmlPreserveTags(troubleshootingRaw) : '';
+                document.getElementById('ticket-previewResolution').textContent = '';
                 syncPreviewHeight();
             }
 
@@ -1769,16 +1842,12 @@
                 document.getElementById('ticket-previewContact').textContent = entry.contactNumber;
 
                 document.getElementById('ticket-previewIssue').textContent = (entry.issue || '').toUpperCase();
-				document.getElementById('ticket-previewIssueDetails').textContent = (entry.issue || '').toUpperCase();
 
-				document.getElementById('ticket-previewNote').textContent = entry.note ? toSentenceCase(entry.note) : '';
+                document.getElementById('ticket-previewNote').textContent = entry.note ? toSentenceCase(entry.note) : '';
+                document.getElementById('ticket-previewTroubleshooting').innerHTML = entry.troubleshooting ? uppercaseHtmlPreserveTags(entry.troubleshooting) : '';
+                document.getElementById('ticket-previewResolution').textContent = entry.resolution ? toSentenceCase(entry.resolution) : '';
                 
-                
-				document.getElementById('ticket-previewTroubleshooting').textContent = formatWithBullets(entry.troubleshooting || '').toUpperCase();
-		
-				document.getElementById('ticket-previewResolution').textContent = entry.resolution ? toSentenceCase(entry.resolution) : '';
-                
-				syncPreviewHeight();
+                syncPreviewHeight();
             }
 
             async function summarizeText(text) {
@@ -1919,7 +1988,8 @@
 
                 let resolution = '';
                 if (troubleshooting.trim()) {
-                    const summary = await summarizeText(troubleshooting);
+                    const plainText = troubleshooting.replace(/<[^>]*>/g, '');
+                    const summary = await summarizeText(plainText);
                     if (summary) resolution = summary;
                 }
 
@@ -2156,14 +2226,19 @@ UPLOAD DATABASE - DONE✅`;
 
             function clearFormFields(prefix) {
                 if (prefix === 'ticket') {
-                    const fields = ['portal', 'store', 'zip', 'contactPerson', 'contactNumber', 'module', 'issue', 'escalated', 'status', 'remarks', 'resolution', 'note'];
+                    const fields = ['portal', 'store', 'zip', 'contactPerson', 'contactNumber', 'module', 'issue', 'escalated', 'status', 'remarks', 'note'];
                     fields.forEach(id => {
                         const el = document.getElementById(`ticket-${id}`);
                         if (el) el.value = '';
                     });
+                    if (quillEditor) {
+                        quillEditor.root.innerHTML = '';
+                        document.getElementById('ticket-resolution').value = '';
+                    }
+                    document.getElementById('ticket-previewResolution').textContent = '';
+                    document.getElementById('ticket-previewTroubleshooting').innerHTML = '';
                     const textareas = document.querySelectorAll(`#tab-ticket textarea`);
                     textareas.forEach(ta => autoGrow(ta));
-                    document.getElementById('ticket-previewResolution').textContent = '';
                 } else if (prefix === 'store') {
                     const fields = ['portal', 'storeName', 'zipcode', 'agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'];
                     fields.forEach(id => {
@@ -2273,7 +2348,10 @@ UPLOAD DATABASE - DONE✅`;
                     document.getElementById('ticket-escalated').value = entry.escalated;
                     document.getElementById('ticket-status').value = entry.status;
                     document.getElementById('ticket-remarks').value = entry.remarks;
-                    document.getElementById('ticket-resolution').value = entry.troubleshooting || '';
+                    if (quillEditor && entry.troubleshooting) {
+                        quillEditor.root.innerHTML = entry.troubleshooting;
+                        document.getElementById('ticket-resolution').value = entry.troubleshooting;
+                    }
                     updatePreviewWithEntry(entry);
                 }
 
@@ -2368,24 +2446,19 @@ UPLOAD DATABASE - DONE✅`;
             }
 
             function copyRow(button) {
-  				const tds = button.closest('tr').querySelectorAll('td');
+                const tds = button.closest('tr').querySelectorAll('td');
+                const dataTds = [...tds].slice(1, -1);
+                const values = dataTds.map((td, idx) => {
+                    let text = td.textContent || '';
+                    if (idx === dataTds.length - 1) {
+                        text = text.toUpperCase();
+                    }
+                    return escapeCSV(text);
+                });
 
-  				// slice(1, -1) = all data columns excluding checkbox + actions
-  				const dataTds = [...tds].slice(1, -1);
-
-  				// Resolution is the last data column in your table before Actions
-  				// (DATE..REMARKS, RESOLUTION) => resolution index = dataTds.length - 1
-  				const values = dataTds.map((td, idx) => {
-    				let text = td.textContent || '';
-    			if (idx === dataTds.length - 1) {
-      				text = text.toUpperCase(); // ✅ uppercase ONLY resolution on copy
-    			}
-    				return escapeCSV(text);
-  				});
-
-  				navigator.clipboard.writeText(values.join('\t'))
-    				.then(() => showNotification('Row copied!'));
-				}
+                navigator.clipboard.writeText(values.join('\t'))
+                    .then(() => showNotification('Row copied!'));
+            }
 
             function renderTable() {
                 const todayEST = getESTDateString();
@@ -2402,19 +2475,19 @@ UPLOAD DATABASE - DONE✅`;
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
                     row.innerHTML = `<td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-                                    <td>${entry.date}</td>
-                                    <td>${entry.shift}</td>
-                                    <td>${entry.support}</td>
-                                    <td>${entry.portal}</td>
-                                    <td>${entry.store}</td>
-                                    <td>${entry.zip}</td>
-                                    <td>${entry.contact}</td>
-                                    <td>${entry.contactNumber}</td>
-                                    <td>${entry.module}</td>
+                                         <td>${entry.date}</td>
+                                         <td>${entry.shift}</td>
+                                         <td>${entry.support}</td>
+                                         <td>${entry.portal}</td>
+                                         <td>${entry.store}</td>
+                                         <td>${entry.zip}</td>
+                                         <td>${entry.contact}</td>
+                                         <td>${entry.contactNumber}</td>
+                                         <td>${entry.module}</td>
                                     <td style="white-space: pre-wrap;">${entry.issue}</td>
-                                    <td>${entry.escalated}</td>
-                                    <td>${entry.status}</td>
-                                    <td>${entry.remarks}</td>
+                                         <td>${entry.escalated}</td>
+                                         <td>${entry.status}</td>
+                                         <td>${entry.remarks}</td>
                                     <td style="white-space: pre-wrap;">${(entry.resolution || '').toUpperCase()}</td>
                                     <td class="action-cell">
                                         <div class="action-container">
@@ -2423,7 +2496,7 @@ UPLOAD DATABASE - DONE✅`;
                                             <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit">✏️</button>
                                             <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove">🗑️</button>
                                         </div>
-                                    </td>`;
+                                       </td>`;
                     tbody.appendChild(row);
                 });
                 updateSelectAllCheckboxState();
@@ -2560,31 +2633,43 @@ UPLOAD DATABASE - DONE✅`;
                         const id = btn.dataset.id;
                         const entry = allEntries.find(e => e.id == id);
                         if (entry) {
-                            const formattedIssue = entry.issue ? entry.issue.toUpperCase() : '';
-                            const formattedTroubleshooting = formatWithBullets(entry.troubleshooting || '');
-                            const formattedResolution = entry.resolution || '';
-                            const formattedNote = entry.note ? entry.note : '';
+                            const troubleshootingHtmlRaw = entry.troubleshooting || '';
+                            const troubleshootingHtmlUpper = troubleshootingHtmlRaw
+                              ? uppercaseHtmlPreserveTags(troubleshootingHtmlRaw)
+                              : '';
+                            const tmp = document.createElement('div');
+                            tmp.innerHTML = troubleshootingHtmlRaw;
+                            const troubleshootingText = (tmp.innerText || tmp.textContent || '').trim();
+                            // Removed auto-bullets: just take the text as is
+                            const formattedTroubleshootingText = troubleshootingText.toUpperCase();
+                            const formattedResolution = (entry.resolution || '').toUpperCase();
+                            const formattedNote = (entry.note || '');
+                            const plainText = `📞 CONTACT:
+CALLER NAME: ${entry.contact}
+CONTACT NUMBER: ${entry.contactNumber}
 
-                            const plainText = `📞 CONTACT:\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\n\n❗ ISSUE:\n${formattedIssue}\n\n🔧 TROUBLESHOOTING:\n${formattedTroubleshooting}\n\n✅ RESOLUTION:\n${formattedResolution}`;
+📝 NOTE:
+${formattedNote}
 
+🔧 TROUBLESHOOTING:
+${formattedTroubleshootingText}
+
+✅ RESOLUTION:
+${formattedResolution}`;
                             const htmlCopy = `
-                                📞 CONTACT:<br>
-                                <strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
-                                <strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
-                                <br>
-                                ❗ ISSUE:<br>
-                                ${escapeHtml(formattedIssue).replace(/\n/g, '<br>')}<br>
-                                <br>
-                                📝 NOTE:<br>
-                                ${escapeHtml(formattedNote).replace(/\n/g, '<br>')}<br>
-                                <br>
-                                🔧 TROUBLESHOOTING:<br>
-                                ${escapeHtml(formattedTroubleshooting).replace(/\n/g, '<br>')}<br>
-                                <br>
-                                ✅ RESOLUTION:<br>
-                                ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
-                            `;
-
+📞 CONTACT:<br>
+<strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
+<strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
+<br>
+📝 NOTE:<br>
+${escapeHtml(formattedNote).replace(/\n/g, '<br>')}<br>
+<br>
+🔧 TROUBLESHOOTING:<br>
+${troubleshootingHtmlUpper || escapeHtml(formattedTroubleshootingText).replace(/\n/g, '<br>')}<br>
+<br>
+✅ RESOLUTION:<br>
+${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
+`;
                             try {
                                 const blob = new Blob([htmlCopy], { type: 'text/html' });
                                 const plainBlob = new Blob([plainText], { type: 'text/plain' });
@@ -2652,6 +2737,17 @@ UPLOAD DATABASE - DONE✅`;
                 renderSidebar();
             }
 
+            function getVisibleEntries() {
+                const todayEST = getESTDateString();
+                return allEntries.filter(entry => {
+                    if (entry.deleted) return false;
+                    const dateObj = parseDateFromString(entry.date);
+                    if (!dateObj) return false;
+                    const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}-${String(dateObj.getDate()).padStart(2,'0')}`;
+                    return entryDateStr === todayEST;
+                });
+            }
+
             function getSelectedRowIds() {
                 const checkboxes = document.querySelectorAll('#entryTable tbody .row-checkbox:checked');
                 return Array.from(checkboxes).map(cb => cb.value);
@@ -2684,13 +2780,12 @@ UPLOAD DATABASE - DONE✅`;
                 const selectedRows = allEntries.filter(entry => ids.includes(entry.id.toString()));
                 selectedRows.reverse();
 
-                
-				const csvContent = selectedRows.map(row => [
-  					row.date, row.shift, row.support, row.portal, row.store, row.zip,
-  					row.contact, row.contactNumber, row.module, row.issue,
-  					row.escalated, row.status, row.remarks,
- 				 (row.resolution || '').toUpperCase()   // ✅ uppercase ONLY on copy
-					].map(field => escapeCSV(String(field ?? ''))).join('\t')).join('\n');
+                const csvContent = selectedRows.map(row => [
+                    row.date, row.shift, row.support, row.portal, row.store, row.zip,
+                    row.contact, row.contactNumber, row.module, row.issue,
+                    row.escalated, row.status, row.remarks,
+                    (row.resolution || '').toUpperCase()
+                ].map(field => escapeCSV(String(field ?? ''))).join('\t')).join('\n');
 
                 navigator.clipboard.writeText(csvContent).then(() => showNotification(`Copied ${selectedRows.length} rows (newest last, no headers)`));
             }
@@ -2827,21 +2922,25 @@ UPLOAD DATABASE - DONE✅`;
             }
 
             function exportToCSV() {
+                const visibleEntries = getVisibleEntries();
+
                 const headers = ['DATE','SHIFT','SUPPORT','PORTAL','STORE','ZIP','CONTACT','CONTACT#','MODULE','ISSUE','ESCALATED','STATUS','REMARKS','RESOLUTION'];
-                const rows = allEntries.map(entry => [
+                const rows = visibleEntries.map(entry => [
                     entry.date, entry.shift, entry.support, entry.portal, entry.store, entry.zip,
                     entry.contact, entry.contactNumber, entry.module, entry.issue,
                     entry.escalated, entry.status, entry.remarks, entry.resolution
-                ].map(field => escapeCSV(field)).join(','));
+                ].map(field => escapeCSV(field ?? '')).join(','));
+
                 const csv = [headers.join(','), ...rows].join('\n');
                 const blob = new Blob(["\uFEFF" + csv], { type: 'text/csv;charset=utf-8' });
                 const url = URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `retailzpos_export_${new Date().toISOString().slice(0,10)}.csv`;
+                a.download = `retailzpos_daily_${new Date().toISOString().slice(0,10)}.csv`;
                 a.click();
                 URL.revokeObjectURL(url);
-                showNotification('Export started');
+
+                showNotification(`✅ Exported ${visibleEntries.length} entries (only visible in database panel)`);
             }
 
             function parseCSV(text) {
@@ -2946,7 +3045,7 @@ UPLOAD DATABASE - DONE✅`;
                     saveAllEntries();
                     renderTable();
                     renderSidebar();
-                    let msg = `Imported ${newEntries.length} entries (not added to history)`;
+                    let msg = `✅ Imported ${newEntries.length} entries into today's database panel`;
                     if (skippedEmptyDate) msg += `, skipped ${skippedEmptyDate} rows with empty date`;
                     showNotification(msg);
                 };
@@ -2956,7 +3055,10 @@ UPLOAD DATABASE - DONE✅`;
                 event.target.value = '';
             }
 
+            // ========== NEW UPDATED SHIFT REPORT FUNCTION (USES getVisibleEntries) ==========
             function generateShiftReport() {
+                const visible = getVisibleEntries();   // ← ONLY visible entries in database panel
+
                 const yesterday = new Date();
                 yesterday.setDate(yesterday.getDate() - 1);
                 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -2964,23 +3066,19 @@ UPLOAD DATABASE - DONE✅`;
                 const dayName = days[yesterday.getDay()];
                 const dateLine = `Date: ${dateStr} - ${dayName} Shift`;
 
-                const uniqueShifts = [...new Set(allEntries.map(e => e.shift).filter(s => s))];
+                const uniqueShifts = [...new Set(visible.map(e => e.shift).filter(s => s))];
                 const shiftLine = `Shift: ${uniqueShifts.join(', ')}`;
 
-                const pendingEntries = allEntries.filter(e => e.status?.toUpperCase() === 'PENDING');
+                const pendingEntries = visible.filter(e => e.status?.toUpperCase() === 'PENDING');
                 const pendingCount = pendingEntries.length;
                 let pendingList = '';
                 if (pendingCount > 0) {
-                    pendingList = pendingEntries.map(e => {
-                        const storePart = e.store || 'Unknown Store';
-                        const issuePart = e.issue || 'No issue details';
-                        return `${storePart} - ${issuePart}`;
-                    }).join('\n');
+                    pendingList = pendingEntries.map(e => `${e.store || 'Unknown Store'} - ${e.issue || 'No issue details'}`).join('\n');
                 }
 
-                const totalCalls = allEntries.filter(e => e.status?.toUpperCase() !== 'OTHER TASK').length;
+                const totalCalls = visible.filter(e => e.status?.toUpperCase() !== 'OTHER TASK').length;
 
-                const otherEntries = allEntries.filter(e => e.status?.toUpperCase() === 'OTHER TASK');
+                const otherEntries = visible.filter(e => e.status?.toUpperCase() === 'OTHER TASK');
                 const otherCount = otherEntries.length;
                 let otherList = '';
                 if (otherCount > 0) {
@@ -2999,14 +3097,12 @@ UPLOAD DATABASE - DONE✅`;
                     otherList = Array.from(uniqueItems).join('\n');
                 }
 
-                const trainingEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING');
-                const demoEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO');
-
-                const trainingList = trainingEntries.length > 0
-                    ? trainingEntries.map(e => `Scheduled Training: ${e.support || 'Unknown Support'} - `).join('\n')
+                const trainingList = otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING').length > 0
+                    ? otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING').map(e => `Scheduled Training: ${e.support || 'Unknown Support'} - `).join('\n')
                     : 'No Training for today';
-                const demoList = demoEntries.length > 0
-                    ? demoEntries.map(e => `Scheduled Demo: ${e.support || 'Unknown Support'} - `).join('\n')
+
+                const demoList = otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO').length > 0
+                    ? otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO').map(e => `Scheduled Demo: ${e.support || 'Unknown Support'} - `).join('\n')
                     : 'No Demo for today';
 
                 const staticSections = `
@@ -3039,25 +3135,18 @@ Use clear and proper escalation notes within the tracker to provide transparency
                     'Good day everyone,',
                     '',
                     'Please find below the shift report for today,',
-                    ''
+                    '',
+                    `1. Pending Tickets: ${pendingCount}`,
+                    pendingList,
+                    '',
+                    `2. Total Calls: ${totalCalls}`,
+                    '',
+                    '',
+                    `3. Total Other Tasks: ${otherCount}`,
+                    otherList,
+                    '',
+                    staticSections.trim()
                 ];
-
-                reportLines.push(`1. Pending Tickets: ${pendingCount}`);
-                if (pendingList) {
-                    reportLines.push(pendingList);
-                }
-
-                reportLines.push('');
-                reportLines.push(`2. Total Calls: ${totalCalls}`);
-
-                reportLines.push('');
-                reportLines.push(`3. Total Other Tasks: ${otherCount}`);
-                if (otherList) {
-                    reportLines.push(otherList);
-                }
-
-                reportLines.push('');
-                reportLines.push(staticSections.trim());
 
                 return reportLines.join('\n');
             }
@@ -3384,7 +3473,8 @@ Use clear and proper escalation notes within the tracker to provide transparency
                     if (el) el.addEventListener('input', () => { ticketUpdatePreview(); saveFormData('ticket'); });
                 });
 
-                document.querySelectorAll('input:not([type="date"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach(el => {
+
+document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach(el => {
                     if (el.id.includes('password')) return;
                     el.addEventListener('input', function() {
                         if (!this.value) return;
@@ -3463,6 +3553,26 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 });
 
                 loadCollapseState();
+
+                quillEditor = new Quill('#ticket-resolution-editor', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['clean']
+                        ]
+                    }
+                });
+
+                quillEditor.on('text-change', function(delta, oldDelta, source) {
+                    const plain = quillEditor.getText().trim();
+                    const htmlContent = quillEditor.root.innerHTML;
+                    const upperHtml = plain.length > 0 ? uppercaseHtmlPreserveTags(htmlContent) : '';
+                    document.getElementById('ticket-resolution').value = upperHtml;
+                    ticketUpdatePreview();
+                    saveFormData('ticket');
+                });
             }
 
             window.switchTab = switchTab;
