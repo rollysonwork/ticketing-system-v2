@@ -71,15 +71,20 @@
             max-height: calc(100vh - 140px);
             position: sticky;
             top: 24px;
-            transition: flex 0.3s ease, padding 0.3s ease, opacity 0.2s ease, background var(--transition);
+            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease, flex 0.2s ease, padding 0.2s ease, margin 0.2s ease;
+            transform-origin: top left;
+            will-change: opacity, transform;
         }
 
         .sidebar.hidden {
             flex: 0 0 0 !important;
             padding: 0 !important;
             margin: 0 !important;
-            opacity: 0;
-            visibility: hidden;
+            opacity: 0 !important;
+            transform: scale(0.95) !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s, flex 0.2s ease, padding 0.2s ease, margin 0.2s ease;
         }
 
         .sidebar-header {
@@ -217,7 +222,7 @@
         .main-content {
             flex: 1;
             min-width: 0;
-            transition: flex 0.3s ease;
+            transition: flex 0.2s ease, margin-left 0.2s ease;
         }
 
         h1 {
@@ -863,6 +868,56 @@
         .no-uppercase {
             text-transform: none !important;
         }
+
+/* Base list */
+.preview-multiline ol {
+    counter-reset: level1;
+    list-style: none;
+    padding-left: 0;
+}
+
+/* LEVEL 1 (1,2,3) */
+.preview-multiline li {
+    counter-increment: level1;
+    margin-left: 0;
+}
+
+.preview-multiline li:not([class*="ql-indent"])::before {
+    content: counter(level1) ". ";
+}
+
+/* LEVEL 2 (A,B,C) */
+.preview-multiline li.ql-indent-1 {
+    counter-increment: level2;
+    margin-left: 30px;
+}
+
+.preview-multiline li.ql-indent-1:first-child {
+    counter-reset: level2;
+}
+
+.preview-multiline li.ql-indent-1::before {
+    content: counter(level2, upper-alpha) ". ";
+}
+
+/* LEVEL 3 (I,II,III) */
+.preview-multiline li.ql-indent-2 {
+    counter-increment: level3;
+    margin-left: 60px;
+}
+
+.preview-multiline li.ql-indent-2:first-child {
+    counter-reset: level3;
+}
+
+.preview-multiline li.ql-indent-2::before {
+    content: counter(level3, upper-roman) ". ";
+}
+
+/* Remove default numbering */
+.preview-multiline li {
+    list-style: none;
+}
 
         </style>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
@@ -2467,7 +2522,7 @@ UPLOAD DATABASE - DONE✅`;
                     const dateObj = parseDateFromString(entry.date);
                     if (!dateObj) return false;
                     const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}-${String(dateObj.getDate()).padStart(2,'0')}`;
-                    return entryDateStr === todayEST;
+                    return entryDateStr <= todayEST;
                 });
                 const tbody = document.querySelector('#entryTable tbody');
                 tbody.innerHTML = '';
@@ -2475,19 +2530,19 @@ UPLOAD DATABASE - DONE✅`;
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
                     row.innerHTML = `<td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-                                         <td>${entry.date}</td>
-                                         <td>${entry.shift}</td>
-                                         <td>${entry.support}</td>
-                                         <td>${entry.portal}</td>
-                                         <td>${entry.store}</td>
-                                         <td>${entry.zip}</td>
-                                         <td>${entry.contact}</td>
-                                         <td>${entry.contactNumber}</td>
-                                         <td>${entry.module}</td>
+                                           <td>${entry.date}</td>
+                                           <td>${entry.shift}</td>
+                                           <td>${entry.support}</td>
+                                           <td>${entry.portal}</td>
+                                           <td>${entry.store}</td>
+                                           <td>${entry.zip}</td>
+                                           <td>${entry.contact}</td>
+                                           <td>${entry.contactNumber}</td>
+                                           <td>${entry.module}</td>
                                     <td style="white-space: pre-wrap;">${entry.issue}</td>
-                                         <td>${entry.escalated}</td>
-                                         <td>${entry.status}</td>
-                                         <td>${entry.remarks}</td>
+                                           <td>${entry.escalated}</td>
+                                           <td>${entry.status}</td>
+                                           <td>${entry.remarks}</td>
                                     <td style="white-space: pre-wrap;">${(entry.resolution || '').toUpperCase()}</td>
                                     <td class="action-cell">
                                         <div class="action-container">
@@ -2496,7 +2551,7 @@ UPLOAD DATABASE - DONE✅`;
                                             <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit">✏️</button>
                                             <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove">🗑️</button>
                                         </div>
-                                       </td>`;
+                                        </td>`;
                     tbody.appendChild(row);
                 });
                 updateSelectAllCheckboxState();
@@ -2744,7 +2799,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
                     const dateObj = parseDateFromString(entry.date);
                     if (!dateObj) return false;
                     const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}-${String(dateObj.getDate()).padStart(2,'0')}`;
-                    return entryDateStr === todayEST;
+                    return entryDateStr <= todayEST;
                 });
             }
 
@@ -3055,9 +3110,9 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
                 event.target.value = '';
             }
 
-            // ========== NEW UPDATED SHIFT REPORT FUNCTION (USES getVisibleEntries) ==========
-            function generateShiftReport() {
-                const visible = getVisibleEntries();   // ← ONLY visible entries in database panel
+            // ========== UPDATED SHIFT REPORT FUNCTIONS ==========
+            function generateShiftReportPlain() {
+                const visible = getVisibleEntries();
 
                 const yesterday = new Date();
                 yesterday.setDate(yesterday.getDate() - 1);
@@ -3073,7 +3128,9 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
                 const pendingCount = pendingEntries.length;
                 let pendingList = '';
                 if (pendingCount > 0) {
-                    pendingList = pendingEntries.map(e => `${e.store || 'Unknown Store'} - ${e.issue || 'No issue details'}`).join('\n');
+                    pendingList = pendingEntries.map(e => `  ${e.store || 'Unknown Store'} - ${e.issue || 'No issue details'}`).join('\n');
+                } else {
+                    pendingList = '  No Pending Tickets';
                 }
 
                 const totalCalls = visible.filter(e => e.status?.toUpperCase() !== 'OTHER TASK').length;
@@ -3094,35 +3151,34 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
                             uniqueItems.add(display);
                         }
                     });
-                    otherList = Array.from(uniqueItems).join('\n');
+                    otherList = Array.from(uniqueItems).map(item => `  ${item}`).join('\n');
+                } else {
+                    otherList = '  No Other Tasks';
                 }
 
-                const trainingList = otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING').length > 0
-                    ? otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING').map(e => `Scheduled Training: ${e.support || 'Unknown Support'} - `).join('\n')
-                    : 'No Training for today';
-
-                const demoList = otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO').length > 0
-                    ? otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO').map(e => `Scheduled Demo: ${e.support || 'Unknown Support'} - `).join('\n')
-                    : 'No Demo for today';
+                const trainingEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING');
+                const demoEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO');
+                const trainingLine = trainingEntries.length > 0
+                    ? `  Scheduled Training: ${trainingEntries.map(e => e.support || 'Unknown Support').join(', ')}`
+                    : '  No Training for today';
+                const demoLine = demoEntries.length > 0
+                    ? `  Scheduled Demo: ${demoEntries.map(e => e.support || 'Unknown Support').join(', ')}`
+                    : '  No Demo for today';
 
                 const staticSections = `
-4. Scheduled Training/Demo (Merchant)
-${trainingList}
-${demoList}
-
 5. Updates / Notices
-The current latest versions:
-RetailzPOS: Version Code 211 (Portal 1, 2, 3, 4, 5, 6, 7, 8)
-Moolah Points: Version Code 37  (Portal 1, 2, 3, 4, 5, 6, 7, 8)
+  The current latest versions:
+    RetailzPOS: Version Code 211 (Portal 1, 2, 3, 4, 5, 6, 7, 8)
+    Moolah Points: Version Code 37  (Portal 1, 2, 3, 4, 5, 6, 7, 8)
 
-Reminders for Retailz team members:
-Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.
-Ask seniors assistance for issue that needed to be escalated to the India team
-Observe professional call etiquette at all times when handling calls.
-Follow up on any pending tickets and ensure timely updates.
-Review pending issues and escalations using the newly added features in our existing workload tracker
-Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.
-Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.
+  Reminders for Retailz team members:
+    - Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.
+    - Ask seniors assistance for issue that needed to be escalated to the India team
+    - Observe professional call etiquette at all times when handling calls.
+    - Follow up on any pending tickets and ensure timely updates.
+    - Review pending issues and escalations using the newly added features in our existing workload tracker
+    - Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.
+    - Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.
 
 6. Training (Retailz Members): No training for today
 
@@ -3145,14 +3201,120 @@ Use clear and proper escalation notes within the tracker to provide transparency
                     `3. Total Other Tasks: ${otherCount}`,
                     otherList,
                     '',
+                    `4. Scheduled Training/Demo (Merchant)`,
+                    trainingLine,
+                    demoLine,
+                    '',
                     staticSections.trim()
                 ];
 
                 return reportLines.join('\n');
             }
 
+function generateShiftReportHTML() {
+    const visible = getVisibleEntries();
+
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dateStr = yesterday.toLocaleDateString('en-US');
+    const dayName = days[yesterday.getDay()];
+    const dateLine = `Date: ${dateStr} - ${dayName} Shift`;
+
+    const uniqueShifts = [...new Set(visible.map(e => e.shift).filter(s => s))];
+    const shiftLine = `Shift: ${uniqueShifts.join(', ')}`;
+
+    const pendingEntries = visible.filter(e => e.status?.toUpperCase() === 'PENDING');
+    const pendingCount = pendingEntries.length;
+    let pendingListHtml = '';
+    if (pendingCount > 0) {
+        pendingListHtml = '<ul style="margin: 0 0 0 20px;">' +
+            pendingEntries.map(e => `<li>${escapeHtml(e.store || 'Unknown Store')} - ${escapeHtml(e.issue || 'No issue details')}</li>`).join('') +
+            '</ul>';
+    } else {
+        pendingListHtml = '<div style="margin-left: 20px;">No Pending Tickets</div>';
+    }
+
+    const totalCalls = visible.filter(e => e.status?.toUpperCase() !== 'OTHER TASK').length;
+
+    const otherEntries = visible.filter(e => e.status?.toUpperCase() === 'OTHER TASK');
+    const otherCount = otherEntries.length;
+    let otherListHtml = '';
+    if (otherCount > 0) {
+        const uniqueItems = new Set();
+        otherEntries.forEach(e => {
+            const moduleName = (e.module && e.module.trim()) ? e.module : '';
+            if (moduleName.toUpperCase() === 'OTHER') {
+                const issueText = e.issue ? e.issue.trim() : '';
+                const display = issueText || 'Other';
+                uniqueItems.add(display);
+            } else {
+                const display = moduleName || 'Other';
+                uniqueItems.add(display);
+            }
+        });
+        otherListHtml = '<ul style="margin: 0 0 0 20px;">' +
+            Array.from(uniqueItems).map(item => `<li>${escapeHtml(item)}</li>`).join('') +
+            '</ul>';
+    } else {
+        otherListHtml = '<div style="margin-left: 20px;">No Other Tasks</div>';
+    }
+
+    const trainingEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING');
+    const demoEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO');
+    const trainingHtml = trainingEntries.length > 0
+        ? `<li>Scheduled Training: ${escapeHtml(trainingEntries.map(e => e.support || 'Unknown Support').join(', '))}</li>`
+        : '<li>No Training for today</li>';
+    const demoHtml = demoEntries.length > 0
+        ? `<li>Scheduled Demo: ${escapeHtml(demoEntries.map(e => e.support || 'Unknown Support').join(', '))}</li>`
+        : '<li>No Demo for today</li>';
+
+    const staticSections = `
+        <p style="margin-top: 16px;"><strong>5. Updates / Notices</strong></p><br>
+        <div style="margin-left: 20px;">The current latest versions:</div><br>
+        <div style="margin-left: 40px;">RetailzPOS: Version Code 211 (Portal 1, 2, 3, 4, 5, 6, 7, 8)</div><br>
+        <div style="margin-left: 40px;">Moolah Points: Version Code 37 (Portal 1, 2, 3, 4, 5, 6, 7, 8)</div><br>
+        <div style="margin-top: 8px;"></div><br>
+        <div style="margin-left: 20px;">Reminders for Retailz team members:</div><br>
+        <ul style="margin: 0 0 0 40px;">
+            <li>Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.</li><br>
+            <li>Ask seniors assistance for issue that needed to be escalated to the India team</li><br>
+            <li>Observe professional call etiquette at all times when handling calls.</li><br>
+            <li>Follow up on any pending tickets and ensure timely updates.</li><br>
+            <li>Review pending issues and escalations using the newly added features in our existing workload tracker</li><br>
+            <li>Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.</li><br>
+            <li>Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.</li><br>
+        </ul>
+<br>
+        <p style="margin-top: 16px;"><strong>6. Training (Retailz Members):</strong> No training for today</p><br><br>
+        <p style="margin-top: 8px;"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</p>
+    `;
+
+    return `
+        <div style="font-family: sans-serif; line-height: 1.5;">
+            <p>${escapeHtml(dateLine)}</p><br>
+            <p>${escapeHtml(shiftLine)}</p><br><br>
+            <p>Good day everyone,</p><br><br>
+            <p>Please find below the shift report for today,</p><br><br>
+            <p><strong>&nbsp;1. Pending Tickets: ${pendingCount}</strong></p><br>
+            &nbsp;&nbsp;${pendingListHtml}<br><br>
+            <p><strong>&nbsp;2. Total Calls: ${totalCalls}</strong></p><br><br>
+            <p><strong>&nbsp;3. Total Other Tasks: ${otherCount}</strong></p><br>
+            &nbsp;&nbsp;${otherListHtml}<br><br>
+            <p><strong>&nbsp;4. Scheduled Training/Demo (Merchant)</strong></p><br>
+            <ul style="margin: 0 0 0 20px;">
+                &nbsp;&nbsp;${trainingHtml}<br>
+                &nbsp;&nbsp;${demoHtml}<br>
+            </ul>
+		<br>
+            ${staticSections}
+        </div>
+    `;
+}
+
             function showShiftReportModal() {
-                const reportText = generateShiftReport();
+                const plainText = generateShiftReportPlain();
+                const htmlContent = generateShiftReportHTML();
 
                 const modal = document.createElement('div');
                 modal.style.position = 'fixed';
@@ -3182,24 +3344,20 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 title.style.fontSize = '1.2rem';
                 modal.appendChild(title);
 
-                const textarea = document.createElement('textarea');
-                textarea.value = reportText;
-                textarea.style.width = '100%';
-                textarea.style.minHeight = '300px';
-                textarea.style.padding = '12px';
-                textarea.style.border = '1px solid #cdddee';
-                textarea.style.borderRadius = '8px';
-                textarea.style.fontFamily = 'monospace';
-                textarea.style.fontSize = '13px';
-                textarea.style.resize = 'none';
-                textarea.readOnly = true;
+                // Create a container for the Quill editor (read-only)
+                const editorContainer = document.createElement('div');
+                editorContainer.style.height = '400px';
+                editorContainer.style.marginBottom = '16px';
+                modal.appendChild(editorContainer);
 
-                if (document.body.classList.contains('dark-mode')) {
-                    textarea.style.backgroundColor = '#1a202c';
-                    textarea.style.color = '#e2e8f0';
-                    textarea.style.borderColor = '#4a5568';
-                }
-                modal.appendChild(textarea);
+                // Initialize Quill in read-only mode (toolbar disabled)
+                const quill = new Quill(editorContainer, {
+                    theme: 'snow',
+                    readOnly: true,
+                    modules: { toolbar: false }
+                });
+                // Paste our generated HTML
+                quill.clipboard.dangerouslyPasteHTML(htmlContent);
 
                 const buttonRow = document.createElement('div');
                 buttonRow.style.display = 'flex';
@@ -3215,10 +3373,22 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 copyBtn.style.cursor = 'pointer';
                 copyBtn.style.backgroundColor = '#2563eb';
                 copyBtn.style.color = 'white';
-                copyBtn.addEventListener('click', () => {
-                    navigator.clipboard.writeText(reportText).then(() => {
-                        showNotification('Report copied to clipboard!');
-                    });
+                copyBtn.addEventListener('click', async () => {
+                    try {
+                        // Use the original HTML string (htmlContent) to preserve formatting
+                        const clipboardItems = [
+                            new ClipboardItem({
+                                'text/plain': new Blob([plainText], { type: 'text/plain' }),
+                                'text/html': new Blob([htmlContent], { type: 'text/html' })
+                            })
+                        ];
+                        await navigator.clipboard.write(clipboardItems);
+                        showNotification('Report copied (rich format)!');
+                    } catch (err) {
+                        // Fallback: copy only plain text
+                        navigator.clipboard.writeText(plainText);
+                        showNotification('Plain text copied (rich copy failed)');
+                    }
                 });
 
                 const closeBtn = document.createElement('button');
@@ -3253,9 +3423,6 @@ Use clear and proper escalation notes within the tracker to provide transparency
 
                 document.body.appendChild(backdrop);
                 document.body.appendChild(modal);
-
-                textarea.style.height = 'auto';
-                textarea.style.height = textarea.scrollHeight + 'px';
             }
 
             function updateSelectAllCheckboxState() {
@@ -3362,15 +3529,58 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 });
             }
 
-            function checkAndRefreshTable() {
-                const todayEST = getESTDateString();
-                const storedDate = localStorage.getItem('lastClearDate');
-                if (storedDate !== todayEST) {
-                    renderTable();
-                    showNotification(`Switched to ${todayEST} entries in main table. History remains in sidebar.`);
-                    localStorage.setItem('lastClearDate', todayEST);
-                }
-            }
+function checkAndRefreshTable() {
+
+    const todayEST = getESTDateString();
+    const storedDate = localStorage.getItem('lastClearDate');
+
+    if (storedDate !== todayEST) {
+
+        archiveOldEntries();
+
+        saveAllEntries();
+
+        renderTable();
+
+        renderSidebar();
+
+        showNotification(`New day detected. Previous entries moved to history.`);
+
+        localStorage.setItem('lastClearDate', todayEST);
+
+    }
+
+}
+
+function archiveOldEntries() {
+
+    const today = getESTDateString();
+
+    allEntries.forEach(entry => {
+
+        if (entry.deleted) return;
+
+        const dateObj = parseDateFromString(entry.date);
+
+        if (!dateObj) return;
+
+        const yyyy = dateObj.getFullYear();
+        const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+        const dd = String(dateObj.getDate()).padStart(2, '0');
+
+        const entryDate =
+            `${yyyy}-${mm}-${dd}`;
+
+        // Archive old entries
+        if (entryDate < today) {
+
+            entry.deleted = true;
+
+        }
+
+    });
+
+}
 
             function init() {
                 const yesterday = new Date();
@@ -3394,6 +3604,8 @@ Use clear and proper escalation notes within the tracker to provide transparency
                 loadFormData('ticket');
                 syncShiftSupportFromTicket();
                 loadAllEntries();
+		archiveOldEntries();
+		saveAllEntries();
 
                 ['moolah', 'store', 'ticket'].forEach(prefix => {
                     setupSearchKeyboard(prefix);
@@ -3473,8 +3685,7 @@ Use clear and proper escalation notes within the tracker to provide transparency
                     if (el) el.addEventListener('input', () => { ticketUpdatePreview(); saveFormData('ticket'); });
                 });
 
-
-document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach(el => {
+                document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach(el => {
                     if (el.id.includes('password')) return;
                     el.addEventListener('input', function() {
                         if (!this.value) return;
