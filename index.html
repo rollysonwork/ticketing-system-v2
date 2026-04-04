@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>RetailzPOS · Unified Creation System</title>
     <style>
-        /* (All existing styles remain unchanged) */
+        /* (All existing styles remain unchanged - copy from previous version) */
         :root {
             --bg-primary: #f8fafc;
             --bg-secondary: #ffffff;
@@ -952,21 +952,36 @@
                             <div id="ticket-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                            <tr><td>DATE</td><td><input type="date" id="ticket-date"></td></tr>
-                            <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                            <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td></tr>
-                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td></tr>
-                            <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td></tr>
-                            <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td></tr>
-                            <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td></tr>
-                            <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
-                            <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td></tr>
-                            <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
-                            <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
-                            <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
-                            <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
-                            <tr><td>RESOLUTION</td><td><div id="ticket-resolution-editor" style="height: 200px;"></div><textarea id="ticket-resolution" style="display:none;"></textarea></td></tr>
-                            <tr><td>NOTE</td><td><textarea id="ticket-note" rows="5"></textarea></td></tr>
+                            <tr><td>DATE</td><td><input type="date" id="ticket-date"></td>
+                            </tr>
+                            <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
+                            </tr>
+                            <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td>
+                            </tr>
+                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td>
+                            </tr>
+                            <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td>
+                            </tr>
+                            <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td>
+                            </tr>
+                            <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td>
+                            </tr>
+                            <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td>
+                            </tr>
+                            <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td>
+                            </tr>
+                            <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td>
+                            </tr>
+                            <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td>
+                            </tr>
+                            <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td>
+                            </tr>
+                            <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td>
+                            </tr>
+                            <tr><td>RESOLUTION</td><td><div id="ticket-resolution-editor" style="height: 200px;"></div><textarea id="ticket-resolution" style="display:none;"></textarea></td>
+                            </tr>
+                            <tr><td>NOTE</td><td><textarea id="ticket-note" rows="5"></textarea></td>
+                            </tr>
                         </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
@@ -1016,20 +1031,34 @@
                             <div id="store-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                            <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
-                            <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                            <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
-                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td></tr>
-                            <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td></tr>
-                            <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
-                            <tr><td>AGENT</td><td><input type="text" id="store-agent"></td></tr>
-                            <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
-                            <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
-                            <tr><td>SKU</td><td><input type="text" id="store-sku"></td></tr>
-                            <tr><td>DATABASE</td><td><input type="text" id="store-database"></td></tr>
-                            <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td></tr>
-                            <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
-                            <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
+                            <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td>
+                            </tr>
+                            <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
+                            </tr>
+                            <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td>
+                            </tr>
+                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td>
+                            </tr>
+                            <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td>
+                            </tr>
+                            <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td>
+                            </tr>
+                            <tr><td>AGENT</td><td><input type="text" id="store-agent"></td>
+                            </tr>
+                            <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td>
+                            </tr>
+                            <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td>
+                            </tr>
+                            <tr><td>SKU</td><td><input type="text" id="store-sku"></td>
+                            </tr>
+                            <tr><td>DATABASE</td><td><input type="text" id="store-database"></td>
+                            </tr>
+                            <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td>
+                            </tr>
+                            <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td>
+                            </tr>
+                            <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td>
+                            </tr>
                         </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('store')">ADD ENTRY</button>
@@ -1040,7 +1069,7 @@
                     </div>
                     <div class="right-panel" id="store-previewPanel">
                         <h3>🔍 PREVIEW</h3>
-                        <div><strong>URL:-</strong> <span id="store-preview-url"></span></div>
+                        <div><strong>URL:-</strong> <span id="store-preview-url">https://portal[PORTAL].retailzpos.com/</span></div>
                         <div><strong>STORE CREATION DATE:</strong> <span id="store-preview-date"></span></div>
                         <div><strong>STORE NAME:</strong> <span id="store-preview-storeName"></span></div>
                         <div><strong>ZIPCODE:</strong> <span id="store-preview-zipcode"></span></div>
@@ -1081,23 +1110,30 @@
                             <div id="moolah-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                            <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
-                            <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                            <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
-                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
-                            <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
-                            <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
-                        </table>
-                        <div class="section-header">CLIENT CREDENTIALS </div>
-                        <table><tr><td>USERNAME</td><td><input type="text" id="moolah-clientUser"></td></tr><tr><td>PASSWORD</td><td><input type="text" id="moolah-clientPass" class="client-password no-uppercase"></td></tr></table>
-                        <div class="section-header">STORE CREDENTIALS </div>
-                        <table><tr><td>USERNAME</td><td><input type="text" id="moolah-storeUser"></td></tr><tr><td>PASSWORD</td><td><input type="text" id="moolah-storePass" class="password-field no-uppercase" readonly value=""></td></tr></table>
-                        <div class="section-header">OUTLET CREDENTIALS </div>
-                        <table><tr><td>USERNAME</td><td><input type="text" id="moolah-outletUser"></td></tr><tr><td>PASSWORD</td><td><input type="text" id="moolah-outletPass" class="password-field no-uppercase" readonly value=""></td></tr></table>
-                        <table>
-                            <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
-                            <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
-                            <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
+                            <tr><td>DATE                                <td><input type="date" id="moolah-date" readonly></td>
+                            </tr>
+                            <tr><td>SHIFT SCHEDULE                                <td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
+                            </tr>
+                            <tr><td>SUPPORT NAME                                <td><input type="text" id="moolah-support" readonly></td>
+                            </tr>
+                            <tr><td>PORTAL NUMBER *                                <td><input type="text" id="moolah-portal" class="required"></td>
+                            </tr>
+                            <tr><td>STORE NAME *                                <td><input type="text" id="moolah-storeName" class="required"></td>
+                            </tr>
+                            <tr><td>ZIP CODE *                                <td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td>
+                            </tr>
+                            <tr><td>EMAIL ID                                <td><input type="email" id="moolah-email" class="no-uppercase"></td>
+                            </tr>
+                            <tr><td>PASSWORD                                <td><input type="text" id="moolah-password" class="no-uppercase"></td>
+                            </tr>
+                            <tr><td>NO OF TABS                                <td><input type="number" id="moolah-noOfTabs"></td>
+                            </tr>
+                            <tr><td>SKU (6 DIGITS)                                <td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td>
+                            </tr>
+                            <tr><td>MOKI ID                                <td><textarea id="moolah-mokiId" rows="2"></textarea></td>
+                            </tr>
+                            <tr><td>ANYDESK ID                                <td><textarea id="moolah-anydeskId" rows="2"></textarea></td>
+                            </tr>
                         </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('moolah')">ADD ENTRY</button>
@@ -1108,23 +1144,17 @@
                     </div>
                     <div class="right-panel" id="moolah-previewPanel">
                         <h3>🔍 PREVIEW</h3>
-                        <div><strong>PORTAL:</strong> <span id="moolah-preview-portal"></span></div>
+                        <div><strong>MOOLAH CREATION DATE:</strong> <span id="moolah-preview-date"></span></div>
                         <div><strong>STORE NAME:</strong> <span id="moolah-preview-storeName"></span></div>
                         <div><strong>ZIPCODE:</strong> <span id="moolah-preview-zipcode"></span></div>
+                        <div><strong>PORTAL:</strong> <span id="moolah-preview-portal"></span></div>
                         <br>
-                        <div><strong>CLIENT:</strong></div>
-                        <div><strong>USERNAME:</strong> <span id="moolah-preview-clientUser"></span></div>
-                        <div><strong>PASSWORD:</strong> <span id="moolah-preview-clientPass"></span></div>
-                        <br>
-                        <div><strong>STORE:</strong></div>
-                        <div><strong>USERNAME:</strong> <span id="moolah-preview-storeUser"></span></div>
-                        <div><strong>PASSWORD:</strong> <span id="moolah-preview-storePass"></span></div>
-                        <br>
-                        <div><strong>OUTLET:</strong></div>
-                        <div><strong>USERNAME:</strong> <span id="moolah-preview-outletUser"></span></div>
-                        <div><strong>PASSWORD:</strong> <span id="moolah-preview-outletPass"></span></div>
+                        <div><strong>EMAIL ID:</strong> <span id="moolah-preview-email"></span></div>
+                        <div><strong>PASSWORD:</strong> <span id="moolah-preview-password"></span></div>
                         <br>
                         <div><strong>SKU:</strong> <span id="moolah-preview-sku"></span></div>
+                        <br>
+                        <div><strong>NO OF TABS:</strong> <span id="moolah-preview-noOfTabs"></span></div>
                         <div><strong>MOKI ID:</strong><br><span id="moolah-preview-mokiId" class="preview-multiline"></span></div>
                         <div><strong>ANYDESK ID:</strong><br><span id="moolah-preview-anydeskId" class="preview-multiline"></span></div>
                         <br>
@@ -1155,15 +1185,15 @@
             <div style="overflow-x: auto;">
                 <table id="entryTable">
                     <thead>
-                        <tr>
+                         <tr>
                             <th style="width:30px"></th>
                             <th>DATE</th><th>SHIFT</th><th>SUPPORT</th><th>PORTAL</th><th>STORE</th><th>ZIP</th>
                             <th>CONTACT</th><th>CONTACT#</th><th>MODULE</th><th>ISSUE</th><th>ESCALATED</th>
                             <th>STATUS</th><th>REMARKS</th><th>RESOLUTION</th><th>ACTIONS</th>
-                        </tr>
+                         </tr>
                     </thead>
                     <tbody></tbody>
-                </table>
+                  </table
             </div>
         </div>
     </div>
@@ -1174,7 +1204,7 @@
         (function() {
             "use strict";
 
-            // ========== STATE FULL NAMES MAPPING ==========
+            // STATE FULL NAMES MAPPING
             const STATE_FULL_NAMES = {
                 'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas', 'CA': 'California',
                 'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware', 'FL': 'Florida', 'GA': 'Georgia',
@@ -1189,17 +1219,15 @@
                 'DC': 'District of Columbia'
             };
 
-            // ========== HELPER: format multiline text with <br> ==========
+            // Helper: format multiline text with <br>
             function formatMultilinePreview(text) {
                 if (!text) return '';
-                // Escape HTML special characters
                 const escaped = text.replace(/[&<>]/g, function(m) {
                     if (m === '&') return '&amp;';
                     if (m === '<') return '&lt;';
                     if (m === '>') return '&gt;';
                     return m;
                 });
-                // Replace newlines with <br>
                 return escaped.replace(/\n/g, '<br>');
             }
 
@@ -1718,7 +1746,7 @@
 
             function saveFormData(prefix) {
                 const fields = {
-                    moolah: ['shift', 'support', 'portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'storePass', 'outletUser', 'outletPass', 'sku', 'mokiId', 'anydeskId'],
+                    moolah: ['shift', 'support', 'portal', 'storeName', 'zipcode', 'email', 'password', 'noOfTabs', 'sku', 'mokiId', 'anydeskId'],
                     store: ['shift', 'support', 'portal', 'storeName', 'zipcode', 'agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'],
                     ticket: ['shift', 'support', 'portal', 'store', 'zip', 'contactPerson', 'contactNumber', 'module', 'issue', 'escalated', 'status', 'remarks', 'resolution', 'note']
                 };
@@ -1790,13 +1818,10 @@
                 const portal = document.getElementById('moolah-portal').value.trim();
                 const storeName = document.getElementById('moolah-storeName').value.trim();
                 const zipcode = document.getElementById('moolah-zipcode').value.trim();
-                const clientUser = document.getElementById('moolah-clientUser').value.trim();
-                const clientPass = document.getElementById('moolah-clientPass').value.trim();
-                const storeUser = document.getElementById('moolah-storeUser').value.trim();
-                const storePass = document.getElementById('moolah-storePass').value.trim();
-                const outletUser = document.getElementById('moolah-outletUser').value.trim();
-                const outletPass = document.getElementById('moolah-outletPass').value.trim();
+                const email = document.getElementById('moolah-email').value.trim();
+                const password = document.getElementById('moolah-password').value.trim();
                 const sku = document.getElementById('moolah-sku').value.trim();
+                const noOfTabs = document.getElementById('moolah-noOfTabs').value.trim();
                 const mokiId = document.getElementById('moolah-mokiId').value.trim();
                 const anydeskId = document.getElementById('moolah-anydeskId').value.trim();
 
@@ -1809,17 +1834,14 @@
                 const skuClean = sku || '[SKU]';
                 const statePart = state || '[STATE]';
 
-                document.getElementById('moolah-preview-portal').textContent = portal || '';
+                document.getElementById('moolah-preview-date').textContent = storeGetFormattedDateMinusOne();
                 document.getElementById('moolah-preview-storeName').textContent = storeName || '';
                 document.getElementById('moolah-preview-zipcode').textContent = zipcode || '';
-                document.getElementById('moolah-preview-clientUser').textContent = clientUser || '';
-                document.getElementById('moolah-preview-clientPass').textContent = clientPass || '';
-                document.getElementById('moolah-preview-storeUser').textContent = storeUser || '';
-                document.getElementById('moolah-preview-storePass').textContent = storePass || '';
-                document.getElementById('moolah-preview-outletUser').textContent = outletUser || '';
-                document.getElementById('moolah-preview-outletPass').textContent = outletPass || '';
+                document.getElementById('moolah-preview-portal').textContent = portal || '';
+                document.getElementById('moolah-preview-email').textContent = email || '';
+                document.getElementById('moolah-preview-password').textContent = password || '';
                 document.getElementById('moolah-preview-sku').textContent = sku || '';
-                // Use formatMultilinePreview for multi-line fields
+                document.getElementById('moolah-preview-noOfTabs').textContent = noOfTabs || '';
                 document.getElementById('moolah-preview-mokiId').innerHTML = formatMultilinePreview(mokiId);
                 document.getElementById('moolah-preview-anydeskId').innerHTML = formatMultilinePreview(anydeskId);
 
@@ -1845,7 +1867,7 @@
                 const mokiId = document.getElementById('store-mokiId').value.trim();
                 const anydeskId = document.getElementById('store-anydeskId').value.trim();
 
-                const url = portal ? `https://portal${portal}.retailzpos.com/` : '';
+                const url = portal ? `https://portal${portal}.retailzpos.com/` : 'https://portal[PORTAL].retailzpos.com/';
                 const state = zipcode ? getStateFromZip(zipcode) : '';
                 const tzCode = zipcode ? getTimeZoneFromZip(zipcode) : '';
                 const tzLabel = tzCode ? getTimeZoneLabel(tzCode) : '';
@@ -1898,9 +1920,7 @@
 
                 const troubleshootingRaw = document.getElementById('ticket-resolution').value;
                 document.getElementById('ticket-previewTroubleshooting').innerHTML = troubleshootingRaw ? uppercaseHtmlPreserveTags(troubleshootingRaw) : '';
-                
-                const resolutionRaw = document.getElementById('ticket-resolution').value ? '' : ''; // will be set from entry later
-                // Note: resolution preview is updated via updatePreviewWithEntry when editing
+                // Resolution preview updated elsewhere
                 syncPreviewHeight();
             }
 
@@ -2251,13 +2271,10 @@ UPLOAD DATABASE - DONE✅`;
 
                 if (prefix === 'moolah') {
                     newEntry.moduleData = {
-                        clientUser: document.getElementById('moolah-clientUser').value,
-                        clientPass: document.getElementById('moolah-clientPass').value,
-                        storeUser: document.getElementById('moolah-storeUser').value,
-                        storePass: document.getElementById('moolah-storePass').value,
-                        outletUser: document.getElementById('moolah-outletUser').value,
-                        outletPass: document.getElementById('moolah-outletPass').value,
+                        email: document.getElementById('moolah-email').value,
+                        password: document.getElementById('moolah-password').value,
                         sku: document.getElementById('moolah-sku').value,
+                        noOfTabs: document.getElementById('moolah-noOfTabs').value,
                         mokiId: document.getElementById('moolah-mokiId').value,
                         anydeskId: document.getElementById('moolah-anydeskId').value
                     };
@@ -2321,7 +2338,7 @@ UPLOAD DATABASE - DONE✅`;
                     const textareas = document.querySelectorAll(`#tab-store textarea`);
                     textareas.forEach(ta => autoGrow(ta));
                 } else if (prefix === 'moolah') {
-                    const fields = ['portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'storePass', 'outletUser', 'outletPass', 'sku', 'mokiId', 'anydeskId'];
+                    const fields = ['portal', 'storeName', 'zipcode', 'email', 'password', 'noOfTabs', 'sku', 'mokiId', 'anydeskId'];
                     fields.forEach(id => {
                         const el = document.getElementById(`moolah-${id}`);
                         if (el) el.value = '';
@@ -2397,13 +2414,10 @@ UPLOAD DATABASE - DONE✅`;
                 }
 
                 if (prefix === 'moolah') {
-                    document.getElementById('moolah-clientUser').value = entry.moduleData?.clientUser || '';
-                    document.getElementById('moolah-clientPass').value = entry.moduleData?.clientPass || '';
-                    document.getElementById('moolah-storeUser').value = entry.moduleData?.storeUser || '';
-                    document.getElementById('moolah-storePass').value = entry.moduleData?.storePass || '';
-                    document.getElementById('moolah-outletUser').value = entry.moduleData?.outletUser || '';
-                    document.getElementById('moolah-outletPass').value = entry.moduleData?.outletPass || '';
+                    document.getElementById('moolah-email').value = entry.moduleData?.email || '';
+                    document.getElementById('moolah-password').value = entry.moduleData?.password || '';
                     document.getElementById('moolah-sku').value = entry.moduleData?.sku || '';
+                    document.getElementById('moolah-noOfTabs').value = entry.moduleData?.noOfTabs || '';
                     document.getElementById('moolah-mokiId').value = entry.moduleData?.mokiId || '';
                     document.getElementById('moolah-anydeskId').value = entry.moduleData?.anydeskId || '';
                 } else if (prefix === 'store') {
@@ -2548,19 +2562,19 @@ UPLOAD DATABASE - DONE✅`;
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
                     row.innerHTML = `<td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-                                             <td>${entry.date}</td>
-                                             <td>${entry.shift}</td>
-                                             <td>${entry.support}</td>
-                                             <td>${entry.portal}</td>
-                                             <td>${entry.store}</td>
-                                             <td>${entry.zip}</td>
-                                             <td>${entry.contact}</td>
-                                             <td>${entry.contactNumber}</td>
-                                             <td>${entry.module}</td>
+                                            <td>${entry.date}</td>
+                                            <td>${entry.shift}</td>
+                                            <td>${entry.support}</td>
+                                            <td>${entry.portal}</td>
+                                            <td>${entry.store}</td>
+                                            <td>${entry.zip}</td>
+                                            <td>${entry.contact}</td>
+                                            <td>${entry.contactNumber}</td>
+                                            <td>${entry.module}</td>
                                     <td style="white-space: pre-wrap;">${entry.issue}</td>
-                                             <td>${entry.escalated}</td>
-                                             <td>${entry.status}</td>
-                                             <td>${entry.remarks}</td>
+                                            <td>${entry.escalated}</td>
+                                            <td>${entry.status}</td>
+                                            <td>${entry.remarks}</td>
                                     <td style="white-space: pre-wrap;">${(entry.resolution || '').toUpperCase()}</td>
                                     <td class="action-cell">
                                         <div class="action-container">
@@ -3128,6 +3142,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
             }
 
             function generateShiftReportPlain() {
+                const indent = (level) => ' '.repeat(level * 5);
                 const visible = getVisibleEntries();
 
                 const yesterday = new Date();
@@ -3144,9 +3159,9 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
                 const pendingCount = pendingEntries.length;
                 let pendingList = '';
                 if (pendingCount > 0) {
-                    pendingList = pendingEntries.map(e => `  ${e.store || 'Unknown Store'} - ${e.issue || 'No issue details'}`).join('\n');
+                    pendingList = pendingEntries.map(e => `${indent(1)}- ${e.store || 'Unknown Store'} - ${e.issue || 'No issue details'}`).join('\n');
                 } else {
-                    pendingList = '  No Pending Tickets';
+                    pendingList = `${indent(1)}No Pending Tickets`;
                 }
 
                 const totalCalls = visible.filter(e => e.status?.toUpperCase() !== 'OTHER TASK').length;
@@ -3167,38 +3182,37 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
                             uniqueItems.add(display);
                         }
                     });
-                    otherList = Array.from(uniqueItems).map(item => `  ${item}`).join('\n');
+                    otherList = Array.from(uniqueItems).map(item => `${indent(1)}- ${item}`).join('\n');
                 } else {
-                    otherList = '  No Other Tasks';
+                    otherList = `${indent(1)}No Other Tasks`;
                 }
 
                 const trainingEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING');
                 const demoEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO');
                 const trainingLine = trainingEntries.length > 0
-                    ? `  Scheduled Training: ${trainingEntries.map(e => e.support || 'Unknown Support').join(', ')}`
-                    : '  No Training for today';
+                    ? `${indent(2)}Scheduled Training: ${trainingEntries.map(e => e.support || 'Unknown Support').join(', ')}`
+                    : `${indent(2)}No Training for today`;
                 const demoLine = demoEntries.length > 0
-                    ? `  Scheduled Demo: ${demoEntries.map(e => e.support || 'Unknown Support').join(', ')}`
-                    : '  No Demo for today';
+                    ? `${indent(2)}Scheduled Demo: ${demoEntries.map(e => e.support || 'Unknown Support').join(', ')}`
+                    : `${indent(2)}No Demo for today`;
 
-                const staticSections = `
-5. Updates / Notices
-  The current latest versions:
-    RetailzPOS: Version Code 211 (Portal 1, 2, 3, 4, 5, 6, 7, 8)
-    Moolah Points: Version Code 37  (Portal 1, 2, 3, 4, 5, 6, 7, 8)
+                const staticSections = `${indent(1)}5. Updates / Notices
+${indent(2)}The current latest versions:
+${indent(3)}RetailzPOS: Version Code 211 (Portal 1, 2, 3, 4, 5, 6, 7, 8)
+${indent(3)}Moolah Points: Version Code 37 (Portal 1, 2, 3, 4, 5, 6, 7, 8)
 
-  Reminders for Retailz team members:
-    - Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.
-    - Ask seniors assistance for issue that needed to be escalated to the India team
-    - Observe professional call etiquette at all times when handling calls.
-    - Follow up on any pending tickets and ensure timely updates.
-    - Review pending issues and escalations using the newly added features in our existing workload tracker
-    - Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.
-    - Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.
+${indent(2)}Reminders for Retailz team members:
+${indent(2)}- Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.
+${indent(2)}- Ask seniors assistance for issue that needed to be escalated to the India team
+${indent(2)}- Observe professional call etiquette at all times when handling calls.
+${indent(2)}- Follow up on any pending tickets and ensure timely updates.
+${indent(2)}- Review pending issues and escalations using the newly added features in our existing workload tracker
+${indent(2)}- Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.
+${indent(2)}- Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.
 
-6. Training (Retailz Members): No training for today
+${indent(1)}6. Training (Retailz Members): No training for today
 
-7. Tasks/Tickets to be Delegated: No delegated task for today`;
+${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
                 const reportLines = [
                     dateLine,
@@ -3208,20 +3222,20 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
                     '',
                     'Please find below the shift report for today,',
                     '',
-                    `1. Pending Tickets: ${pendingCount}`,
+                    `${indent(1)}1. Pending Tickets: ${pendingCount}`,
                     pendingList,
                     '',
-                    `2. Total Calls: ${totalCalls}`,
+                    `${indent(1)}2. Total Calls: ${totalCalls}`,
                     '',
                     '',
-                    `3. Total Other Tasks: ${otherCount}`,
+                    `${indent(1)}3. Total Other Tasks: ${otherCount}`,
                     otherList,
                     '',
-                    `4. Scheduled Training/Demo (Merchant)`,
+                    `${indent(1)}4. Scheduled Training/Demo (Merchant)`,
                     trainingLine,
                     demoLine,
                     '',
-                    staticSections.trim()
+                    staticSections
                 ];
 
                 return reportLines.join('\n');
@@ -3467,20 +3481,6 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
                 syncPreviewHeight();
             }
 
-            function setupPasswordSync() {
-                const clientPass = document.getElementById('moolah-clientPass');
-                const storePass = document.getElementById('moolah-storePass');
-                const outletPass = document.getElementById('moolah-outletPass');
-                if (clientPass && storePass && outletPass) {
-                    clientPass.addEventListener('input', function() {
-                        storePass.value = this.value;
-                        outletPass.value = this.value;
-                        moolahUpdatePreview();
-                        saveFormData('moolah');
-                    });
-                }
-            }
-
             function setupAutocomplete(inputId, options, nextFieldId) {
                 const input = document.getElementById(inputId);
                 const listId = inputId + 'List';
@@ -3622,7 +3622,6 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
 
                 document.querySelectorAll('textarea').forEach(ta => autoGrow(ta));
 
-                setupPasswordSync();
                 setupAutocomplete('ticket-module', MODULE_OPTIONS, 'ticket-issue');
                 setupAutocomplete('ticket-status', STATUS_OPTIONS, 'ticket-remarks');
 
@@ -3655,7 +3654,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
 
                 document.getElementById('ticket-date').addEventListener('change', syncShiftSupportFromTicket);
 
-                const moolahFields = ['portal', 'storeName', 'zipcode', 'clientUser', 'clientPass', 'storeUser', 'outletUser', 'sku', 'mokiId', 'anydeskId'];
+                const moolahFields = ['portal', 'storeName', 'zipcode', 'email', 'password', 'noOfTabs', 'sku', 'mokiId', 'anydeskId'];
                 moolahFields.forEach(id => {
                     const el = document.getElementById(`moolah-${id}`);
                     if (el) el.addEventListener('input', () => { moolahUpdatePreview(); saveFormData('moolah'); });
