@@ -2715,8 +2715,10 @@ CALLER NAME: ${entry.contact}
 CONTACT NUMBER: ${entry.contactNumber}
 ISSUE:
 ${entry.issue || ''}
+
 NOTE:
-${entry.note || ''}`;
+${entry.note || ''}`; 
+            
             navigator.clipboard.writeText(details);
             showNotification('Details copied');
         }
