@@ -2701,78 +2701,83 @@ UPLOAD DATABASE - DONE✅`;
 
                 container.innerHTML = html;
 
-                container.querySelectorAll('.copy-store').forEach(btn => {
-                    btn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        const id = btn.dataset.id;
-                        const entry = allEntries.find(e => e.id == id);
-                        if (entry) {
-                            const details = `PORTAL: ${entry.portal}\nSTORE NAME: ${entry.store}\nZIPCODE: ${entry.zip}\nCALLER NAME: ${entry.contact}\nCONTACT NUMBER: ${entry.contactNumber}\nISSUE: ${entry.issue}`;
-                            navigator.clipboard.writeText(details);
-                            showNotification('Details copied');
-                        }
-                    });
-                });
-
-                container.querySelectorAll('.copy-details').forEach(btn => {
-                    btn.addEventListener('click', async (e) => {
-                        e.stopPropagation();
-                        const id = btn.dataset.id;
-                        const entry = allEntries.find(e => e.id == id);
-                        if (entry) {
-                            const troubleshootingHtmlRaw = entry.troubleshooting || '';
-                            const troubleshootingHtmlUpper = troubleshootingHtmlRaw
-                              ? uppercaseHtmlPreserveTags(troubleshootingHtmlRaw)
-                              : '';
-                            const tmp = document.createElement('div');
-                            tmp.innerHTML = troubleshootingHtmlRaw;
-                            const troubleshootingText = (tmp.innerText || tmp.textContent || '').trim();
-                            const formattedTroubleshootingText = troubleshootingText.toUpperCase();
-                            const formattedResolution = (entry.resolution || '').toUpperCase();
-                            const formattedNote = (entry.note || '');
-                            const plainText = `📞 CONTACT:
+container.querySelectorAll('.copy-store').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        const entry = allEntries.find(e => e.id == id);
+        if (entry) {
+            // Format with ISSUE and NOTE on new lines below their labels
+            const details = `PORTAL: ${entry.portal}
+STORE NAME: ${entry.store}
+ZIPCODE: ${entry.zip}
 CALLER NAME: ${entry.contact}
 CONTACT NUMBER: ${entry.contactNumber}
+ISSUE:
+${entry.issue || ''}
+NOTE:
+${entry.note || ''}`;
+            navigator.clipboard.writeText(details);
+            showNotification('Details copied');
+        }
+    });
+});
 
-📝 NOTE:
-${formattedNote}
+container.querySelectorAll('.copy-details').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        const id = btn.dataset.id;
+        const entry = allEntries.find(e => e.id == id);
+        if (entry) {
+            const troubleshootingHtmlRaw = entry.troubleshooting || '';
+            // No uppercase conversion to preserve list formatting
+            const troubleshootingHtmlForCopy = troubleshootingHtmlRaw;
+            const tmp = document.createElement('div');
+            tmp.innerHTML = troubleshootingHtmlRaw;
+            const troubleshootingText = (tmp.innerText || tmp.textContent || '').trim();
+            const formattedTroubleshootingText = troubleshootingText; // keep original case
+            const formattedResolution = entry.resolution || '';
+            
+            // Plain text version (no NOTE)
+            const plainText = `📞 CONTACT:
+CALLER NAME: ${entry.contact}
+CONTACT NUMBER: ${entry.contactNumber}
 
 🔧 TROUBLESHOOTING:
 ${formattedTroubleshootingText}
 
 ✅ RESOLUTION:
 ${formattedResolution}`;
-                            const htmlCopy = `
+            
+            // HTML version (no NOTE)
+            const htmlCopy = `
 📞 CONTACT:<br>
 <strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
 <strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
 <br>
-📝 NOTE:<br>
-${escapeHtml(formattedNote).replace(/\n/g, '<br>')}<br>
-<br>
 🔧 TROUBLESHOOTING:<br>
-${troubleshootingHtmlUpper || escapeHtml(formattedTroubleshootingText).replace(/\n/g, '<br>')}<br>
+${troubleshootingHtmlForCopy || escapeHtml(formattedTroubleshootingText).replace(/\n/g, '<br>')}<br>
 <br>
 ✅ RESOLUTION:<br>
 ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
 `;
-                            try {
-                                const blob = new Blob([htmlCopy], { type: 'text/html' });
-                                const plainBlob = new Blob([plainText], { type: 'text/plain' });
-                                await navigator.clipboard.write([
-                                    new ClipboardItem({
-                                        'text/plain': plainBlob,
-                                        'text/html': blob
-                                    })
-                                ]);
-                                showNotification('HRMS details copied (rich format)');
-                            } catch (err) {
-                                navigator.clipboard.writeText(plainText);
-                                showNotification('HRMS details copied (plain text)');
-                            }
-                        }
-                    });
-                });
+            try {
+                const blob = new Blob([htmlCopy], { type: 'text/html' });
+                const plainBlob = new Blob([plainText], { type: 'text/plain' });
+                await navigator.clipboard.write([
+                    new ClipboardItem({
+                        'text/plain': plainBlob,
+                        'text/html': blob
+                    })
+                ]);
+                showNotification('HRMS details copied (rich format)');
+            } catch (err) {
+                navigator.clipboard.writeText(plainText);
+                showNotification('HRMS details copied (plain text)');
+            }
+        }
+    });
+});
 
                 container.querySelectorAll('.edit-entry').forEach(btn => {
                     btn.addEventListener('click', (e) => {
