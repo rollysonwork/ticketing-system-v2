@@ -1907,6 +1907,7 @@ STORE NAME: ${entry.store}
 ZIPCODE: ${entry.zip}
 CALLER NAME: ${entry.contact}
 CONTACT NUMBER: ${entry.contactNumber}
+
 ISSUE:
 ${entry.issue || ""}
 
