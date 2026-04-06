@@ -1951,14 +1951,14 @@ ${formattedResolution}`;
 
           // HTML version (no NOTE)
           const htmlCopy = `
-📞 CONTACT:<br>
+<strong>📞 CONTACT: </strong><br>
 <strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
 <strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
 <br>
-🔧 TROUBLESHOOTING:<br>
+<strong>🔧 TROUBLESHOOTING:</strong><br>
 ${troubleshootingHtmlForCopy || escapeHtml(formattedTroubleshootingText).replace(/\n/g, "<br>")}<br>
 <br>
-✅ RESOLUTION:<br>
+<strong>✅ RESOLUTION:</strong><br>
 ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 `;
           try {
