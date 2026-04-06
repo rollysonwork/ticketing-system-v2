@@ -2759,9 +2759,9 @@ ${formattedResolution}`;
 <strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
 <br>
 <strong>🔧 TROUBLESHOOTING: </strong>
-${troubleshootingHtmlForCopy || escapeHtml(formattedTroubleshootingText).replace(/\n/g, '<br>')}
+${troubleshootingHtmlForCopy || escapeHtml(formattedTroubleshootingText).replace(/\n/g, '<br>')}<br>
 <strong>✅ RESOLUTION: </strong><br>
-${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
+${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}<br>
 `;
             try {
                 const blob = new Blob([htmlCopy], { type: 'text/html' });
