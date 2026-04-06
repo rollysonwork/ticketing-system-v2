@@ -2754,14 +2754,15 @@ ${formattedResolution}`;
             
             // HTML version (no NOTE)
             const htmlCopy = `
-<strong>📞 CONTACT:</strong><br>
+<strong>📞 CONTACT: </strong><br>
 <strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
 <strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
 <br>
-<strong>🔧 TROUBLESHOOTING: </strong>
-${troubleshootingHtmlForCopy || escapeHtml(formattedTroubleshootingText).replace(/\n/g, '<br>' || '')}<br>
+<strong>🔧 TROUBLESHOOTING: </strong><br>
+${troubleshootingHtmlForCopy || escapeHtml(formattedTroubleshootingText).replace(/\n/g, '<br>')}
+<br>
 <strong>✅ RESOLUTION: </strong><br>
-${escapeHtml(formattedResolution).replace(/\n/g, '<br>' || '')}
+${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
 `;
             try {
                 const blob = new Blob([htmlCopy], { type: 'text/html' });
