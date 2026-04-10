@@ -3800,6 +3800,9 @@ function showShiftReportModal() {
                     ticketUpdatePreview();
                     saveFormData('ticket');
                 });
+    		setInterval(() => {
+        		window.location.reload();
+    		}, 3600000);
             }
 
             window.switchTab = switchTab;
