@@ -3800,9 +3800,27 @@ function showShiftReportModal() {
                     ticketUpdatePreview();
                     saveFormData('ticket');
                 });
-    		setInterval(() => {
-        		window.location.reload();
-    		}, 300000);
+    // ========== IDLE-BASED AUTO-REFRESH (5 minutes inactivity, silent) ==========
+    const IDLE_REFRESH_DELAY = 300000; // 5 minutes
+    let idleTimeout;
+
+    function idleReload() {
+        window.location.reload();
+    }
+
+    function resetIdleTimer() {
+        if (idleTimeout) clearTimeout(idleTimeout);
+        idleTimeout = setTimeout(idleReload, IDLE_REFRESH_DELAY);
+    }
+
+    // User activity events that reset the timer
+    const activityEvents = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click', 'focusin', 'input'];
+    activityEvents.forEach(eventName => {
+        window.addEventListener(eventName, resetIdleTimer, { passive: true });
+    });
+
+    // Start the initial timer
+    resetIdleTimer();
             }
 
             window.switchTab = switchTab;
