@@ -10,7 +10,7 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
     />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous"> -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <style>
         /* (All existing styles remain unchanged - copy from previous version) */
@@ -994,7 +994,10 @@
                             </tr>
                             <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td>
                             </tr>
-                            <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td>
+                            <tr>
+                            <td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off">
+                                <datalist id="ticket-statusList"></datalist>
+                            </td>
                             </tr>
                             <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td>
                             </tr>
@@ -2763,27 +2766,27 @@ container.querySelectorAll('.copy-details').forEach(btn => {
             
             // Plain text version (no NOTE)
             const plainText = `📞 CONTACT:
-CALLER NAME: ${entry.contact}
-CONTACT NUMBER: ${entry.contactNumber}
+                CALLER NAME: ${entry.contact}
+                CONTACT NUMBER: ${entry.contactNumber}
 
-🔧 TROUBLESHOOTING:
-${formattedTroubleshootingText}
+                🔧 TROUBLESHOOTING:
+                ${formattedTroubleshootingText}
 
-✅ RESOLUTION:
-${formattedResolution}`;
-            
-            // HTML version (no NOTE)
-            const htmlCopy = `
-<strong>📞 CONTACT: </strong><br>
-<strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
-<strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
-<br>
-<strong>🔧 TROUBLESHOOTING: </strong><br>
-${troubleshootingHtmlForCopy || escapeHtml(formattedTroubleshootingText).replace(/\n/g, '<br>')}
-<br>
-<strong>✅ RESOLUTION: </strong><br>
-${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
-`;
+                ✅ RESOLUTION:
+                ${formattedResolution}`;
+                            
+                // HTML version (no NOTE)
+                const htmlCopy = `
+                    <strong>📞 CONTACT: </strong><br>
+                    <strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
+                    <strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
+                    
+                    <strong>🔧 TROUBLESHOOTING: </strong><br>
+                    ${troubleshootingHtmlForCopy || escapeHtml(formattedTroubleshootingText).replace(/\n/g, '<br>')}
+                    <br>
+                    <strong>✅ RESOLUTION: </strong><br>
+                    ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
+            `;
             try {
                 const blob = new Blob([htmlCopy], { type: 'text/html' });
                 const plainBlob = new Blob([plainText], { type: 'text/plain' });
@@ -3863,7 +3866,7 @@ function checkAndRefreshTable() {
             document.addEventListener('DOMContentLoaded', init);
         })();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script> -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </body>
 </html>
