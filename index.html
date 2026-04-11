@@ -914,6 +914,31 @@
         .preview-multiline li {
             list-style: none;
         }
+
+        .icon-custom {
+            --icon-size: 2em;
+            display: inline-block;
+            width: var(--icon-size);
+            height: var(--icon-size);
+            margin-right: 4px;
+            vertical-align: middle;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            line-height: 1;
+        }
+
+        .icon-moolah {
+            background-image: var(--logo-moolah-points);
+        }
+
+        .icon-retailz {
+            background-image: var(--logo-retailzpos);
+        }
+
+        .icon-ticket {
+            background-image: var(--logo-vitreous-retailz-ticket);
+        }
     </style>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
@@ -936,9 +961,9 @@
             <div class="tab-container">
                 <button class="sidebar-toggle-tab" id="sidebarToggleTabBtn" title="Toggle sidebar">◀</button>
                 <div class="tab-buttons">
-                    <button class="tab-button active" onclick="switchTab('ticket', this)">TICKET CREATION</button>
-                    <button class="tab-button" onclick="switchTab('store', this)">STORE CREATION</button>
-                    <button class="tab-button" onclick="switchTab('moolah', this)">MOOLAH CREATION</button>
+                    <button class="tab-button active" onclick="switchTab('ticket', this)"><i class="icon-custom icon-ticket"></i> TICKET CREATION</button>
+                    <button class="tab-button" onclick="switchTab('store', this)"><i class="icon-custom icon-retailz"></i> STORE CREATION</button>
+                    <button class="tab-button" onclick="switchTab('moolah', this)"><i class="icon-custom icon-moolah"></i> MOOLAH CREATION</button>
                 </div>
             </div>
 
