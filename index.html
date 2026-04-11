@@ -944,7 +944,7 @@
     <div class="app-container">
         <div class="sidebar" id="ticketSidebar">
             <div class="sidebar-header">
-                <h3>📋 TICKET HISTORY</h3>
+                <h3><i class="bi bi-ticket-detailed-fill"></i> TICKET HISTORY</h3>
             </div>
             <div id="sidebarContent"></div>
         </div>
@@ -1004,8 +1004,8 @@
                             </tr>
                         </table>
                         <div class="button-row">
-                            <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
-                            <button class="form-clear-btn" onclick="clearFormOnly('ticket')">CLEAR FORM</button>
+                            <button class="add" onclick="addEntry('ticket')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
+                            <button class="form-clear-btn" onclick="clearFormOnly('ticket')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
                             <button class="clock" onclick="clock('IN', 'ticket')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
                             <button class="clock" onclick="clock('OUT', 'ticket')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
                         </div>
@@ -1081,10 +1081,10 @@
                             </tr>
                         </table>
                         <div class="button-row">
-                            <button class="add" onclick="addEntry('store')">ADD ENTRY</button>
-                            <button class="form-clear-btn" onclick="clearFormOnly('store')">CLEAR FORM</button>
-                            <button class="clock" onclick="clock('IN', 'store')">CLOCK IN</button>
-                            <button class="clock" onclick="clock('OUT', 'store')">CLOCK OUT</button>
+                            <button class="add" onclick="addEntry('store')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
+                            <button class="form-clear-btn" onclick="clearFormOnly('store')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
+                            <button class="clock" onclick="clock('IN', 'store')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
+                            <button class="clock" onclick="clock('OUT', 'store')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
                         </div>
                     </div>
                     <div class="right-panel" id="store-previewPanel">
@@ -1156,10 +1156,10 @@
                             </tr>
                         </table>
                         <div class="button-row">
-                            <button class="add" onclick="addEntry('moolah')">ADD ENTRY</button>
-                            <button class="form-clear-btn" onclick="clearFormOnly('moolah')">CLEAR FORM</button>
-                            <button class="clock" onclick="clock('IN', 'moolah')">CLOCK IN</button>
-                            <button class="clock" onclick="clock('OUT', 'moolah')">CLOCK OUT</button>
+                            <button class="add" onclick="addEntry('moolah')"><i class="bi bi-plus"></i>ADD ENTRY</button>
+                            <button class="form-clear-btn" onclick="clearFormOnly('moolah')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
+                            <button class="clock" onclick="clock('IN', 'moolah')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
+                            <button class="clock" onclick="clock('OUT', 'moolah')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
                         </div>
                     </div>
                     <div class="right-panel" id="moolah-previewPanel">
@@ -1192,14 +1192,14 @@
 
             <div class="bulk-bar">
                 <label><input type="checkbox" id="selectAllCheckbox"> Select All</label>
-                <button id="bulkDeleteBtn" title="Remove selected rows (only from main table)">🗑️ REMOVE</button>
-                <button id="bulkCopyBtn" title="Copy selected rows">📋 COPY</button>
-                <button id="bulkUpdateStatusBtn" title="Update status for selected rows">✏️ UPDATE</button>
-                <button id="exportCsvBtn" class="export-btn">📥 EXPORT</button>
-                <button id="importCsvBtn" class="import-btn">📤 IMPORT</button>
-                <button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report">📋 SHIFT REPORT</button>
-                <button id="setSheetsKeyBtn" class="sheets-key-btn">🔑 SET SHEETS KEY</button>
-                <button id="setGeminiKeyBtn" class="gemini-key-btn">🤖 SET GEMINI KEY</button>
+                <button id="bulkDeleteBtn" title="Remove selected rows (only from main table)"><i class="bi bi-trash-fill"></i> REMOVE</button>
+                <button id="bulkCopyBtn" title="Copy selected rows"><i class="bi bi-copy"></i>  COPY</button>
+                <button id="bulkUpdateStatusBtn" title="Update status for selected rows"><i class="bi bi-pencil-square"></i>  UPDATE</button>
+                <button id="exportCsvBtn" class="export-btn"><i class="bi bi-filetype-csv"></i>  EXPORT</button>
+                <button id="importCsvBtn" class="import-btn"><i class="bi bi-file-earmark-arrow-up"></i>  IMPORT</button>
+                <button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i>  SHIFT REPORT</button>
+                <button id="setSheetsKeyBtn" class="sheets-key-btn"><i class="bi bi-key"></i>  SET SHEETS KEY</button>
+                <button id="setGeminiKeyBtn" class="gemini-key-btn"><i class="bi bi-robot"></i>  SET GEMINI KEY</button>
             </div>
 
             <div style="overflow-x: auto;">
