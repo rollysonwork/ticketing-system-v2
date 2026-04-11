@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>RetailzPOS · Unified Creation System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Meroitic&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <style>
         /* (All existing styles remain unchanged - copy from previous version) */
         :root {
@@ -631,33 +640,16 @@
             color: white;
         }
 
-        .button-row .add::before {
-            content: "➕ ";
-            font-size: 12px;
-        }
-
-        .button-row .add.editing::before {
-            content: "✏️ ";
-        }
-
         .button-row .clock {
             background: var(--warning);
             border-color: var(--warning);
             color: white;
         }
 
-        .button-row .clock::before {
-            content: "⏱️ ";
-        }
-
         .button-row .form-clear-btn {
             background: var(--text-muted);
             border-color: var(--text-muted);
             color: white;
-        }
-
-        .button-row .form-clear-btn::before {
-            content: "🧹 ";
         }
 
         .button-row button:hover {
@@ -1014,8 +1006,8 @@
                         <div class="button-row">
                             <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('ticket')">CLEAR FORM</button>
-                            <button class="clock" onclick="clock('IN', 'ticket')">CLOCK IN</button>
-                            <button class="clock" onclick="clock('OUT', 'ticket')">CLOCK OUT</button>
+                            <button class="clock" onclick="clock('IN', 'ticket')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
+                            <button class="clock" onclick="clock('OUT', 'ticket')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
                         </div>
                     </div>
                     <div class="right-panel" id="ticket-previewPanel">
@@ -3871,5 +3863,7 @@ function checkAndRefreshTable() {
             document.addEventListener('DOMContentLoaded', init);
         })();
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </body>
 </html>
