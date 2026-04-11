@@ -3831,7 +3831,7 @@ function checkAndRefreshTable() {
                     saveFormData('ticket');
                 });
 // ========== IDLE-BASED AUTO-REFRESH (5 minutes inactivity, silent) ==========
-    const IDLE_REFRESH_DELAY = 300000; // 5 minutes
+    const IDLE_REFRESH_DELAY = 900000; // 15 minutes
     let idleTimeout;
 
     function idleReload() {
