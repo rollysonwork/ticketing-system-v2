@@ -2,9 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="description" content="Vitreous · Unified Creation System for RetailzPOS - Streamline your ticket, RetailzPOS store, and Moolah Points creation process with our all-in-one solution designed for efficiency and ease of use." />
-    <meta name="keywords" content="Vitreous, RetailzPOS, Moolah Creation, Store Creation, Ticket Creation, Support Ticket, Unified Creation System" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/x-icon" href="./assets/icons/logo-256-vitreous-support-ticket.png">
     <title>RetailzPOS · Unified Creation System</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -180,6 +177,16 @@
             transition: var(--transition);
             box-shadow: var(--card-shadow);
         }
+        /* Colored border classes for entry types */
+        .sidebar-card.ticket-card {
+            border-left-color: #3b82f6 !important; /* blue */
+        }
+        .sidebar-card.store-card {
+            border-left-color: #ef4444 !important; /* red */
+        }
+        .sidebar-card.moolah-card {
+            border-left-color: #eab308 !important; /* yellow */
+        }
 
         .sidebar-card:hover {
             transform: translateY(-2px);
@@ -218,6 +225,30 @@
             display: flex;
             gap: 8px;
             justify-content: space-between;
+        }
+        .card-actions-row.stack-row {
+            flex-direction: column;
+            gap: 6px;
+        }
+        .stack-btn {
+            width: 100%;
+            text-align: center;
+            padding: 6px 0;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+        .stack-btn:hover {
+            background: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
         }
 
         .card-actions button {
@@ -981,38 +1012,21 @@
                             <div id="ticket-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                            <tr><td>DATE</td><td><input type="date" id="ticket-date"></td>
-                            </tr>
-                            <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
-                            </tr>
-                            <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td>
-                            </tr>
-                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td>
-                            </tr>
-                            <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td>
-                            </tr>
-                            <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td>
-                            </tr>
-                            <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td>
-                            </tr>
-                            <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td>
-                            </tr>
-                            <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td>
-                            </tr>
-                            <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td>
-                            </tr>
-                            <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td>
-                            </tr>
-                            <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off">
-                                <datalist id="ticket-statusList"></datalist>
-                            </td>
-                            </tr>
-                            <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td>
-                            </tr>
-                            <tr><td>RESOLUTION</td><td><div id="ticket-resolution-editor" style="height: 200px;"></div><textarea id="ticket-resolution" style="display:none;"></textarea></td>
-                            </tr>
-                            <tr><td>NOTE</td><td><textarea id="ticket-note" rows="5"></textarea></td>
-                            </tr>
+                            <tr><th>DATE</th><td><input type="date" id="ticket-date"></td></tr>
+                            <tr><th>SHIFT SCHEDULE</th><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                            <tr><th>SUPPORT NAME</th><td><input type="text" id="ticket-support"></td></tr>
+                            <tr><th>PORTAL NUMBER *</th><td><input type="text" id="ticket-portal"></td></tr>
+                            <tr><th>STORE NAME *</th><td><input type="text" id="ticket-store"></td></tr>
+                            <tr><th>ZIP CODE *</th><td><input type="text" id="ticket-zip"></td></tr>
+                            <tr><th>CONTACT PERSON</th><td><input type="text" id="ticket-contactPerson"></td></tr>
+                            <tr><th>CONTACT #</th><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
+                            <tr><th>MODULE</th><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td></tr>
+                            <tr><th>ISSUE</th><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
+                            <tr><th>ESCALATED PERSON</th><td><input type="text" id="ticket-escalated"></td></tr>
+                            <tr><th>STATUS</th><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
+                            <tr><th>REMARKS</th><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
+                            <tr><th>RESOLUTION</th><td><div id="ticket-resolution-editor" style="height: 200px;"></div><textarea id="ticket-resolution" style="display:none;"></textarea></td></tr>
+                            <tr><th>NOTE</th><td><textarea id="ticket-note" rows="5"></textarea></td></tr>
                         </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('ticket')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
@@ -1062,34 +1076,20 @@
                             <div id="store-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                            <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td>
-                            </tr>
-                            <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
-                            </tr>
-                            <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td>
-                            </tr>
-                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td>
-                            </tr>
-                            <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td>
-                            </tr>
-                            <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td>
-                            </tr>
-                            <tr><td>AGENT</td><td><input type="text" id="store-agent"></td>
-                            </tr>
-                            <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td>
-                            </tr>
-                            <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td>
-                            </tr>
-                            <tr><td>SKU</td><td><input type="text" id="store-sku"></td>
-                            </tr>
-                            <tr><td>DATABASE</td><td><input type="text" id="store-database"></td>
-                            </tr>
-                            <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td>
-                            </tr>
-                            <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td>
-                            </tr>
-                            <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td>
-                            </tr>
+                            <tr><th>DATE</th><td><input type="date" id="store-date" readonly></td></tr>
+                            <tr><th>SHIFT SCHEDULE</th><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                            <tr><th>SUPPORT NAME</th><td><input type="text" id="store-support" readonly></td></tr>
+                            <tr><th>PORTAL NUMBER *</th><td><input type="text" id="store-portal" class="required-field"></td></tr>
+                            <tr><th>STORE NAME *</th><td><input type="text" id="store-storeName" class="required-field"></td></tr>
+                            <tr><th>ZIP CODE *</th><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
+                            <tr><th>AGENT</th><td><input type="text" id="store-agent"></td></tr>
+                            <tr><th>EMAIL ID</th><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
+                            <tr><th>PASSWORD</th><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
+                            <tr><th>SKU</th><td><input type="text" id="store-sku"></td></tr>
+                            <tr><th>DATABASE</th><td><input type="text" id="store-database"></td></tr>
+                            <tr><th>NO OF REG.</th><td><input type="number" id="store-noOfReg"></td></tr>
+                            <tr><th>MOKI ID</th><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
+                            <tr><th>ANYDESK ID</th><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
                         </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('store')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
@@ -1141,30 +1141,18 @@
                             <div id="moolah-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                            <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td>
-                            </tr>
-                            <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
-                            </tr>
-                            <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td>
-                            </tr>
-                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td>
-                            </tr>
-                            <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td>
-                            </tr>
-                            <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td>
-                            </tr>
-                            <tr><td>EMAIL ID</td><td><input type="email" id="moolah-email" class="no-uppercase"></td>
-                            </tr>
-                            <tr><td>PASSWORD</td><td><input type="text" id="moolah-password" class="no-uppercase"></td>
-                            </tr>
-                            <tr><td>NO OF TABS</td><td><input type="number" id="moolah-noOfTabs"></td>
-                            </tr>
-                            <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td>
-                            </tr>
-                            <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td>
-                            </tr>
-                            <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td>
-                            </tr>
+                            <tr><th>DATE</th><td><input type="date" id="moolah-date" readonly></td></tr>
+                            <tr><th>SHIFT SCHEDULE</th><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                            <tr><th>SUPPORT NAME</th><td><input type="text" id="moolah-support" readonly></td></tr>
+                            <tr><th>PORTAL NUMBER *</th><td><input type="text" id="moolah-portal" class="required"></td></tr>
+                            <tr><th>STORE NAME *</th><td><input type="text" id="moolah-storeName" class="required"></td></tr>
+                            <tr><th>ZIP CODE *</th><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
+                            <tr><th>EMAIL ID</th><td><input type="email" id="moolah-email" class="no-uppercase"></td></tr>
+                            <tr><th>PASSWORD</th><td><input type="text" id="moolah-password" class="no-uppercase"></td></tr>
+                            <tr><th>NO OF TABS</th><td><input type="number" id="moolah-noOfTabs"></td></tr>
+                            <tr><th>SKU (6 DIGITS)</th><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
+                            <tr><th>MOKI ID</th><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
+                            <tr><th>ANYDESK ID</th><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
                         </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('moolah')"><i class="bi bi-plus"></i>ADD ENTRY</button>
@@ -1216,15 +1204,10 @@
             <div style="overflow-x: auto;">
                 <table id="entryTable">
                     <thead>
-                        <tr>
-                            <th style="width:30px"></th>
-                            <th>DATE</th><th>SHIFT</th><th>SUPPORT</th><th>PORTAL</th><th>STORE</th><th>ZIP</th>
-                            <th>CONTACT</th><th>CONTACT#</th><th>MODULE</th><th>ISSUE</th><th>ESCALATED</th>
-                            <th>STATUS</th><th>REMARKS</th><th>RESOLUTION</th><th>ACTIONS</th>
-                         </tr>
+                        <tr><th style="width:30px"></th><th>DATE</th><th>SHIFT</th><th>SUPPORT</th><th>PORTAL</th><th>STORE</th><th>ZIP</th><th>CONTACT</th><th>CONTACT#</th><th>MODULE</th><th>ISSUE</th><th>ESCALATED</th><th>STATUS</th><th>REMARKS</th><th>RESOLUTION</th><th>ACTIONS</th></tr>
                     </thead>
                     <tbody></tbody>
-                  </table
+                </table>
             </div>
         </div>
     </div>
@@ -2592,19 +2575,19 @@ UPLOAD DATABASE - DONE✅`;
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
                     row.innerHTML = `<td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-                                            <td>${entry.date}</td>
-                                            <td>${entry.shift}</td>
-                                            <td>${entry.support}</td>
-                                            <td>${entry.portal}</td>
-                                            <td>${entry.store}</td>
-                                            <td>${entry.zip}</td>
-                                            <td>${entry.contact}</td>
-                                            <td>${entry.contactNumber}</td>
-                                            <td>${entry.module}</td>
+                                             <td>${entry.date}</td>
+                                             <td>${entry.shift}</td>
+                                             <td>${entry.support}</td>
+                                             <td>${entry.portal}</td>
+                                             <td>${entry.store}</td>
+                                             <td>${entry.zip}</td>
+                                             <td>${entry.contact}</td>
+                                             <td>${entry.contactNumber}</td>
+                                             <td>${entry.module}</td>
                                     <td style="white-space: pre-wrap;">${(entry.issue || '').toUpperCase()}</td>
-                                            <td>${entry.escalated}</td>
-                                            <td>${entry.status}</td>
-                                            <td>${(entry.remarks || '').toUpperCase()}</td>
+                                             <td>${entry.escalated}</td>
+                                             <td>${entry.status}</td>
+                                             <td>${(entry.remarks || '').toUpperCase()}</td>
                                     <td style="white-space: pre-wrap;">${(entry.resolution || '').toUpperCase()}</td>
                                     <td class="action-cell">
                                         <div class="action-container">
@@ -2701,21 +2684,34 @@ UPLOAD DATABASE - DONE✅`;
                                     if (entry.status && entry.status.toUpperCase() === 'OTHER TASK') {
                                         issueDisplay = entry.module || 'OTHER TASK';
                                     }
+
+                                    // Determine card class based on entry source/module
+                                    let cardClass = 'ticket-card';
+                                    if (entry.source === 'store') {
+                                        cardClass = 'store-card';
+                                    } else if (entry.source === 'moolah') {
+                                        cardClass = 'moolah-card';
+                                    } else if (entry.module === 'Moolah') {
+                                        cardClass = 'moolah-card';
+                                    } else if (entry.module === 'Store Creation') {
+                                        cardClass = 'store-card';
+                                    }
+
                                     html += `
-                                        <div class="sidebar-card" data-id="${entry.id}">
-                                            <div class="preview-item issue-item">${issueDisplay}</div>
-                                            <div class="preview-item"><strong>Portal:</strong> ${entry.portal || '-'}</div>
-                                            <div class="preview-item"><strong>Store:</strong> ${entry.store || '-'}</div>
-                                            <div class="preview-item"><strong>Zip:</strong> ${entry.zip || '-'}</div>
+                                        <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
+                                            <div class="preview-item issue-item">${escapeHtml(issueDisplay)}</div>
+                                            <div class="preview-item"><strong>Portal:</strong> ${escapeHtml(entry.portal || '-')}</div>
+                                            <div class="preview-item"><strong>Store:</strong> ${escapeHtml(entry.store || '-')}</div>
+                                            <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || '-')}</div>
                                             <div class="card-actions">
                                                 <div class="card-actions-row">
                                                     <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
                                                     <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
                                                 </div>
-                                                <div class="card-actions-row">
-                                                    <button class="edit-entry" data-id="${entry.id}">✏️ EDIT</button>
-                                                    <button class="return-entry" data-id="${entry.id}">↩️ RETURN</button>
-                                                    <button class="delete-entry" data-id="${entry.id}">🗑️ DELETE</button>
+                                                <div class="card-actions-row stack-row">
+                                                    <button class="edit-entry stack-btn" data-id="${entry.id}">✏️<br>EDIT</button>
+                                                    <button class="return-entry stack-btn" data-id="${entry.id}">↩️<br>RETURN</button>
+                                                    <button class="delete-entry stack-btn" data-id="${entry.id}">🗑️<br>DELETE</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -3908,7 +3904,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
                 quillEditor.on('text-change', function(delta, oldDelta, source) {
                     const htmlContent = quillEditor.root.innerHTML;
-                    // Keep original case (no uppercase conversion)
                     document.getElementById('ticket-resolution').value = htmlContent;
                     ticketUpdatePreview();
                     saveFormData('ticket');
