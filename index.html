@@ -2,19 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/x-icon" href="./assets/icons/logo-256-vitreous-support-ticket.png">
     <title>RetailzPOS · Unified Creation System</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Meroitic&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <style>
-        /* (All existing styles remain unchanged - copy from previous version) */
         :root {
             --bg-primary: #f8fafc;
             --bg-secondary: #ffffff;
@@ -33,9 +22,6 @@
             --card-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
             --card-shadow-hover: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
             --transition: all 0.2s ease;
-            --logo-moolah-points: url("./assets/icons/logo-256-moolah-points.png");
-            --logo-retailzpos: url("./assets/icons/logo-256-retailzpos.png");
-            --logo-vitreous-retailz-ticket: url("./assets/icons/logo-256-vitreous-support-ticket.png");
         }
 
         body.dark-mode {
@@ -52,7 +38,7 @@
         }
 
         * {
-            margin: 1;
+            margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
@@ -98,7 +84,6 @@
             transform: scale(0.95) !important;
             visibility: hidden !important;
             pointer-events: none !important;
-            transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s 0.2s, flex 0.2s ease, padding 0.2s ease, margin 0.2s ease;
         }
 
         .sidebar-header {
@@ -208,9 +193,15 @@
 
         .card-actions {
             display: flex;
+            flex-direction: column;
             gap: 8px;
             margin-top: 10px;
-            flex-wrap: wrap;
+        }
+
+        .card-actions-row {
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
         }
 
         .card-actions button {
@@ -225,6 +216,7 @@
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 0.02em;
+            flex: 1;
         }
 
         .card-actions button:hover {
@@ -641,16 +633,33 @@
             color: white;
         }
 
+        .button-row .add::before {
+            content: "➕ ";
+            font-size: 12px;
+        }
+
+        .button-row .add.editing::before {
+            content: "✏️ ";
+        }
+
         .button-row .clock {
             background: var(--warning);
             border-color: var(--warning);
             color: white;
         }
 
+        .button-row .clock::before {
+            content: "⏱️ ";
+        }
+
         .button-row .form-clear-btn {
             background: var(--text-muted);
             border-color: var(--text-muted);
             color: white;
+        }
+
+        .button-row .form-clear-btn::before {
+            content: "🧹 ";
         }
 
         .button-row button:hover {
@@ -824,7 +833,7 @@
             min-height: 120px;
         }
         #ticket-resolution-editor .ql-editor {
-            text-transform: uppercase;
+            text-transform: none;
         }
 
         @media (max-width: 900px) {
@@ -907,31 +916,6 @@
         .preview-multiline li {
             list-style: none;
         }
-
-        .icon-custom {
-            --icon-size: 2em;
-            display: inline-block;
-            width: var(--icon-size);
-            height: var(--icon-size);
-            margin-right: 4px;
-            vertical-align: middle;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            line-height: 1;
-        }
-
-        .icon-moolah {
-            background-image: var(--logo-moolah-points);
-        }
-
-        .icon-retailz {
-            background-image: var(--logo-retailzpos);
-        }
-
-        .icon-ticket {
-            background-image: var(--logo-vitreous-retailz-ticket);
-        }
     </style>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
@@ -945,7 +929,7 @@
     <div class="app-container">
         <div class="sidebar" id="ticketSidebar">
             <div class="sidebar-header">
-                <h3><i class="bi bi-ticket-detailed-fill"></i> TICKET HISTORY</h3>
+                <h3>📋 TICKET HISTORY</h3>
             </div>
             <div id="sidebarContent"></div>
         </div>
@@ -954,9 +938,9 @@
             <div class="tab-container">
                 <button class="sidebar-toggle-tab" id="sidebarToggleTabBtn" title="Toggle sidebar">◀</button>
                 <div class="tab-buttons">
-                    <button class="tab-button active" onclick="switchTab('ticket', this)"><i class="icon-custom icon-ticket"></i> TICKET CREATION</button>
-                    <button class="tab-button" onclick="switchTab('store', this)"><i class="icon-custom icon-retailz"></i> STORE CREATION</button>
-                    <button class="tab-button" onclick="switchTab('moolah', this)"><i class="icon-custom icon-moolah"></i> MOOLAH CREATION</button>
+                    <button class="tab-button active" onclick="switchTab('ticket', this)">TICKET CREATION</button>
+                    <button class="tab-button" onclick="switchTab('store', this)">STORE CREATION</button>
+                    <button class="tab-button" onclick="switchTab('moolah', this)">MOOLAH CREATION</button>
                 </div>
             </div>
 
@@ -973,45 +957,27 @@
                             <div id="ticket-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                            <tr><td>DATE</td><td><input type="date" id="ticket-date"></td>
-                            </tr>
-                            <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
-                            </tr>
-                            <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td>
-                            </tr>
-                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td>
-                            </tr>
-                            <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td>
-                            </tr>
-                            <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td>
-                            </tr>
-                            <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td>
-                            </tr>
-                            <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td>
-                            </tr>
-                            <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td>
-                            </tr>
-                            <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td>
-                            </tr>
-                            <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td>
-                            </tr>
-                            <tr>
-                            <td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off">
-                                <datalist id="ticket-statusList"></datalist>
-                            </td>
-                            </tr>
-                            <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td>
-                            </tr>
-                            <tr><td>RESOLUTION</td><td><div id="ticket-resolution-editor" style="height: 200px;"></div><textarea id="ticket-resolution" style="display:none;"></textarea></td>
-                            </tr>
-                            <tr><td>NOTE</td><td><textarea id="ticket-note" rows="5"></textarea></td>
-                            </tr>
+                            <tr><td>DATE</td><td><input type="date" id="ticket-date"></td></tr>
+                            <tr><td>SHIFT SCHEDULE</td><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                            <tr><td>SUPPORT NAME</td><td><input type="text" id="ticket-support"></td></tr>
+                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="ticket-portal"></td></tr>
+                            <tr><td>STORE NAME *</td><td><input type="text" id="ticket-store"></td></tr>
+                            <tr><td>ZIP CODE *</td><td><input type="text" id="ticket-zip"></td></tr>
+                            <tr><td>CONTACT PERSON</td><td><input type="text" id="ticket-contactPerson"></td></tr>
+                            <tr><td>CONTACT #</td><td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase"></td></tr>
+                            <tr><td>MODULE</td><td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off"><datalist id="ticket-moduleList"></datalist></td></tr>
+                            <tr><td>ISSUE</td><td><textarea id="ticket-issue" rows="2"></textarea></td></tr>
+                            <tr><td>ESCALATED PERSON</td><td><input type="text" id="ticket-escalated"></td></tr>
+                            <tr><td>STATUS</td><td><input id="ticket-status" list="ticket-statusList" autocomplete="off"><datalist id="ticket-statusList"></datalist></td></tr>
+                            <tr><td>REMARKS</td><td><textarea id="ticket-remarks" rows="2"></textarea></td></tr>
+                            <tr><td>RESOLUTION</td><td><div id="ticket-resolution-editor" style="height: 200px;"></div><textarea id="ticket-resolution" style="display:none;"></textarea></td></tr>
+                            <tr><td>NOTE</td><td><textarea id="ticket-note" rows="5"></textarea></td></tr>
                         </table>
                         <div class="button-row">
-                            <button class="add" onclick="addEntry('ticket')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
-                            <button class="form-clear-btn" onclick="clearFormOnly('ticket')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
-                            <button class="clock" onclick="clock('IN', 'ticket')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
-                            <button class="clock" onclick="clock('OUT', 'ticket')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
+                            <button class="add" onclick="addEntry('ticket')">ADD ENTRY</button>
+                            <button class="form-clear-btn" onclick="clearFormOnly('ticket')">CLEAR FORM</button>
+                            <button class="clock" onclick="clock('IN', 'ticket')">CLOCK IN</button>
+                            <button class="clock" onclick="clock('OUT', 'ticket')">CLOCK OUT</button>
                         </div>
                     </div>
                     <div class="right-panel" id="ticket-previewPanel">
@@ -1055,40 +1021,26 @@
                             <div id="store-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                            <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td>
-                            </tr>
-                            <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
-                            </tr>
-                            <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td>
-                            </tr>
-                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td>
-                            </tr>
-                            <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td>
-                            </tr>
-                            <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td>
-                            </tr>
-                            <tr><td>AGENT</td><td><input type="text" id="store-agent"></td>
-                            </tr>
-                            <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td>
-                            </tr>
-                            <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td>
-                            </tr>
-                            <tr><td>SKU</td><td><input type="text" id="store-sku"></td>
-                            </tr>
-                            <tr><td>DATABASE</td><td><input type="text" id="store-database"></td>
-                            </tr>
-                            <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td>
-                            </tr>
-                            <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td>
-                            </tr>
-                            <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td>
-                            </tr>
+                            <tr><td>DATE</td><td><input type="date" id="store-date" readonly></td></tr>
+                            <tr><td>SHIFT SCHEDULE</td><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                            <tr><td>SUPPORT NAME</td><td><input type="text" id="store-support" readonly></td></tr>
+                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="store-portal" class="required-field"></td></tr>
+                            <tr><td>STORE NAME *</td><td><input type="text" id="store-storeName" class="required-field"></td></tr>
+                            <tr><td>ZIP CODE *</td><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
+                            <tr><td>AGENT</td><td><input type="text" id="store-agent"></td></tr>
+                            <tr><td>EMAIL ID</td><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
+                            <tr><td>PASSWORD</td><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
+                            <tr><td>SKU</td><td><input type="text" id="store-sku"></td></tr>
+                            <tr><td>DATABASE</td><td><input type="text" id="store-database"></td></tr>
+                            <tr><td>NO OF REG.</td><td><input type="number" id="store-noOfReg"></td></tr>
+                            <tr><td>MOKI ID</td><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
+                            <tr><td>ANYDESK ID</td><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
                         </table>
                         <div class="button-row">
-                            <button class="add" onclick="addEntry('store')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
-                            <button class="form-clear-btn" onclick="clearFormOnly('store')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
-                            <button class="clock" onclick="clock('IN', 'store')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
-                            <button class="clock" onclick="clock('OUT', 'store')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
+                            <button class="add" onclick="addEntry('store')">ADD ENTRY</button>
+                            <button class="form-clear-btn" onclick="clearFormOnly('store')">CLEAR FORM</button>
+                            <button class="clock" onclick="clock('IN', 'store')">CLOCK IN</button>
+                            <button class="clock" onclick="clock('OUT', 'store')">CLOCK OUT</button>
                         </div>
                     </div>
                     <div class="right-panel" id="store-previewPanel">
@@ -1134,36 +1086,24 @@
                             <div id="moolah-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                            <tr><td>DATE                                <td><input type="date" id="moolah-date" readonly></td>
-                            </tr>
-                            <tr><td>SHIFT SCHEDULE                                <td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
-                            </tr>
-                            <tr><td>SUPPORT NAME                                <td><input type="text" id="moolah-support" readonly></td>
-                            </tr>
-                            <tr><td>PORTAL NUMBER *                                <td><input type="text" id="moolah-portal" class="required"></td>
-                            </tr>
-                            <tr><td>STORE NAME *                                <td><input type="text" id="moolah-storeName" class="required"></td>
-                            </tr>
-                            <tr><td>ZIP CODE *                                <td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td>
-                            </tr>
-                            <tr><td>EMAIL ID                                <td><input type="email" id="moolah-email" class="no-uppercase"></td>
-                            </tr>
-                            <tr><td>PASSWORD                                <td><input type="text" id="moolah-password" class="no-uppercase"></td>
-                            </tr>
-                            <tr><td>NO OF TABS                                <td><input type="number" id="moolah-noOfTabs"></td>
-                            </tr>
-                            <tr><td>SKU (6 DIGITS)                                <td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td>
-                            </tr>
-                            <tr><td>MOKI ID                                <td><textarea id="moolah-mokiId" rows="2"></textarea></td>
-                            </tr>
-                            <tr><td>ANYDESK ID                                <td><textarea id="moolah-anydeskId" rows="2"></textarea></td>
-                            </tr>
+                            <tr><td>DATE</td><td><input type="date" id="moolah-date" readonly></td></tr>
+                            <tr><td>SHIFT SCHEDULE</td><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
+                            <tr><td>SUPPORT NAME</td><td><input type="text" id="moolah-support" readonly></td></tr>
+                            <tr><td>PORTAL NUMBER *</td><td><input type="text" id="moolah-portal" class="required"></td></tr>
+                            <tr><td>STORE NAME *</td><td><input type="text" id="moolah-storeName" class="required"></td></tr>
+                            <tr><td>ZIP CODE *</td><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
+                            <tr><td>EMAIL ID</td><td><input type="email" id="moolah-email" class="no-uppercase"></td></tr>
+                            <tr><td>PASSWORD</td><td><input type="text" id="moolah-password" class="no-uppercase"></td></tr>
+                            <tr><td>NO OF TABS</td><td><input type="number" id="moolah-noOfTabs"></td></tr>
+                            <tr><td>SKU (6 DIGITS)</td><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
+                            <tr><td>MOKI ID</td><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
+                            <tr><td>ANYDESK ID</td><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
                         </table>
                         <div class="button-row">
-                            <button class="add" onclick="addEntry('moolah')"><i class="bi bi-plus"></i>ADD ENTRY</button>
-                            <button class="form-clear-btn" onclick="clearFormOnly('moolah')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
-                            <button class="clock" onclick="clock('IN', 'moolah')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
-                            <button class="clock" onclick="clock('OUT', 'moolah')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
+                            <button class="add" onclick="addEntry('moolah')">ADD ENTRY</button>
+                            <button class="form-clear-btn" onclick="clearFormOnly('moolah')">CLEAR FORM</button>
+                            <button class="clock" onclick="clock('IN', 'moolah')">CLOCK IN</button>
+                            <button class="clock" onclick="clock('OUT', 'moolah')">CLOCK OUT</button>
                         </div>
                     </div>
                     <div class="right-panel" id="moolah-previewPanel">
@@ -1196,28 +1136,23 @@
 
             <div class="bulk-bar">
                 <label><input type="checkbox" id="selectAllCheckbox"> Select All</label>
-                <button id="bulkDeleteBtn" title="Remove selected rows (only from main table)"><i class="bi bi-trash-fill"></i> REMOVE</button>
-                <button id="bulkCopyBtn" title="Copy selected rows"><i class="bi bi-copy"></i>  COPY</button>
-                <button id="bulkUpdateStatusBtn" title="Update status for selected rows"><i class="bi bi-pencil-square"></i>  UPDATE</button>
-                <button id="exportCsvBtn" class="export-btn"><i class="bi bi-filetype-csv"></i>  EXPORT</button>
-                <button id="importCsvBtn" class="import-btn"><i class="bi bi-file-earmark-arrow-up"></i>  IMPORT</button>
-                <button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i>  SHIFT REPORT</button>
-                <button id="setSheetsKeyBtn" class="sheets-key-btn"><i class="bi bi-key"></i>  SET SHEETS KEY</button>
-                <button id="setGeminiKeyBtn" class="gemini-key-btn"><i class="bi bi-robot"></i>  SET GEMINI KEY</button>
+                <button id="bulkDeleteBtn" title="Remove selected rows (only from main table)">🗑️ REMOVE</button>
+                <button id="bulkCopyBtn" title="Copy selected rows">📋 COPY</button>
+                <button id="bulkUpdateStatusBtn" title="Update status for selected rows">✏️ UPDATE</button>
+                <button id="exportCsvBtn" class="export-btn">📥 EXPORT</button>
+                <button id="importCsvBtn" class="import-btn">📤 IMPORT</button>
+                <button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report">📋 SHIFT REPORT</button>
+                <button id="setSheetsKeyBtn" class="sheets-key-btn">🔑 SET SHEETS KEY</button>
+                <button id="setGeminiKeyBtn" class="gemini-key-btn">🤖 SET GEMINI KEY</button>
             </div>
 
             <div style="overflow-x: auto;">
                 <table id="entryTable">
                     <thead>
-                         <tr>
-                            <th style="width:30px"></th>
-                            <th>DATE</th><th>SHIFT</th><th>SUPPORT</th><th>PORTAL</th><th>STORE</th><th>ZIP</th>
-                            <th>CONTACT</th><th>CONTACT#</th><th>MODULE</th><th>ISSUE</th><th>ESCALATED</th>
-                            <th>STATUS</th><th>REMARKS</th><th>RESOLUTION</th><th>ACTIONS</th>
-                         </tr>
+                        <tr><th style="width:30px"></th><th>DATE</th><th>SHIFT</th><th>SUPPORT</th><th>PORTAL</th><th>STORE</th><th>ZIP</th><th>CONTACT</th><th>CONTACT#</th><th>MODULE</th><th>ISSUE</th><th>ESCALATED</th><th>STATUS</th><th>REMARKS</th><th>RESOLUTION</th><th>ACTIONS</th></tr>
                     </thead>
                     <tbody></tbody>
-                  </table
+                </table>
             </div>
         </div>
     </div>
@@ -1228,7 +1163,6 @@
         (function() {
             "use strict";
 
-            // STATE FULL NAMES MAPPING
             const STATE_FULL_NAMES = {
                 'AL': 'Alabama', 'AK': 'Alaska', 'AZ': 'Arizona', 'AR': 'Arkansas', 'CA': 'California',
                 'CO': 'Colorado', 'CT': 'Connecticut', 'DE': 'Delaware', 'FL': 'Florida', 'GA': 'Georgia',
@@ -1243,7 +1177,6 @@
                 'DC': 'District of Columbia'
             };
 
-            // Helper: format multiline text with <br>
             function formatMultilinePreview(text) {
                 if (!text) return '';
                 const escaped = text.replace(/[&<>]/g, function(m) {
@@ -1935,16 +1868,15 @@
                 document.getElementById('ticket-previewContactNumber').textContent = document.getElementById('ticket-contactNumber').value;
                 document.getElementById('ticket-previewContact').textContent = document.getElementById('ticket-contactNumber').value;
                 
-                const issueUpper = document.getElementById('ticket-issue').value.toUpperCase();
-                document.getElementById('ticket-previewIssue').innerHTML = formatMultilinePreview(issueUpper);
+                const issueOriginal = document.getElementById('ticket-issue').value;
+                document.getElementById('ticket-previewIssue').innerHTML = formatMultilinePreview(issueOriginal);
 
                 const noteRaw = document.getElementById('ticket-note').value;
-                const noteFormatted = noteRaw ? toSentenceCase(noteRaw) : '';
-                document.getElementById('ticket-previewNote').innerHTML = formatMultilinePreview(noteFormatted);
+                document.getElementById('ticket-previewNote').innerHTML = formatMultilinePreview(noteRaw);
 
                 const troubleshootingRaw = document.getElementById('ticket-resolution').value;
-                document.getElementById('ticket-previewTroubleshooting').innerHTML = troubleshootingRaw ? uppercaseHtmlPreserveTags(troubleshootingRaw) : '';
-                // Resolution preview updated elsewhere
+                document.getElementById('ticket-previewTroubleshooting').innerHTML = troubleshootingRaw ? troubleshootingRaw : '';
+                
                 syncPreviewHeight();
             }
 
@@ -1957,12 +1889,10 @@
                 document.getElementById('ticket-previewContactNumber').textContent = entry.contactNumber;
                 document.getElementById('ticket-previewContact').textContent = entry.contactNumber;
 
-                document.getElementById('ticket-previewIssue').innerHTML = formatMultilinePreview((entry.issue || '').toUpperCase());
-
-                const noteFormatted = entry.note ? toSentenceCase(entry.note) : '';
-                document.getElementById('ticket-previewNote').innerHTML = formatMultilinePreview(noteFormatted);
-                document.getElementById('ticket-previewTroubleshooting').innerHTML = entry.troubleshooting ? uppercaseHtmlPreserveTags(entry.troubleshooting) : '';
-                document.getElementById('ticket-previewResolution').innerHTML = formatMultilinePreview(entry.resolution ? toSentenceCase(entry.resolution) : '');
+                document.getElementById('ticket-previewIssue').innerHTML = formatMultilinePreview(entry.issue || '');
+                document.getElementById('ticket-previewNote').innerHTML = formatMultilinePreview(entry.note || '');
+                document.getElementById('ticket-previewTroubleshooting').innerHTML = entry.troubleshooting || '';
+                document.getElementById('ticket-previewResolution').innerHTML = formatMultilinePreview(entry.resolution || '');
                 
                 syncPreviewHeight();
             }
@@ -2595,17 +2525,17 @@ UPLOAD DATABASE - DONE✅`;
                                             <td>${entry.contact}</td>
                                             <td>${entry.contactNumber}</td>
                                             <td>${entry.module}</td>
-                                    <td style="white-space: pre-wrap;">${entry.issue}</td>
+                                    <td style="white-space: pre-wrap;">${(entry.issue || '').toUpperCase()}</td>
                                             <td>${entry.escalated}</td>
                                             <td>${entry.status}</td>
-                                            <td>${entry.remarks}</td>
+                                            <td>${(entry.remarks || '').toUpperCase()}</td>
                                     <td style="white-space: pre-wrap;">${(entry.resolution || '').toUpperCase()}</td>
                                     <td class="action-cell">
                                         <div class="action-container">
-                                            <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
-                                            <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
-                                            <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
-                                            <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
+                                            <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy">📋</button>
+                                            <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution">🔄</button>
+                                            <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit">✏️</button>
+                                            <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove">🗑️</button>
                                         </div>
                                         </td>`;
                     tbody.appendChild(row);
@@ -2702,11 +2632,15 @@ UPLOAD DATABASE - DONE✅`;
                                             <div class="preview-item"><strong>Store:</strong> ${entry.store || '-'}</div>
                                             <div class="preview-item"><strong>Zip:</strong> ${entry.zip || '-'}</div>
                                             <div class="card-actions">
-                                                <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
-                                                <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
-                                                <button class="edit-entry" data-id="${entry.id}">✏️</button>
-                                                <button class="return-entry" data-id="${entry.id}">↩️</button>
-                                                <button class="delete-entry" data-id="${entry.id}">🗑️</button>
+                                                <div class="card-actions-row">
+                                                    <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
+                                                    <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
+                                                </div>
+                                                <div class="card-actions-row">
+                                                    <button class="edit-entry" data-id="${entry.id}">✏️ EDIT</button>
+                                                    <button class="return-entry" data-id="${entry.id}">↩️ RETURN</button>
+                                                    <button class="delete-entry" data-id="${entry.id}">🗑️ DELETE</button>
+                                                </div>
                                             </div>
                                         </div>
                                     `;
@@ -2725,14 +2659,14 @@ UPLOAD DATABASE - DONE✅`;
 
                 container.innerHTML = html;
 
-container.querySelectorAll('.copy-store').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const id = btn.dataset.id;
-        const entry = allEntries.find(e => e.id == id);
-        if (entry) {
-            // Format with ISSUE and NOTE on new lines below their labels
-            const details = `PORTAL: ${entry.portal}
+                // DETAILS button: copy rich (HTML) + plain text
+                container.querySelectorAll('.copy-store').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        e.stopPropagation();
+                        const id = btn.dataset.id;
+                        const entry = allEntries.find(e => e.id == id);
+                        if (entry) {
+                            const plainText = `PORTAL: ${entry.portal}
 STORE NAME: ${entry.store}
 ZIPCODE: ${entry.zip}
 CALLER NAME: ${entry.contact}
@@ -2742,69 +2676,147 @@ ISSUE:
 ${entry.issue || ''}
 
 NOTE:
-${entry.note || ''}`; 
-            
-            navigator.clipboard.writeText(details);
-            showNotification('Details copied');
-        }
-    });
-});
+${entry.note || ''}`;
 
-container.querySelectorAll('.copy-details').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-        e.stopPropagation();
-        const id = btn.dataset.id;
-        const entry = allEntries.find(e => e.id == id);
-        if (entry) {
-            const troubleshootingHtmlRaw = entry.troubleshooting || '';
-            // No uppercase conversion to preserve list formatting
-            const troubleshootingHtmlForCopy = troubleshootingHtmlRaw;
-            const tmp = document.createElement('div');
-            tmp.innerHTML = troubleshootingHtmlRaw;
-            const troubleshootingText = (tmp.innerText || tmp.textContent || '').trim();
-            const formattedTroubleshootingText = troubleshootingText; // keep original case
-            const formattedResolution = entry.resolution || '';
-            
-            // Plain text version (no NOTE)
-            const plainText = `📞 CONTACT:
-                CALLER NAME: ${entry.contact}
-                CONTACT NUMBER: ${entry.contactNumber}
+                            const htmlContent = `<strong>PORTAL: </strong>${escapeHtml(entry.portal)}<br>
+<strong>STORE NAME: </strong>${escapeHtml(entry.store)}<br>
+<strong>ZIPCODE: </strong>${escapeHtml(entry.zip)}<br>
+<strong>CALLER NAME: </strong>${escapeHtml(entry.contact)}<br>
+<strong>CONTACT NUMBER: </strong>${escapeHtml(entry.contactNumber)}<br>
+<br>
+<strong>ISSUE:</strong><br>
+${escapeHtml(entry.issue || '').replace(/\n/g, '<br>')}<br>
+<br>
+<strong>NOTE:</strong><br>
+${escapeHtml(entry.note || '').replace(/\n/g, '<br>')}`;
 
-                🔧 TROUBLESHOOTING:
-                ${formattedTroubleshootingText}
+                            try {
+                                const blobHtml = new Blob([htmlContent], { type: 'text/html' });
+                                const blobPlain = new Blob([plainText], { type: 'text/plain' });
+                                await navigator.clipboard.write([
+                                    new ClipboardItem({
+                                        'text/plain': blobPlain,
+                                        'text/html': blobHtml
+                                    })
+                                ]);
+                                showNotification('Details copied (rich format)');
+                            } catch (err) {
+                                navigator.clipboard.writeText(plainText);
+                                showNotification('Details copied (plain text)');
+                            }
+                        }
+                    });
+                });
 
-                ✅ RESOLUTION:
-                ${formattedResolution}`;
-                            
-                // HTML version (no NOTE)
-                const htmlCopy = `
-                    <strong>📞 CONTACT: </strong><br>
-                    <strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
-                    <strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
-                    
-                    <strong>🔧 TROUBLESHOOTING: </strong><br>
-                    ${troubleshootingHtmlForCopy || escapeHtml(formattedTroubleshootingText).replace(/\n/g, '<br>')}
-                    <br>
-                    <strong>✅ RESOLUTION: </strong><br>
-                    ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
-            `;
-            try {
-                const blob = new Blob([htmlCopy], { type: 'text/html' });
-                const plainBlob = new Blob([plainText], { type: 'text/plain' });
-                await navigator.clipboard.write([
-                    new ClipboardItem({
-                        'text/plain': plainBlob,
-                        'text/html': blob
-                    })
-                ]);
-                showNotification('HRMS details copied (rich format)');
-            } catch (err) {
-                navigator.clipboard.writeText(plainText);
-                showNotification('HRMS details copied (plain text)');
-            }
-        }
-    });
-});
+                // HRMS button: improved plain text with indentation for nested lists
+                container.querySelectorAll('.copy-details').forEach(btn => {
+                    btn.addEventListener('click', async (e) => {
+                        e.stopPropagation();
+                        const id = btn.dataset.id;
+                        const entry = allEntries.find(e => e.id == id);
+                        if (entry) {
+                            // Helper to convert HTML to plain text with indentation for nested lists
+                            function htmlToPlainText(html) {
+                                if (!html) return '';
+                                const temp = document.createElement('div');
+                                temp.innerHTML = html;
+                                let result = '';
+
+                                function processNode(node, level) {
+                                    if (node.nodeType === Node.TEXT_NODE) {
+                                        let text = node.textContent;
+                                        if (text.trim()) {
+                                            result += text;
+                                        }
+                                        return;
+                                    }
+                                    if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+                                    const tag = node.tagName.toLowerCase();
+                                    const isBlock = ['p', 'div', 'li', 'ul', 'ol', 'br'].includes(tag);
+
+                                    if (tag === 'br') {
+                                        result += '\n';
+                                        return;
+                                    }
+                                    if (isBlock && result.length > 0 && !result.endsWith('\n')) {
+                                        result += '\n';
+                                    }
+
+                                    if (tag === 'li') {
+                                        const parentList = node.parentElement;
+                                        const isOrdered = parentList && parentList.tagName.toLowerCase() === 'ol';
+                                        let prefix;
+                                        if (isOrdered) {
+                                            const index = Array.from(parentList.children).indexOf(node) + 1;
+                                            prefix = `${index}. `;
+                                        } else {
+                                            prefix = '- ';
+                                        }
+                                        const indent = '\t'.repeat(level);
+                                        result += indent + prefix;
+                                    }
+
+                                    let childLevel = level;
+                                    if (tag === 'ul' || tag === 'ol') childLevel = level + 1;
+                                    else if (tag === 'li') childLevel = level + 1;
+
+                                    Array.from(node.childNodes).forEach(child => {
+                                        processNode(child, childLevel);
+                                    });
+
+                                    if (isBlock && result.length > 0 && !result.endsWith('\n')) {
+                                        result += '\n';
+                                    }
+                                }
+
+                                processNode(temp, 0);
+                                result = result.replace(/\n\s*\n/g, '\n\n').trim();
+                                return result;
+                            }
+
+                            const troubleshootingHtml = entry.troubleshooting || '';
+                            const troubleshootingPlain = htmlToPlainText(troubleshootingHtml);
+                            const formattedResolution = entry.resolution || '';
+
+                            const plainText = `📞 CONTACT:
+CALLER NAME: ${entry.contact}
+CONTACT NUMBER: ${entry.contactNumber}
+
+🔧 TROUBLESHOOTING:
+${troubleshootingPlain}
+
+✅ RESOLUTION:
+${formattedResolution}`;
+
+                            const htmlCopy = `
+<strong>📞 CONTACT: </strong><br>
+<strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
+<strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
+<br>
+<strong>🔧 TROUBLESHOOTING: </strong><br>
+${troubleshootingHtml || escapeHtml(troubleshootingPlain).replace(/\n/g, '<br>')}
+<br>
+<strong>✅ RESOLUTION: </strong><br>
+${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
+`;
+                            try {
+                                const blob = new Blob([htmlCopy], { type: 'text/html' });
+                                const plainBlob = new Blob([plainText], { type: 'text/plain' });
+                                await navigator.clipboard.write([
+                                    new ClipboardItem({
+                                        'text/plain': plainBlob,
+                                        'text/html': blob
+                                    })
+                                ]);
+                                showNotification('HRMS details copied (rich format)');
+                            } catch (err) {
+                                navigator.clipboard.writeText(plainText);
+                                showNotification('HRMS details copied (plain text)');
+                            }
+                        }
+                    });
+                });
 
                 container.querySelectorAll('.edit-entry').forEach(btn => {
                     btn.addEventListener('click', (e) => {
@@ -3173,63 +3185,62 @@ container.querySelectorAll('.copy-details').forEach(btn => {
                 event.target.value = '';
             }
 
-function generateShiftReportPlain() {
-    const indent = (level) => ' '.repeat(level * 5);
-    const visible = getVisibleEntries();
+            function generateShiftReportPlain() {
+                const indent = (level) => ' '.repeat(level * 5);
+                const visible = getVisibleEntries();
 
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const dateStr = yesterday.toLocaleDateString('en-US');
-    const dayName = days[yesterday.getDay()];
-    const dateLine = `Date: ${dateStr} - ${dayName} Shift`;
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const dateStr = yesterday.toLocaleDateString('en-US');
+                const dayName = days[yesterday.getDay()];
+                const dateLine = `Date: ${dateStr} - ${dayName} Shift`;
 
-    const uniqueShifts = [...new Set(visible.map(e => e.shift).filter(s => s))];
-    const shiftLine = `Shift: ${uniqueShifts.join(', ')}`;
+                const uniqueShifts = [...new Set(visible.map(e => e.shift).filter(s => s))];
+                const shiftLine = `Shift: ${uniqueShifts.join(', ')}`;
 
-    const pendingEntries = visible.filter(e => e.status?.toUpperCase() === 'PENDING');
-    const pendingCount = pendingEntries.length;
-    let pendingList = '';
-    if (pendingCount > 0) {
-        pendingList = pendingEntries.map(e => `${indent(1)}${e.store || 'Unknown Store'} - ${e.issue || 'No issue details'}`).join('\n');
-    } else {
-        pendingList = `${indent(1)}No Pending Tickets`;
-    }
+                const pendingEntries = visible.filter(e => e.status?.toUpperCase() === 'PENDING');
+                const pendingCount = pendingEntries.length;
+                let pendingList = '';
+                if (pendingCount > 0) {
+                    pendingList = pendingEntries.map(e => `${indent(1)}${e.store || 'Unknown Store'} - ${e.issue || 'No issue details'}`).join('\n');
+                } else {
+                    pendingList = `${indent(1)}No Pending Tickets`;
+                }
 
-    const totalCalls = visible.filter(e => e.status?.toUpperCase() !== 'OTHER TASK').length;
+                const totalCalls = visible.filter(e => e.status?.toUpperCase() !== 'OTHER TASK').length;
 
-    const otherEntries = visible.filter(e => e.status?.toUpperCase() === 'OTHER TASK');
-    const otherCount = otherEntries.length;
-    let otherList = '';
-    if (otherCount > 0) {
-        const uniqueItems = new Set();
-        otherEntries.forEach(e => {
-            const moduleName = (e.module && e.module.trim()) ? e.module : '';
-            if (moduleName.toUpperCase() === 'OTHER') {
-                const issueText = e.issue ? e.issue.trim() : '';
-                const display = issueText || 'Other';
-                uniqueItems.add(display);
-            } else {
-                const display = moduleName || 'Other';
-                uniqueItems.add(display);
-            }
-        });
-        otherList = Array.from(uniqueItems).map(item => `${indent(1)}${item}`).join('\n');
-    } else {
-        otherList = `${indent(1)}No Other Tasks`;
-    }
+                const otherEntries = visible.filter(e => e.status?.toUpperCase() === 'OTHER TASK');
+                const otherCount = otherEntries.length;
+                let otherList = '';
+                if (otherCount > 0) {
+                    const uniqueItems = new Set();
+                    otherEntries.forEach(e => {
+                        const moduleName = (e.module && e.module.trim()) ? e.module : '';
+                        if (moduleName.toUpperCase() === 'OTHER') {
+                            const issueText = e.issue ? e.issue.trim() : '';
+                            const display = issueText || 'Other';
+                            uniqueItems.add(display);
+                        } else {
+                            const display = moduleName || 'Other';
+                            uniqueItems.add(display);
+                        }
+                    });
+                    otherList = Array.from(uniqueItems).map(item => `${indent(1)}${item}`).join('\n');
+                } else {
+                    otherList = `${indent(1)}No Other Tasks`;
+                }
 
-    const trainingEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING');
-    const demoEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO');
-    const trainingLine = trainingEntries.length > 0
-        ? `${indent(2)}Scheduled Training: ${trainingEntries.map(e => e.support || 'Unknown Support').join(', ')}`
-        : `${indent(2)}No Training for today`;
-    const demoLine = demoEntries.length > 0
-        ? `${indent(2)}Scheduled Demo: ${demoEntries.map(e => e.support || 'Unknown Support').join(', ')}`
-        : `${indent(2)}No Demo for today`;
+                const trainingEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING');
+                const demoEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO');
+                const trainingLine = trainingEntries.length > 0
+                    ? `${indent(2)}Scheduled Training: ${trainingEntries.map(e => e.support || 'Unknown Support').join(', ')}`
+                    : `${indent(2)}No Training for today`;
+                const demoLine = demoEntries.length > 0
+                    ? `${indent(2)}Scheduled Demo: ${demoEntries.map(e => e.support || 'Unknown Support').join(', ')}`
+                    : `${indent(2)}No Demo for today`;
 
-    // Updated version section with multiple lines
-    const staticSections = `${indent(1)}5. Updates / Notices
+                const staticSections = `${indent(1)}5. Updates / Notices
 ${indent(2)}The current latest versions:
 ${indent(3)}RetailzPOS: Version Code 216 (Portal 1, 2, 3, 4, 6, 7, 8)
 ${indent(3)}Moolah Points: Version Code 37 (Portal 1, 2, 3, 4, 6, 7, 8)
@@ -3247,257 +3258,255 @@ ${indent(1)}6. Training (Retailz Members): No training for today
 
 ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
-    return [
-        dateLine,
-        shiftLine,
-        '',
-        'Good day everyone,',
-        '',
-        'Please find below the shift report for today,',
-        '',
-        `${indent(1)}1. Pending Tickets: ${pendingCount}`,
-        pendingList,
-        '',
-        `${indent(1)}2. Total Calls: ${totalCalls}`,
-        '',
-        '',
-        `${indent(1)}3. Total Other Tasks: ${otherCount}`,
-        otherList,
-        '',
-        `${indent(1)}4. Scheduled Training/Demo (Merchant)`,
-        trainingLine,
-        demoLine,
-        '',
-        staticSections
-    ].join('\n');
-}
-
-function generateShiftReportHTML() {
-    const visible = getVisibleEntries();
-
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const dateStr = yesterday.toLocaleDateString('en-US');
-    const dayName = days[yesterday.getDay()];
-    const dateLine = `Date: ${dateStr} - ${dayName} Shift`;
-
-    const uniqueShifts = [...new Set(visible.map(e => e.shift).filter(s => s))];
-    const shiftLine = `Shift: ${uniqueShifts.join(', ')}`;
-
-    const pendingEntries = visible.filter(e => e.status?.toUpperCase() === 'PENDING');
-    const pendingCount = pendingEntries.length;
-    let pendingListHtml = '';
-    if (pendingCount > 0) {
-        pendingListHtml = pendingEntries.map(e => {
-            const storeName = escapeHtml(e.store || 'Unknown Store');
-            const issueText = escapeHtml(e.issue || 'No issue details');
-            return `<div style="margin-left:25px;"><b>${storeName}</b> - <i>${issueText}</i></div>`;
-        }).join('');
-    } else {
-        pendingListHtml = `<div style="margin-left:25px;">No Pending Tickets</div>`;
-    }
-
-    const totalCalls = visible.filter(e => e.status?.toUpperCase() !== 'OTHER TASK').length;
-
-    const otherEntries = visible.filter(e => e.status?.toUpperCase() === 'OTHER TASK');
-    const otherCount = otherEntries.length;
-    let otherListHtml = '';
-    if (otherCount > 0) {
-        const uniqueItems = new Set();
-        otherEntries.forEach(e => {
-            const moduleName = (e.module && e.module.trim()) ? e.module : '';
-            if (moduleName.toUpperCase() === 'OTHER') {
-                const issueText = e.issue ? e.issue.trim() : '';
-                const display = issueText || 'Other';
-                uniqueItems.add(display);
-            } else {
-                const display = moduleName || 'Other';
-                uniqueItems.add(display);
+                return [
+                    dateLine,
+                    shiftLine,
+                    '',
+                    'Good day everyone,',
+                    '',
+                    'Please find below the shift report for today,',
+                    '',
+                    `${indent(1)}1. Pending Tickets: ${pendingCount}`,
+                    pendingList,
+                    '',
+                    `${indent(1)}2. Total Calls: ${totalCalls}`,
+                    '',
+                    '',
+                    `${indent(1)}3. Total Other Tasks: ${otherCount}`,
+                    otherList,
+                    '',
+                    `${indent(1)}4. Scheduled Training/Demo (Merchant)`,
+                    trainingLine,
+                    demoLine,
+                    '',
+                    staticSections
+                ].join('\n');
             }
-        });
-        otherListHtml = Array.from(uniqueItems).map(item => `<div style="margin-left:25px;">${escapeHtml(item)}</div>`).join('');
-    } else {
-        otherListHtml = `<div style="margin-left:25px;">No Other Tasks</div>`;
-    }
 
-    const trainingEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING');
-    const demoEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO');
-    const trainingLine = trainingEntries.length > 0
-        ? `<div style="margin-left:25px;">Scheduled Training: ${escapeHtml(trainingEntries.map(e => e.support || 'Unknown Support').join(', '))}</div>`
-        : `<div style="margin-left:25px;">No Training for today</div>`;
-    const demoLine = demoEntries.length > 0
-        ? `<div style="margin-left:25px;">Scheduled Demo: ${escapeHtml(demoEntries.map(e => e.support || 'Unknown Support').join(', '))}</div>`
-        : `<div style="margin-left:25px;">No Demo for today</div>`;
+            function generateShiftReportHTML() {
+                const visible = getVisibleEntries();
 
-    // Updated version section with multiple lines using <div>
-    const versionHtml = `
-        <div style="margin-left:25px;">The current latest versions:</div>
-        <div style="margin-left:50px;">RetailzPOS: Version Code 216 (Portal 1,2, 3, 4, 6, 7, 8)</div>
-        <div style="margin-left:50px;">Moolah Points: Version Code 37 (Portal 1,2, 3, 4, 6, 7, 8)</div>
-    `;
+                const yesterday = new Date();
+                yesterday.setDate(yesterday.getDate() - 1);
+                const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                const dateStr = yesterday.toLocaleDateString('en-US');
+                const dayName = days[yesterday.getDay()];
+                const dateLine = `Date: ${dateStr} - ${dayName} Shift`;
 
-    const remindersItems = [
-        "Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.",
-        "Ask seniors assistance for issue that needed to be escalated to the India team",
-        "Observe professional call etiquette at all times when handling calls.",
-        "Follow up on any pending tickets and ensure timely updates.",
-        "Review pending issues and escalations using the newly added features in our existing workload tracker",
-        "Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.",
-        "Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history."
-    ];
-    const remindersListHtml = `<ul style="margin:4px 0 0 25px; padding-left:20px;">` +
-        remindersItems.map(item => `<li style="margin:0;">${escapeHtml(item)}</li>`).join('') +
-        `</ul>`;
+                const uniqueShifts = [...new Set(visible.map(e => e.shift).filter(s => s))];
+                const shiftLine = `Shift: ${uniqueShifts.join(', ')}`;
 
-    const staticSections = `
-        <div><strong>5. Updates / Notices</strong></div>
-        ${versionHtml}
-        <div style="margin-top:8px;"></div>
-        <div style="margin-left:25px;">Reminders for Retailz team members:</div>
-        ${remindersListHtml}
-        <div style="margin-top:8px;"><strong>6. Training (Retailz Members):</strong> No training for today</div>
-        <div style="margin-top:4px;"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</div>
-    `;
+                const pendingEntries = visible.filter(e => e.status?.toUpperCase() === 'PENDING');
+                const pendingCount = pendingEntries.length;
+                let pendingListHtml = '';
+                if (pendingCount > 0) {
+                    pendingListHtml = pendingEntries.map(e => {
+                        const storeName = escapeHtml(e.store || 'Unknown Store');
+                        const issueText = escapeHtml(e.issue || 'No issue details');
+                        return `<div style="margin-left:25px;"><b>${storeName}</b> - <i>${issueText}</i></div>`;
+                    }).join('');
+                } else {
+                    pendingListHtml = `<div style="margin-left:25px;">No Pending Tickets</div>`;
+                }
 
-    return `
-        <div style="font-family: sans-serif; line-height:1.4;">
-            <div>${escapeHtml(dateLine)}</div>
-            <div>${escapeHtml(shiftLine)}</div>
-            <div><br></div>
-            <div>Good day everyone,</div>
-            <div><br></div>
-            <div>Please find below the shift report for today,</div>
-            <div><br></div>
-            <div><strong>1. Pending Tickets: ${pendingCount}</strong></div>
-            ${pendingListHtml}
-            <div><br></div>
-            <div><strong>2. Total Calls: ${totalCalls}</strong></div>
-            <div><br></div>
-            <div><br></div>
-            <div><strong>3. Total Other Tasks: ${otherCount}</strong></div>
-            ${otherListHtml}
-            <div><br></div>
-            <div><strong>4. Scheduled Training/Demo (Merchant)</strong></div>
-            ${trainingLine}
-            ${demoLine}
-            <div><br></div>
-            ${staticSections}
-        </div>
-    `;
-}
+                const totalCalls = visible.filter(e => e.status?.toUpperCase() !== 'OTHER TASK').length;
 
-function showShiftReportModal() {
-    const plainText = generateShiftReportPlain();
-    const htmlContent = generateShiftReportHTML();
+                const otherEntries = visible.filter(e => e.status?.toUpperCase() === 'OTHER TASK');
+                const otherCount = otherEntries.length;
+                let otherListHtml = '';
+                if (otherCount > 0) {
+                    const uniqueItems = new Set();
+                    otherEntries.forEach(e => {
+                        const moduleName = (e.module && e.module.trim()) ? e.module : '';
+                        if (moduleName.toUpperCase() === 'OTHER') {
+                            const issueText = e.issue ? e.issue.trim() : '';
+                            const display = issueText || 'Other';
+                            uniqueItems.add(display);
+                        } else {
+                            const display = moduleName || 'Other';
+                            uniqueItems.add(display);
+                        }
+                    });
+                    otherListHtml = Array.from(uniqueItems).map(item => `<div style="margin-left:25px;">${escapeHtml(item)}</div>`).join('');
+                } else {
+                    otherListHtml = `<div style="margin-left:25px;">No Other Tasks</div>`;
+                }
 
-    const modal = document.createElement('div');
-    modal.style.position = 'fixed';
-    modal.style.top = '50%';
-    modal.style.left = '50%';
-    modal.style.transform = 'translate(-50%, -50%)';
-    modal.style.backgroundColor = '#fff';
-    modal.style.padding = '24px';
-    modal.style.borderRadius = '16px';
-    modal.style.boxShadow = '0 20px 35px -10px rgba(0,0,0,0.3)';
-    modal.style.zIndex = '1000';
-    modal.style.minWidth = '600px';
-    modal.style.maxWidth = '800px';
-    modal.style.maxHeight = '80vh';
-    modal.style.overflowY = 'auto';
-    modal.style.border = '1px solid #cdddee';
+                const trainingEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'TRAINING');
+                const demoEntries = otherEntries.filter(e => e.module?.toUpperCase() === 'DEMO');
+                const trainingLine = trainingEntries.length > 0
+                    ? `<div style="margin-left:25px;">Scheduled Training: ${escapeHtml(trainingEntries.map(e => e.support || 'Unknown Support').join(', '))}</div>`
+                    : `<div style="margin-left:25px;">No Training for today</div>`;
+                const demoLine = demoEntries.length > 0
+                    ? `<div style="margin-left:25px;">Scheduled Demo: ${escapeHtml(demoEntries.map(e => e.support || 'Unknown Support').join(', '))}</div>`
+                    : `<div style="margin-left:25px;">No Demo for today</div>`;
 
-    if (document.body.classList.contains('dark-mode')) {
-        modal.style.backgroundColor = '#2d3748';
-        modal.style.borderColor = '#4a5568';
-        modal.style.color = '#e2e8f0';
-    }
+                const versionHtml = `
+                    <div style="margin-left:25px;">The current latest versions:</div>
+                    <div style="margin-left:50px;">RetailzPOS: Version Code 216 (Portal 1,2, 3, 4, 6, 7, 8)</div>
+                    <div style="margin-left:50px;">Moolah Points: Version Code 37 (Portal 1,2, 3, 4, 6, 7, 8)</div>
+                `;
 
-    const title = document.createElement('h3');
-    title.textContent = 'End‑of‑Shift Report';
-    title.style.marginBottom = '16px';
-    title.style.fontSize = '1.2rem';
-    modal.appendChild(title);
+                const remindersItems = [
+                    "Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.",
+                    "Ask seniors assistance for issue that needed to be escalated to the India team",
+                    "Observe professional call etiquette at all times when handling calls.",
+                    "Follow up on any pending tickets and ensure timely updates.",
+                    "Review pending issues and escalations using the newly added features in our existing workload tracker",
+                    "Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.",
+                    "Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history."
+                ];
+                const remindersListHtml = `<ul style="margin:4px 0 0 25px; padding-left:20px;">` +
+                    remindersItems.map(item => `<li style="margin:0;">${escapeHtml(item)}</li>`).join('') +
+                    `</ul>`;
 
-    // Create a preformatted text area (read-only) for plain text display
-    const pre = document.createElement('pre');
-    pre.textContent = plainText;
-    pre.style.whiteSpace = 'pre-wrap';
-    pre.style.fontFamily = 'monospace';
-    pre.style.fontSize = '13px';
-    pre.style.lineHeight = '1.5';
-    pre.style.margin = '0';
-    pre.style.padding = '12px';
-    pre.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#1e293b' : '#f8fafc';
-    pre.style.borderRadius = '12px';
-    pre.style.border = '1px solid var(--border-color)';
-    pre.style.overflowX = 'auto';
-    pre.style.maxHeight = '400px';
-    modal.appendChild(pre);
+                const staticSections = `
+                    <div><strong>5. Updates / Notices</strong></div>
+                    ${versionHtml}
+                    <div style="margin-top:8px;"></div>
+                    <div style="margin-left:25px;">Reminders for Retailz team members:</div>
+                    ${remindersListHtml}
+                    <div style="margin-top:8px;"><strong>6. Training (Retailz Members):</strong> No training for today</div>
+                    <div style="margin-top:4px;"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</div>
+                `;
 
-    const buttonRow = document.createElement('div');
-    buttonRow.style.display = 'flex';
-    buttonRow.style.justifyContent = 'flex-end';
-    buttonRow.style.gap = '8px';
-    buttonRow.style.marginTop = '16px';
+                return `
+                    <div style="font-family: sans-serif; line-height:1.4;">
+                        <div>${escapeHtml(dateLine)}</div>
+                        <div>${escapeHtml(shiftLine)}</div>
+                        <div><br></div>
+                        <div>Good day everyone,</div>
+                        <div><br></div>
+                        <div>Please find below the shift report for today,</div>
+                        <div><br></div>
+                        <div><strong>1. Pending Tickets: ${pendingCount}</strong></div>
+                        ${pendingListHtml}
+                        <div><br></div>
+                        <div><strong>2. Total Calls: ${totalCalls}</strong></div>
+                        <div><br></div>
+                        <div><br></div>
+                        <div><strong>3. Total Other Tasks: ${otherCount}</strong></div>
+                        ${otherListHtml}
+                        <div><br></div>
+                        <div><strong>4. Scheduled Training/Demo (Merchant)</strong></div>
+                        ${trainingLine}
+                        ${demoLine}
+                        <div><br></div>
+                        ${staticSections}
+                    </div>
+                `;
+            }
 
-    const copyBtn = document.createElement('button');
-    copyBtn.textContent = 'Copy to Clipboard';
-    copyBtn.style.padding = '8px 16px';
-    copyBtn.style.border = 'none';
-    copyBtn.style.borderRadius = '30px';
-    copyBtn.style.cursor = 'pointer';
-    copyBtn.style.backgroundColor = '#2563eb';
-    copyBtn.style.color = 'white';
-    copyBtn.addEventListener('click', async () => {
-        try {
-            const clipboardItems = [
-                new ClipboardItem({
-                    'text/plain': new Blob([plainText], { type: 'text/plain' }),
-                    'text/html': new Blob([htmlContent], { type: 'text/html' })
-                })
-            ];
-            await navigator.clipboard.write(clipboardItems);
-            showNotification('Report copied (rich format)!');
-        } catch (err) {
-            navigator.clipboard.writeText(plainText);
-            showNotification('Plain text copied (rich copy failed)');
-        }
-    });
+            function showShiftReportModal() {
+                const plainText = generateShiftReportPlain();
+                const htmlContent = generateShiftReportHTML();
 
-    const closeBtn = document.createElement('button');
-    closeBtn.textContent = 'Close';
-    closeBtn.style.padding = '8px 16px';
-    closeBtn.style.border = 'none';
-    closeBtn.style.borderRadius = '30px';
-    closeBtn.style.cursor = 'pointer';
-    closeBtn.style.backgroundColor = '#6b7280';
-    closeBtn.style.color = 'white';
-    closeBtn.addEventListener('click', () => {
-        document.body.removeChild(backdrop);
-        document.body.removeChild(modal);
-    });
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.top = '50%';
+                modal.style.left = '50%';
+                modal.style.transform = 'translate(-50%, -50%)';
+                modal.style.backgroundColor = '#fff';
+                modal.style.padding = '24px';
+                modal.style.borderRadius = '16px';
+                modal.style.boxShadow = '0 20px 35px -10px rgba(0,0,0,0.3)';
+                modal.style.zIndex = '1000';
+                modal.style.minWidth = '600px';
+                modal.style.maxWidth = '800px';
+                modal.style.maxHeight = '80vh';
+                modal.style.overflowY = 'auto';
+                modal.style.border = '1px solid #cdddee';
 
-    buttonRow.appendChild(copyBtn);
-    buttonRow.appendChild(closeBtn);
-    modal.appendChild(buttonRow);
+                if (document.body.classList.contains('dark-mode')) {
+                    modal.style.backgroundColor = '#2d3748';
+                    modal.style.borderColor = '#4a5568';
+                    modal.style.color = '#e2e8f0';
+                }
 
-    const backdrop = document.createElement('div');
-    backdrop.style.position = 'fixed';
-    backdrop.style.top = '0';
-    backdrop.style.left = '0';
-    backdrop.style.width = '100%';
-    backdrop.style.height = '100%';
-    backdrop.style.backgroundColor = 'rgba(0,0,0,0.5)';
-    backdrop.style.zIndex = '999';
-    backdrop.addEventListener('click', () => {
-        document.body.removeChild(backdrop);
-        document.body.removeChild(modal);
-    });
+                const title = document.createElement('h3');
+                title.textContent = 'End‑of‑Shift Report';
+                title.style.marginBottom = '16px';
+                title.style.fontSize = '1.2rem';
+                modal.appendChild(title);
 
-    document.body.appendChild(backdrop);
-    document.body.appendChild(modal);
-}
+                const pre = document.createElement('pre');
+                pre.textContent = plainText;
+                pre.style.whiteSpace = 'pre-wrap';
+                pre.style.fontFamily = 'monospace';
+                pre.style.fontSize = '13px';
+                pre.style.lineHeight = '1.5';
+                pre.style.margin = '0';
+                pre.style.padding = '12px';
+                pre.style.backgroundColor = document.body.classList.contains('dark-mode') ? '#1e293b' : '#f8fafc';
+                pre.style.borderRadius = '12px';
+                pre.style.border = '1px solid var(--border-color)';
+                pre.style.overflowX = 'auto';
+                pre.style.maxHeight = '400px';
+                modal.appendChild(pre);
+
+                const buttonRow = document.createElement('div');
+                buttonRow.style.display = 'flex';
+                buttonRow.style.justifyContent = 'flex-end';
+                buttonRow.style.gap = '8px';
+                buttonRow.style.marginTop = '16px';
+
+                const copyBtn = document.createElement('button');
+                copyBtn.textContent = 'Copy to Clipboard';
+                copyBtn.style.padding = '8px 16px';
+                copyBtn.style.border = 'none';
+                copyBtn.style.borderRadius = '30px';
+                copyBtn.style.cursor = 'pointer';
+                copyBtn.style.backgroundColor = '#2563eb';
+                copyBtn.style.color = 'white';
+                copyBtn.addEventListener('click', async () => {
+                    try {
+                        const clipboardItems = [
+                            new ClipboardItem({
+                                'text/plain': new Blob([plainText], { type: 'text/plain' }),
+                                'text/html': new Blob([htmlContent], { type: 'text/html' })
+                            })
+                        ];
+                        await navigator.clipboard.write(clipboardItems);
+                        showNotification('Report copied (rich format)!');
+                    } catch (err) {
+                        navigator.clipboard.writeText(plainText);
+                        showNotification('Plain text copied (rich copy failed)');
+                    }
+                });
+
+                const closeBtn = document.createElement('button');
+                closeBtn.textContent = 'Close';
+                closeBtn.style.padding = '8px 16px';
+                closeBtn.style.border = 'none';
+                closeBtn.style.borderRadius = '30px';
+                closeBtn.style.cursor = 'pointer';
+                closeBtn.style.backgroundColor = '#6b7280';
+                closeBtn.style.color = 'white';
+                closeBtn.addEventListener('click', () => {
+                    document.body.removeChild(backdrop);
+                    document.body.removeChild(modal);
+                });
+
+                buttonRow.appendChild(copyBtn);
+                buttonRow.appendChild(closeBtn);
+                modal.appendChild(buttonRow);
+
+                const backdrop = document.createElement('div');
+                backdrop.style.position = 'fixed';
+                backdrop.style.top = '0';
+                backdrop.style.left = '0';
+                backdrop.style.width = '100%';
+                backdrop.style.height = '100%';
+                backdrop.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                backdrop.style.zIndex = '999';
+                backdrop.addEventListener('click', () => {
+                    document.body.removeChild(backdrop);
+                    document.body.removeChild(modal);
+                });
+
+                document.body.appendChild(backdrop);
+                document.body.appendChild(modal);
+            }
 
             function updateSelectAllCheckboxState() {
                 const selectAllBar = document.getElementById('selectAllCheckbox');
@@ -3589,25 +3598,22 @@ function showShiftReportModal() {
                 });
             }
 
-function checkAndRefreshTable() {
-    const todayEST = getESTDateString();
-    const storedDate = localStorage.getItem('lastClearDate');
+            function checkAndRefreshTable() {
+                const todayEST = getESTDateString();
+                const storedDate = localStorage.getItem('lastClearDate');
 
-    if (storedDate !== todayEST) {
-        archiveOldEntries();
-        saveAllEntries();
-        renderTable();
-        renderSidebar();
-        showNotification(`New day detected. Previous entries moved to history.`);
-
-        // ✅ Add this: reload after a short delay (so user sees the notification)
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000);  // 2 seconds
-
-        localStorage.setItem('lastClearDate', todayEST);
-    }
-}
+                if (storedDate !== todayEST) {
+                    archiveOldEntries();
+                    saveAllEntries();
+                    renderTable();
+                    renderSidebar();
+                    showNotification(`New day detected. Previous entries moved to history.`);
+                    localStorage.setItem('lastClearDate', todayEST);
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 1500);
+                }
+            }
 
             function archiveOldEntries() {
                 const today = getESTDateString();
@@ -3727,8 +3733,11 @@ function checkAndRefreshTable() {
                     if (el) el.addEventListener('input', () => { ticketUpdatePreview(); saveFormData('ticket'); });
                 });
 
+                // Uppercase conversion for most inputs, but EXCLUDE ticket-issue, ticket-remarks, ticket-resolution, ticket-note
                 document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach(el => {
-                    if (el.id.includes('password')) return;
+                    if (el.id === 'ticket-issue' || el.id === 'ticket-remarks' || el.id === 'ticket-resolution' || el.id === 'ticket-note') {
+                        return;
+                    }
                     el.addEventListener('input', function() {
                         if (!this.value) return;
                         const start = this.selectionStart;
@@ -3823,34 +3832,25 @@ function checkAndRefreshTable() {
                 }
 
                 quillEditor.on('text-change', function(delta, oldDelta, source) {
-                    const plain = quillEditor.getText().trim();
                     const htmlContent = quillEditor.root.innerHTML;
-                    const upperHtml = plain.length > 0 ? uppercaseHtmlPreserveTags(htmlContent) : '';
-                    document.getElementById('ticket-resolution').value = upperHtml;
+                    document.getElementById('ticket-resolution').value = htmlContent;
                     ticketUpdatePreview();
                     saveFormData('ticket');
                 });
-// ========== IDLE-BASED AUTO-REFRESH (5 minutes inactivity, silent) ==========
-    const IDLE_REFRESH_DELAY = 900000; // 15 minutes
-    let idleTimeout;
 
-    function idleReload() {
-        window.location.reload();
-    }
-
-    function resetIdleTimer() {
-        if (idleTimeout) clearTimeout(idleTimeout);
-        idleTimeout = setTimeout(idleReload, IDLE_REFRESH_DELAY);
-    }
-
-    // User activity events that reset the timer
-    const activityEvents = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click', 'focusin', 'input'];
-    activityEvents.forEach(eventName => {
-        window.addEventListener(eventName, resetIdleTimer, { passive: true });
-    });
-
-    // Start the initial timer
-    resetIdleTimer();
+                // Idle-based auto-refresh (15 minutes inactivity, silent)
+                const IDLE_REFRESH_DELAY = 1800000;
+                let idleTimeout;
+                function idleReload() { window.location.reload(); }
+                function resetIdleTimer() {
+                    if (idleTimeout) clearTimeout(idleTimeout);
+                    idleTimeout = setTimeout(idleReload, IDLE_REFRESH_DELAY);
+                }
+                const activityEvents = ['mousedown', 'mousemove', 'keydown', 'scroll', 'touchstart', 'click', 'focusin', 'input'];
+                activityEvents.forEach(eventName => {
+                    window.addEventListener(eventName, resetIdleTimer, { passive: true });
+                });
+                resetIdleTimer();
             }
 
             window.switchTab = switchTab;
@@ -3867,7 +3867,5 @@ function checkAndRefreshTable() {
             document.addEventListener('DOMContentLoaded', init);
         })();
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </body>
 </html>
