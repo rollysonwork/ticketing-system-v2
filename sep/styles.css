@@ -117,7 +117,7 @@ body {
 .sidebar-header h3 {
   font-size: 0.9rem;
   font-weight: 600;
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   letter-spacing: 0.05em;
   color: var(--accent-color);
   margin: 0;
