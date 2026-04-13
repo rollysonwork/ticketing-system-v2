@@ -2994,8 +2994,11 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
 
                 const csvContent = selectedRows.map(row => [
                     row.date, row.shift, row.support, row.portal, row.store, row.zip,
-                    row.contact, row.contactNumber, row.module, row.issue,
-                    row.escalated, row.status, row.remarks,
+                    row.contact, row.contactNumber, row.module,
+                    (row.issue || '').toUpperCase(),
+                    (row.escalated || '').toUpperCase(),
+                    (row.status || '').toUpperCase(),
+                    (row.remarks || '').toUpperCase(),
                     (row.resolution || '').toUpperCase()
                 ].map(field => escapeCSV(String(field ?? ''))).join('\t')).join('\n');
 
