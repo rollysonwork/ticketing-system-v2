@@ -2095,10 +2095,19 @@
                 addBtn.disabled = true;
 
                 let resolution = '';
-                if (troubleshooting.trim()) {
+                // Only summarize if this is a NEW entry (not editing)
+                if (!editId && troubleshooting.trim()) {
                     const plainText = troubleshooting.replace(/<[^>]*>/g, '');
                     const summary = await summarizeText(plainText);
                     if (summary) resolution = summary;
+                } else if (editId) {
+                    // For editing, keep the existing resolution from the entry being edited
+                    const existingEntry = allEntries.find(e => e.id === editId);
+                    if (existingEntry) {
+                        resolution = existingEntry.resolution || '';
+                    } else {
+                        resolution = document.getElementById('ticket-resolution').value || '';
+                    }
                 }
 
                 addBtn.textContent = originalBtnText;
