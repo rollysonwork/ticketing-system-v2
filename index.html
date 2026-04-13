@@ -2682,7 +2682,7 @@ UPLOAD DATABASE - DONE✅`;
                             if (!isDateCollapsed) {
                                 html += `<div class="date-entries">`;
                                 dates[dateKey].forEach(entry => {
-                                    let issueDisplay = entry.issue || '-';
+                                    let issueDisplay = (entry.issue || '-').toUpperCase();
                                     if (entry.status && entry.status.toUpperCase() === 'OTHER TASK') {
                                         issueDisplay = entry.module || 'OTHER TASK';
                                     }
