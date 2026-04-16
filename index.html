@@ -589,12 +589,15 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 16px;
+            table-layout: fixed;
         }
 
         .left-panel table td {
             padding: 8px 4px;
             border: none;
             vertical-align: top;
+            word-break: break-word;
+            overflow-wrap: break-word;
         }
 
         .left-panel table td:first-child {
@@ -864,9 +867,14 @@
         }
         .ql-editor {
             min-height: 120px;
+            max-width: 100%;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            white-space: pre-wrap;
         }
         #ticket-resolution-editor .ql-editor {
             text-transform: none;
+            white-space: pre-wrap;
         }
 
         @media (max-width: 900px) {
@@ -975,8 +983,10 @@
             background-image: var(--logo-vitreous-retailz-ticket);
         }
     </style>
-    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <!-- <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet"> -->
+    <!-- <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 </head>
 <body>
     <h1>
@@ -1014,7 +1024,7 @@
                             <div id="ticket-searchResults" class="search-results"></div>
                             <div id="ticket-loadStatus" class="load-status"></div>
                         </div>
-                        <table>
+                        <table class="ticket-table-info">
                             <tr><th>DATE</th><td><input type="date" id="ticket-date"></td></tr>
                             <tr><th>SHIFT SCHEDULE</th><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
                             <tr><th>SUPPORT NAME</th><td><input type="text" id="ticket-support"></td></tr>
@@ -1078,7 +1088,7 @@
                             <div id="store-searchResults" class="search-results"></div>
                             <div id="store-loadStatus" class="load-status"></div>
                         </div>
-                        <table>
+                        <table class="ticket-table-info">
                             <tr><th>DATE</th><td><input type="date" id="store-date" readonly></td></tr>
                             <tr><th>SHIFT SCHEDULE</th><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
                             <tr><th>SUPPORT NAME</th><td><input type="text" id="store-support" readonly></td></tr>
@@ -1143,7 +1153,7 @@
                             <div id="moolah-searchResults" class="search-results"></div>
                             <div id="moolah-loadStatus" class="load-status"></div>
                         </div>
-                        <table>
+                        <table class="ticket-table-info">
                             <tr><th>DATE</th><td><input type="date" id="moolah-date" readonly></td></tr>
                             <tr><th>SHIFT SCHEDULE</th><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
                             <tr><th>SUPPORT NAME</th><td><input type="text" id="moolah-support" readonly></td></tr>
