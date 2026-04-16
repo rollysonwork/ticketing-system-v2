@@ -1158,7 +1158,7 @@
                             <tr><th>ANYDESK ID</th><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
                         </table>
                         <div class="button-row">
-                            <button class="add" onclick="addEntry('moolah')"><i class="bi bi-plus"></i>ADD ENTRY</button>
+                            <button class="add" onclick="addEntry('moolah')"><i class="bi bi-plus-circle-fill"></i>ADD ENTRY</button>
                             <button class="form-clear-btn" onclick="clearFormOnly('moolah')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
                             <button class="clock" onclick="clock('IN', 'moolah')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
                             <button class="clock" onclick="clock('OUT', 'moolah')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
@@ -1596,7 +1596,7 @@
                     storeData.sort((a, b) => a.storeName.localeCompare(b.storeName));
 
                     Object.values(statusEls).forEach(el => {
-                        if (el) el.innerHTML = `<span class="success">✅ Loaded ${storeData.length} stores successfully!</span>`;
+                        if (el) el.innerHTML = `<span class="success"><i class="success bg-success bi bi-check-square"></i> Loaded ${storeData.length} stores successfully!</span>`;
                     });
                     clearSearchResults();
                     showNotification(`Loaded ${storeData.length} stores`);
