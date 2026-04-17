@@ -81,9 +81,8 @@
         display: flex;
         gap: 24px;
         align-items: flex-start;
-        max-width: 100% !important;
+        max-width: 1600px;
         margin: 0 auto;
-        padding: 0 12px;
       }
     
       .sidebar {
@@ -108,9 +107,14 @@
         will-change: opacity, transform;
       }
     
-      /* Keep sidebar always visible – hidden class removed or unused */
       .sidebar.hidden {
-        display: none; /* fallback, but toggle button removed so never triggered */
+        flex: 0 0 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        opacity: 0 !important;
+        transform: scale(0.95) !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
       }
     
       .sidebar-header {
@@ -297,9 +301,6 @@
         transition:
           flex 0.2s ease,
           margin-left 0.2s ease;
-        width: 100%;
-        overflow-x: auto;
-        padding: 0;
       }
     
       h1 {
@@ -340,9 +341,23 @@
         flex-wrap: wrap;
       }
     
-      /* Sidebar toggle button removed – keep style if any reference remains */
       .sidebar-toggle-tab {
-        display: none; /* Hide any leftover toggle button */
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        font-size: 1.2rem;
+        cursor: pointer;
+        padding: 8px 12px;
+        border-radius: 40px;
+        transition: var(--transition);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.01em;
+        color: var(--text-secondary);
+      }
+    
+      .sidebar-toggle-tab:hover {
+        background: var(--accent-soft);
+        transform: translateY(-2px);
       }
     
       .tab-buttons {
@@ -397,36 +412,31 @@
         }
       }
     
-      /* Container for left/right panels – full width, flexible */
       .container {
         display: flex;
         gap: 24px;
         align-items: flex-start;
         flex-wrap: wrap;
-        width: 100%;
       }
     
-      /* Extended panel widths */
-      .left-panel {
-        flex: 2;
-        min-width: 400px;
+      .left-panel,
+      .right-panel {
         background: var(--bg-secondary);
         border-radius: 20px;
         padding: 24px;
         box-shadow: var(--card-shadow);
         border: 1px solid var(--border-color);
         transition: var(--transition);
+      }
+    
+      .left-panel {
+        flex: 1.1;
+        min-width: 380px;
       }
     
       .right-panel {
-        flex: 1.2;
-        min-width: 320px;
-        background: var(--bg-secondary);
-        border-radius: 20px;
-        padding: 24px;
-        box-shadow: var(--card-shadow);
-        border: 1px solid var(--border-color);
-        transition: var(--transition);
+        flex: 1;
+        min-width: 280px;
         position: sticky;
         top: 24px;
         max-height: calc(100vh - 140px);
@@ -650,7 +660,7 @@
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 16px;
-        table-layout: auto;
+        table-layout: fixed;
       }
     
       .left-panel table td {
@@ -771,7 +781,6 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
     
-      /* === STICKY BULK BAR === */
       .bulk-bar {
         display: flex;
         gap: 12px;
@@ -783,16 +792,6 @@
         background: var(--bg-secondary);
         border-radius: 40px;
         border: 1px solid var(--border-color);
-        position: sticky;
-        top: 0;
-        z-index: 1020;
-        backdrop-filter: blur(4px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), var(--card-shadow);
-        transition: box-shadow 0.2s ease, background 0.2s ease;
-      }
-    
-      html {
-        scroll-padding-top: 80px;
       }
     
       .bulk-bar label {
@@ -853,7 +852,6 @@
         border-color: #8b5cf6;
       }
     
-      /* === FULL WIDTH DATABASE TABLE === */
       #entryTable {
         width: 100%;
         border-collapse: collapse;
@@ -862,8 +860,6 @@
         border-radius: 16px;
         overflow: hidden;
         box-shadow: var(--card-shadow);
-        table-layout: auto;
-        min-width: 1000px;
       }
     
       #entryTable th {
@@ -1025,16 +1021,6 @@
           padding: 8px 16px;
           font-size: 12px;
         }
-        .bulk-bar {
-          flex-wrap: wrap;
-          gap: 10px;
-          padding: 12px 16px;
-          top: 0;
-        }
-        .bulk-bar button,
-        .bulk-bar label {
-          flex: 0 0 auto;
-        }
       }
     
       .no-uppercase {
@@ -1114,12 +1100,6 @@
     
       .icon-ticket {
         background-image: var(--logo-vitreous-retailz-ticket);
-      }
-    
-      /* Dark mode consistency for sticky bar */
-      body.dark-mode .bulk-bar {
-        background: var(--bg-secondary);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
       }
     </style>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
