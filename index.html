@@ -1207,19 +1207,56 @@
                         </div>
                         <table>
                             <tr><th>DATE</th><td><input type="date" id="store-date" readonly></td></tr>
-                            <tr><th>SHIFT SCHEDULE</th><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                            <tr><th>SUPPORT NAME</th><td><input type="text" id="store-support" readonly></td></tr>
-                            <tr><th>PORTAL NUMBER *</th><td><input type="text" id="store-portal" class="required-field"></td></tr>
-                            <tr><th>STORE NAME *</th><td><input type="text" id="store-storeName" class="required-field"></td></tr>
-                            <tr><th>ZIP CODE *</th><td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td></tr>
-                            <tr><th>AGENT</th><td><input type="text" id="store-agent"></td></tr>
-                            <tr><th>EMAIL ID</th><td><input type="email" id="store-email" class="no-uppercase"></td></tr>
-                            <tr><th>PASSWORD</th><td><input type="text" id="store-password" class="no-uppercase"></td></tr>
-                            <tr><th>SKU</th><td><input type="text" id="store-sku"></td></tr>
-                            <tr><th>DATABASE</th><td><input type="text" id="store-database"></td></tr>
-                            <tr><th>NO OF REG.</th><td><input type="number" id="store-noOfReg"></td></tr>
-                            <tr><th>MOKI ID</th><td><textarea id="store-mokiId" rows="2"></textarea></td></tr>
-                            <tr><th>ANYDESK ID</th><td><textarea id="store-anydeskId" rows="2"></textarea></td></tr>
+                            <tr><th>SHIFT SCHEDULE</th><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
+                            </tr>
+                            <tr>
+                                <th>SUPPORT NAME</th>
+                                <td><input type="text" id="store-support" readonly></td>
+                            </tr>
+                            <tr>
+                                <th>PORTAL NUMBER *</th>
+                                <td><input type="text" id="store-portal" class="required-field"></td>
+                            </tr>
+                            <tr>
+                                <th>STORE NAME *</th>
+                                <td><input type="text" id="store-storeName" class="required-field"></td>
+                            </tr>
+                            <tr>
+                                <th>ZIP CODE *</th>
+                                <td><input type="text" id="store-zipcode" maxlength="5" class="required-field"></td>
+                            </tr>
+                            <tr>
+                                <th>AGENT</th>
+                                <td><input type="text" id="store-agent"></td>
+                            </tr>
+                            <tr>
+                                <th>EMAIL ID</th>
+                                <td><input type="email" id="store-email" class="no-uppercase"></td>
+                            </tr>
+                            <tr>
+                                <th>PASSWORD</th>
+                                <td><input type="text" id="store-password" class="no-uppercase"></td>
+                            </tr>
+                            <tr>
+                                <th>SKU</th>
+                                <td><input type="text" id="store-sku"></td>
+                            </tr>
+                            <tr>
+                                <th>DATABASE</th>
+                                <td><input type="text" id="store-database"></td>
+                            </tr>
+                            <tr>
+                                <th>NO OF REG.</th>
+                                <td><input type="number" id="store-noOfReg"></td>
+                            </tr>
+                            <tr>
+                                <th>MOKI ID</th>
+                                <td><textarea id="store-mokiId" rows="2"></textarea></td>
+                            </tr>
+                            <tr>
+                                <th>ANYDESK ID</th>
+                                <td><textarea id="store-anydeskId" rows="2"></textarea></td>
+                            </tr>
                         </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('store')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
@@ -1271,18 +1308,54 @@
                             <div id="moolah-loadStatus" class="load-status"></div>
                         </div>
                         <table>
-                            <tr><th>DATE</th><td><input type="date" id="moolah-date" readonly></td></tr>
-                            <tr><th>SHIFT SCHEDULE</th><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td></tr>
-                            <tr><th>SUPPORT NAME</th><td><input type="text" id="moolah-support" readonly></td></tr>
-                            <tr><th>PORTAL NUMBER *</th><td><input type="text" id="moolah-portal" class="required"></td></tr>
-                            <tr><th>STORE NAME *</th><td><input type="text" id="moolah-storeName" class="required"></td></tr>
-                            <tr><th>ZIP CODE *</th><td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td></tr>
-                            <tr><th>EMAIL ID</th><td><input type="email" id="moolah-email" class="no-uppercase"></td></tr>
-                            <tr><th>PASSWORD</th><td><input type="text" id="moolah-password" class="no-uppercase"></td></tr>
-                            <tr><th>NO OF TABS</th><td><input type="number" id="moolah-noOfTabs"></td></tr>
-                            <tr><th>SKU (6 DIGITS)</th><td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td></tr>
-                            <tr><th>MOKI ID</th><td><textarea id="moolah-mokiId" rows="2"></textarea></td></tr>
-                            <tr><th>ANYDESK ID</th><td><textarea id="moolah-anydeskId" rows="2"></textarea></td></tr>
+                            <tr>
+                                <th>DATE</th>
+                                <td><input type="date" id="moolah-date" readonly></td>
+                            </tr>
+                            <tr>
+                                <th>SHIFT SCHEDULE</th>
+                                <td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option></select></td>
+                            </tr>
+                            <tr>
+                                <th>SUPPORT NAME</th>
+                                <td><input type="text" id="moolah-support" readonly></td>
+                            </tr>
+                            <tr>
+                                <th>PORTAL NUMBER *</th>
+                                <td><input type="text" id="moolah-portal" class="required"></td>
+                            </tr>
+                            <tr>
+                                <th>STORE NAME *</th>
+                                <td><input type="text" id="moolah-storeName" class="required"></td>
+                            </tr>
+                            <tr>
+                                <th>ZIP CODE *</th>
+                                <td><input type="text" id="moolah-zipcode" maxlength="5" class="required"></td>
+                            </tr>
+                            <tr>
+                                <th>EMAIL ID</th>
+                                <td><input type="email" id="moolah-email" class="no-uppercase"></td>
+                            </tr>
+                            <tr>
+                                <th>PASSWORD</th>
+                                <td><input type="text" id="moolah-password" class="no-uppercase"></td>
+                            </tr>
+                            <tr>
+                                <th>NO OF TABS</th>
+                                <td><input type="number" id="moolah-noOfTabs"></td>
+                            </tr>
+                            <tr>
+                                <th>SKU (6 DIGITS)</th>
+                                <td><input type="text" id="moolah-sku" maxlength="6" inputmode="numeric"></td>
+                            </tr>
+                            <tr>
+                                <th>MOKI ID</th>
+                                <td><textarea id="moolah-mokiId" rows="2"></textarea></td>
+                            </tr>
+                            <tr>
+                                <th>ANYDESK ID</th>
+                                <td><textarea id="moolah-anydeskId" rows="2"></textarea></td>
+                            </tr>
                         </table>
                         <div class="button-row">
                             <button class="add" onclick="addEntry('moolah')"><i class="bi bi-plus"></i>ADD ENTRY</button>
@@ -1377,6 +1450,7 @@
                 GOOGLE_SHEET_ID: '1IDsVjZrWCP0hXRn_EufLNgpOMtYFtV6jVZx9P5rvbcA',
                 SHEET_NAME: 'SERVER MANAGEMENT',
                 PORTAL_COL: 0,
+                SKU_COL: 1,              // Column B (0-indexed)
                 STORE_NAME_COL: 2,
                 ZIP_CODE_COL: 3,
                 STATUS_COL: 11,
@@ -1704,6 +1778,7 @@
                     for (let i = 1; i < data.values.length; i++) {
                         const row = data.values[i];
                         const portal = (row[CONFIG.PORTAL_COL] || '').toString().trim();
+                        const sku = (row[CONFIG.SKU_COL] || '').toString().trim();
                         const storeName = (row[CONFIG.STORE_NAME_COL] || '').toString().trim();
                         const zipCode = (row[CONFIG.ZIP_CODE_COL] || '').toString().trim();
                         let status = (row[CONFIG.STATUS_COL] || '').toString().trim().toUpperCase();
@@ -1714,6 +1789,7 @@
 
                         storeData.push({
                             portal: portal || 'N/A',
+                            sku: sku || '',
                             storeName: storeName.toUpperCase() || 'UNKNOWN STORE',
                             zipCode: zipCode || 'N/A',
                             status,
@@ -1799,6 +1875,7 @@
                                 <div class="result-details">
                                     <span>📌 PORTAL ${store.portal || 'N/A'}</span>
                                     <span class="result-zip">📍 ${store.zipCode || 'N/A'}</span>
+                                    ${store.sku ? `<span class="result-sku">🏷️ SKU ${store.sku}</span>` : ''}
                                 </div>
                             </div>
                         </div>
@@ -1816,12 +1893,14 @@
                     document.getElementById('moolah-portal').value = store.portal;
                     document.getElementById('moolah-storeName').value = store.storeName;
                     document.getElementById('moolah-zipcode').value = store.zipCode;
+                    document.getElementById('moolah-sku').value = store.sku || '';
                     moolahUpdatePreview();
                     saveFormData('moolah');
                 } else if (prefix === 'store') {
                     document.getElementById('store-portal').value = store.portal;
                     document.getElementById('store-storeName').value = store.storeName;
                     document.getElementById('store-zipcode').value = store.zipCode;
+                    document.getElementById('store-sku').value = store.sku || '';
                     storeUpdatePreview();
                     saveFormData('store');
                 } else if (prefix === 'ticket') {
@@ -2112,7 +2191,7 @@
                             body: JSON.stringify({
                                 contents: [{
                                     parts: [{
-                                        text: `Summarize the following step‑by‑step troubleshooting steps into two to three clear & concise sentences. Keep it professional . Only output the summarized sentences.\n\n${text}`
+                                        text: `Summarize briefly:\n${text}`
                                     }]
                                 }]
                             })
@@ -2221,18 +2300,35 @@
                 addBtn.disabled = true;
 
                 let resolution = '';
-                // Only summarize if this is a NEW entry (not editing)
-                if (!editId && troubleshooting.trim()) {
-                    const plainText = troubleshooting.replace(/<[^>]*>/g, '');
-                    const summary = await summarizeText(plainText);
-                    if (summary) resolution = summary;
-                } else if (editId) {
-                    // For editing, keep the existing resolution from the entry being edited
+
+                if (editId) {
+                    // Editing existing entry
                     const existingEntry = allEntries.find(e => e.id === editId);
                     if (existingEntry) {
-                        resolution = existingEntry.resolution || '';
+                        const oldTroubleshooting = existingEntry.troubleshooting || '';
+                        const newTroubleshooting = troubleshooting;
+                        if (oldTroubleshooting === newTroubleshooting) {
+                            // No change → reuse existing summary
+                            resolution = existingEntry.resolution || '';
+                            showNotification('Resolution unchanged → summary reused');
+                        } else {
+                            // Changed → call Gemini
+                            const plainText = newTroubleshooting.replace(/<[^>]*>/g, '');
+                            const summary = await summarizeText(plainText);
+                            if (summary) resolution = summary;
+                            else resolution = existingEntry.resolution || '';
+                            showNotification('Resolution changed → new summary generated');
+                        }
                     } else {
+                        // Fallback (should not happen)
                         resolution = document.getElementById('ticket-resolution').value || '';
+                    }
+                } else {
+                    // New entry
+                    if (troubleshooting.trim()) {
+                        const plainText = troubleshooting.replace(/<[^>]*>/g, '');
+                        const summary = await summarizeText(plainText);
+                        if (summary) resolution = summary;
                     }
                 }
 
@@ -2722,9 +2818,9 @@ UPLOAD DATABASE - DONE✅`;
                                              <td>${entry.contactNumber}</td>
                                              <td>${entry.module}</td>
                                     <td style="white-space: pre-wrap;">${(entry.issue || '').toUpperCase()}</td>
-                                             <td>${entry.escalated}</td>
-                                             <td>${entry.status}</td>
-                                             <td>${(entry.remarks || '').toUpperCase()}</td>
+                                    <td>${entry.escalated}</td>
+                                    <td>${entry.status}</td>
+                                    <td>${(entry.remarks || '').toUpperCase()}</td>
                                     <td style="white-space: pre-wrap;">${(entry.resolution || '').toUpperCase()}</td>
                                     <td class="action-cell">
                                         <div class="action-container">
@@ -2733,7 +2829,7 @@ UPLOAD DATABASE - DONE✅`;
                                             <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
                                             <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
                                         </div>
-                                        </td>`;
+                                    </td>`;
                     tbody.appendChild(row);
                 });
                 updateSelectAllCheckboxState();
@@ -2822,17 +2918,13 @@ UPLOAD DATABASE - DONE✅`;
                                         issueDisplay = entry.module || 'OTHER TASK';
                                     }
 
-                                    // Determine card class based on entry source/module
-                                    let cardClass = 'ticket-card';
+                                    let cardClass = 'ticket-card'; // default
                                     if (entry.source === 'store') {
                                         cardClass = 'store-card';
                                     } else if (entry.source === 'moolah') {
                                         cardClass = 'moolah-card';
-                                    } else if (entry.module === 'Moolah') {
-                                        cardClass = 'moolah-card';
-                                    } else if (entry.module === 'Store Creation') {
-                                        cardClass = 'store-card';
                                     }
+                                    // No module fallback – source is always defined after migration
 
                                     html += `
                                         <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
@@ -2868,7 +2960,6 @@ UPLOAD DATABASE - DONE✅`;
 
                 container.innerHTML = html;
 
-                // DETAILS button: copy rich (HTML) + plain text
                 container.querySelectorAll('.copy-store').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         e.stopPropagation();
@@ -2917,7 +3008,6 @@ ${escapeHtml(entry.note || '').replace(/\n/g, '<br>')}`;
                     });
                 });
 
-                // HRMS button: improved plain text with indentation for nested lists
                 container.querySelectorAll('.copy-details').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         e.stopPropagation();
@@ -3075,40 +3165,38 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
                 renderSidebar();
             }
 
-            function getVisibleEntries() {
-                const todayEST = getESTDateString();
-                return allEntries.filter(entry => {
-                    if (entry.deleted) return false;
-                    const dateObj = parseDateFromString(entry.date);
-                    if (!dateObj) return false;
-                    const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}-${String(dateObj.getDate()).padStart(2,'0')}`;
-                    return entryDateStr <= todayEST;
-                });
-            }
-
-            function getSelectedRowIds() {
-                const checkboxes = document.querySelectorAll('#entryTable tbody .row-checkbox:checked');
-                return Array.from(checkboxes).map(cb => cb.value);
-            }
-
-            function bulkDelete() {
-                const ids = getSelectedRowIds();
-                if (ids.length === 0) {
-                    showNotification('No rows selected');
-                    return;
+            function loadAllEntries() {
+                const saved = localStorage.getItem('unifiedEntries');
+                if (saved) {
+                    try {
+                        allEntries = JSON.parse(saved);
+                        let needsSave = false;
+                        allEntries.forEach(entry => {
+                            // Ensure all required fields exist
+                            if (entry.troubleshooting === undefined) entry.troubleshooting = entry.resolution || '';
+                            if (entry.resolution === undefined && entry.originalResolution) entry.resolution = entry.originalResolution;
+                            if (entry.deleted === undefined) entry.deleted = false;
+                            if (entry.imported === undefined) entry.imported = false;
+                            if (entry.note === undefined) entry.note = '';
+                            
+                            // 🆕 Migration: add source based on module if missing
+                            if (entry.source === undefined) {
+                                needsSave = true;
+                                if (entry.module === 'Moolah') {
+                                    entry.source = 'moolah';
+                                } else if (entry.module === 'Store Creation') {
+                                    entry.source = 'store';
+                                } else {
+                                    entry.source = 'ticket';
+                                }
+                            }
+                        });
+                        if (needsSave) saveAllEntries();
+                    } catch (e) { }
                 }
-                if (!confirm(`Remove ${ids.length} selected entries from main table? They will remain in history.`)) return;
-                pushUndo();
-                ids.forEach(id => {
-                    const entry = allEntries.find(e => e.id == id);
-                    if (entry) entry.deleted = true;
-                });
-                saveAllEntries();
                 renderTable();
                 renderSidebar();
-                showNotification(`${ids.length} entries hidden from main table (still in history)`);
             }
-
             function bulkCopy() {
                 const ids = getSelectedRowIds();
                 if (ids.length === 0) {
