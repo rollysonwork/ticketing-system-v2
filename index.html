@@ -2808,19 +2808,19 @@ UPLOAD DATABASE - DONE✅`;
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
                     row.innerHTML = `<td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-                                             <td>${entry.date}</td>
-                                             <td>${entry.shift}</td>
-                                             <td>${entry.support}</td>
-                                             <td>${entry.portal}</td>
-                                             <td>${entry.store}</td>
-                                             <td>${entry.zip}</td>
-                                             <td>${entry.contact}</td>
-                                             <td>${entry.contactNumber}</td>
-                                             <td>${entry.module}</td>
+                                     <td>${entry.date}</td>
+                                     <td>${entry.shift}</td>
+                                     <td>${entry.support}</td>
+                                     <td>${entry.portal}</td>
+                                     <td>${entry.store}</td>
+                                     <td>${entry.zip}</td>
+                                     <td>${entry.contact}</td>
+                                     <td>${entry.contactNumber}</td>
+                                     <td>${entry.module}</td>
                                     <td style="white-space: pre-wrap;">${(entry.issue || '').toUpperCase()}</td>
-                                    <td>${entry.escalated}</td>
-                                    <td>${entry.status}</td>
-                                    <td>${(entry.remarks || '').toUpperCase()}</td>
+                                     <td>${entry.escalated}</td>
+                                     <td>${entry.status}</td>
+                                     <td>${(entry.remarks || '').toUpperCase()}</td>
                                     <td style="white-space: pre-wrap;">${(entry.resolution || '').toUpperCase()}</td>
                                     <td class="action-cell">
                                         <div class="action-container">
@@ -2850,6 +2850,47 @@ UPLOAD DATABASE - DONE✅`;
 
             function saveCollapseState() {
                 localStorage.setItem('sidebarCollapseState', JSON.stringify({ months: collapseState.months, dates: collapseState.dates }));
+            }
+
+            // Helper: get the working date key (today - 1) in the same format used in sidebar dates
+            function getWorkingDateKey() {
+                const today = new Date();
+                today.setDate(today.getDate() - 1);
+                return today.toLocaleDateString('en-US', {
+                    month: 'long',
+                    day: 'numeric',
+                    year: 'numeric'
+                });
+            }
+
+            // Reset sidebar collapse state: only working date expanded, others collapsed
+            function resetSidebarCollapseState() {
+                // Collect all date keys from existing non-imported entries
+                const dateKeys = new Set();
+                allEntries.forEach(entry => {
+                    if (!entry.date || entry.imported) return;
+                    const parts = entry.date.split('/');
+                    if (parts.length !== 3) return;
+                    const month = parseInt(parts[0], 10);
+                    const day = parseInt(parts[1], 10);
+                    const year = parseInt(parts[2], 10);
+                    const dateObj = new Date(year, month - 1, day);
+                    const dateKey = dateObj.toLocaleDateString('en-US', {
+                        month: 'long',
+                        day: 'numeric',
+                        year: 'numeric'
+                    });
+                    dateKeys.add(dateKey);
+                });
+
+                const workingKey = getWorkingDateKey();
+                // Reset: all dates collapsed by default, except the working date
+                dateKeys.forEach(key => {
+                    collapseState.dates[key] = (key !== workingKey);
+                });
+                // Optionally keep months expanded (or reset if you want)
+                // collapseState.months = {}; // uncomment if you want months collapsed too
+                saveCollapseState();
             }
 
             window.toggleMonth = function(monthKey) {
@@ -2918,13 +2959,13 @@ UPLOAD DATABASE - DONE✅`;
                                         issueDisplay = entry.module || 'OTHER TASK';
                                     }
 
+                                    // Determine card class based on entry.source only (no module fallback)
                                     let cardClass = 'ticket-card'; // default
                                     if (entry.source === 'store') {
                                         cardClass = 'store-card';
                                     } else if (entry.source === 'moolah') {
                                         cardClass = 'moolah-card';
                                     }
-                                    // No module fallback – source is always defined after migration
 
                                     html += `
                                         <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
@@ -3152,34 +3193,14 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
                 if (saved) {
                     try {
                         allEntries = JSON.parse(saved);
-                        allEntries.forEach(entry => {
-                            if (entry.troubleshooting === undefined) entry.troubleshooting = entry.resolution || '';
-                            if (entry.resolution === undefined && entry.originalResolution) entry.resolution = entry.originalResolution;
-                            if (entry.deleted === undefined) entry.deleted = false;
-                            if (entry.imported === undefined) entry.imported = false;
-                            if (entry.note === undefined) entry.note = '';
-                        });
-                    } catch (e) { }
-                }
-                renderTable();
-                renderSidebar();
-            }
-
-            function loadAllEntries() {
-                const saved = localStorage.getItem('unifiedEntries');
-                if (saved) {
-                    try {
-                        allEntries = JSON.parse(saved);
                         let needsSave = false;
                         allEntries.forEach(entry => {
-                            // Ensure all required fields exist
                             if (entry.troubleshooting === undefined) entry.troubleshooting = entry.resolution || '';
                             if (entry.resolution === undefined && entry.originalResolution) entry.resolution = entry.originalResolution;
                             if (entry.deleted === undefined) entry.deleted = false;
                             if (entry.imported === undefined) entry.imported = false;
                             if (entry.note === undefined) entry.note = '';
-                            
-                            // 🆕 Migration: add source based on module if missing
+                            // Migration: add source based on module if missing
                             if (entry.source === undefined) {
                                 needsSave = true;
                                 if (entry.module === 'Moolah') {
@@ -3194,9 +3215,46 @@ ${escapeHtml(formattedResolution).replace(/\n/g, '<br>')}
                         if (needsSave) saveAllEntries();
                     } catch (e) { }
                 }
+                // Reset sidebar collapse state (only working date expanded) after loading entries
+                resetSidebarCollapseState();
                 renderTable();
                 renderSidebar();
             }
+
+            function getVisibleEntries() {
+                const todayEST = getESTDateString();
+                return allEntries.filter(entry => {
+                    if (entry.deleted) return false;
+                    const dateObj = parseDateFromString(entry.date);
+                    if (!dateObj) return false;
+                    const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}-${String(dateObj.getDate()).padStart(2,'0')}`;
+                    return entryDateStr <= todayEST;
+                });
+            }
+
+            function getSelectedRowIds() {
+                const checkboxes = document.querySelectorAll('#entryTable tbody .row-checkbox:checked');
+                return Array.from(checkboxes).map(cb => cb.value);
+            }
+
+            function bulkDelete() {
+                const ids = getSelectedRowIds();
+                if (ids.length === 0) {
+                    showNotification('No rows selected');
+                    return;
+                }
+                if (!confirm(`Remove ${ids.length} selected entries from main table? They will remain in history.`)) return;
+                pushUndo();
+                ids.forEach(id => {
+                    const entry = allEntries.find(e => e.id == id);
+                    if (entry) entry.deleted = true;
+                });
+                saveAllEntries();
+                renderTable();
+                renderSidebar();
+                showNotification(`${ids.length} entries hidden from main table (still in history)`);
+            }
+
             function bulkCopy() {
                 const ids = getSelectedRowIds();
                 if (ids.length === 0) {
