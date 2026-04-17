@@ -1141,6 +1141,7 @@
 
         <div class="main-content">
             <div class="tab-container">
+                <button class="sidebar-toggle-tab" id="sidebarToggleTabBtn" title="Toggle sidebar">◀</button>
                 <div class="tab-buttons">
                     <button class="tab-button active" onclick="switchTab('ticket', this)"><i class="icon-custom icon-ticket"></i> TICKET CREATION</button>
                     <button class="tab-button" onclick="switchTab('store', this)"><i class="icon-custom icon-retailz"></i> STORE CREATION</button>
@@ -4196,6 +4197,23 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
                     localStorage.setItem('lastClearDate', getESTDateString());
                 }
                 setInterval(checkAndRefreshTable, 60000);
+
+                const sidebar = document.getElementById('ticketSidebar');
+                const toggleBtn = document.getElementById('sidebarToggleTabBtn');
+                const savedSidebarState = localStorage.getItem('sidebarHidden');
+                if (savedSidebarState === 'true') {
+                    sidebar.classList.add('hidden');
+                    toggleBtn.textContent = '▶';
+                } else {
+                    toggleBtn.textContent = '◀';
+                }
+                toggleBtn.addEventListener('click', () => {
+                    const isHidden = sidebar.classList.toggle('hidden');
+                    localStorage.setItem('sidebarHidden', isHidden);
+                    toggleBtn.textContent = isHidden ? '▶' : '◀';
+                    setTimeout(() => syncPreviewHeight(), 200);
+                });
+
                 loadCollapseState();
 
                 quillEditor = new Quill('#ticket-resolution-editor', {
