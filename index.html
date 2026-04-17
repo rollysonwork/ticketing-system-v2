@@ -295,12 +295,32 @@
         border-color: var(--accent-color);
       }
     
+      /* ========== MAIN CONTENT FULL WIDTH ========== */
       .main-content {
         flex: 1;
         min-width: 0;
-        transition:
-          flex 0.2s ease,
-          margin-left 0.2s ease;
+        width: 100%;
+        max-width: 100%;
+        transition: flex 0.2s ease, margin-left 0.2s ease;
+      }
+    
+      /* ========== FLOATING BULK BAR (STICKY) ========== */
+      .bulk-bar {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: var(--bg-secondary);
+        backdrop-filter: blur(4px);
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 1rem;
+        padding: 12px 16px;
+        border-radius: 60px;
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        box-shadow: var(--card-shadow);
       }
     
       h1 {
@@ -781,77 +801,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
     
-      .bulk-bar {
-        display: flex;
-        gap: 12px;
-        align-items: center;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin: 24px 0;
-        padding: 12px 16px;
-        background: var(--bg-secondary);
-        border-radius: 40px;
-        border: 1px solid var(--border-color);
-      }
-    
-      .bulk-bar label {
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        cursor: pointer;
-        white-space: nowrap;
-        color: var(--text-secondary);
-      }
-    
-      .bulk-bar button {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 30px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: var(--transition);
-        background: var(--bg-tertiary);
-        color: var(--text-secondary);
-        display: inline-flex;
-        align-items: center;
-        gap: 4px;
-        text-transform: uppercase;
-        font-size: 12px;
-        border: 1px solid var(--border-color);
-      }
-    
-      .bulk-bar button:hover {
-        background: var(--accent-color);
-        color: white;
-        border-color: var(--accent-color);
-      }
-    
-      .bulk-bar .export-btn {
-        background: var(--success);
-        color: white;
-        border-color: var(--success);
-      }
-      .bulk-bar .import-btn {
-        background: var(--warning);
-        color: white;
-        border-color: var(--warning);
-      }
-      .bulk-bar .shift-report-btn {
-        background: #b93131;
-        color: white;
-        border-color: #b93131;
-      }
-      .bulk-bar .sheets-key-btn {
-        background: #8b5cf6;
-        color: white;
-        border-color: #8b5cf6;
-      }
-      .bulk-bar .gemini-key-btn {
-        background: #8b5cf6;
-        color: white;
-        border-color: #8b5cf6;
-      }
-    
+      /* ========== DATABASE TABLE FULL WIDTH & SCROLL FIXES ========== */
       #entryTable {
         width: 100%;
         border-collapse: collapse;
@@ -860,6 +810,7 @@
         border-radius: 16px;
         overflow: hidden;
         box-shadow: var(--card-shadow);
+        table-layout: auto;
       }
     
       #entryTable th {
@@ -869,20 +820,37 @@
         font-size: 0.7rem;
         letter-spacing: 0.03em;
         text-transform: uppercase;
-        padding: 12px 8px;
+        padding: 10px 6px;
         border: 1px solid var(--border-color);
         text-align: center;
       }
     
       #entryTable td {
         background: var(--bg-secondary);
-        padding: 12px 8px;
+        padding: 8px 6px;
         border: 1px solid var(--border-color);
         text-align: center;
         vertical-align: middle;
         word-wrap: break-word;
         max-width: 300px;
         color: var(--text-primary);
+        white-space: normal;
+        overflow-wrap: break-word;
+        word-break: break-word;
+      }
+    
+      /* Checkbox column width */
+      #entryTable th:first-child,
+      #entryTable td:first-child {
+        width: 40px;
+        text-align: center;
+      }
+    
+      /* Actions column width */
+      #entryTable th:last-child,
+      #entryTable td:last-child {
+        width: 110px;
+        text-align: center;
       }
     
       #entryTable tbody tr:hover td {
@@ -899,7 +867,7 @@
         gap: 4px;
         justify-content: center;
         align-items: center;
-        padding: 12px 4px;
+        padding: 6px 4px;
       }
     
       .icon-btn {
@@ -2852,7 +2820,7 @@ UPLOAD DATABASE - DONE✅`;
                                             <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
                                             <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
                                         </div>
-                                    </td>`;
+                                     </div>`;
                     tbody.appendChild(row);
                 });
                 updateSelectAllCheckboxState();
