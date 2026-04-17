@@ -1457,6 +1457,9 @@
                 NOTES_COL: 14
             };
 
+            // Minimum length of resolution text to trigger Gemini summarization
+            const MIN_SUMMARIZE_LENGTH = 15;
+
             function getGoogleApiKey() {
                 return localStorage.getItem('googleApiKey');
             }
@@ -2173,6 +2176,17 @@
             }
 
             async function summarizeText(text) {
+                // Guard: empty or too short text → skip API call
+                const trimmed = text ? text.trim() : '';
+                if (!trimmed) {
+                    console.log("Summarize skipped: empty text");
+                    return "";
+                }
+                if (trimmed.length < MIN_SUMMARIZE_LENGTH) {
+                    console.log(`Summarize skipped: text too short (${trimmed.length} < ${MIN_SUMMARIZE_LENGTH})`);
+                    return trimmed; // return original short text as "summary"
+                }
+
                 let apiKey = localStorage.getItem('geminiApiKey');
                 if (!apiKey) {
                     apiKey = prompt('Enter your Google Gemini API key (get one at makersuite.google.com/app/apikey):');
@@ -2191,7 +2205,7 @@
                             body: JSON.stringify({
                                 contents: [{
                                     parts: [{
-                                        text: `Summarize briefly:\n${text}`
+                                        text: `Summarize briefly. Only output the summarized sentences.\n\n${trimmed}`
                                     }]
                                 }]
                             })
@@ -2312,23 +2326,32 @@
                             resolution = existingEntry.resolution || '';
                             showNotification('Resolution unchanged → summary reused');
                         } else {
-                            // Changed → call Gemini
+                            // Changed → call Gemini, but only if text is long enough
                             const plainText = newTroubleshooting.replace(/<[^>]*>/g, '');
-                            const summary = await summarizeText(plainText);
-                            if (summary) resolution = summary;
-                            else resolution = existingEntry.resolution || '';
-                            showNotification('Resolution changed → new summary generated');
+                            if (plainText.trim().length >= MIN_SUMMARIZE_LENGTH) {
+                                const summary = await summarizeText(plainText);
+                                if (summary) resolution = summary;
+                                else resolution = existingEntry.resolution || '';
+                                showNotification('Resolution changed → new summary generated');
+                            } else {
+                                resolution = plainText; // keep original short text
+                                showNotification('Resolution too short → no summary generated');
+                            }
                         }
                     } else {
                         // Fallback (should not happen)
                         resolution = document.getElementById('ticket-resolution').value || '';
                     }
                 } else {
-                    // New entry
+                    // New entry: only summarize if text is not empty and long enough
                     if (troubleshooting.trim()) {
                         const plainText = troubleshooting.replace(/<[^>]*>/g, '');
-                        const summary = await summarizeText(plainText);
-                        if (summary) resolution = summary;
+                        if (plainText.trim().length >= MIN_SUMMARIZE_LENGTH) {
+                            const summary = await summarizeText(plainText);
+                            if (summary) resolution = summary;
+                        } else {
+                            resolution = plainText; // keep original short text
+                        }
                     }
                 }
 
