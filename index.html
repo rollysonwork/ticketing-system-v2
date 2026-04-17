@@ -81,7 +81,7 @@
         display: flex;
         gap: 24px;
         align-items: flex-start;
-        max-width: 100% !important;    /* Extend to full width */
+        max-width: 100% !important;
         margin: 0 auto;
         padding: 0 12px;
       }
@@ -108,14 +108,9 @@
         will-change: opacity, transform;
       }
     
+      /* Keep sidebar always visible – hidden class removed or unused */
       .sidebar.hidden {
-        flex: 0 0 0 !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        opacity: 0 !important;
-        transform: scale(0.95) !important;
-        visibility: hidden !important;
-        pointer-events: none !important;
+        display: none; /* fallback, but toggle button removed so never triggered */
       }
     
       .sidebar-header {
@@ -304,6 +299,7 @@
           margin-left 0.2s ease;
         width: 100%;
         overflow-x: auto;
+        padding: 0;
       }
     
       h1 {
@@ -344,23 +340,9 @@
         flex-wrap: wrap;
       }
     
+      /* Sidebar toggle button removed – keep style if any reference remains */
       .sidebar-toggle-tab {
-        background: var(--bg-secondary);
-        border: 1px solid var(--border-color);
-        font-size: 1.2rem;
-        cursor: pointer;
-        padding: 8px 12px;
-        border-radius: 40px;
-        transition: var(--transition);
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.01em;
-        color: var(--text-secondary);
-      }
-    
-      .sidebar-toggle-tab:hover {
-        background: var(--accent-soft);
-        transform: translateY(-2px);
+        display: none; /* Hide any leftover toggle button */
       }
     
       .tab-buttons {
@@ -415,15 +397,19 @@
         }
       }
     
+      /* Container for left/right panels – full width, flexible */
       .container {
         display: flex;
         gap: 24px;
         align-items: flex-start;
         flex-wrap: wrap;
+        width: 100%;
       }
     
-      .left-panel,
-      .right-panel {
+      /* Extended panel widths */
+      .left-panel {
+        flex: 2;
+        min-width: 400px;
         background: var(--bg-secondary);
         border-radius: 20px;
         padding: 24px;
@@ -432,14 +418,15 @@
         transition: var(--transition);
       }
     
-      .left-panel {
-        flex: 1.1;
-        min-width: 380px;
-      }
-    
       .right-panel {
-        flex: 1;
-        min-width: 280px;
+        flex: 1.2;
+        min-width: 320px;
+        background: var(--bg-secondary);
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: var(--card-shadow);
+        border: 1px solid var(--border-color);
+        transition: var(--transition);
         position: sticky;
         top: 24px;
         max-height: calc(100vh - 140px);
@@ -663,7 +650,7 @@
         width: 100%;
         border-collapse: collapse;
         margin-bottom: 16px;
-        table-layout: fixed;
+        table-layout: auto;
       }
     
       .left-panel table td {
@@ -784,7 +771,7 @@
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       }
     
-      /* === UPDATED BULK BAR: STICKY + FULL WIDTH === */
+      /* === STICKY BULK BAR === */
       .bulk-bar {
         display: flex;
         gap: 12px;
@@ -804,7 +791,6 @@
         transition: box-shadow 0.2s ease, background 0.2s ease;
       }
     
-      /* Extra scroll padding so sticky bar doesn't cover top content */
       html {
         scroll-padding-top: 80px;
       }
@@ -867,7 +853,7 @@
         border-color: #8b5cf6;
       }
     
-      /* === EXTEND DATABASE TABLE TO FULL WIDTH === */
+      /* === FULL WIDTH DATABASE TABLE === */
       #entryTable {
         width: 100%;
         border-collapse: collapse;
@@ -1155,7 +1141,6 @@
 
         <div class="main-content">
             <div class="tab-container">
-                <button class="sidebar-toggle-tab" id="sidebarToggleTabBtn" title="Toggle sidebar">◀</button>
                 <div class="tab-buttons">
                     <button class="tab-button active" onclick="switchTab('ticket', this)"><i class="icon-custom icon-ticket"></i> TICKET CREATION</button>
                     <button class="tab-button" onclick="switchTab('store', this)"><i class="icon-custom icon-retailz"></i> STORE CREATION</button>
@@ -4211,23 +4196,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
                     localStorage.setItem('lastClearDate', getESTDateString());
                 }
                 setInterval(checkAndRefreshTable, 60000);
-
-                const sidebar = document.getElementById('ticketSidebar');
-                const toggleBtn = document.getElementById('sidebarToggleTabBtn');
-                const savedSidebarState = localStorage.getItem('sidebarHidden');
-                if (savedSidebarState === 'true') {
-                    sidebar.classList.add('hidden');
-                    toggleBtn.textContent = '▶';
-                } else {
-                    toggleBtn.textContent = '◀';
-                }
-                toggleBtn.addEventListener('click', () => {
-                    const isHidden = sidebar.classList.toggle('hidden');
-                    localStorage.setItem('sidebarHidden', isHidden);
-                    toggleBtn.textContent = isHidden ? '▶' : '◀';
-                    setTimeout(() => syncPreviewHeight(), 200);
-                });
-
                 loadCollapseState();
 
                 quillEditor = new Quill('#ticket-resolution-editor', {
