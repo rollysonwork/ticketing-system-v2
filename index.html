@@ -1936,7 +1936,7 @@
                     localStorage.setItem('geminiApiKey', apiKey.trim());
                 }
 
-                const models = ['gemini-2.0-flash', 'gemini-2.5-flash', 'gemini-2.5-flash-lite', 'gemini-2.5-pro', 'gemini-3.1-pro-preview', 'gemini-3-pro-preview', 'gemini-3-flash-preview', 'gemini-pro-latest'];
+                const models = ['gemini-2.5-flash-lite'];
                 let lastError = null;
 
                 for (const model of models) {
@@ -1947,7 +1947,7 @@
                             body: JSON.stringify({
                                 contents: [{
                                     parts: [{
-                                        text: `Summarize the following step‑by‑step troubleshooting steps into two to three clear & concise sentences. Keep it professional . Only output the summarized sentences.\n\n${text}`
+                                        text: `Summarize briefly . Only output the summarized sentences.\n\n${text}`
                                     }]
                                 }]
                             })
