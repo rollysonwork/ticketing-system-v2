@@ -87,19 +87,6 @@
             max-height: calc(100vh - 140px);
             position: sticky;
             top: 24px;
-            transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease, flex 0.2s ease, padding 0.2s ease, margin 0.2s ease;
-            transform-origin: top left;
-            will-change: opacity, transform;
-        }
-
-        .sidebar.hidden {
-            flex: 0 0 0 !important;
-            padding: 0 !important;
-            margin: 0 !important;
-            opacity: 0 !important;
-            transform: scale(0.95) !important;
-            visibility: hidden !important;
-            pointer-events: none !important;
         }
 
         .sidebar-header {
@@ -127,16 +114,7 @@
             color: var(--accent-color);
             border-bottom: 1px solid var(--border-color);
             margin: 12px 0 8px;
-            cursor: pointer;
             user-select: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: var(--transition);
-        }
-
-        .month-header:hover {
-            color: var(--accent-hover);
         }
 
         .date-group {
@@ -150,21 +128,6 @@
             color: var(--text-muted);
             letter-spacing: 0.02em;
             margin-top: 8px;
-            cursor: pointer;
-            user-select: none;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: var(--transition);
-        }
-
-        .date-header:hover {
-            color: var(--accent-color);
-        }
-
-        .month-arrow, .date-arrow {
-            font-size: 0.7rem;
-            transition: transform 0.2s;
         }
 
         .date-entries {
@@ -181,18 +144,18 @@
             transition: var(--transition);
             box-shadow: var(--card-shadow);
         }
-        /* Colored border classes for entry types */
+        /* Colored border classes based on entry source */
         .sidebar-card.ticket-card {
-            border-left-color: #3b82f6 !important; /* blue */
-            border-bottom-color: #326cc9 !important; /* blue */
+            border-left-color: #3b82f6 !important;
+            border-bottom-color: #326cc9 !important;
         }
         .sidebar-card.store-card {
-            border-left-color: #a11b31 !important; /* red */
-            border-bottom-color: #801627 !important; /* blue */
+            border-left-color: #a11b31 !important;
+            border-bottom-color: #801627 !important;
         }
         .sidebar-card.moolah-card {
-            border-left-color: #bc8f00 !important; /* yellow */
-            border-bottom-color: #9d7900 !important; /* blue */
+            border-left-color: #bc8f00 !important;
+            border-bottom-color: #9d7900 !important;
         }
 
         .sidebar-card:hover {
@@ -282,7 +245,8 @@
         .main-content {
             flex: 1;
             min-width: 0;
-            transition: flex 0.2s ease, margin-left 0.2s ease;
+            width: 100%;
+            transition: flex 0.2s ease;
         }
 
         h1 {
@@ -321,25 +285,6 @@
             align-items: center;
             gap: 12px;
             flex-wrap: wrap;
-        }
-
-        .sidebar-toggle-tab {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            font-size: 1.2rem;
-            cursor: pointer;
-            padding: 8px 12px;
-            border-radius: 40px;
-            transition: var(--transition);
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.01em;
-            color: var(--text-secondary);
-        }
-
-        .sidebar-toggle-tab:hover {
-            background: var(--accent-soft);
-            transform: translateY(-2px);
         }
 
         .tab-buttons {
@@ -754,11 +699,12 @@
 
         #entryTable {
             width: 100%;
+            min-width: 1200px;
             border-collapse: collapse;
             font-size: 13px;
             background: var(--bg-secondary);
             border-radius: 16px;
-            overflow: hidden;
+            overflow-x: auto;
             box-shadow: var(--card-shadow);
         }
 
@@ -994,7 +940,6 @@
 
         <div class="main-content">
             <div class="tab-container">
-                <button class="sidebar-toggle-tab" id="sidebarToggleTabBtn" title="Toggle sidebar">◀</button>
                 <div class="tab-buttons">
                     <button class="tab-button active" onclick="switchTab('ticket', this)"><i class="icon-custom icon-ticket"></i> TICKET CREATION</button>
                     <button class="tab-button" onclick="switchTab('store', this)"><i class="icon-custom icon-retailz"></i> STORE CREATION</button>
@@ -1250,6 +1195,7 @@
                 GOOGLE_SHEET_ID: '1IDsVjZrWCP0hXRn_EufLNgpOMtYFtV6jVZx9P5rvbcA',
                 SHEET_NAME: 'SERVER MANAGEMENT',
                 PORTAL_COL: 0,
+                SKU_COL: 1,
                 STORE_NAME_COL: 2,
                 ZIP_CODE_COL: 3,
                 STATUS_COL: 11,
@@ -1320,6 +1266,18 @@
                 const now = new Date();
                 const estDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/New_York' }));
                 return estDate.toISOString().slice(0,10);
+            }
+
+            function isTodayEST(dateStr) {
+                if (!dateStr) return false;
+                const todayEST = getESTDateString();
+                const parts = dateStr.split('/');
+                if (parts.length !== 3) return false;
+                const month = parts[0].padStart(2,'0');
+                const day = parts[1].padStart(2,'0');
+                const year = parts[2];
+                const entryFormatted = `${year}-${month}-${day}`;
+                return entryFormatted === todayEST;
             }
 
             function parseDateFromString(dateStr) {
@@ -1577,6 +1535,7 @@
                     for (let i = 1; i < data.values.length; i++) {
                         const row = data.values[i];
                         const portal = (row[CONFIG.PORTAL_COL] || '').toString().trim();
+                        const sku = (row[CONFIG.SKU_COL] || '').toString().trim();
                         const storeName = (row[CONFIG.STORE_NAME_COL] || '').toString().trim();
                         const zipCode = (row[CONFIG.ZIP_CODE_COL] || '').toString().trim();
                         let status = (row[CONFIG.STATUS_COL] || '').toString().trim().toUpperCase();
@@ -1587,6 +1546,7 @@
 
                         storeData.push({
                             portal: portal || 'N/A',
+                            sku: sku,
                             storeName: storeName.toUpperCase() || 'UNKNOWN STORE',
                             zipCode: zipCode || 'N/A',
                             status,
@@ -1689,12 +1649,14 @@
                     document.getElementById('moolah-portal').value = store.portal;
                     document.getElementById('moolah-storeName').value = store.storeName;
                     document.getElementById('moolah-zipcode').value = store.zipCode;
+                    document.getElementById('moolah-sku').value = store.sku || '';
                     moolahUpdatePreview();
                     saveFormData('moolah');
                 } else if (prefix === 'store') {
                     document.getElementById('store-portal').value = store.portal;
                     document.getElementById('store-storeName').value = store.storeName;
                     document.getElementById('store-zipcode').value = store.zipCode;
+                    document.getElementById('store-sku').value = store.sku || '';
                     storeUpdatePreview();
                     saveFormData('store');
                 } else if (prefix === 'ticket') {
@@ -2094,13 +2056,11 @@
                 addBtn.disabled = true;
 
                 let resolution = '';
-                // Only summarize if this is a NEW entry (not editing)
                 if (!editId && troubleshooting.trim()) {
                     const plainText = troubleshooting.replace(/<[^>]*>/g, '');
                     const summary = await summarizeText(plainText);
                     if (summary) resolution = summary;
                 } else if (editId) {
-                    // For editing, keep the existing resolution from the entry being edited
                     const existingEntry = allEntries.find(e => e.id === editId);
                     if (existingEntry) {
                         resolution = existingEntry.resolution || '';
@@ -2585,19 +2545,19 @@ UPLOAD DATABASE - DONE✅`;
                     const row = document.createElement('tr');
                     row.dataset.id = entry.id;
                     row.innerHTML = `<td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-                                             <td>${entry.date}</td>
-                                             <td>${entry.shift}</td>
-                                             <td>${entry.support}</td>
-                                             <td>${entry.portal}</td>
-                                             <td>${entry.store}</td>
-                                             <td>${entry.zip}</td>
-                                             <td>${entry.contact}</td>
-                                             <td>${entry.contactNumber}</td>
-                                             <td>${entry.module}</td>
+                                              <td>${entry.date}</td>
+                                              <td>${entry.shift}</td>
+                                              <td>${entry.support}</td>
+                                              <td>${entry.portal}</td>
+                                              <td>${entry.store}</td>
+                                              <td>${entry.zip}</td>
+                                              <td>${entry.contact}</td>
+                                              <td>${entry.contactNumber}</td>
+                                              <td>${entry.module}</td>
                                     <td style="white-space: pre-wrap;">${(entry.issue || '').toUpperCase()}</td>
-                                             <td>${entry.escalated}</td>
-                                             <td>${entry.status}</td>
-                                             <td>${(entry.remarks || '').toUpperCase()}</td>
+                                              <td>${entry.escalated}</td>
+                                              <td>${entry.status}</td>
+                                              <td>${(entry.remarks || '').toUpperCase()}</td>
                                     <td style="white-space: pre-wrap;">${(entry.resolution || '').toUpperCase()}</td>
                                     <td class="action-cell">
                                         <div class="action-container">
@@ -2612,40 +2572,11 @@ UPLOAD DATABASE - DONE✅`;
                 updateSelectAllCheckboxState();
             }
 
-            const collapseState = { months: {}, dates: {} };
-
-            function loadCollapseState() {
-                const saved = localStorage.getItem('sidebarCollapseState');
-                if (saved) {
-                    try {
-                        const parsed = JSON.parse(saved);
-                        collapseState.months = parsed.months || {};
-                        collapseState.dates = parsed.dates || {};
-                    } catch(e) {}
-                }
-            }
-
-            function saveCollapseState() {
-                localStorage.setItem('sidebarCollapseState', JSON.stringify({ months: collapseState.months, dates: collapseState.dates }));
-            }
-
-            window.toggleMonth = function(monthKey) {
-                collapseState.months[monthKey] = !collapseState.months[monthKey];
-                saveCollapseState();
-                renderSidebar();
-            };
-
-            window.toggleDate = function(dateKey) {
-                collapseState.dates[dateKey] = !collapseState.dates[dateKey];
-                saveCollapseState();
-                renderSidebar();
-            };
-
             function renderSidebar() {
                 const container = document.getElementById('sidebarContent');
                 if (!container) return;
 
-                const historyEntries = allEntries.filter(entry => !entry.imported);
+                const historyEntries = allEntries.filter(entry => !entry.imported && isTodayEST(entry.date));
 
                 const grouped = {};
                 historyEntries.forEach(entry => {
@@ -2671,77 +2602,58 @@ UPLOAD DATABASE - DONE✅`;
 
                 let html = '';
                 sortedMonths.forEach(month => {
-                    const isMonthCollapsed = collapseState.months[month] === true;
-                    const monthArrow = isMonthCollapsed ? '▶' : '▼';
                     html += `<div class="sidebar-group">
-                                <div class="month-header" onclick="toggleMonth('${month.replace(/'/g, "\\'")}')">
-                                    <span class="month-arrow">${monthArrow}</span> ${month}
-                                </div>`;
-                    if (!isMonthCollapsed) {
-                        const dates = grouped[month];
-                        const sortedDates = Object.keys(dates).sort((a,b) => new Date(b) - new Date(a));
-                        sortedDates.forEach(dateKey => {
-                            const isDateCollapsed = collapseState.dates[dateKey] === true;
-                            const dateArrow = isDateCollapsed ? '▶' : '▼';
-                            html += `<div class="date-group">
-                                        <div class="date-header" onclick="toggleDate('${dateKey.replace(/'/g, "\\'")}')">
-                                            <span class="date-arrow">${dateArrow}</span> ${dateKey}
-                                        </div>`;
-                            if (!isDateCollapsed) {
-                                html += `<div class="date-entries">`;
-                                dates[dateKey].forEach(entry => {
-                                    let issueDisplay = (entry.issue || '-').toUpperCase();
-                                    if (entry.status && entry.status.toUpperCase() === 'OTHER TASK') {
-                                        issueDisplay = entry.module || 'OTHER TASK';
-                                    }
-
-                                    // Determine card class based on entry source/module
-                                    let cardClass = 'ticket-card';
-                                    if (entry.source === 'store') {
-                                        cardClass = 'store-card';
-                                    } else if (entry.source === 'moolah') {
-                                        cardClass = 'moolah-card';
-                                    } else if (entry.module === 'Moolah') {
-                                        cardClass = 'moolah-card';
-                                    } else if (entry.module === 'Store Creation') {
-                                        cardClass = 'store-card';
-                                    }
-
-                                    html += `
-                                        <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
-                                            <div class="preview-item issue-item">${escapeHtml(issueDisplay)}</div>
-                                            <div class="preview-item"><strong>Portal:</strong> ${escapeHtml(entry.portal || '-')}</div>
-                                            <div class="preview-item"><strong>Store:</strong> ${escapeHtml(entry.store || '-')}</div>
-                                            <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || '-')}</div>
-                                            <div class="card-actions">
-                                                <div class="card-actions-row stack-row">
-                                                    <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
-                                                    <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
-                                                </div>
-                                                <div class="card-actions-row">
-                                                    <button class="edit-entry stack-btn" data-id="${entry.id}">✏️<br>EDIT</button>
-                                                    <button class="return-entry stack-btn" data-id="${entry.id}">↩️<br>RETURN</button>
-                                                    <button class="delete-entry stack-btn" data-id="${entry.id}">🗑️<br>DELETE</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    `;
-                                });
-                                html += `</div>`;
+                                <div class="month-header">${month}</div>`;
+                    const dates = grouped[month];
+                    const sortedDates = Object.keys(dates).sort((a,b) => new Date(b) - new Date(a));
+                    sortedDates.forEach(dateKey => {
+                        html += `<div class="date-group">
+                                    <div class="date-header">${dateKey}</div>
+                                    <div class="date-entries">`;
+                        dates[dateKey].forEach(entry => {
+                            let issueDisplay = (entry.issue || '-').toUpperCase();
+                            if (entry.status && entry.status.toUpperCase() === 'OTHER TASK') {
+                                issueDisplay = entry.module || 'OTHER TASK';
                             }
-                            html += `</div>`;
+
+                            let cardClass = 'ticket-card';
+                            if (entry.source === 'store') {
+                                cardClass = 'store-card';
+                            } else if (entry.source === 'moolah') {
+                                cardClass = 'moolah-card';
+                            }
+
+                            html += `
+                                <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
+                                    <div class="preview-item issue-item">${escapeHtml(issueDisplay)}</div>
+                                    <div class="preview-item"><strong>Portal:</strong> ${escapeHtml(entry.portal || '-')}</div>
+                                    <div class="preview-item"><strong>Store:</strong> ${escapeHtml(entry.store || '-')}</div>
+                                    <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || '-')}</div>
+                                    <div class="card-actions">
+                                        <div class="card-actions-row stack-row">
+                                            <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
+                                            <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
+                                        </div>
+                                        <div class="card-actions-row">
+                                            <button class="edit-entry stack-btn" data-id="${entry.id}">✏️<br>EDIT</button>
+                                            <button class="return-entry stack-btn" data-id="${entry.id}">↩️<br>RETURN</button>
+                                            <button class="delete-entry stack-btn" data-id="${entry.id}">🗑️<br>DELETE</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
                         });
-                    }
+                        html += `</div></div>`;
+                    });
                     html += `</div>`;
                 });
 
                 if (historyEntries.length === 0) {
-                    html = '<div style="padding:20px; text-align:center; color:#64748b;">No entries yet.</div>';
+                    html = '<div style="padding:20px; text-align:center; color:#64748b;">No entries for today.</div>';
                 }
 
                 container.innerHTML = html;
 
-                // DETAILS button: copy rich (HTML) + plain text
                 container.querySelectorAll('.copy-store').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         e.stopPropagation();
@@ -2790,7 +2702,6 @@ ${escapeHtml(entry.note || '').replace(/\n/g, '<br>')}`;
                     });
                 });
 
-                // HRMS button: improved plain text with indentation for nested lists
                 container.querySelectorAll('.copy-details').forEach(btn => {
                     btn.addEventListener('click', async (e) => {
                         e.stopPropagation();
@@ -3817,7 +3728,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
                     if (el) el.addEventListener('input', () => { ticketUpdatePreview(); saveFormData('ticket'); });
                 });
 
-                // Uppercase conversion for most inputs, but EXCLUDE ticket-issue, ticket-remarks, ticket-resolution, ticket-note
                 document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach(el => {
                     if (el.id === 'ticket-issue' || el.id === 'ticket-remarks' || el.id === 'ticket-resolution' || el.id === 'ticket-note') {
                         return;
@@ -3882,24 +3792,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
                 }
                 setInterval(checkAndRefreshTable, 60000);
 
-                const sidebar = document.getElementById('ticketSidebar');
-                const toggleBtn = document.getElementById('sidebarToggleTabBtn');
-                const savedSidebarState = localStorage.getItem('sidebarHidden');
-                if (savedSidebarState === 'true') {
-                    sidebar.classList.add('hidden');
-                    toggleBtn.textContent = '▶';
-                } else {
-                    toggleBtn.textContent = '◀';
-                }
-                toggleBtn.addEventListener('click', () => {
-                    const isHidden = sidebar.classList.toggle('hidden');
-                    localStorage.setItem('sidebarHidden', isHidden);
-                    toggleBtn.textContent = isHidden ? '▶' : '◀';
-                    setTimeout(() => syncPreviewHeight(), 200);
-                });
-
-                loadCollapseState();
-
                 quillEditor = new Quill('#ticket-resolution-editor', {
                     theme: 'snow',
                     modules: {
@@ -3922,7 +3814,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
                     saveFormData('ticket');
                 });
 
-                // Idle-based auto-refresh (15 minutes inactivity, silent)
                 const IDLE_REFRESH_DELAY = 900000;
                 let idleTimeout;
                 function idleReload() { window.location.reload(); }
