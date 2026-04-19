@@ -921,8 +921,8 @@
         transition: opacity 0.2s ease;
         z-index: 999;
         pointer-events: none;
-        backdrop-filter: blur(4px);
         -webkit-backdrop-filter: blur(4px);
+        backdrop-filter: blur(4px);
       }
 
       #notification.show {
@@ -1123,13 +1123,15 @@
               </div>
               <table>
                 <tr>
-                  <th>DATE</th>
-                  <td><input type="date" id="ticket-date" /></td>
+                  <th><label for="ticket-date">DATE</label></th>
+                  <td>
+                    <input type="date" name="ticket-date" id="ticket-date" />
+                  </td>
                 </tr>
                 <tr>
-                  <th>SHIFT SCHEDULE</th>
+                  <th><label for="ticket-shift">SHIFT SCHEDULE</label></th>
                   <td>
-                    <select id="ticket-shift">
+                    <select name="ticket-shift" id="ticket-shift">
                       <option value="">-- SELECT --</option>
                       <option value="8PM - 5AM">8PM - 5AM</option>
                       <option value="9PM - 6AM">9PM - 6AM</option>
@@ -1141,30 +1143,55 @@
                   </td>
                 </tr>
                 <tr>
-                  <th>SUPPORT NAME</th>
-                  <td><input type="text" id="ticket-support" /></td>
-                </tr>
-                <tr>
-                  <th>PORTAL NUMBER *</th>
-                  <td><input type="text" id="ticket-portal" /></td>
-                </tr>
-                <tr>
-                  <th>STORE NAME *</th>
-                  <td><input type="text" id="ticket-store" /></td>
-                </tr>
-                <tr>
-                  <th>ZIP CODE *</th>
-                  <td><input type="text" id="ticket-zip" /></td>
-                </tr>
-                <tr>
-                  <th>CONTACT PERSON</th>
-                  <td><input type="text" id="ticket-contactPerson" /></td>
-                </tr>
-                <tr>
-                  <th>CONTACT #</th>
+                  <th><label for="ticket-support">SUPPORT NAME</label></th>
                   <td>
                     <input
                       type="text"
+                      name="ticket-support"
+                      id="ticket-support"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th><label for="ticket-portal">PORTAL NUMBER *</label></th>
+                  <td>
+                    <input
+                      type="text"
+                      name="ticket-portal"
+                      id="ticket-portal"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th><label for="ticket-store">STORE NAME *</label></th>
+                  <td>
+                    <input type="text" name="ticket-store" id="ticket-store" />
+                  </td>
+                </tr>
+                <tr>
+                  <th><label for="ticket-zip">ZIP CODE *</label></th>
+                  <td>
+                    <input type="text" name="ticket-zip" id="ticket-zip" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>
+                    <label for="ticket-contactPerson">CONTACT PERSON</label>
+                  </th>
+                  <td>
+                    <input
+                      type="text"
+                      name="ticket-contactPerson"
+                      id="ticket-contactPerson"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <th><label for="ticket-contactNumber">CONTACT #</label></th>
+                  <td>
+                    <input
+                      type="text"
+                      name="ticket-contactNumber"
                       id="ticket-contactNumber"
                       maxlength="14"
                       class="no-uppercase"
@@ -1172,10 +1199,11 @@
                   </td>
                 </tr>
                 <tr>
-                  <th>MODULE</th>
+                  <th><label for="ticket-module">MODULE</label></th>
                   <td>
                     <input
                       id="ticket-module"
+                      name="ticket-module"
                       list="ticket-moduleList"
                       class="no-uppercase"
                       autocomplete="off"
@@ -1183,29 +1211,52 @@
                   </td>
                 </tr>
                 <tr>
-                  <th>ISSUE</th>
-                  <td><textarea id="ticket-issue" rows="2"></textarea></td>
+                  <th><label for="ticket-issue">ISSUE</label></th>
+                  <td>
+                    <textarea
+                      id="ticket-issue"
+                      name="ticket-issue"
+                      rows="2"
+                    ></textarea>
+                  </td>
                 </tr>
                 <tr>
-                  <th>ESCALATED PERSON</th>
-                  <td><input type="text" id="ticket-escalated" /></td>
+                  <th>
+                    <label for="ticket-escalated">ESCALATED PERSON</label>
+                  </th>
+                  <td>
+                    <input
+                      type="text"
+                      name="ticket-escalated"
+                      id="ticket-escalated"
+                    />
+                  </td>
                 </tr>
                 <tr>
-                  <th>STATUS</th>
+                  <th><label for="ticket-status">STATUS</label></th>
                   <td>
                     <input
                       id="ticket-status"
+                      name="ticket-status"
                       list="ticket-statusList"
                       autocomplete="off"
                     /><datalist id="ticket-statusList"></datalist>
                   </td>
                 </tr>
                 <tr>
-                  <th>REMARKS</th>
-                  <td><textarea id="ticket-remarks" rows="2"></textarea></td>
+                  <th><label for="ticket-remarks">REMARKS</label></th>
+                  <td>
+                    <textarea
+                      name="ticket-remarks"
+                      id="ticket-remarks"
+                      rows="2"
+                    ></textarea>
+                  </td>
                 </tr>
                 <tr>
-                  <th>RESOLUTION</th>
+                  <th>
+                    <label for="ticket-resolution-editor">RESOLUTION</label>
+                  </th>
                   <td>
                     <div
                       id="ticket-resolution-editor"
@@ -1213,13 +1264,20 @@
                     ></div>
                     <textarea
                       id="ticket-resolution"
+                      name="ticket-resolution"
                       style="display: none"
                     ></textarea>
                   </td>
                 </tr>
                 <tr>
-                  <th>NOTE</th>
-                  <td><textarea id="ticket-note" rows="5"></textarea></td>
+                  <th><label for="ticket-note">NOTE</label></th>
+                  <td>
+                    <textarea
+                      id="ticket-note"
+                      name="ticket-note"
+                      rows="5"
+                    ></textarea>
+                  </td>
                 </tr>
               </table>
               <div class="button-row">
@@ -1744,7 +1802,7 @@
           <button
             id="shiftReportBtn"
             class="shift-report-btn"
-            title="Generate end‑of‑shift report"
+            title="Generate end-of-shift report"
           >
             <i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT
           </button>
