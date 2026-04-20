@@ -2330,6 +2330,19 @@ async function addEntryLegacy(prefix) {
     const storeName = storeNameEl.value.trim();
     const zipcode = zipcodeEl.value.trim();
 
+    // Set issue text based on prefix
+    let issueText = '';
+    if (prefix === 'store') {
+        issueText = `NEW STORE CREATION FORM SENT - DONE ✅
+STORE CREATION - DONE✅
+INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE✅
+UPLOAD DATABASE - DONE✅`;
+    } else if (prefix === 'moolah') {
+        issueText = `CREATE MOOLAH ACCOUNT - DONE ✅
+INSTALL & UPDATE ALL APPS - DONE ✅
+ASSIGN STORE - DONE ✅`;
+    }
+
     // Collect module-specific data
     let moduleData = {};
     if (prefix === 'store') {
@@ -2365,10 +2378,10 @@ async function addEntryLegacy(prefix) {
         contact: '',          // not used for store/moolah
         contactNumber: '',
         module: prefix === 'store' ? 'Store Creation' : 'Moolah',
-        issue: `${prefix === 'store' ? 'Store Creation' : 'Moolah Account'} - Done ✅`,
+        issue: issueText,
         note: '',
         escalated: '',
-        status: 'RESOLVED',
+        status: 'OTHER TASK',   // changed from 'RESOLVED'
         remarks: '',
         troubleshooting: '',
         resolution: '',
