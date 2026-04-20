@@ -2321,7 +2321,7 @@ async function addEntryLegacy(prefix) {
 
     pushUndo();
 
-    // Get common fields (date, shift, support) – they are read-only but have values
+    // Get common fields
     const dateStr = document.getElementById(`${prefix}-date`).value;
     const formattedDate = dateStr ? new Date(dateStr).toLocaleDateString('en-US') : storeGetFormattedDateMinusOne();
     const shift = document.getElementById(`${prefix}-shift`).value;
@@ -2330,7 +2330,6 @@ async function addEntryLegacy(prefix) {
     const storeName = storeNameEl.value.trim();
     const zipcode = zipcodeEl.value.trim();
 
-    // Set issue text based on prefix
     let issueText = '';
     if (prefix === 'store') {
         issueText = `NEW STORE CREATION FORM SENT - DONE ✅
@@ -2343,7 +2342,6 @@ INSTALL & UPDATE ALL APPS - DONE ✅
 ASSIGN STORE - DONE ✅`;
     }
 
-    // Collect module-specific data
     let moduleData = {};
     if (prefix === 'store') {
         moduleData = {
@@ -2367,34 +2365,93 @@ ASSIGN STORE - DONE ✅`;
         };
     }
 
-    const newEntry = {
-        id: Date.now(),
-        date: formattedDate,
-        shift: shift,
-        support: support,
-        portal: portal,
-        store: storeName,
-        zip: zipcode,
-        contact: 'SHIPPING TEAM',          // not used for store/moolah
-        contactNumber: '(000) 000-0000',
-        module: prefix === 'store' ? 'Store Creation' : 'Moolah',
-        issue: issueText,
-        note: '',
-        escalated: '',
-        status: 'OTHER TASK',   // changed from 'RESOLVED'
-        remarks: '',
-        troubleshooting: '',
-        resolution: '',
-        moduleData: moduleData,
-        source: prefix,       // 'store' or 'moolah'
-        deleted: false,
-        imported: false
-    };
+    const addBtn = document.querySelector(`#tab-${prefix} .add`);
+    const originalBtnText = addBtn.textContent;
 
-    allEntries.unshift(newEntry);
-    showNotification(`${prefix === 'store' ? 'Store' : 'Moolah'} entry added!`);
+    // ---- EDIT MODE ----
+    if (editId) {
+        const existingIndex = allEntries.findIndex(e => e.id === editId);
+        if (existingIndex !== -1) {
+            const existingEntry = allEntries[existingIndex];
+            const updatedEntry = {
+                ...existingEntry,
+                date: formattedDate,
+                shift: shift,
+                support: support,
+                portal: portal,
+                store: storeName,
+                zip: zipcode,
+                issue: issueText,
+                moduleData: moduleData,
+                status: 'OTHER TASK',   // keep consistent
+                source: prefix,
+                deleted: false,
+                imported: false
+            };
+            allEntries[existingIndex] = updatedEntry;
+            showNotification(`${prefix === 'store' ? 'Store' : 'Moolah'} entry updated!`);
+        } else {
+            // fallback: create new if entry with editId not found
+            const newEntry = {
+                id: Date.now(),
+                date: formattedDate,
+                shift: shift,
+                support: support,
+                portal: portal,
+                store: storeName,
+                zip: zipcode,
+                contact: 'SHIPPING TEAM',
+                contactNumber: '(000) 000-0000',
+                module: prefix === 'store' ? 'Store Creation' : 'Moolah',
+                issue: issueText,
+                note: '',
+                escalated: '',
+                status: 'OTHER TASK',
+                remarks: '',
+                troubleshooting: '',
+                resolution: '',
+                moduleData: moduleData,
+                source: prefix,
+                deleted: false,
+                imported: false
+            };
+            allEntries.unshift(newEntry);
+            showNotification(`${prefix === 'store' ? 'Store' : 'Moolah'} entry added (previous edit target missing)!`);
+        }
+        editId = null;
+        addBtn.textContent = 'ADD ENTRY';
+        addBtn.classList.remove('editing');
+    } 
+    // ---- NEW ENTRY ----
+    else {
+        const newEntry = {
+            id: Date.now(),
+            date: formattedDate,
+            shift: shift,
+            support: support,
+            portal: portal,
+            store: storeName,
+            zip: zipcode,
+            contact: 'SHIPPING TEAM',
+            contactNumber: '(000) 000-0000',
+            module: prefix === 'store' ? 'Store Creation' : 'Moolah',
+            issue: issueText,
+            note: '',
+            escalated: '',
+            status: 'OTHER TASK',
+            remarks: '',
+            troubleshooting: '',
+            resolution: '',
+            moduleData: moduleData,
+            source: prefix,
+            deleted: false,
+            imported: false
+        };
+        allEntries.unshift(newEntry);
+        showNotification(`${prefix === 'store' ? 'Store' : 'Moolah'} entry added!`);
+    }
 
-    // Clear only the module-specific fields (keep date, shift, support)
+    // Clear only module-specific fields (keep date/shift/support)
     if (prefix === 'store') {
         const storeFields = ['agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'];
         storeFields.forEach(id => {
