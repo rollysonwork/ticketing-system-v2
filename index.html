@@ -2120,12 +2120,14 @@ function selectStore(prefix, index) {
                 }
             }
 
+// Replace the existing addEntry function with this one
 async function addEntry(prefix) {
     if (prefix !== 'ticket') {
-        addEntryLegacy(prefix);
+        await addEntryLegacy(prefix);
         return;
     }
 
+    // --- existing ticket logic (unchanged) ---
     let requiredIds = ['ticket-portal', 'ticket-store', 'ticket-zip'];
     let valid = true;
     requiredIds.forEach(id => {
@@ -2136,14 +2138,11 @@ async function addEntry(prefix) {
             valid = false;
         }
     });
-
     if (!valid) {
         showNotification('Please fill PORTAL, STORE NAME, and ZIP CODE!');
         return;
     }
-
     pushUndo();
-
     const dateStr = document.getElementById('ticket-date').value;
     const formattedDate = new Date(dateStr).toLocaleDateString('en-US');
     const shift = document.getElementById('ticket-shift').value;
@@ -2232,7 +2231,7 @@ async function addEntry(prefix) {
                 resolution: resolution,
                 deleted: false,
                 imported: existingEntry.imported || false,
-                source: existingEntry.source || 'ticket'
+                source: 'ticket'
             };
             allEntries[existingEntryIndex] = newEntry;
             showNotification('Entry updated!');
@@ -2295,6 +2294,112 @@ async function addEntry(prefix) {
     }
 
     clearFormFields('ticket');
+    saveAllEntries();
+    renderTable();
+    renderSidebar();
+    syncPreviewHeight();
+}
+
+// ----- NEW: addEntryLegacy for store & moolah -----
+async function addEntryLegacy(prefix) {
+    // Validate required fields
+    const portalEl = document.getElementById(`${prefix}-portal`);
+    const storeNameEl = document.getElementById(`${prefix}-storeName`);
+    const zipcodeEl = document.getElementById(`${prefix}-zipcode`);
+    let valid = true;
+    [portalEl, storeNameEl, zipcodeEl].forEach(el => {
+        el.classList.remove('invalid');
+        if (!el.value.trim()) {
+            el.classList.add('invalid');
+            valid = false;
+        }
+    });
+    if (!valid) {
+        showNotification('Please fill PORTAL, STORE NAME, and ZIP CODE!');
+        return;
+    }
+
+    pushUndo();
+
+    // Get common fields (date, shift, support) – they are read-only but have values
+    const dateStr = document.getElementById(`${prefix}-date`).value;
+    const formattedDate = dateStr ? new Date(dateStr).toLocaleDateString('en-US') : storeGetFormattedDateMinusOne();
+    const shift = document.getElementById(`${prefix}-shift`).value;
+    const support = document.getElementById(`${prefix}-support`).value.toUpperCase();
+    const portal = portalEl.value.trim();
+    const storeName = storeNameEl.value.trim();
+    const zipcode = zipcodeEl.value.trim();
+
+    // Collect module-specific data
+    let moduleData = {};
+    if (prefix === 'store') {
+        moduleData = {
+            agent: document.getElementById('store-agent').value,
+            email: document.getElementById('store-email').value,
+            password: document.getElementById('store-password').value,
+            sku: document.getElementById('store-sku').value,
+            database: document.getElementById('store-database').value,
+            noOfReg: document.getElementById('store-noOfReg').value,
+            mokiId: document.getElementById('store-mokiId').value,
+            anydeskId: document.getElementById('store-anydeskId').value
+        };
+    } else if (prefix === 'moolah') {
+        moduleData = {
+            email: document.getElementById('moolah-email').value,
+            password: document.getElementById('moolah-password').value,
+            sku: document.getElementById('moolah-sku').value,
+            noOfTabs: document.getElementById('moolah-noOfTabs').value,
+            mokiId: document.getElementById('moolah-mokiId').value,
+            anydeskId: document.getElementById('moolah-anydeskId').value
+        };
+    }
+
+    const newEntry = {
+        id: Date.now(),
+        date: formattedDate,
+        shift: shift,
+        support: support,
+        portal: portal,
+        store: storeName,
+        zip: zipcode,
+        contact: '',          // not used for store/moolah
+        contactNumber: '',
+        module: prefix === 'store' ? 'Store Creation' : 'Moolah',
+        issue: `${prefix === 'store' ? 'Store Creation' : 'Moolah Account'} - Done ✅`,
+        note: '',
+        escalated: '',
+        status: 'RESOLVED',
+        remarks: '',
+        troubleshooting: '',
+        resolution: '',
+        moduleData: moduleData,
+        source: prefix,       // 'store' or 'moolah'
+        deleted: false,
+        imported: false
+    };
+
+    allEntries.unshift(newEntry);
+    showNotification(`${prefix === 'store' ? 'Store' : 'Moolah'} entry added!`);
+
+    // Clear only the module-specific fields (keep date, shift, support)
+    if (prefix === 'store') {
+        const storeFields = ['agent', 'email', 'password', 'sku', 'database', 'noOfReg', 'mokiId', 'anydeskId'];
+        storeFields.forEach(id => {
+            const el = document.getElementById(`store-${id}`);
+            if (el) el.value = '';
+        });
+        storeUpdatePreview();
+        saveFormData('store');
+    } else if (prefix === 'moolah') {
+        const moolahFields = ['email', 'password', 'sku', 'noOfTabs', 'mokiId', 'anydeskId'];
+        moolahFields.forEach(id => {
+            const el = document.getElementById(`moolah-${id}`);
+            if (el) el.value = '';
+        });
+        moolahUpdatePreview();
+        saveFormData('moolah');
+    }
+
     saveAllEntries();
     renderTable();
     renderSidebar();
