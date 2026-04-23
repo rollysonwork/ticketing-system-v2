@@ -1268,8 +1268,9 @@ const CONFIG = {
     SKU_COL: 1,          // <-- ADD THIS LINE
     STORE_NAME_COL: 2,
     ZIP_CODE_COL: 3,
-    STATUS_COL: 11,
-    NOTES_COL: 14
+    STATUS_COL: 10,
+    NOTE1_COL: 15,
+	NOTE2_COL: 16
 };
 
             function getGoogleApiKey() {
@@ -1640,19 +1641,22 @@ for (let i = 1; i < data.values.length; i++) {
     const storeName = (row[CONFIG.STORE_NAME_COL] || '').toString().trim();
     const zipCode = (row[CONFIG.ZIP_CODE_COL] || '').toString().trim();
     let status = (row[CONFIG.STATUS_COL] || '').toString().trim().toUpperCase();
-    const notes = (row[CONFIG.NOTES_COL] || '').toString().trim().toUpperCase();
+	
+    const note1 = (row[CONFIG.NOTE1_COL] || '').toString().trim().toUpperCase();
+	const note2 = (row[CONFIG.NOTE2_COL] || '').toString().trim().toUpperCase();
+	const combinedNotes = [note1, note2].filter(n => n !== '').join(' ');
 
     if (!portal && !storeName) continue;
     if (!status) status = 'UNKNOWN';
 
-    storeData.push({
-        portal: portal || 'N/A',
-        sku: sku,                           // NEW
-        storeName: storeName.toUpperCase() || 'UNKNOWN STORE',
-        zipCode: zipCode || 'N/A',
-        status,
-        notes
-    });
+	storeData.push({
+	    portal: portal || 'N/A',
+	    sku: sku,
+	    storeName: storeName.toUpperCase() || 'UNKNOWN STORE',
+	    zipCode: zipCode || 'N/A',
+	    status,
+	    notes: combinedNotes
+	});
 }
                     storeData.sort((a, b) => a.storeName.localeCompare(b.storeName));
 
