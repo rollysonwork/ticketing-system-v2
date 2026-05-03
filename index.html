@@ -976,15 +976,87 @@ body {
     .icon-ticket {
         background-image: var(--logo-vitreous-retailz-ticket);
     }
+
+.login-action-btn {
+    transition: var(--transition);
+    cursor: pointer;
+    border: none;
+    border-radius: 40px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 16px;
+    background: var(--accent-color);
+    color: white;
+    font-size: 0.8rem;
+}
+.login-action-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.login-action-btn {
+    transition: var(--transition);
+    cursor: pointer;
+    border: none;
+    border-radius: 40px;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 8px 16px;
+    background: var(--accent-color);
+    color: white;
+    font-size: 0.8rem;
+}
+.login-action-btn:hover {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
 </style>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 </head>
 <body>
-    <h1>
-        🏬 RetailzPOS · Unified Creation System
-        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
-    </h1>
+<!-- Login Overlay -->
+<div id="loginOverlay" style="display:none; position:fixed; inset:0; background-image: url('https://patelprocessing.com/Login-Page-(1920x1080).jpg'); background-size: cover; background-position: center; z-index:2000; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:16px;">
+    <div style="background:var(--bg-secondary); border-radius:20px; padding:32px; box-shadow:var(--card-shadow); border:1px solid var(--border-color); max-width:400px; width:90%;">
+        <!-- Logo inside the card -->
+        <div style="text-align:center; margin-bottom:16px;">
+            <img src="	https://vitreous.support/logo.png?v=1777764480010_0.43758564004058664" alt="Logo" style="max-width:300px; height:auto;">
+        </div>
+        <h2 style="text-align:center; margin-bottom:24px;">Welcome Back!</h2>
+        <div style="margin-bottom:16px;">
+            <label style="display:block; margin-bottom:4px;">Email</label>
+            <input type="email" id="loginEmail" placeholder="you@example.com" class="no-uppercase" style="width:100%;">
+        </div>
+        <div style="margin-bottom:16px; position:relative;">
+            <label style="display:block; margin-bottom:4px;">Password</label>
+            <input type="password" id="loginPassword" class="no-uppercase" style="width:100%; padding-right:40px;">
+            <button id="togglePassword" type="button" style="position:absolute; right:10px; bottom:14px; background:none; border:none; cursor:pointer; font-size:1.2rem;" title="Show password">🙉</button>
+        </div>
+        <div id="loginError" style="color:#ef4444; margin-bottom:16px; text-align:center;"></div>
+        <button id="loginBtn" class="login-action-btn" style="width:100%; padding:12px;">Login</button>        
+<div style="margin-top:16px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">
+    <button id="setSheetsKeyFromLogin" class="login-action-btn">🔑 Sheets Key</button>
+    <button id="setGeminiKeyFromLogin" class="login-action-btn">🤖 Gemini Key</button>
+</div>
+        <div id="keyStatus" style="margin-top:12px; text-align:center; font-size:0.8rem; color:var(--text-muted);"></div>
+    </div>
+</div>
+<h1>
+    🏬 RetailzPOS · Unified Creation System
+    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+    <button class="theme-toggle" id="logoutBtn" title="Logout" style="margin-left:8px;">🚪</button>
+</h1>
 
     <div class="app-container">
         <div class="main-content">
@@ -1264,13 +1336,14 @@ body {
 const CONFIG = {
     GOOGLE_SHEET_ID: '1IDsVjZrWCP0hXRn_EufLNgpOMtYFtV6jVZx9P5rvbcA',
     SHEET_NAME: 'SERVER MANAGEMENT',
+    CRED_SHEET_NAME: 'CREDENTIALS',   // <-- new
     PORTAL_COL: 0,
-    SKU_COL: 1,          // <-- ADD THIS LINE
+    SKU_COL: 1,
     STORE_NAME_COL: 2,
     ZIP_CODE_COL: 3,
     STATUS_COL: 10,
     NOTE1_COL: 15,
-	NOTE2_COL: 16
+    NOTE2_COL: 16
 };
 
             function getGoogleApiKey() {
@@ -1302,9 +1375,9 @@ const CONFIG = {
                 '11PM - 8AM': ['11:00 PM', '08:00 AM'],
                 '1AM - 10AM': ['01:00 AM', '10:00 AM'],
                 '2AM - 11AM': ['02:00 AM', '11:00 AM'],
-				'6PM - 5AM': ['06:00 PM', '05:00 AM'],
-				'9PM - 8AM': ['09:00 PM', '08:00 AM'],
-				'7:30AM - 6:30PM': ['07:30 PM', '06:30 PM']
+		'6PM - 5AM': ['06:00 PM', '05:00 AM'],
+		'9PM - 8AM': ['09:00 PM', '08:00 AM'],
+		'7:30AM - 6:30PM': ['07:30 PM', '06:30 PM']
             };
 
             const CONSTANT_ISSUE = `CREATE MOOLAH ACCOUNT - DONE ✅\nINSTALL & UPDATE ALL APPS - DONE ✅\nASSIGN STORE - DONE ✅`;
@@ -2958,9 +3031,9 @@ function renderSidebar() {
                         if (entry.status && entry.status.toUpperCase() === 'OTHER TASK') {
                             issueDisplay = entry.module || 'OTHER TASK';
                         }
-						let cardClass = 'ticket-card';
-						if (entry.source === 'store') cardClass = 'store-card';
-						else if (entry.source === 'moolah') cardClass = 'moolah-card';
+                        let cardClass = 'ticket-card';
+                        if (entry.source === 'store') cardClass = 'store-card';
+                        else if (entry.source === 'moolah') cardClass = 'moolah-card';
 
                         // Determine issue text color based on status
                         let issueTextColor = '';
@@ -3985,7 +4058,213 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
                 });
             }
 
-            function init() {
+// Load credentials from Google Sheets
+let credentials = []; // will hold objects: { support, email, password, role }
+
+async function loadCredentials() {
+    const apiKey = getGoogleApiKey();
+    if (!apiKey) throw new Error('API key not set');
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.GOOGLE_SHEET_ID}/values/${encodeURIComponent(CONFIG.CRED_SHEET_NAME)}?key=${apiKey}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Failed to load credentials');
+    const data = await response.json();
+    if (!data.values || data.values.length < 2) throw new Error('No credentials found');
+    credentials = [];
+    for (let i = 1; i < data.values.length; i++) {
+        const row = data.values[i];
+        const support = (row[0] || '').trim();
+        const email = (row[1] || '').trim();
+        const password = (row[2] || '').trim();
+        const role = (row[3] || '').trim().toUpperCase();
+        if (email && password) {
+            credentials.push({ support, email, password, role });
+        }
+    }
+}
+
+function getLoggedInUser() {
+    const stored = localStorage.getItem('loggedInUser');
+    return stored ? JSON.parse(stored) : null;
+}
+
+function setLoggedInUser(user) {
+    localStorage.setItem('loggedInUser', JSON.stringify(user));
+}
+
+function clearLoggedInUser() {
+    localStorage.removeItem('loggedInUser');
+}
+
+function showLoginError(msg) {
+    document.getElementById('loginError').textContent = msg;
+}
+
+// Apply role-based restrictions
+function applyRoleRestrictions(role) {
+    role = role.toUpperCase();
+    if (role === 'LEVEL 1') {
+        // hide moolah tab & store tab
+        document.querySelectorAll('.tab-button').forEach(btn => {
+            const text = btn.textContent.toUpperCase();
+            if (text.includes('MOOLAH') || text.includes('STORE')) {
+                btn.style.display = 'none';
+            }
+        });
+        // hide bulk bar buttons: import, export, shift report
+        document.getElementById('importCsvBtn').style.display = 'none';
+        document.getElementById('exportCsvBtn').style.display = 'none';
+        document.getElementById('shiftReportBtn').style.display = 'none';
+    } else if (role === 'LEVEL 2') {
+        document.getElementById('importCsvBtn').style.display = 'none';
+        document.getElementById('exportCsvBtn').style.display = 'none';
+        document.getElementById('shiftReportBtn').style.display = 'none';
+    }
+    // LEVEL 3: no restrictions
+}
+
+function autoFillSupportName(supportName) {
+    document.getElementById('ticket-support').value = supportName;
+    document.getElementById('ticket-support').readOnly = true;
+    document.getElementById('store-support').value = supportName;
+    document.getElementById('store-support').readOnly = true;
+    document.getElementById('moolah-support').value = supportName;
+    document.getElementById('moolah-support').readOnly = true;
+    // trigger sync
+    syncShiftSupportFromTicket();
+}
+
+function setupLoginListeners() {
+    const loginBtn = document.getElementById('loginBtn');
+    const setSheetsBtn = document.getElementById('setSheetsKeyFromLogin');
+    const setGeminiBtn = document.getElementById('setGeminiKeyFromLogin');
+    const togglePwd = document.getElementById('togglePassword');
+    const loginEmail = document.getElementById('loginEmail');
+    const loginPassword = document.getElementById('loginPassword');
+    const keyStatusEl = document.getElementById('keyStatus');
+
+    // Helper to update key status message and enable/disable login button
+    function updateKeyStatus() {
+        const sheetsKey = getGoogleApiKey();
+        const geminiKey = localStorage.getItem('geminiApiKey');
+        const bothSet = sheetsKey && geminiKey;
+        loginBtn.disabled = !bothSet;
+        if (!bothSet) {
+            const missing = [];
+            if (!sheetsKey) missing.push('Sheets API Key');
+            if (!geminiKey) missing.push('Gemini API Key');
+            keyStatusEl.textContent = `⚠️ Missing: ${missing.join(', ')}. Please set both keys before login.`;
+        } else {
+            keyStatusEl.textContent = '✅ Both API keys are set. You can login.';
+        }
+    }
+    updateKeyStatus();
+
+    // Set Sheets API key
+    setSheetsBtn.addEventListener('click', () => {
+        const key = prompt('Enter your Google Sheets API key:');
+        if (key !== null) {
+            if (key.trim() === '') {
+                localStorage.removeItem('googleApiKey');
+            } else {
+                localStorage.setItem('googleApiKey', key.trim());
+            }
+            updateKeyStatus();
+            showNotification(key.trim() ? 'Sheets API key saved.' : 'Sheets API key removed.');
+        }
+    });
+
+    // Set Gemini API key
+    setGeminiBtn.addEventListener('click', () => {
+        const key = prompt('Enter your Google Gemini API key:');
+        if (key !== null) {
+            if (key.trim() === '') {
+                localStorage.removeItem('geminiApiKey');
+            } else {
+                localStorage.setItem('geminiApiKey', key.trim());
+            }
+            updateKeyStatus();
+            showNotification(key.trim() ? 'Gemini API key saved.' : 'Gemini API key removed.');
+        }
+    });
+
+    // Toggle password visibility
+    togglePwd.addEventListener('click', () => {
+        const type = loginPassword.getAttribute('type') === 'password' ? 'text' : 'password';
+        loginPassword.setAttribute('type', type);
+        togglePwd.textContent = type === 'password' ? '👁️' : '🙈';
+    });
+
+    // Login action
+    loginBtn.addEventListener('click', async () => {
+        const email = loginEmail.value.trim();
+        const pwd = loginPassword.value.trim();
+        if (!email || !pwd) {
+            showLoginError('Please enter email and password.');
+            return;
+        }
+        // Final check (button may be disabled, but just in case)
+        if (!getGoogleApiKey() || !localStorage.getItem('geminiApiKey')) {
+            showLoginError('Both API keys must be set before logging in.');
+            return;
+        }
+        try {
+            await loadCredentials();
+            const user = credentials.find(c => c.email.toLowerCase() === email.toLowerCase() && c.password === pwd);
+            if (!user) {
+                showLoginError('Invalid email or password.');
+                return;
+            }
+            setLoggedInUser({
+                email: user.email,
+                support: user.support,
+                role: user.role
+            });
+            showNotification(`Welcome, ${user.support}!`);
+            location.reload();
+        } catch (err) {
+            showLoginError(`Error: ${err.message}`);
+        }
+    });
+
+    // Allow Enter key to login
+    [loginEmail, loginPassword].forEach(el => {
+        el.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') loginBtn.click();
+        });
+    });
+}
+
+function init() {
+    // Check if user is already logged in
+    const loggedInUser = getLoggedInUser();
+    if (!loggedInUser) {
+        // Show login overlay and disable main UI
+        document.getElementById('loginOverlay').style.display = 'flex';
+        document.querySelector('.app-container').style.display = 'none';
+        document.getElementById('entryTable').style.display = 'none';
+        document.querySelector('.bulk-bar').style.display = 'none';
+        setupLoginListeners();
+        return; // rest of init will run after login
+    }
+
+    // User is logged in – show main UI and continue
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.querySelector('.app-container').style.display = '';
+    document.getElementById('entryTable').style.display = '';
+    document.querySelector('.bulk-bar').style.display = '';
+
+    // Apply role restrictions
+    applyRoleRestrictions(loggedInUser.role);
+    // Auto‑fill support name everywhere
+    autoFillSupportName(loggedInUser.support);
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+    if (confirm('Are you sure you want to logout?')) {
+        clearLoggedInUser();
+        location.reload();
+    }
+});
+
                 const yesterday = new Date();
                 yesterday.setDate(yesterday.getDate() - 1);
                 const yyyy = yesterday.getFullYear();
