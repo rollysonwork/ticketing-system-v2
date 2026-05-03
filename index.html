@@ -2958,11 +2958,9 @@ function renderSidebar() {
                         if (entry.status && entry.status.toUpperCase() === 'OTHER TASK') {
                             issueDisplay = entry.module || 'OTHER TASK';
                         }
-                        let cardClass = 'ticket-card';
-                        if (entry.source === 'store') cardClass = 'store-card';
-                        else if (entry.source === 'moolah') cardClass = 'moolah-card';
-                        else if (entry.module === 'Moolah') cardClass = 'moolah-card';
-                        else if (entry.module === 'Store Creation') cardClass = 'store-card';
+						let cardClass = 'ticket-card';
+						if (entry.source === 'store') cardClass = 'store-card';
+						else if (entry.source === 'moolah') cardClass = 'moolah-card';
 
                         // Determine issue text color based on status
                         let issueTextColor = '';
