@@ -1089,7 +1089,7 @@ body {
                         </div>
                         <table>
                             <tr><th>DATE</th><td><input type="date" id="ticket-date"></td></tr>
-                            <tr><th>SHIFT SCHEDULE</th><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option><option value="6PM - 5AM">6PM - 5AM</option><option value="9PM - 8AM">9PM - 8AM</option><option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option></select></td>
+                            <tr><th>SHIFT SCHEDULE</th><td><select id="ticket-shift"><option value="">-- SELECT --</option><option value="6PM - 5AM">6PM - 5AM</option><option value="9PM - 8AM">9PM - 8AM</option><option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option></select></td>
                             <tr><th>SUPPORT NAME</th><td><input type="text" id="ticket-support"></td></tr>
                             <tr><th>PORTAL NUMBER *</th><td><input type="text" id="ticket-portal"></td>
                             <tr><th>STORE NAME *</th><td><input type="text" id="ticket-store"></td>
@@ -1160,7 +1160,7 @@ body {
                         </div>
                         <table>
                             <tr><th>DATE</th><td><input type="date" id="store-date" readonly></td>
-                            <tr><th>SHIFT SCHEDULE</th><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option><option value="6PM - 5AM">6PM - 5AM</option><option value="9PM - 8AM">9PM - 8AM</option><option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option></select></td>
+                            <tr><th>SHIFT SCHEDULE</th><td><select id="store-shift" disabled><option value="">-- SELECT --</option><option value="6PM - 5AM">6PM - 5AM</option><option value="9PM - 8AM">9PM - 8AM</option><option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option></select></td>
                             <tr><th>SUPPORT NAME</th><td><input type="text" id="store-support" readonly></td>
                             <tr><th>PORTAL NUMBER *</th><td><input type="text" id="store-portal" class="required-field"></td>
                             <tr><th>STORE NAME *</th><td><input type="text" id="store-storeName" class="required-field"></td>
@@ -1232,7 +1232,7 @@ body {
                         </div>
                         <table>
                             <tr><th>DATE</th><td><input type="date" id="moolah-date" readonly></td>
-                            <tr><th>SHIFT SCHEDULE</th><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="8PM - 5AM">8PM - 5AM</option><option value="9PM - 6AM">9PM - 6AM</option><option value="10PM - 7AM">10PM - 7AM</option><option value="11PM - 8AM">11PM - 8AM</option><option value="1AM - 10AM">1AM - 10AM</option><option value="2AM - 11AM">2AM - 11AM</option><option value="6PM - 5AM">6PM - 5AM</option><option value="9PM - 8AM">9PM - 8AM</option><option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option></select></td>
+                            <tr><th>SHIFT SCHEDULE</th><td><select id="moolah-shift" disabled><option value="">-- SELECT --</option><option value="6PM - 5AM">6PM - 5AM</option><option value="9PM - 8AM">9PM - 8AM</option><option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option></select></td>
                             <tr><th>SUPPORT NAME</th><td><input type="text" id="moolah-support" readonly></td>
                             <tr><th>PORTAL NUMBER *</th><td><input type="text" id="moolah-portal" class="required"></td>
                             <tr><th>STORE NAME *</th><td><input type="text" id="moolah-storeName" class="required"></td>
@@ -1369,15 +1369,9 @@ const CONFIG = {
             }
 
             const CLOCK_TIMES = {
-                '8PM - 5AM': ['08:00 PM', '05:00 AM'],
-                '9PM - 6AM': ['09:00 PM', '06:00 AM'],
-                '10PM - 7AM': ['10:00 PM', '07:00 AM'],
-                '11PM - 8AM': ['11:00 PM', '08:00 AM'],
-                '1AM - 10AM': ['01:00 AM', '10:00 AM'],
-                '2AM - 11AM': ['02:00 AM', '11:00 AM'],
-		'6PM - 5AM': ['06:00 PM', '05:00 AM'],
-		'9PM - 8AM': ['09:00 PM', '08:00 AM'],
-		'7:30AM - 6:30PM': ['07:30 PM', '06:30 PM']
+				'6PM - 5AM': ['06:00 PM', '05:00 AM'],
+				'9PM - 8AM': ['09:00 PM', '08:00 AM'],
+				'7:30AM - 6:30PM': ['07:30 PM', '06:30 PM']
             };
 
             const CONSTANT_ISSUE = `CREATE MOOLAH ACCOUNT - DONE ✅\nINSTALL & UPDATE ALL APPS - DONE ✅\nASSIGN STORE - DONE ✅`;
