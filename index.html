@@ -1021,6 +1021,12 @@ body {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+#togglePassword {
+    align-self: center;
+    align-content: center;
+    align-items: center;
+}
+
 </style>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
@@ -1041,7 +1047,7 @@ body {
         <div style="margin-bottom:16px; position:relative;">
             <label style="display:block; margin-bottom:4px;">Password</label>
             <input type="password" id="loginPassword" class="no-uppercase" style="width:100%; padding-right:40px;">
-            <button id="togglePassword" type="button" style="position:absolute; right:10px; bottom:14px; background:none; border:none; cursor:pointer; font-size:1.2rem;" title="Show password">🙉</button>
+            <button id="togglePassword" type="button" style="position:absolute; right:10px; background:none; border:none; cursor:pointer; font-size:1.2rem;" title="Show password">🙉</button>
         </div>
         <div id="loginError" style="color:#ef4444; margin-bottom:16px; text-align:center;"></div>
         <button id="loginBtn" class="login-action-btn" style="width:100%; padding:12px;">Login</button>        
