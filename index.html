@@ -3003,6 +3003,16 @@ ASSIGN STORE - DONE ✅`;
                 updateSelectAllCheckboxState();
             }
 
+function getYesterdayFormatted() {
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    return yesterday.toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
+}
+
 function renderSidebar() {
     const containers = [
         document.getElementById('ticketHistoryContent'),
@@ -3011,6 +3021,11 @@ function renderSidebar() {
     ].filter(c => c);
 
     if (containers.length === 0) return;
+
+    // Determine current month key and yesterday formatted
+    const now = new Date();
+    const currentMonthKey = `${now.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}`;
+    const yesterdayFormatted = getYesterdayFormatted();
 
     const historyEntries = allEntries.filter(entry => !entry.imported);
     const todayEST = getESTDateString();
@@ -3023,18 +3038,20 @@ function renderSidebar() {
         if (!entry.date) return;
         const parts = entry.date.split('/');
         if (parts.length !== 3) return;
-        const month = parseInt(parts[0],10);
-        const day = parseInt(parts[1],10);
-        const year = parseInt(parts[2],10);
-        const dateObj = new Date(year, month-1, day);
+        const month = parseInt(parts[0], 10);
+        const day = parseInt(parts[1], 10);
+        const year = parseInt(parts[2], 10);
+        const dateObj = new Date(year, month - 1, day);
         const monthKey = `${dateObj.toLocaleString('default', { month: 'long' })} ${year}`;
-        const dateKey = `${dateObj.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+        const dateKey = dateObj.toLocaleDateString('en-US', {
+            month: 'long', day: 'numeric', year: 'numeric'
+        });
         if (!grouped[monthKey]) grouped[monthKey] = {};
         if (!grouped[monthKey][dateKey]) grouped[monthKey][dateKey] = [];
         grouped[monthKey][dateKey].push(entry);
     });
 
-    const sortedMonths = Object.keys(grouped).sort((a,b) => {
+    const sortedMonths = Object.keys(grouped).sort((a, b) => {
         const dateA = new Date(a);
         const dateB = new Date(b);
         return dateB - dateA;
@@ -3042,7 +3059,11 @@ function renderSidebar() {
 
     let html = '';
     for (const month of sortedMonths) {
-        const isMonthCollapsed = collapseState.months[month] === true;
+        // Set default collapsed state for month if not already set
+        if (collapseState.months[month] === undefined) {
+            collapseState.months[month] = (month !== currentMonthKey);
+        }
+        const isMonthCollapsed = collapseState.months[month];
         const monthArrow = isMonthCollapsed ? '▶' : '▼';
         html += `<div class="sidebar-group">
                     <div class="month-header" onclick="toggleMonth('${month.replace(/'/g, "\\'")}')">
@@ -3050,13 +3071,13 @@ function renderSidebar() {
                     </div>`;
         if (!isMonthCollapsed) {
             const dates = grouped[month];
-            const sortedDates = Object.keys(dates).sort((a,b) => new Date(b) - new Date(a));
+            const sortedDates = Object.keys(dates).sort((a, b) => new Date(b) - new Date(a));
             for (const dateKey of sortedDates) {
-                let isDateCollapsed = collapseState.dates[dateKey];
-                if (isDateCollapsed === undefined) {
-                    isDateCollapsed = (dateKey !== todayFormatted);
-                    collapseState.dates[dateKey] = isDateCollapsed;
+                // Set default collapsed state for date if not already set
+                if (collapseState.dates[dateKey] === undefined) {
+                    collapseState.dates[dateKey] = (dateKey !== yesterdayFormatted);
                 }
+                const isDateCollapsed = collapseState.dates[dateKey];
                 const dateArrow = isDateCollapsed ? '▶' : '▼';
                 html += `<div class="date-group">
                             <div class="date-header" onclick="toggleDate('${dateKey.replace(/'/g, "\\'")}')">
@@ -3073,7 +3094,6 @@ function renderSidebar() {
                         if (entry.source === 'store') cardClass = 'store-card';
                         else if (entry.source === 'moolah') cardClass = 'moolah-card';
 
-                        // Determine issue text color based on status
                         let issueTextColor = '';
                         switch ((entry.status || '').toUpperCase()) {
                             case 'RESOLVED':
