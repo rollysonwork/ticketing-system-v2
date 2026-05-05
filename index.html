@@ -1052,12 +1052,13 @@ body {
         <div id="keyStatus" style="margin-top:12px; text-align:center; font-size:0.8rem; color:var(--text-muted);"></div>
     </div>
 </div>
-<h1>
-    🏬 RetailzPOS · Unified Creation System
-    <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
-    <button class="theme-toggle" id="logoutBtn" title="Logout" style="margin-left:8px;">🚪</button>
-</h1>
-
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem;">
+    <h1 style="margin: 0;">🏬 RetailzPOS · Unified Creation System</h1>
+    <div style="display: flex; gap: 12px;">
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+        <button class="theme-toggle" id="profileBtn" title="Profile">👤</button>
+    </div>
+</div>
     <div class="app-container">
         <div class="main-content">
             <div class="tab-container">
@@ -1304,7 +1305,50 @@ body {
 
     <div id="notification"></div>
 
+<!-- Profile Modal -->
+<div id="profileModal" style="display:none; position:fixed; top:20px; right:20px; background:var(--bg-secondary); border-radius:16px; box-shadow:0 10px 25px -5px rgba(0,0,0,0.2); border:1px solid var(--border-color); width:300px; z-index:1100; padding:16px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <strong>Profile</strong>
+        <button id="closeProfileModal" style="background:none; border:none; font-size:1.2rem; cursor:pointer;">&times;</button>
+    </div>
+    <div id="profileInfo">
+        <div><strong>Support:</strong> <span id="profileSupport"></span></div>
+        <div><strong>Email:</strong> <span id="profileEmail"></span></div>
+        <div><strong>Role:</strong> <span id="profileRole"></span></div>
+    </div>
+    <hr style="margin:12px 0; border-color:var(--border-color);">
+    <button id="changePasswordBtn" class="login-action-btn" style="width:100%; margin-bottom:8px;">Change Password</button>
+    <button id="logoutBtnProfile" class="login-action-btn" style="width:100%; background:#ef4444;">Logout</button>
+</div>
+
+<!-- Change Password Modal -->
+<div id="changePwdModal" style="display:none; position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:var(--bg-secondary); border-radius:20px; padding:24px; box-shadow:0 20px 35px -10px rgba(0,0,0,0.3); width:350px; z-index:1200; border:1px solid var(--border-color);">
+    <h3 style="margin-bottom:16px;">Change Password</h3>
+    <div style="margin-bottom:12px;">
+        <input type="password" id="oldPassword" placeholder="Old Password" style="width:100%;">
+        <button class="togglePwd" data-target="oldPassword" style="position:relative; float:right; margin-top:-30px; margin-right:8px; background:none; border:none;">👁️</button>
+    </div>
+    <div style="margin-bottom:12px;">
+        <input type="password" id="newPassword" placeholder="New Password" style="width:100%;">
+        <button class="togglePwd" data-target="newPassword" style="position:relative; float:right; margin-top:-30px; margin-right:8px; background:none; border:none;">👁️</button>
+    </div>
+    <div style="margin-bottom:12px;">
+        <input type="password" id="confirmPassword" placeholder="Confirm New Password" style="width:100%;">
+        <button class="togglePwd" data-target="confirmPassword" style="position:relative; float:right; margin-top:-30px; margin-right:8px; background:none; border:none;">👁️</button>
+    </div>
+    <div id="pwdError" style="color:#ef4444; margin-bottom:12px; font-size:0.8rem;"></div>
+    <div style="display:flex; gap:8px;">
+        <button id="submitPasswordChange" class="login-action-btn" style="flex:1;">Update</button>
+        <button id="cancelPwdChange" class="login-action-btn" style="flex:1; background:#6b7280;">Cancel</button>
+    </div>
+</div>
+<div id="pwdModalBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1150;"></div>
+
+
     <script>
+
+const PASSWORD_UPDATE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz_NOXzj_IQChM9QV90sgtyiL43YY9rwSwkQ3g21THcbsrqc5tfYBnCAWI0CCDL0-lb/exec'; // Replace with actual URL
+
         (function() {
             "use strict";
 
@@ -4242,6 +4286,38 @@ function setupLoginListeners() {
     });
 }
 
+async function updatePasswordInSheet(email, oldPassword, newPassword) {
+    if (!PASSWORD_UPDATE_SCRIPT_URL || PASSWORD_UPDATE_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')) {
+        showNotification('Password update script URL not configured.');
+        return false;
+    }
+    try {
+        const response = await fetch(PASSWORD_UPDATE_SCRIPT_URL, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, oldPassword, newPassword })
+        });
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+        
+        const result = await response.json();
+        if (result.success) {
+            showNotification(result.message || 'Password updated successfully!');
+            return true;
+        } else {
+            showNotification(result.error || 'Password update failed');
+            return false;
+        }
+    } catch (err) {
+        console.error('Password update error:', err);
+        showNotification('Error: ' + err.message);
+        return false;
+    }
+}
+
 function init() {
     // Check if user is already logged in
     const loggedInUser = getLoggedInUser();
@@ -4265,13 +4341,8 @@ function init() {
     applyRoleRestrictions(loggedInUser.role);
     // Auto‑fill support name everywhere
     autoFillSupportName(loggedInUser.support);
+window.currentUser = loggedInUser;
 
-    document.getElementById('logoutBtn').addEventListener('click', () => {
-    if (confirm('Are you sure you want to logout?')) {
-        clearLoggedInUser();
-        location.reload();
-    }
-});
 
                 const yesterday = new Date();
                 yesterday.setDate(yesterday.getDate() - 1);
@@ -4374,22 +4445,23 @@ function init() {
                     if (el) el.addEventListener('input', () => { ticketUpdatePreview(); saveFormData('ticket'); });
                 });
 
-                // Uppercase conversion except for specified fields
-                document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach(el => {
-                    if (el.id === 'ticket-issue' || el.id === 'ticket-remarks' || el.id === 'ticket-resolution' || el.id === 'ticket-note') {
-                        return;
-                    }
-                    el.addEventListener('input', function() {
-                        if (!this.value) return;
-                        const start = this.selectionStart;
-                        const end = this.selectionEnd;
-                        this.value = this.value.toUpperCase();
-                        this.setSelectionRange(start, end);
-                    });
-                    el.addEventListener('blur', function() {
-                        if (this.value) this.value = this.value.toUpperCase();
-                    });
-                });
+document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach(el => {
+    // Exclude password modal fields and ticket specific fields
+    if (el.id === 'ticket-issue' || el.id === 'ticket-remarks' || el.id === 'ticket-resolution' || el.id === 'ticket-note' ||
+        el.id === 'oldPassword' || el.id === 'newPassword' || el.id === 'confirmPassword') {
+        return;
+    }
+    el.addEventListener('input', function() {
+        if (!this.value) return;
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = this.value.toUpperCase();
+        this.setSelectionRange(start, end);
+    });
+    el.addEventListener('blur', function() {
+        if (this.value) this.value = this.value.toUpperCase();
+    });
+});
 
                 initTheme();
                 document.getElementById('themeToggle').addEventListener('click', toggleTheme);
@@ -4462,6 +4534,101 @@ function init() {
                     ticketUpdatePreview();
                     saveFormData('ticket');
                 });
+
+// Profile modal logic
+const profileBtn = document.getElementById('profileBtn');
+const profileModal = document.getElementById('profileModal');
+const closeProfile = document.getElementById('closeProfileModal');
+const changePwdBtn = document.getElementById('changePasswordBtn');
+const logoutProfileBtn = document.getElementById('logoutBtnProfile');
+
+function showProfileModal() {
+    document.getElementById('profileSupport').textContent = currentUser.support || '';
+    document.getElementById('profileEmail').textContent = currentUser.email || '';
+    document.getElementById('profileRole').textContent = currentUser.role || '';
+    profileModal.style.display = 'block';
+}
+profileBtn.addEventListener('click', showProfileModal);
+closeProfile.addEventListener('click', () => profileModal.style.display = 'none');
+window.addEventListener('click', (e) => { if (e.target === profileModal) profileModal.style.display = 'none'; });
+
+logoutProfileBtn.addEventListener('click', () => {
+    if (confirm('Logout?')) {
+        clearLoggedInUser();
+        location.reload();
+    }
+});
+
+// Change password modal
+const changePwdModal = document.getElementById('changePwdModal');
+const backdrop = document.getElementById('pwdModalBackdrop');
+changePwdBtn.addEventListener('click', () => {
+    changePwdModal.style.display = 'block';
+    backdrop.style.display = 'block';
+});
+document.getElementById('cancelPwdChange').addEventListener('click', () => {
+    changePwdModal.style.display = 'none';
+    backdrop.style.display = 'none';
+    document.getElementById('pwdError').textContent = '';
+    document.getElementById('oldPassword').value = '';
+    document.getElementById('newPassword').value = '';
+    document.getElementById('confirmPassword').value = '';
+});
+backdrop.addEventListener('click', () => {
+    changePwdModal.style.display = 'none';
+    backdrop.style.display = 'none';
+});
+
+// Toggle password visibility for modals
+document.querySelectorAll('.togglePwd').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const targetId = btn.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        if (input.type === 'password') {
+            input.type = 'text';
+            btn.textContent = '🙈';
+        } else {
+            input.type = 'password';
+            btn.textContent = '👁️';
+        }
+    });
+});
+
+document.getElementById('submitPasswordChange').addEventListener('click', async () => {
+    const oldPwd = document.getElementById('oldPassword').value;
+    const newPwd = document.getElementById('newPassword').value;
+    const confirmPwd = document.getElementById('confirmPassword').value;
+    const errorDiv = document.getElementById('pwdError');
+    errorDiv.textContent = '';
+
+    if (!oldPwd || !newPwd || !confirmPwd) {
+        errorDiv.textContent = 'All fields required.';
+        return;
+    }
+    if (newPwd !== confirmPwd) {
+        errorDiv.textContent = 'New passwords do not match.';
+        return;
+    }
+    if (newPwd.length < 4) {
+        errorDiv.textContent = 'Password must be at least 4 characters.';
+        return;
+    }
+
+    const email = currentUser.email;
+    // Validate old password locally (optional, but better to let sheet handle)
+    const success = await updatePasswordInSheet(email, oldPwd, newPwd);
+    if (success) {
+        changePwdModal.style.display = 'none';
+        backdrop.style.display = 'none';
+        showNotification('Password updated successfully. Please login again.');
+        setTimeout(() => {
+            clearLoggedInUser();
+            location.reload();
+        }, 1500);
+    } else {
+        errorDiv.textContent = 'Failed to update password. Old password may be incorrect or script error.';
+    }
+});
 
                 // Idle refresh
                 const IDLE_REFRESH_DELAY = 900000;
