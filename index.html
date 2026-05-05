@@ -4287,33 +4287,14 @@ function setupLoginListeners() {
 }
 
 async function updatePasswordInSheet(email, oldPassword, newPassword) {
-    if (!PASSWORD_UPDATE_SCRIPT_URL || PASSWORD_UPDATE_SCRIPT_URL.includes('YOUR_DEPLOYMENT_ID')) {
-        showNotification('Password update script URL not configured.');
-        return false;
-    }
+    const url = `${PASSWORD_UPDATE_SCRIPT_URL}?email=${encodeURIComponent(email)}&oldPassword=${encodeURIComponent(oldPassword)}&newPassword=${encodeURIComponent(newPassword)}`;
     try {
-        const response = await fetch(PASSWORD_UPDATE_SCRIPT_URL, {
-            method: 'POST',
-            mode: 'cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, oldPassword, newPassword })
-        });
-        
-        if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
-        }
-        
-        const result = await response.json();
-        if (result.success) {
-            showNotification(result.message || 'Password updated successfully!');
-            return true;
-        } else {
-            showNotification(result.error || 'Password update failed');
-            return false;
-        }
+        await fetch(url, { method: 'GET', mode: 'no-cors' });
+        // With no-cors, we can't read the response, but the request reaches the server.
+        showNotification('Password change request sent. Check your sheet.');
+        return true;
     } catch (err) {
-        console.error('Password update error:', err);
-        showNotification('Error: ' + err.message);
+        showNotification('Network error: ' + err.message);
         return false;
     }
 }
