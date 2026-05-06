@@ -1417,11 +1417,24 @@
 							<div><strong>MOKI ID:</strong><br /><span id="store-preview-mokiId" class="preview-multiline"></span></div>
 							<div><strong>ANYDESK ID:</strong><br /><span id="store-preview-anydeskId" class="preview-multiline"></span></div>
 							<br />
-							<div>NEW STORE CREATION FORM SENT - DONE ✅</div>
-							<div>STORE CREATION - DONE✅</div>
-							<div>INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE✅</div>
-							<div>UPLOAD DATABASE - DONE✅</div>
-							<div>PENDING❌</div>
+<div><strong>NEW STORE CREATION FORM SENT</strong>
+    <button class="store-step-btn" data-step="form" data-status="done" style="margin-left: 8px;">✅ DONE</button>
+    <button class="store-step-btn" data-step="form" data-status="pending" style="margin-left: 4px;">❌ PENDING</button>
+</div>
+<div><strong>STORE CREATION</strong>
+    <button class="store-step-btn" data-step="creation" data-status="done">✅ DONE</button>
+    <button class="store-step-btn" data-step="creation" data-status="pending">❌ PENDING</button>
+</div>
+<div><strong>INSTALL, UPDATE APPS & LOGIN ACCOUNT</strong>
+    <button class="store-step-btn" data-step="install" data-status="done">✅ DONE</button>
+    <button class="store-step-btn" data-step="install" data-status="pending">❌ PENDING</button>
+</div>
+<div><strong>UPLOAD DATABASE</strong>
+    <button class="store-step-btn" data-step="upload" data-status="done">✅ DONE</button>
+    <button class="store-step-btn" data-step="upload" data-status="pending">❌ PENDING</button>
+</div>
+<div style="margin-top: 12px;"><strong>Generated Issue:</strong></div>
+<div id="store-generated-issue" class="preview-multiline" style="background: var(--bg-tertiary); padding: 8px; border-radius: 8px; white-space: pre-wrap;"></div>
 							<br />
 							<div><strong id="store-preview-skuLine"></strong></div>
 							<div><strong>STATE:</strong> <span id="store-preview-stateFull"></span></div>
@@ -1529,10 +1542,20 @@
 							<div><strong>MOKI ID:</strong><br /><span id="moolah-preview-mokiId" class="preview-multiline"></span></div>
 							<div><strong>ANYDESK ID:</strong><br /><span id="moolah-preview-anydeskId" class="preview-multiline"></span></div>
 							<br />
-							<div>CREATE MOOLAH ACCOUNT - DONE ✅</div>
-							<div>INSTALL & UPDATE ALL APPS - DONE ✅</div>
-							<div>ASSIGN STORE - DONE ✅</div>
-							<div>PENDING❌</div>
+<div><strong>CREATE MOOLAH ACCOUNT</strong>
+    <button class="moolah-step-btn" data-step="create" data-status="done">✅ DONE</button>
+    <button class="moolah-step-btn" data-step="create" data-status="pending">❌ PENDING</button>
+</div>
+<div><strong>INSTALL & UPDATE ALL APPS</strong>
+    <button class="moolah-step-btn" data-step="install" data-status="done">✅ DONE</button>
+    <button class="moolah-step-btn" data-step="install" data-status="pending">❌ PENDING</button>
+</div>
+<div><strong>ASSIGN STORE</strong>
+    <button class="moolah-step-btn" data-step="assign" data-status="done">✅ DONE</button>
+    <button class="moolah-step-btn" data-step="assign" data-status="pending">❌ PENDING</button>
+</div>
+<div style="margin-top: 12px;"><strong>Generated Issue:</strong></div>
+<div id="moolah-generated-issue" class="preview-multiline" style="background: var(--bg-tertiary); padding: 8px; border-radius: 8px; white-space: pre-wrap;"></div>
 							<br />
 							<div><strong id="moolah-preview-namingLine"></strong></div>
 							<div><strong>STATE:</strong> <span id="moolah-preview-stateFull"></span></div>
@@ -2943,17 +2966,17 @@
 					const storeName = storeNameEl.value.trim();
 					const zipcode = zipcodeEl.value.trim();
 
-					let issueText = "";
-					if (prefix === "store") {
-						issueText = `NEW STORE CREATION FORM SENT - DONE ✅
-STORE CREATION - DONE✅
-INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE✅
-UPLOAD DATABASE - DONE✅`;
-					} else if (prefix === "moolah") {
-						issueText = `CREATE MOOLAH ACCOUNT - DONE ✅
+let issueText = "";
+if (prefix === "store") {
+    issueText = window._storeCurrentIssue || `NEW STORE CREATION FORM SENT - DONE ✅
+STORE CREATION - DONE ✅
+INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
+UPLOAD DATABASE - DONE ✅`;
+} else if (prefix === "moolah") {
+    issueText = window._moolahCurrentIssue || `CREATE MOOLAH ACCOUNT - DONE ✅
 INSTALL & UPDATE ALL APPS - DONE ✅
 ASSIGN STORE - DONE ✅`;
-					}
+}
 
 					let moduleData = {};
 					if (prefix === "store") {
@@ -4936,6 +4959,95 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						ticketUpdatePreview();
 						saveFormData("ticket");
 					});
+
+// ----- Store & Moolah Step Management -----
+window.storeSteps = { form: 'done', creation: 'done', install: 'done', upload: 'done' };
+window.moolahSteps = { create: 'done', install: 'done', assign: 'done' };
+
+function updateStoreIssuePreview() {
+    const steps = {
+        form: 'NEW STORE CREATION FORM SENT',
+        creation: 'STORE CREATION',
+        install: 'INSTALL, UPDATE APPS & LOGIN ACCOUNT',
+        upload: 'UPLOAD DATABASE'
+    };
+    let lines = [];
+    for (let [key, label] of Object.entries(steps)) {
+        const status = window.storeSteps[key] === 'done' ? 'DONE ✅' : 'PENDING ❌';
+        lines.push(`${label} - ${status}`);
+    }
+    const issueText = lines.join('\n');
+    const el = document.getElementById('store-generated-issue');
+    if (el) el.innerText = issueText;
+    window._storeCurrentIssue = issueText;
+}
+
+function updateMoolahIssuePreview() {
+    const steps = {
+        create: 'CREATE MOOLAH ACCOUNT',
+        install: 'INSTALL & UPDATE ALL APPS',
+        assign: 'ASSIGN STORE'
+    };
+    let lines = [];
+    for (let [key, label] of Object.entries(steps)) {
+        const status = window.moolahSteps[key] === 'done' ? 'DONE ✅' : 'PENDING ❌';
+        lines.push(`${label} - ${status}`);
+    }
+    const issueText = lines.join('\n');
+    const el = document.getElementById('moolah-generated-issue');
+    if (el) el.innerText = issueText;
+    window._moolahCurrentIssue = issueText;
+}
+
+function initStoreStepButtons() {
+    document.querySelectorAll('.store-step-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const step = btn.dataset.step;
+            const status = btn.dataset.status;
+            window.storeSteps[step] = status;
+            // Update button styling
+            btn.parentElement.querySelectorAll('.store-step-btn').forEach(b => {
+                if (b.dataset.status === window.storeSteps[step]) {
+                    b.style.backgroundColor = (window.storeSteps[step] === 'done') ? '#10b981' : '#f59e0b';
+                    b.style.color = 'white';
+                    b.style.borderColor = 'transparent';
+                } else {
+                    b.style.backgroundColor = '';
+                    b.style.color = '';
+                    b.style.borderColor = '';
+                }
+            });
+            updateStoreIssuePreview();
+        });
+    });
+}
+
+function initMoolahStepButtons() {
+    document.querySelectorAll('.moolah-step-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const step = btn.dataset.step;
+            const status = btn.dataset.status;
+            window.moolahSteps[step] = status;
+            btn.parentElement.querySelectorAll('.moolah-step-btn').forEach(b => {
+                if (b.dataset.status === window.moolahSteps[step]) {
+                    b.style.backgroundColor = (window.moolahSteps[step] === 'done') ? '#10b981' : '#f59e0b';
+                    b.style.color = 'white';
+                    b.style.borderColor = 'transparent';
+                } else {
+                    b.style.backgroundColor = '';
+                    b.style.color = '';
+                    b.style.borderColor = '';
+                }
+            });
+            updateMoolahIssuePreview();
+        });
+    });
+}
+
+initStoreStepButtons();
+initMoolahStepButtons();
+updateStoreIssuePreview();
+updateMoolahIssuePreview();
 
 					// Profile modal logic
 					const profileBtn = document.getElementById("profileBtn");
