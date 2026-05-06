@@ -4737,84 +4737,82 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					}
 				}
 
-// ========== TEMPLATE FUNCTIONS ==========
+// Store all templates globally
+let allTemplates = [];
+
 async function loadTroubleshootingTemplates() {
     const apiKey = getGoogleApiKey();
     if (!apiKey) {
         console.warn("No API key, cannot load templates");
         return;
     }
-    const select = document.getElementById("ticket-template-select");
-    if (!select) return;
-    select.disabled = true;
-    select.innerHTML = '<option value="">-- Loading templates... --</option>';
-
     try {
         const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.GOOGLE_SHEET_ID}/values/${encodeURIComponent(CONFIG.TEMPLATE_SHEET_NAME)}?key=${apiKey}`;
         const response = await fetch(url);
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
         if (!data.values || data.values.length < 2) {
-            select.innerHTML = '<option value="">-- No templates found --</option>';
+            allTemplates = [];
+            updateTemplateDropdown();
             return;
         }
 
-        select.innerHTML = '<option value="">-- Select a template --</option>';
+        allTemplates = [];
+        // Skip header row (index 0)
         for (let i = 1; i < data.values.length; i++) {
-            const title = (data.values[i][0] || "").trim();
-            const steps = (data.values[i][1] || "").trim();
+            const moduleName = (data.values[i][0] || "").trim();
+            const title = (data.values[i][1] || "").trim();
+            const steps = (data.values[i][2] || "").trim();
             if (title && steps) {
-                const option = document.createElement("option");
-                option.value = steps;
-                option.textContent = title;
-                select.appendChild(option);
+                allTemplates.push({ module: moduleName, title: title, steps: steps });
             }
         }
-        select.disabled = false;
-        if (select.options.length === 1) {
-            select.innerHTML = '<option value="">-- No valid templates --</option>';
-        }
+        updateTemplateDropdown();
     } catch (error) {
         console.error("Failed to load templates:", error);
-        select.innerHTML = '<option value="">-- Error loading templates --</option>';
-        select.disabled = true;
+        allTemplates = [];
+        updateTemplateDropdown(true);
     }
 }
 
-function initTemplateSelector() {
-    const templateSelect = document.getElementById("ticket-template-select");
-    if (!templateSelect) return;
-
-    templateSelect.addEventListener("change", async (e) => {
-        const steps = e.target.value;
-        if (!steps) return;
-
-        const templateName = templateSelect.options[templateSelect.selectedIndex]?.text || "template";
-        const confirmReplace = confirm(`Replace current troubleshooting steps with "${templateName}"?`);
-        if (!confirmReplace) {
-            templateSelect.value = "";
-            return;
+function updateTemplateDropdown(showError = false) {
+    const select = document.getElementById("ticket-template-select");
+    if (!select) return;
+    
+    const moduleInput = document.getElementById("ticket-module");
+    const selectedModule = moduleInput ? moduleInput.value.trim().toUpperCase() : "";
+    
+    let filtered = [];
+    if (selectedModule !== "") {
+        filtered = allTemplates.filter(t => {
+            const templateModule = t.module.toUpperCase();
+            return templateModule === selectedModule || templateModule === "" || templateModule === "ALL";
+        });
+    }
+    
+    if (showError) {
+        select.innerHTML = '<option value="">-- Error loading templates --</option>';
+        select.disabled = true;
+        return;
+    }
+    
+    if (filtered.length === 0) {
+        if (selectedModule === "") {
+            select.innerHTML = '<option value="">-- Select a module first --</option>';
+        } else {
+            select.innerHTML = `<option value="">-- No templates for "${selectedModule}" --</option>`;
         }
-
-        // Collapse multiple consecutive line breaks into single \n
-        const collapsed = steps.replace(/[\r\n]+/g, "\n");
-        // Split into lines and remove any that are empty or only whitespace
-        const lines = collapsed.split("\n");
-        const nonEmptyLines = lines.filter(line => line.trim() !== "");
-        // Join with single newline
-        const plainText = nonEmptyLines.join("\n");
-
-        if (quillEditor) {
-            // ✅ Set as plain text – Quill will render each line as a separate block with normal spacing
-            quillEditor.setText(plainText);
-            // Get the HTML that Quill generates (for storage and preview)
-            const htmlContent = quillEditor.root.innerHTML;
-            document.getElementById("ticket-resolution").value = htmlContent;
-            // Refresh the preview panel
-            ticketUpdatePreview();
-            showNotification(`Template "${templateName}" loaded. You can now edit as needed.`);
-        }
-        templateSelect.value = "";
+        select.disabled = true;
+        return;
+    }
+    
+    select.disabled = false;
+    select.innerHTML = '<option value="">-- Select a template --</option>';
+    filtered.forEach(t => {
+        const option = document.createElement("option");
+        option.value = t.steps;
+        option.textContent = t.title;
+        select.appendChild(option);
     });
 }
 
@@ -4892,8 +4890,15 @@ function initTemplateSelector() {
 
 					document.querySelectorAll("textarea").forEach((ta) => autoGrow(ta));
 
-					setupAutocomplete("ticket-module", MODULE_OPTIONS, "ticket-issue");
-					setupAutocomplete("ticket-status", STATUS_OPTIONS, "ticket-remarks");
+setupAutocomplete("ticket-module", MODULE_OPTIONS, "ticket-issue");
+setupAutocomplete("ticket-status", STATUS_OPTIONS, "ticket-remarks");
+
+// Re-populate template dropdown when module changes
+const moduleField = document.getElementById("ticket-module");
+if (moduleField) {
+    moduleField.addEventListener("change", () => updateTemplateDropdown());
+    moduleField.addEventListener("input", () => updateTemplateDropdown());
+}
 
 					document.getElementById("ticket-contactNumber").addEventListener("input", function () {
 						let v = this.value.replace(/\D/g, "");
