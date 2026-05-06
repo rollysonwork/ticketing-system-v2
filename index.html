@@ -3331,13 +3331,10 @@ ASSIGN STORE - DONE ✅`;
 				function copyRow(button) {
 					const tds = button.closest("tr").querySelectorAll("td");
 					const dataTds = [...tds].slice(1, -1);
-					const values = dataTds.map((td, idx) => {
-						let text = td.textContent || "";
-						if (idx === dataTds.length - 1) {
-							text = text.toUpperCase();
-						}
-						return escapeCSV(text);
-					});
+					const values = dataTds.map((td) => {
+    						let text = td.textContent || "";
+    						return escapeCSV(text);
+				});
 
 					navigator.clipboard.writeText(values.join("\t")).then(() => showNotification("Row copied!"));
 				}
@@ -3366,11 +3363,11 @@ ASSIGN STORE - DONE ✅`;
                                              <td>${entry.contact}</td>
                                              <td>${entry.contactNumber}</td>
                                              <td>${entry.module}</td>
-                                    <td style="white-space: pre-wrap;">${(entry.issue || "").toUpperCase()}</td>
+                                    <td style="white-space: pre-wrap;">${entry.issue || ""}</td>
                                              <td>${entry.escalated}</td>
                                              <td>${entry.status}</td>
-                                             <td>${(entry.remarks || "").toUpperCase()}</td>
-                                    <td style="white-space: pre-wrap;">${(entry.resolution || "").toUpperCase()}</td>
+                                             <td style="white-space: pre-wrap;">${entry.remarks || ""}</td>
+                                    <td style="white-space: pre-wrap;">${entry.resolution || ""}</td>
                                     <td class="action-cell">
                                         <div class="action-container">
                                             <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
