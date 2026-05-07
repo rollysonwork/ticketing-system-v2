@@ -2988,7 +2988,7 @@
 							`NEW STORE CREATION FORM SENT - DONE ✅
 STORE CREATION - DONE ✅
 INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
-UPLOAD DATABASE - DONE ✅`;
+UPLOAD DATABASE - PENDING ❌`;
 					} else if (prefix === "moolah") {
 						issueText =
 							window._moolahCurrentIssue ||
@@ -5098,7 +5098,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					});
 
 					// ----- Store & Moolah Step Management -----
-					window.storeSteps = { form: "done", creation: "done", install: "done", upload: "done" };
+					window.storeSteps = { form: "done", creation: "done", install: "done", upload: "pending" };
 					window.moolahSteps = { create: "done", install: "done", assign: "done" };
 
 					function updateStoreIssuePreview() {
