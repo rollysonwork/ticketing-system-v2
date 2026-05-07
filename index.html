@@ -1119,6 +1119,25 @@
 				align-content: center;
 				align-items: center;
 			}
+
+			.store-step-btn, .moolah-step-btn {
+				/* background: var(--accent-color);
+				color: white;
+				border-color: var(--accent-color); */
+				transition: var(--transition);
+				cursor: pointer;
+				/* border: none; */
+				border-radius: 10px;
+				font-weight: 600;
+				text-transform: uppercase;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 4px;
+				padding: 8px 16px;
+			}
+
+
 		</style>
 		<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
 		<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
@@ -1553,20 +1572,20 @@
 							<div><strong>MOKI ID:</strong><br /><span id="moolah-preview-mokiId" class="preview-multiline"></span></div>
 							<div><strong>ANYDESK ID:</strong><br /><span id="moolah-preview-anydeskId" class="preview-multiline"></span></div>
 							<br />
-							<div>
+							<div class="mb-1">
 								<strong>CREATE MOOLAH ACCOUNT</strong>
-								<button class="moolah-step-btn" data-step="create" data-status="done">✅ DONE</button>
-								<button class="moolah-step-btn" data-step="create" data-status="pending">❌ PENDING</button>
+								<button class="btn btn-outline-success moolah-step-btn" data-step="create" data-status="done"><i class="bi bi-check-square-fill"></i></button>
+								<button class="btn btn-outline-danger moolah-step-btn" data-step="create" data-status="pending"><i class="bi bi-x-square-fill"></i></button>
 							</div>
-							<div>
+							<div class="mb-1">
 								<strong>INSTALL & UPDATE ALL APPS</strong>
-								<button class="moolah-step-btn" data-step="install" data-status="done">✅ DONE</button>
-								<button class="moolah-step-btn" data-step="install" data-status="pending">❌ PENDING</button>
+								<button class="btn btn-outline-success moolah-step-btn" data-step="install" data-status="done"><i class="bi bi-check-square-fill"></i></button>
+								<button class="btn btn-outline-danger moolah-step-btn" data-step="install" data-status="pending"><i class="bi bi-x-square-fill"></i></button>
 							</div>
-							<div>
+							<div class="mb-1">
 								<strong>ASSIGN STORE</strong>
-								<button class="moolah-step-btn" data-step="assign" data-status="done">✅ DONE</button>
-								<button class="moolah-step-btn" data-step="assign" data-status="pending">❌ PENDING</button>
+								<button class="btn btn-outline-success moolah-step-btn" data-step="assign" data-status="done"><i class="bi bi-check-square-fill"></i></button>
+								<button class="btn btn-outline-danger moolah-step-btn" data-step="assign" data-status="pending"><i class="bi bi-x-square-fill"></i></button>
 							</div>
 							<div style="margin-top: 12px"><strong>Generated Issue:</strong></div>
 							<div id="moolah-generated-issue" class="preview-multiline" style="background: var(--bg-tertiary); padding: 8px; border-radius: 8px; white-space: pre-wrap"></div>
@@ -5165,9 +5184,9 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 								window.moolahSteps[step] = status;
 								btn.parentElement.querySelectorAll(".moolah-step-btn").forEach((b) => {
 									if (b.dataset.status === window.moolahSteps[step]) {
-										b.style.backgroundColor = window.moolahSteps[step] === "done" ? "#10b981" : "#f59e0b";
+										b.style.backgroundColor = window.moolahSteps[step] === "done" ? "#198754" : "#dc3545";
 										b.style.color = "white";
-										b.style.borderColor = "transparent";
+										b.style.borderColor = "";
 									} else {
 										b.style.backgroundColor = "";
 										b.style.color = "";
