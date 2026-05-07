@@ -17,13 +17,13 @@
 			rel="stylesheet"
 		/>
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha256-2FMn2Zx6PuH5tdBQDRNwrOo60ts5wWPC9R8jK67b3t4=" crossorigin="anonymous" />
 		<link
-			href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
 			rel="stylesheet"
-			integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+			href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+			integrity="sha256-pdY4ejLKO67E0CM2tbPtq1DJ3VGDVVdqAR6j3ZwdiE4="
 			crossorigin="anonymous"
 		/>
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
 		<style>
 			:root {
 				--bg-primary: #f8fafc;
@@ -1142,8 +1142,7 @@
 				padding: 8px 16px;
 			}
 		</style>
-		<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
-		<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.min.css" />
 	</head>
 	<body>
 		<!-- Login Overlay -->
@@ -1175,8 +1174,8 @@
 					<input type="email" id="loginEmail" placeholder="you@example.com" class="no-uppercase" style="width: 100%" />
 				</div>
 				<div style="margin-bottom: 16px; position: relative">
-					<label style="display: block; margin-bottom: 4px">Password</label>
-					<input type="password" id="loginPassword" class="no-uppercase" style="width: 100%; padding-right: 40px" />
+					<label style="display: block; margin-bottom: 4px" for="loginPassword">Password</label>
+					<input type="password" id="loginPassword" class="no-uppercase" name="loginPassword" style="width: 100%; padding-right: 40px" />
 					<button id="togglePassword" type="button" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem" title="Show password">🙉</button>
 				</div>
 				<div id="loginError" style="color: #ef4444; margin-bottom: 16px; text-align: center"></div>
@@ -1226,11 +1225,11 @@
 							</div>
 							<table>
 								<tr>
-									<th>DATE</th>
-									<td><input type="date" id="ticket-date" /></td>
+									<th><label for="ticket-date">DATE</label></th>
+									<td><input name="ticket-date" type="date" id="ticket-date" /></td>
 								</tr>
 								<tr>
-									<th>SHIFT SCHEDULE</th>
+									<th><label for="ticket-shift">SHIFT SCHEDULE</label></th>
 									<td>
 										<select id="ticket-shift">
 											<option value="">-- SELECT --</option>
@@ -1241,47 +1240,47 @@
 									</td>
 								</tr>
 								<tr>
-									<th>SUPPORT NAME</th>
+									<th><label for="ticket-support">SUPPORT NAME</label></th>
 									<td><input type="text" id="ticket-support" /></td>
 								</tr>
 								<tr>
-									<th>PORTAL NUMBER *</th>
+									<th><label for="ticket-portal">PORTAL NUMBER *</label></th>
 									<td><input type="text" id="ticket-portal" /></td>
 								</tr>
 								<tr>
-									<th>STORE NAME *</th>
+									<th><label for="ticket-store">STORE NAME *</label></th>
 									<td><input type="text" id="ticket-store" /></td>
 								</tr>
 								<tr>
-									<th>ZIP CODE *</th>
+									<th><label for="ticket-zip">ZIP CODE *</label></th>
 									<td><input type="text" id="ticket-zip" /></td>
 								</tr>
 								<tr>
-									<th>CONTACT PERSON</th>
+									<th><label for="ticket-contactPerson">CONTACT PERSON</label></th>
 									<td><input type="text" id="ticket-contactPerson" /></td>
 								</tr>
 								<tr>
-									<th>CONTACT #</th>
+									<th><label for="ticket-contactNumber">CONTACT #</label></th>
 									<td><input type="text" id="ticket-contactNumber" maxlength="14" class="no-uppercase" /></td>
 								</tr>
 								<tr>
-									<th>MODULE</th>
+									<th><label for="ticket-module">MODULE</label></th>
 									<td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off" /><datalist id="ticket-moduleList"></datalist></td>
 								</tr>
 								<tr>
-									<th>ISSUE</th>
+									<th><label for="ticket-issue">ISSUE</label></th>
 									<td><textarea id="ticket-issue" rows="2"></textarea></td>
 								</tr>
 								<tr>
-									<th>ESCALATED PERSON</th>
+									<th><label for="ticket-escalated">ESCALATED PERSON</label></th>
 									<td><input type="text" id="ticket-escalated" /></td>
 								</tr>
 								<tr>
-									<th>STATUS</th>
+									<th><label for="ticket-status">STATUS</label></th>
 									<td><input id="ticket-status" list="ticket-statusList" autocomplete="off" /><datalist id="ticket-statusList"></datalist></td>
 								</tr>
 								<tr>
-									<th>REMARKS</th>
+									<th><label for="ticket-remarks">REMARKS</label></th>
 									<td><textarea id="ticket-remarks" rows="2"></textarea></td>
 								</tr>
 								<tr>
@@ -1299,15 +1298,15 @@
 									</td>
 								</tr>
 								<tr>
-									<th>NOTE</th>
-									<td><textarea id="ticket-note" rows="5"></textarea></td>
+									<th><label for="ticket-note">NOTE</label></th>
+									<td><textarea name="ticket-note" id="ticket-note" rows="5"></textarea></td>
 								</tr>
 							</table>
 							<div class="button-row">
-								<button class="add" onclick="addEntry('ticket')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
-								<button class="form-clear-btn" onclick="clearFormOnly('ticket')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
-								<button class="clock" onclick="clock('IN', 'ticket')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
-								<button class="clock" onclick="clock('OUT', 'ticket')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
+								<button class="add" type="button" onclick="addEntry('ticket')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
+								<button class="form-clear-btn" type="button" onclick="clearFormOnly('ticket')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
+								<button class="clock" type="button" onclick="clock('IN', 'ticket')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
+								<button class="clock" type="button" onclick="clock('OUT', 'ticket')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
 							</div>
 						</div>
 						<div class="right-panel" id="ticket-previewPanel">
@@ -1661,7 +1660,7 @@
 		>
 			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
 				<strong>Profile</strong>
-				<button id="closeProfileModal" style="background: none; border: none; font-size: 1.2rem; cursor: pointer">&times;</button>
+				<button id="closeProfileModal" type="button" style="background: none; border: none; font-size: 1.2rem; cursor: pointer">&times;</button>
 			</div>
 			<div id="profileInfo">
 				<div><strong>Support:</strong> <span id="profileSupport"></span></div>
@@ -1669,8 +1668,8 @@
 				<div><strong>Role:</strong> <span id="profileRole"></span></div>
 			</div>
 			<hr style="margin: 12px 0; border-color: var(--border-color)" />
-			<button id="changePasswordBtn" class="login-action-btn" style="width: 100%; margin-bottom: 8px">Change Password</button>
-			<button id="logoutBtnProfile" class="login-action-btn" style="width: 100%; background: #ef4444">Logout</button>
+			<button id="changePasswordBtn" class="login-action-btn" type="button" style="width: 100%; margin-bottom: 8px">Change Password</button>
+			<button id="logoutBtnProfile" class="login-action-btn" type="button" style="width: 100%; background: #ef4444">Logout</button>
 		</div>
 
 		<!-- Change Password Modal -->
@@ -5405,6 +5404,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 			integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
 			crossorigin="anonymous"
 		></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
 	</body>
 </html>
