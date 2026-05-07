@@ -1271,7 +1271,7 @@
 											<select id="ticket-template-select" class="form-select" style="font-size: 0.8rem">
 												<option value="">-- Select a template --</option>
 											</select>
-											<small style="font-size: 0.7rem; color: var(--text-muted);">Selecting a template will replace current troubleshooting steps (you can edit afterwards).</small>
+											<small style="font-size: 0.7rem; color: var(--text-muted)">Selecting a template will replace current troubleshooting steps (you can edit afterwards).</small>
 										</div>
 										<textarea id="ticket-resolution" style="display: none"></textarea>
 									</td>
@@ -1426,23 +1426,23 @@
 							<br />
 							<div>
 								<strong>NEW STORE CREATION FORM SENT</strong>
-								<button class="store-step-btn" data-step="form" data-status="done" style="margin-left: 8px">✅ DONE</button>
-								<button class="store-step-btn" data-step="form" data-status="pending" style="margin-left: 4px">❌ PENDING</button>
+								<button class="btn btn-outline-success store-step-btn" data-step="form" data-status="done"><i class="bi bi-check-square-fill"></i></button>
+								<button class="btn btn-outline-danger store-step-btn" data-step="form" data-status="pending"><i class="bi bi-x-square-fill"></i></button>
 							</div>
 							<div>
 								<strong>STORE CREATION</strong>
-								<button class="store-step-btn" data-step="creation" data-status="done">✅ DONE</button>
-								<button class="store-step-btn" data-step="creation" data-status="pending">❌ PENDING</button>
+								<button class="btn btn-outline-success store-step-btn" data-step="creation" data-status="done"><i class="bi bi-check-square-fill"></i></button>
+								<button class="btn btn-outline-danger store-step-btn" data-step="creation" data-status="pending"><i class="bi bi-x-square-fill"></i></button>
 							</div>
 							<div>
 								<strong>INSTALL, UPDATE APPS & LOGIN ACCOUNT</strong>
-								<button class="store-step-btn" data-step="install" data-status="done">✅ DONE</button>
-								<button class="store-step-btn" data-step="install" data-status="pending">❌ PENDING</button>
+								<button class="btn btn-outline-success store-step-btn" data-step="install" data-status="done"><i class="bi bi-check-square-fill"></i></button>
+								<button class="btn btn-outline-danger store-step-btn" data-step="install" data-status="pending"><i class="bi bi-x-square-fill"></i></button>
 							</div>
 							<div>
 								<strong>UPLOAD DATABASE</strong>
-								<button class="store-step-btn" data-step="upload" data-status="done">✅ DONE</button>
-								<button class="store-step-btn" data-step="upload" data-status="pending">❌ PENDING</button>
+								<button class="btn btn-outline-success store-step-btn" data-step="upload" data-status="done"><i class="bi bi-check-square-fill"></i></button>
+								<button class="btn btn-outline-danger store-step-btn" data-step="upload" data-status="pending"><i class="bi bi-x-square-fill"></i></button>
 							</div>
 							<div style="margin-top: 12px"><strong>Generated Issue:</strong></div>
 							<div id="store-generated-issue" class="preview-multiline" style="background: var(--bg-tertiary); padding: 8px; border-radius: 8px; white-space: pre-wrap"></div>
@@ -5145,13 +5145,11 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 								// Update button styling
 								btn.parentElement.querySelectorAll(".store-step-btn").forEach((b) => {
 									if (b.dataset.status === window.storeSteps[step]) {
-										b.style.backgroundColor = window.storeSteps[step] === "done" ? "#10b981" : "#f59e0b";
+										b.style.backgroundColor = window.storeSteps[step] === "done" ? "#198754" : "#dc3545";
 										b.style.color = "white";
-										b.style.borderColor = "transparent";
 									} else {
 										b.style.backgroundColor = "";
 										b.style.color = "";
-										b.style.borderColor = "";
 									}
 								});
 								updateStoreIssuePreview();
