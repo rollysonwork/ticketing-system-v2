@@ -1127,6 +1127,8 @@
 				/* background: var(--accent-color);
 				color: white;
 				border-color: var(--accent-color); */
+				height: 2em;
+				width: 2em;
 				transition: var(--transition);
 				cursor: pointer;
 				/* border: none; */
@@ -3255,6 +3257,11 @@ ASSIGN STORE - DONE ✅`;
 						document.getElementById("moolah-noOfTabs").value = entry.moduleData?.noOfTabs || "";
 						document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
 						document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
+						if (entry.issue) {
+							window._moolahCurrentIssue = entry.issue;
+							syncMoolahButtonsFromIssueText(entry.issue);
+							document.getElementById("moolah-generated-issue").innerText = entry.issue;
+						}
 					} else if (prefix === "store") {
 						document.getElementById("store-agent").value = entry.moduleData?.agent || "";
 						document.getElementById("store-email").value = entry.moduleData?.email || "";
@@ -3264,6 +3271,11 @@ ASSIGN STORE - DONE ✅`;
 						document.getElementById("store-noOfReg").value = entry.moduleData?.noOfReg || "";
 						document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
 						document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
+						if (entry.issue) {
+							window._storeCurrentIssue = entry.issue;
+							syncStoreButtonsFromIssueText(entry.issue);
+							document.getElementById("store-generated-issue").innerText = entry.issue;
+						}
 					} else {
 						document.getElementById("ticket-module").value = entry.module;
 						document.getElementById("ticket-issue").value = entry.issue;
@@ -3277,8 +3289,22 @@ ASSIGN STORE - DONE ✅`;
 						updatePreviewWithEntry(entry);
 					}
 
-					if (prefix === "moolah") moolahUpdatePreview();
-					if (prefix === "store") storeUpdatePreview();
+					if (prefix === "moolah") {
+						if (entry.issue) {
+							window._moolahCurrentIssue = entry.issue;
+							syncMoolahButtonsFromIssueText(entry.issue);
+							document.getElementById("moolah-generated-issue").innerText = entry.issue;
+						}
+						moolahUpdatePreview();
+					}
+					if (prefix === "store") {
+						if (entry.issue) {
+							window._storeCurrentIssue = entry.issue;
+							syncStoreButtonsFromIssueText(entry.issue);
+							document.getElementById("store-generated-issue").innerText = entry.issue;
+						}
+						storeUpdatePreview();
+					}
 
 					editId = entry.id;
 					const addBtn = document.querySelector(`#tab-${prefix} .add`);
@@ -5156,22 +5182,62 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						window._moolahCurrentIssue = issueText;
 					}
 
+					const STORE_STEP_LABELS = {
+						form: "NEW STORE CREATION FORM SENT",
+						creation: "STORE CREATION",
+						install: "INSTALL, UPDATE APPS & LOGIN ACCOUNT",
+						upload: "UPLOAD DATABASE",
+					};
+
+					const MOOLAH_STEP_LABELS = {
+						create: "CREATE MOOLAH ACCOUNT",
+						install: "INSTALL & UPDATE ALL APPS",
+						assign: "ASSIGN STORE",
+					};
+
+					function parseStepStatusesFromIssue(issueText, stepLabels, currentSteps) {
+						const result = { ...currentSteps };
+						if (!issueText) return result;
+						const lines = issueText
+							.split(/\r?\n/)
+							.map((line) => line.trim())
+							.filter((line) => line.length > 0);
+						lines.forEach((line) => {
+							for (const [step, label] of Object.entries(stepLabels)) {
+								if (!line.toLowerCase().includes(label.toLowerCase())) continue;
+								if (/\bdone\b/i.test(line)) {
+									result[step] = "done";
+								} else if (/\bpending\b/i.test(line)) {
+									result[step] = "pending";
+								}
+							}
+						});
+						return result;
+					}
+
+					function applyStepButtonStyles(prefix, steps) {
+						document.querySelectorAll(`.${prefix}-step-btn`).forEach((btn) => {
+							const step = btn.dataset.step;
+							if (!step || !steps[step]) return;
+							if (btn.dataset.status === steps[step]) {
+								btn.style.backgroundColor = steps[step] === "done" ? "#198754" : "#dc3545";
+								btn.style.color = "white";
+								btn.style.borderColor = "";
+							} else {
+								btn.style.backgroundColor = "";
+								btn.style.color = "";
+								btn.style.borderColor = "";
+							}
+						});
+					}
+
 					function initStoreStepButtons() {
 						document.querySelectorAll(".store-step-btn").forEach((btn) => {
-							btn.addEventListener("click", (e) => {
+							btn.addEventListener("click", () => {
 								const step = btn.dataset.step;
 								const status = btn.dataset.status;
 								window.storeSteps[step] = status;
-								// Update button styling
-								btn.parentElement.querySelectorAll(".store-step-btn").forEach((b) => {
-									if (b.dataset.status === window.storeSteps[step]) {
-										b.style.backgroundColor = window.storeSteps[step] === "done" ? "#198754" : "#dc3545";
-										b.style.color = "white";
-									} else {
-										b.style.backgroundColor = "";
-										b.style.color = "";
-									}
-								});
+								applyStepButtonStyles("store", window.storeSteps);
 								updateStoreIssuePreview();
 							});
 						});
@@ -5179,28 +5245,30 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
 					function initMoolahStepButtons() {
 						document.querySelectorAll(".moolah-step-btn").forEach((btn) => {
-							btn.addEventListener("click", (e) => {
+							btn.addEventListener("click", () => {
 								const step = btn.dataset.step;
 								const status = btn.dataset.status;
 								window.moolahSteps[step] = status;
-								btn.parentElement.querySelectorAll(".moolah-step-btn").forEach((b) => {
-									if (b.dataset.status === window.moolahSteps[step]) {
-										b.style.backgroundColor = window.moolahSteps[step] === "done" ? "#198754" : "#dc3545";
-										b.style.color = "white";
-										b.style.borderColor = "";
-									} else {
-										b.style.backgroundColor = "";
-										b.style.color = "";
-										b.style.borderColor = "";
-									}
-								});
+								applyStepButtonStyles("moolah", window.moolahSteps);
 								updateMoolahIssuePreview();
 							});
 						});
 					}
 
+					function syncStoreButtonsFromIssueText(issueText) {
+						window.storeSteps = parseStepStatusesFromIssue(issueText, STORE_STEP_LABELS, window.storeSteps);
+						applyStepButtonStyles("store", window.storeSteps);
+					}
+
+					function syncMoolahButtonsFromIssueText(issueText) {
+						window.moolahSteps = parseStepStatusesFromIssue(issueText, MOOLAH_STEP_LABELS, window.moolahSteps);
+						applyStepButtonStyles("moolah", window.moolahSteps);
+					}
+
 					initStoreStepButtons();
 					initMoolahStepButtons();
+					syncStoreButtonsFromIssueText(document.getElementById("store-generated-issue")?.innerText || "");
+					syncMoolahButtonsFromIssueText(document.getElementById("moolah-generated-issue")?.innerText || "");
 					updateStoreIssuePreview();
 					updateMoolahIssuePreview();
 
