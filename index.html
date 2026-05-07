@@ -197,10 +197,12 @@
 				align-items: flex-start;
 				margin: 0 auto;
 				max-width: 1873px;
+				width: 100%;
+				box-sizing: border-box;
 			}
 
 			.history-panel {
-				flex: 0 0 400px;
+				flex: 0 0 clamp(250px, 20%, 400px);
 				min-width: 250px;
 				background: var(--bg-secondary);
 				border-radius: 20px;
@@ -215,7 +217,7 @@
 			}
 
 			.left-panel {
-				flex: 0 0 800px;
+				flex: 0 0 clamp(300px, 40%, 800px);
 				min-width: 300px;
 				background: var(--bg-secondary);
 				border-radius: 20px;
@@ -226,7 +228,7 @@
 			}
 
 			.right-panel {
-				flex: 0 0 625px;
+				flex: 0 0 clamp(300px, 35%, 625px);
 				min-width: 300px;
 				background: var(--bg-secondary);
 				border-radius: 20px;
