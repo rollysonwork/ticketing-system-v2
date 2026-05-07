@@ -3819,11 +3819,11 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 								row.contact,
 								row.contactNumber,
 								row.module,
-								(row.issue || "").toUpperCase(),
-								(row.escalated || "").toUpperCase(),
-								(row.status || "").toUpperCase(),
-								(row.remarks || "").toUpperCase(),
-								(row.resolution || "").toUpperCase(),
+								row.issue || "",
+								row.escalated || "",
+								row.status || "",
+								row.remarks || "",
+								row.resolution || "",
 							]
 								.map((field) => escapeCSV(String(field ?? "")))
 								.join("\t"),
