@@ -1445,6 +1445,8 @@
 							<div><strong>MOKI ID:</strong><br /><span id="store-preview-mokiId" class="preview-multiline"></span></div>
 							<div><strong>ANYDESK ID:</strong><br /><span id="store-preview-anydeskId" class="preview-multiline"></span></div>
 							<br />
+							<div id="store-generated-issue"></div>
+							<br />
 							<div>
 								<strong>NEW STORE CREATION FORM SENT</strong>
 								<button class="btn btn-outline-success store-step-btn" data-step="form" data-status="done"><i class="bi bi-check-square-fill"></i></button>
@@ -1465,8 +1467,6 @@
 								<button class="btn btn-outline-success store-step-btn" data-step="upload" data-status="done"><i class="bi bi-check-square-fill"></i></button>
 								<button class="btn btn-outline-danger store-step-btn" data-step="upload" data-status="pending"><i class="bi bi-x-square-fill"></i></button>
 							</div>
-							<div style="margin-top: 12px"><strong>Generated Issue:</strong></div>
-							<div id="store-generated-issue" class="preview-multiline" style="background: var(--bg-tertiary); padding: 8px; border-radius: 8px; white-space: pre-wrap"></div>
 							<br />
 							<div><strong id="store-preview-skuLine"></strong></div>
 							<div><strong>STATE:</strong> <span id="store-preview-stateFull"></span></div>
@@ -1570,9 +1570,11 @@
 							<br />
 							<div><strong>SKU:</strong> <span id="moolah-preview-sku"></span></div>
 							<br />
-							<div><strong>NO OF TABS:</strong> <span id="moolah-preview-noOfTabs"></span></div>
+							<div><strong>NO OF TABLETS:</strong> <span id="moolah-preview-noOfTabs"></span></div>
 							<div><strong>MOKI ID:</strong><br /><span id="moolah-preview-mokiId" class="preview-multiline"></span></div>
 							<div><strong>ANYDESK ID:</strong><br /><span id="moolah-preview-anydeskId" class="preview-multiline"></span></div>
+							<br />
+							<div id="moolah-generated-issue"></div>
 							<br />
 							<div class="mb-1">
 								<strong>CREATE MOOLAH ACCOUNT</strong>
@@ -1589,9 +1591,7 @@
 								<button class="btn btn-outline-success moolah-step-btn" data-step="assign" data-status="done"><i class="bi bi-check-square-fill"></i></button>
 								<button class="btn btn-outline-danger moolah-step-btn" data-step="assign" data-status="pending"><i class="bi bi-x-square-fill"></i></button>
 							</div>
-							<div style="margin-top: 12px"><strong>Generated Issue:</strong></div>
-							<div id="moolah-generated-issue" class="preview-multiline" style="background: var(--bg-tertiary); padding: 8px; border-radius: 8px; white-space: pre-wrap"></div>
-							<br />
+
 							<div><strong id="moolah-preview-namingLine"></strong></div>
 							<div><strong>STATE:</strong> <span id="moolah-preview-stateFull"></span></div>
 							<div><strong>TIMEZONE:</strong> <span id="moolah-preview-timezoneLine"></span></div>
@@ -1607,8 +1607,6 @@
 					<button id="exportCsvBtn" class="export-btn"><i class="bi bi-filetype-csv"></i> EXPORT</button>
 					<button id="importCsvBtn" class="import-btn"><i class="bi bi-file-earmark-arrow-up"></i> IMPORT</button>
 					<button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
-					<button id="setSheetsKeyBtn" class="sheets-key-btn"><i class="bi bi-key"></i> SET SHEETS KEY</button>
-					<button id="setGeminiKeyBtn" class="gemini-key-btn"><i class="bi bi-robot"></i> SET GEMINI KEY</button>
 				</div>
 
 				<div style="overflow-x: auto">
@@ -4953,17 +4951,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						setupSearchKeyboard(prefix);
 					});
 
-					document.getElementById("setSheetsKeyBtn").addEventListener("click", setGoogleApiKeyAndLoad);
-					document.getElementById("setGeminiKeyBtn").addEventListener("click", () => {
-						const newKey = prompt("Enter your Google Gemini API key:");
-						if (newKey && newKey.trim() !== "") {
-							localStorage.setItem("geminiApiKey", newKey.trim());
-							showNotification("Gemini API key saved.");
-						} else if (newKey === "") {
-							localStorage.removeItem("geminiApiKey");
-							showNotification("Gemini API key removed.");
-						}
-					});
 
 					if (getGoogleApiKey()) {
 						setTimeout(loadSheetData, 500);
