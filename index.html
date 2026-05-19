@@ -5287,107 +5287,98 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
         }
 
         function importFromCSV(event) {
-		    const file = event.target.files[0];
-		    if (!file) return;
-		    const reader = new FileReader();
-		    reader.readAsText(file, "UTF-8");
-		    reader.onload = (e) => {
-		        const text = e.target.result;
-		        const cleanText = text.charCodeAt(0) === 0xfeff ? text.slice(1) : text;
-		        const rows = parseCSV(cleanText);
-		        if (rows.length === 0) {
-		            showNotification("CSV file is empty");
-		            return;
-		        }
-		        const headers = rows[0];
-		        const expected = [
-		            "DATE", "SHIFT", "SUPPORT", "PORTAL", "STORE", "ZIP",
-		            "CONTACT", "CONTACT#", "MODULE", "ISSUE", "ESCALATED",
-		            "STATUS", "REMARKS", "RESOLUTION"
-		        ];
-		        if (!expected.every((h, i) => h === headers[i])) {
-		            showNotification("CSV headers do not match expected format");
-		            return;
-		        }
-		        const newEntries = [];
-		        let skippedEmptyDate = 0;
-		        for (let i = 1; i < rows.length; i++) {
-		            const values = rows[i];
-		            if (values.length < expected.length) continue;
-		            let dateValue = values[0] ? values[0].trim() : "";
-		            if (!dateValue) {
-		                skippedEmptyDate++;
-		                continue;
-		            }
-		            // Normalize date from YYYY-MM-DD to MM/DD/YYYY if needed
-		            if (dateValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
-		                const parts = dateValue.split("-");
-		                dateValue = `${parts[1]}/${parts[2]}/${parts[0]}`;
-		            } else if (dateValue.match(/^\d{2}\/\d{2}\/\d{4}$/)) {
-		                // Already in MM/DD/YYYY – keep as is
-		            } else {
-		                // Try to parse as date and reformat
-		                const parsed = new Date(dateValue);
-		                if (!isNaN(parsed)) {
-		                    const month = (parsed.getMonth() + 1).toString().padStart(2, '0');
-		                    const day = parsed.getDate().toString().padStart(2, '0');
-		                    const year = parsed.getFullYear();
-		                    dateValue = `${month}/${day}/${year}`;
-		                } else {
-		                    console.warn("Could not parse date:", dateValue);
-		                    skippedEmptyDate++;
-		                    continue;
-		                }
-		            }
-		            const entry = {
-		                id: Date.now() + i + Math.random(),
-		                date: dateValue,
-		                shift: values[1],
-		                support: values[2],
-		                portal: values[3],
-		                store: values[4],
-		                zip: values[5],
-		                contact: values[6],
-		                contactNumber: values[7],
-		                module: values[8],
-		                issue: values[9],
-		                escalated: values[10],
-		                status: values[11],
-		                remarks: values[12],
-		                resolution: values[13],
-		                troubleshooting: "",
-		                note: "",
-		                moduleData: {},
-		                source: "ticket",
-		                deleted: false,
-		                imported: true,
-		            };
-		            newEntries.push(entry);
-		        }
-		        if (newEntries.length === 0) {
-		            showNotification(
-		                skippedEmptyDate
-		                    ? `No valid entries found (${skippedEmptyDate} rows had empty or invalid date)`
-		                    : "No valid entries found in CSV",
-		            );
-		            return;
-		        }
-		        pushUndo();
-		        allEntries = [...newEntries, ...allEntries];
-		        saveAllEntries();        // this already calls updateStatusCounters
-		        renderTable();
-		        renderSidebar();
-		        // Additional explicit call to ensure counters update after render
-		        updateStatusCounters();
-		        let msg = `✅ Imported ${newEntries.length} entries`;
-		        if (skippedEmptyDate) msg += `, skipped ${skippedEmptyDate} rows with invalid date`;
-		        showNotification(msg);
-		    };
-		    reader.onerror = () => {
-		        showNotification("Error reading file");
-		    };
-		    event.target.value = "";
-		}
+          const file = event.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.readAsText(file, "UTF-8");
+          reader.onload = (e) => {
+            const text = e.target.result;
+            const cleanText =
+              text.charCodeAt(0) === 0xfeff ? text.slice(1) : text;
+            const rows = parseCSV(cleanText);
+            if (rows.length === 0) {
+              showNotification("CSV file is empty");
+              return;
+            }
+            const headers = rows[0];
+            const expected = [
+              "DATE",
+              "SHIFT",
+              "SUPPORT",
+              "PORTAL",
+              "STORE",
+              "ZIP",
+              "CONTACT",
+              "CONTACT#",
+              "MODULE",
+              "ISSUE",
+              "ESCALATED",
+              "STATUS",
+              "REMARKS",
+              "RESOLUTION",
+            ];
+            if (!expected.every((h, i) => h === headers[i])) {
+              showNotification("CSV headers do not match expected format");
+              return;
+            }
+            const newEntries = [];
+            let skippedEmptyDate = 0;
+            for (let i = 1; i < rows.length; i++) {
+              const values = rows[i];
+              if (values.length < expected.length) continue;
+              const dateValue = values[0] ? values[0].trim() : "";
+              if (!dateValue) {
+                skippedEmptyDate++;
+                continue;
+              }
+              const entry = {
+                id: Date.now() + i + Math.random(),
+                date: values[0],
+                shift: values[1],
+                support: values[2],
+                portal: values[3],
+                store: values[4],
+                zip: values[5],
+                contact: values[6],
+                contactNumber: values[7],
+                module: values[8],
+                issue: values[9],
+                escalated: values[10],
+                status: values[11],
+                remarks: values[12],
+                resolution: values[13],
+                troubleshooting: "",
+                note: "",
+                moduleData: {},
+                source: "ticket",
+                deleted: false,
+                imported: true,
+              };
+              newEntries.push(entry);
+            }
+            if (newEntries.length === 0) {
+              showNotification(
+                skippedEmptyDate
+                  ? `No valid entries found (${skippedEmptyDate} rows had empty date)`
+                  : "No valid entries found in CSV",
+              );
+              return;
+            }
+            pushUndo();
+            allEntries = [...newEntries, ...allEntries];
+            saveAllEntries();
+            renderTable();
+            renderSidebar();
+            let msg = `✅ Imported ${newEntries.length} entries into today's database panel`;
+            if (skippedEmptyDate)
+              msg += `, skipped ${skippedEmptyDate} rows with empty date`;
+            showNotification(msg);
+          };
+          reader.onerror = () => {
+            showNotification("Error reading file");
+          };
+          event.target.value = "";
+        }
 
         function generateShiftReportPlain() {
           const indent = (level) => " ".repeat(level * 5);
