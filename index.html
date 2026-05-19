@@ -3118,29 +3118,34 @@
         }
 
         function updateStatusCounters() {
-			const todayEST = getESTDateString(); // "YYYY-MM-DD"
-			const todayEntries = allEntries.filter(entry => {
-				if (entry.deleted) return false;
-				if (!entry.date) return false;
-				// entry.date format: "MM/DD/YYYY"
-				const parts = entry.date.split('/');
-				if (parts.length !== 3) return false;
-				const month = parts[0].padStart(2, '0');
-				const day = parts[1].padStart(2, '0');
-				const year = parts[2];
-				const entryDateStr = `${year}-${month}-${day}`;
-				return entryDateStr === todayEST;
-			});
-			const resolved = todayEntries.filter(e => e.status?.toUpperCase() === 'RESOLVED').length;
-			const pending = todayEntries.filter(e => e.status?.toUpperCase() === 'PENDING').length;
-			const other = todayEntries.filter(e => e.status?.toUpperCase() === 'OTHER TASK').length;
-			const resolvedSpan = document.getElementById('counterResolved');
-			const pendingSpan = document.getElementById('counterPending');
-			const otherSpan = document.getElementById('counterOther');
-			if (resolvedSpan) resolvedSpan.innerText = resolved;
-			if (pendingSpan) pendingSpan.innerText = pending;
-			if (otherSpan) otherSpan.innerText = other;
-		}
+            const tbody = document.querySelector("#entryTable tbody");
+            if (!tbody) return;
+            
+            const rows = tbody.querySelectorAll("tr");
+            let resolved = 0, pending = 0, other = 0;
+            
+            rows.forEach(row => {
+                // Skip the "no pending tickets" message row (colspan > 1)
+                const firstCell = row.querySelector("td");
+                if (firstCell && firstCell.colSpan > 1) return;
+                
+                // Status is the 13th column (index 12, 0-based)
+                const statusCell = row.cells[12];
+                if (!statusCell) return;
+                
+                const status = statusCell.textContent.trim().toUpperCase();
+                if (status === "RESOLVED") resolved++;
+                else if (status === "PENDING") pending++;
+                else if (status === "OTHER TASK") other++;
+            });
+            
+            const resolvedSpan = document.getElementById('counterResolved');
+            const pendingSpan = document.getElementById('counterPending');
+            const otherSpan = document.getElementById('counterOther');
+            if (resolvedSpan) resolvedSpan.innerText = resolved;
+            if (pendingSpan) pendingSpan.innerText = pending;
+            if (otherSpan) otherSpan.innerText = other;
+        }
 
         function clearSearchResults() {
           ["ticket", "store", "moolah"].forEach((prefix) => {
@@ -5160,7 +5165,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
               return entry;
             });
             saveAllEntries();
-			updateStatusCounters()
+			updateStatusCounters();
             renderTable();
             renderSidebar();
             document.body.removeChild(backdrop);
@@ -6388,14 +6393,12 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
               const pendingEntries = await fetchWorkloadSheetData();
               cachedPendingEntries = pendingEntries;
               renderPendingTableView(pendingEntries);
-              // ❌ REMOVED: hiding bulk buttons – they stay as is
+              updateStatusCounters();  // <-- add this
           } else {
               toggleBtn.classList.remove("active");
               toggleBtn.textContent = "📋 My Pending Tickets (Sheet)";
-              // Restore normal table view
-              renderTable();  // original function using allEntries
-              // ❌ REMOVED: restoring bulk buttons – not needed
-              // Also refresh counters
+              renderTable();
+              updateStatusCounters();  // <-- add this
               updateStatusCounters();
           }
       }
