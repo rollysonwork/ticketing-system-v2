@@ -1197,6 +1197,10 @@
         transform: translateY(-2px);
         filter: brightness(1.05);
       }
+      .pending-tracker-toggle.active {
+        background: #e17055 !important;
+        box-shadow: 0 0 0 2px #fff, 0 0 0 4px #e17055;
+      }
     </style>
     <link
       rel="stylesheet"
@@ -2157,7 +2161,6 @@
           >
             <i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT
           </button>
-          
             <span class="counter-badge resolved"
               >✅ Resolved: <span id="counterResolved">0</span></span
             >
@@ -2167,6 +2170,9 @@
             <span class="counter-badge other"
               >📋 Other Task: <span id="counterOther">0</span></span
             >
+            <button id="pendingTrackerToggleBtn" class="pending-tracker-toggle" style="background:#6c5ce7; color:white;">
+              📋 My Pending Tickets (Sheet)
+            </button>
         </div>
 
         <div style="overflow-x: auto">
@@ -6235,6 +6241,175 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
           });
         }
 
+      // ---------- PENDING TRACKER (Workload Sheet) ----------
+      let isPendingTrackerMode = false;   // false = local DB, true = sheet pending view
+      let cachedPendingEntries = [];       // store fetched pending entries
+
+      async function fetchWorkloadSheetData() {
+          const apiKey = getGoogleApiKey();
+          if (!apiKey) {
+              showNotification("❌ Google Sheets API key not set.");
+              return [];
+          }
+          const sheetName = "WORKLOAD TRACKER 2026";
+          const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.GOOGLE_SHEET_ID}/values/${encodeURIComponent(sheetName)}?key=${apiKey}`;
+          try {
+              const response = await fetch(url);
+              if (!response.ok) throw new Error(`HTTP ${response.status}`);
+              const data = await response.json();
+              if (!data.values || data.values.length < 2) {
+                  showNotification("No data found in WORKLOAD TRACKER 2026");
+                  return [];
+              }
+              
+              const headers = data.values[0].map(h => (h || "").trim());
+              console.log("📋 Headers from sheet:", headers);
+              
+              // Helper to find column index (case‑insensitive)
+              const findCol = (name) => headers.findIndex(h => h.toUpperCase() === name.toUpperCase());
+              
+              const dateIdx = findCol("DATE");
+              const shiftIdx = findCol("SHIFT SCHEDULE");
+              const supportIdx = findCol("SUPPORT NAME");
+              const portalIdx = findCol("PORTAL NUMBER");
+              const storeIdx = findCol("STORE NAME");
+              const zipIdx = findCol("ZIP CODE");
+              const contactIdx = findCol("CONTACT PERSON");
+              const contactNumIdx = findCol("CONTACT #");
+              const moduleIdx = findCol("Module");
+              const issueIdx = findCol("ISSUE");
+              const escalatedIdx = findCol("ESCALATED PERSON");
+              const statusIdx = findCol("STATUS");
+              const remarksIdx = findCol("REMARKS");
+              const resolutionIdx = findCol("RESOLUTION");
+              
+              if (statusIdx === -1 || supportIdx === -1) {
+                  console.error("Missing STATUS or SUPPORT NAME column. Found headers:", headers);
+                  showNotification("Sheet missing STATUS or SUPPORT NAME column.");
+                  return [];
+              }
+              
+              const rows = data.values.slice(1);
+              const currentUserSupport = (currentUser?.support || "").trim();
+              console.log(`🔍 Current user support: "${currentUserSupport}"`);
+              
+              const pendingRows = rows.filter(row => {
+                  const status = (row[statusIdx] || "").trim().toUpperCase();
+                  const support = (row[supportIdx] || "").trim().toUpperCase();
+                  return status === "PENDING" && support === currentUserSupport.toUpperCase();
+              });
+              
+              console.log(`📊 Found ${pendingRows.length} pending tickets for "${currentUserSupport}"`);
+              
+              if (pendingRows.length === 0 && rows.length > 0) {
+                  console.log("Sample of first 3 rows (status, support):");
+                  rows.slice(0, 3).forEach((row, i) => {
+                      console.log(`  Row ${i+1}: status="${row[statusIdx]}", support="${row[supportIdx]}"`);
+                  });
+              }
+              
+              // Map to entry object expected by renderTable
+              return pendingRows.map(row => ({
+                  id: Date.now() + Math.random(),
+                  date: dateIdx !== -1 ? (row[dateIdx] || "") : "",
+                  shift: shiftIdx !== -1 ? (row[shiftIdx] || "") : "",
+                  support: supportIdx !== -1 ? (row[supportIdx] || "") : "",
+                  portal: portalIdx !== -1 ? (row[portalIdx] || "") : "",
+                  store: storeIdx !== -1 ? (row[storeIdx] || "") : "",
+                  zip: zipIdx !== -1 ? (row[zipIdx] || "") : "",
+                  contact: contactIdx !== -1 ? (row[contactIdx] || "") : "",
+                  contactNumber: contactNumIdx !== -1 ? (row[contactNumIdx] || "") : "",
+                  module: moduleIdx !== -1 ? (row[moduleIdx] || "") : "",
+                  issue: issueIdx !== -1 ? (row[issueIdx] || "") : "",
+                  escalated: escalatedIdx !== -1 ? (row[escalatedIdx] || "") : "",
+                  status: statusIdx !== -1 ? (row[statusIdx] || "") : "",
+                  remarks: remarksIdx !== -1 ? (row[remarksIdx] || "") : "",
+                  resolution: resolutionIdx !== -1 ? (row[resolutionIdx] || "") : "",
+                  troubleshooting: "",
+                  note: "",
+                  source: "workload",
+                  deleted: false,
+                  imported: false
+              }));
+          } catch (err) {
+              console.error("Failed to load workload sheet:", err);
+              showNotification(`Error: ${err.message}`);
+              return [];
+          }
+      }
+
+      function renderPendingTableView(entries) {
+          const tbody = document.querySelector("#entryTable tbody");
+          tbody.innerHTML = "";
+          if (!entries.length) {
+              tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">✨ No pending tickets found for you in WORKLOAD TRACKER 2026 ✨</td></tr>`;
+              return;
+          }
+          entries.forEach(entry => {
+              const row = document.createElement("tr");
+              row.dataset.id = entry.id;
+              row.innerHTML = `
+                  <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+                  <td>${escapeHtml(entry.date)}</td>
+                  <td>${escapeHtml(entry.shift)}</td>
+                  <td>${escapeHtml(entry.support)}</td>
+                  <td>${escapeHtml(entry.portal)}</td>
+                  <td>${escapeHtml(entry.store)}</td>
+                  <td>${escapeHtml(entry.zip)}</td>
+                  <td>${escapeHtml(entry.contact)}</td>
+                  <td>${escapeHtml(entry.contactNumber)}</td>
+                  <td>${escapeHtml(entry.module)}</td>
+                  <td style="white-space: pre-wrap;">${escapeHtml(entry.issue)}</td>
+                  <td>${escapeHtml(entry.escalated)}</td>
+                  <td>${escapeHtml(entry.status)}</td>
+                  <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks)}</td>
+                  <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution)}</td>
+                  <td class="action-cell">
+                      <div class="action-container">
+                          <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
+                          <button class="icon-btn edit-btn disabled" disabled title="Edit not allowed in tracker view"><i class="bi bi-pencil-square"></i></button>
+                          <button class="icon-btn delete-btn disabled" disabled title="Delete not allowed"><i class="bi bi-trash3-fill"></i></button>
+                      </div>
+                  </td>
+              `;
+              tbody.appendChild(row);
+          });
+          updateSelectAllCheckboxState();
+      }
+
+      async function togglePendingTracker() {
+          isPendingTrackerMode = !isPendingTrackerMode;
+          localStorage.setItem("pendingTrackerMode", isPendingTrackerMode ? "true" : "false");
+          const toggleBtn = document.getElementById("pendingTrackerToggleBtn");
+          if (isPendingTrackerMode) {
+              toggleBtn.classList.add("active");
+              toggleBtn.textContent = "🔙 Back to Local DB";
+              showNotification("Loading your pending tickets from WORKLOAD TRACKER 2026...");
+              const pendingEntries = await fetchWorkloadSheetData();
+              cachedPendingEntries = pendingEntries;
+              renderPendingTableView(pendingEntries);
+              // Hide bulk action buttons that shouldn't be used in tracker mode
+              document.getElementById("bulkDeleteBtn").style.display = "none";
+              document.getElementById("bulkCopyBtn").style.display = "none";
+              document.getElementById("bulkUpdateStatusBtn").style.display = "none";
+              document.getElementById("exportCsvBtn").style.display = "none";
+              document.getElementById("importCsvBtn").style.display = "none";
+          } else {
+              toggleBtn.classList.remove("active");
+              toggleBtn.textContent = "📋 My Pending Tickets (Sheet)";
+              // Restore normal table view
+              renderTable();  // original function using allEntries
+              // Restore bulk buttons
+              document.getElementById("bulkDeleteBtn").style.display = "";
+              document.getElementById("bulkCopyBtn").style.display = "";
+              document.getElementById("bulkUpdateStatusBtn").style.display = "";
+              document.getElementById("exportCsvBtn").style.display = "";
+              document.getElementById("importCsvBtn").style.display = "";
+              // Also refresh counters
+              updateStatusCounters();
+          }
+      }
+
         function init() {
           const loggedInUser = getLoggedInUser();
           if (!loggedInUser) {
@@ -6780,52 +6955,63 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
             });
           });
 
-          document
-            .getElementById("submitPasswordChange")
-            .addEventListener("click", async () => {
+          document.getElementById("submitPasswordChange").addEventListener("click", async () => {
               const oldPwd = document.getElementById("oldPassword").value;
               const newPwd = document.getElementById("newPassword").value;
-              const confirmPwd =
-                document.getElementById("confirmPassword").value;
+              const confirmPwd = document.getElementById("confirmPassword").value;
               const errorDiv = document.getElementById("pwdError");
               errorDiv.textContent = "";
 
               if (!oldPwd || !newPwd || !confirmPwd) {
-                errorDiv.textContent = "All fields required.";
-                return;
+                  errorDiv.textContent = "All fields required.";
+                  return;
               }
               if (newPwd !== confirmPwd) {
-                errorDiv.textContent = "New passwords do not match.";
-                return;
+                  errorDiv.textContent = "New passwords do not match.";
+                  return;
               }
               if (newPwd.length < 4) {
-                errorDiv.textContent =
-                  "Password must be at least 4 characters.";
-                return;
+                  errorDiv.textContent = "Password must be at least 4 characters.";
+                  return;
               }
 
               const email = currentUser.email;
-              // Validate old password locally (optional, but better to let sheet handle)
-              const success = await updatePasswordInSheet(
-                email,
-                oldPwd,
-                newPwd,
-              );
+              const success = await updatePasswordInSheet(email, oldPwd, newPwd);
               if (success) {
-                changePwdModal.style.display = "none";
-                backdrop.style.display = "none";
-                showNotification(
-                  "Password updated successfully. Please login again.",
-                );
-                setTimeout(() => {
-                  clearLoggedInUser();
-                  location.reload();
-                }, 1500);
+                  changePwdModal.style.display = "none";
+                  backdrop.style.display = "none";
+                  showNotification("Password updated successfully. Please login again.");
+                  setTimeout(() => {
+                      clearLoggedInUser();
+                      location.reload();
+                  }, 1500);
               } else {
-                errorDiv.textContent =
-                  "Failed to update password. Old password may be incorrect or script error.";
+                  errorDiv.textContent = "Failed to update password. Old password may be incorrect or script error.";
               }
-            });
+          });
+
+          // ---------- PENDING TRACKER INITIALISATION (moved outside) ----------
+          const savedMode = localStorage.getItem("pendingTrackerMode");
+          if (savedMode === "true" && currentUser) {
+              isPendingTrackerMode = true;
+              const toggleBtn = document.getElementById("pendingTrackerToggleBtn");
+              if (toggleBtn) {
+                  toggleBtn.classList.add("active");
+                  toggleBtn.textContent = "🔙 Back to Local DB";
+                  document.getElementById("bulkDeleteBtn").style.display = "none";
+                  document.getElementById("bulkCopyBtn").style.display = "none";
+                  document.getElementById("bulkUpdateStatusBtn").style.display = "none";
+                  document.getElementById("exportCsvBtn").style.display = "none";
+                  document.getElementById("importCsvBtn").style.display = "none";
+                  fetchWorkloadSheetData().then(entries => {
+                      cachedPendingEntries = entries;
+                      renderPendingTableView(entries);
+                  });
+              }
+          } else {
+              localStorage.setItem("pendingTrackerMode", "false");
+          }
+          document.getElementById("pendingTrackerToggleBtn").addEventListener("click", togglePendingTracker);
 
           // Idle refresh
           const IDLE_REFRESH_DELAY = 900000;
