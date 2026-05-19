@@ -5369,6 +5369,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
             saveAllEntries();
             renderTable();
             renderSidebar();
+			updateStatusCounters();
             let msg = `✅ Imported ${newEntries.length} entries into today's database panel`;
             if (skippedEmptyDate)
               msg += `, skipped ${skippedEmptyDate} rows with empty date`;
