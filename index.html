@@ -2161,6 +2161,9 @@
           >
             <i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT
           </button>
+          <button id="pendingTrackerToggleBtn" class="pending-tracker-toggle" style="background:#6c5ce7; color:white;">
+              📋 My Pending Tickets (Sheet)
+            </button>
             <span class="counter-badge resolved"
               >✅ Resolved: <span id="counterResolved">0</span></span
             >
@@ -2170,9 +2173,6 @@
             <span class="counter-badge other"
               >📋 Other Task: <span id="counterOther">0</span></span
             >
-            <button id="pendingTrackerToggleBtn" class="pending-tracker-toggle" style="background:#6c5ce7; color:white;">
-              📋 My Pending Tickets (Sheet)
-            </button>
         </div>
 
         <div style="overflow-x: auto">
@@ -6388,23 +6388,13 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
               const pendingEntries = await fetchWorkloadSheetData();
               cachedPendingEntries = pendingEntries;
               renderPendingTableView(pendingEntries);
-              // Hide bulk action buttons that shouldn't be used in tracker mode
-              document.getElementById("bulkDeleteBtn").style.display = "none";
-              document.getElementById("bulkCopyBtn").style.display = "none";
-              document.getElementById("bulkUpdateStatusBtn").style.display = "none";
-              document.getElementById("exportCsvBtn").style.display = "none";
-              document.getElementById("importCsvBtn").style.display = "none";
+              // ❌ REMOVED: hiding bulk buttons – they stay as is
           } else {
               toggleBtn.classList.remove("active");
               toggleBtn.textContent = "📋 My Pending Tickets (Sheet)";
               // Restore normal table view
               renderTable();  // original function using allEntries
-              // Restore bulk buttons
-              document.getElementById("bulkDeleteBtn").style.display = "";
-              document.getElementById("bulkCopyBtn").style.display = "";
-              document.getElementById("bulkUpdateStatusBtn").style.display = "";
-              document.getElementById("exportCsvBtn").style.display = "";
-              document.getElementById("importCsvBtn").style.display = "";
+              // ❌ REMOVED: restoring bulk buttons – not needed
               // Also refresh counters
               updateStatusCounters();
           }
@@ -6990,7 +6980,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
               }
           });
 
-          // ---------- PENDING TRACKER INITIALISATION (moved outside) ----------
+          // ---------- PENDING TRACKER INITIALISATION (no button hiding) ----------
           const savedMode = localStorage.getItem("pendingTrackerMode");
           if (savedMode === "true" && currentUser) {
               isPendingTrackerMode = true;
@@ -6998,11 +6988,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
               if (toggleBtn) {
                   toggleBtn.classList.add("active");
                   toggleBtn.textContent = "🔙 Back to Local DB";
-                  document.getElementById("bulkDeleteBtn").style.display = "none";
-                  document.getElementById("bulkCopyBtn").style.display = "none";
-                  document.getElementById("bulkUpdateStatusBtn").style.display = "none";
-                  document.getElementById("exportCsvBtn").style.display = "none";
-                  document.getElementById("importCsvBtn").style.display = "none";
+                  // ❌ REMOVED: hiding bulk buttons
                   fetchWorkloadSheetData().then(entries => {
                       cachedPendingEntries = entries;
                       renderPendingTableView(entries);
