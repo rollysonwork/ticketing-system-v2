@@ -1144,6 +1144,39 @@
 				gap: 4px;
 				padding: 8px 16px;
 			}
+			.status-counters {
+			background: var(--bg-tertiary);
+			padding: 4px 12px;
+			border-radius: 40px;
+			border: 1px solid var(--border-color);
+			}	
+			.counter-badge {
+				font-size: 0.8rem;
+				font-weight: 600;
+				background: var(--bg-secondary);
+				padding: 4px 10px;
+				border-radius: 30px;
+				display: inline-flex;
+				gap: 6px;
+				align-items: center;
+			}
+			.counter-badge.resolved { color: #11734b; border: 1px solid #10b98140; background: #10b98110; }
+			.counter-badge.pending { color: #b10202; border: 1px solid #f59e0b40; background: #f59e0b10; }
+			.counter-badge.other { color: #bfe1f6; border: 1px solid #3b82f640; background: #3b82f610; }
+			.pending-tracker-btn {
+				background: var(--warning);
+				border: none;
+				border-radius: 40px;
+				padding: 6px 14px;
+				font-weight: 600;
+				font-size: 0.8rem;
+				color: white;
+				transition: var(--transition);
+			}
+			.pending-tracker-btn:hover {
+				transform: translateY(-2px);
+				filter: brightness(1.05);
+			}
 		</style>
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.min.css" />
 	</head>
@@ -1728,6 +1761,11 @@
 					<button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report">
 						<i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT
 					</button>
+					<div class="status-counters" style="display: inline-flex; gap: 16px; margin-left: auto; align-items: center;">
+					<span class="counter-badge resolved">✅ Resolved: <span id="counterResolved">0</span></span>
+					<span class="counter-badge pending">⏳ Pending: <span id="counterPending">0</span></span>
+					<span class="counter-badge other">📋 Other Task: <span id="counterOther">0</span></span>
+					</div>
 				</div>
 
 				<div style="overflow-x: auto">
@@ -5260,7 +5298,23 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 				}
 
 				function init() {
-					// Check if user is already logged in
+					function updateStatusCounters() {
+					const todayEST = getESTDateString();
+					const todayEntries = allEntries.filter(entry => {
+						if (entry.deleted) return false;
+						const dateObj = parseDateFromString(entry.date);
+						if (!dateObj) return false;
+						const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth()+1).padStart(2,'0')}-${String(dateObj.getDate()).padStart(2,'0')}`;
+						return entryDateStr === todayEST;
+					});
+					const resolved = todayEntries.filter(e => e.status?.toUpperCase() === 'RESOLVED').length;
+					const pending = todayEntries.filter(e => e.status?.toUpperCase() === 'PENDING').length;
+					const other = todayEntries.filter(e => e.status?.toUpperCase() === 'OTHER TASK').length;
+					document.getElementById('counterResolved').innerText = resolved;
+					document.getElementById('counterPending').innerText = pending;
+					document.getElementById('counterOther').innerText = other;
+					}
+
 					const loggedInUser = getLoggedInUser();
 					if (!loggedInUser) {
 						// Show login overlay and disable main UI
