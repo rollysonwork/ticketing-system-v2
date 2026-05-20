@@ -5954,25 +5954,34 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
         // Apply role-based restrictions
         function applyRoleRestrictions(role) {
-          role = role.toUpperCase();
-          if (role === "LEVEL 1") {
-            // hide moolah tab & store tab
-            document.querySelectorAll(".tab-button").forEach((btn) => {
-              const text = btn.textContent.toUpperCase();
-              if (text.includes("MOOLAH") || text.includes("STORE")) {
-                btn.style.display = "none";
-              }
-            });
-            // hide bulk bar buttons: import, export, shift report
-            document.getElementById("importCsvBtn").style.display = "none";
-            document.getElementById("exportCsvBtn").style.display = "none";
-            document.getElementById("shiftReportBtn").style.display = "none";
-          } else if (role === "LEVEL 2") {
-            document.getElementById("importCsvBtn").style.display = "none";
-            document.getElementById("exportCsvBtn").style.display = "none";
-            document.getElementById("shiftReportBtn").style.display = "none";
-          }
-          // LEVEL 3: no restrictions
+            role = role.toUpperCase();
+            const pendingToggleBtn = document.getElementById("pendingTrackerToggleBtn");
+            
+            if (role === "LEVEL 1") {
+                // hide moolah tab & store tab
+                document.querySelectorAll(".tab-button").forEach((btn) => {
+                    const text = btn.textContent.toUpperCase();
+                    if (text.includes("MOOLAH") || text.includes("STORE")) {
+                        btn.style.display = "none";
+                    }
+                });
+                // hide bulk bar buttons: import, export, shift report
+                document.getElementById("importCsvBtn").style.display = "none";
+                document.getElementById("exportCsvBtn").style.display = "none";
+                document.getElementById("shiftReportBtn").style.display = "none";
+                // Ensure pending tracker button is visible
+                if (pendingToggleBtn) pendingToggleBtn.style.display = "";
+            } 
+            else if (role === "LEVEL 2") {
+                document.getElementById("importCsvBtn").style.display = "none";
+                document.getElementById("exportCsvBtn").style.display = "none";
+                document.getElementById("shiftReportBtn").style.display = "none";
+                if (pendingToggleBtn) pendingToggleBtn.style.display = "";
+            }
+            else {
+                // LEVEL 3 or any other – ensure button is visible
+                if (pendingToggleBtn) pendingToggleBtn.style.display = "";
+            }
         }
 
         function autoFillSupportName(supportName) {
@@ -6448,6 +6457,8 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
           loadFormData("moolah");
           loadFormData("store");
           loadFormData("ticket");
+          // Force the support name to the logged‑in user (overwrites any saved value)
+          autoFillSupportName(currentUser.support);
           syncShiftSupportFromTicket();
           loadAllEntries();
 		  updateStatusCounters();
@@ -6906,9 +6917,13 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
           logoutProfileBtn.addEventListener("click", () => {
             if (confirm("Logout?")) {
-              clearLoggedInUser();
-              location.reload();
-            }
+                  // Clear all form data from localStorage
+                  localStorage.removeItem("moolahFormData");
+                  localStorage.removeItem("storeFormData");
+                  localStorage.removeItem("ticketFormData");
+                  clearLoggedInUser();
+                  location.reload();
+              }
           });
 
           // Change password modal
