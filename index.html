@@ -1771,6 +1771,7 @@
 					<span class="counter-badge resolved">✅ Resolved: <span id="counterResolved">0</span></span>
 					<span class="counter-badge pending">⏳ Pending: <span id="counterPending">0</span></span>
 					<span class="counter-badge other">📋 Other Task: <span id="counterOther">0</span></span>
+					<button id="manualRefreshBtn" title="Refresh counters now" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">🔄</button>
 				</div>
 
 				<div style="overflow-x: auto">
@@ -5269,6 +5270,10 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					document.getElementById("bulkCopyBtn").addEventListener("click", bulkCopy);
 					document.getElementById("bulkUpdateStatusBtn").addEventListener("click", bulkUpdateStatus);
 					document.getElementById("exportCsvBtn").addEventListener("click", exportToCSV);
+					document.getElementById("manualRefreshBtn")?.addEventListener("click", () => {
+						updateStatusCounters();
+						showNotification("Counters refreshed");
+					});
 
 					const importBtn = document.getElementById("importCsvBtn");
 					const fileInput = document.createElement("input");
@@ -5608,7 +5613,35 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						});
 					});
 					resetIdleTimer();
+
+				// --- Auto‑refresh counters every 30 seconds ---
+				let refreshInterval = null;
+
+				function startCounterRefresh() {
+					if (refreshInterval) clearInterval(refreshInterval);
+					refreshInterval = setInterval(() => {
+						updateStatusCounters();
+					}, 30000); // 30 seconds
 				}
+
+				function stopCounterRefresh() {
+					if (refreshInterval) {
+						clearInterval(refreshInterval);
+						refreshInterval = null;
+					}
+				}
+
+				// Start the refresh after initial load
+				startCounterRefresh();
+
+				// Stop refresh on logout to avoid unnecessary calls
+				const originalLogout = logoutProfileBtn.onclick;
+				logoutProfileBtn.addEventListener("click", () => {
+					stopCounterRefresh();
+				});
+				}
+
+				
 
 				window.switchTab = switchTab;
 				window.clock = clock;
