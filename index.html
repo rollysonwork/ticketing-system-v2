@@ -36,6 +36,7 @@
 				--logo-moolah-points: url("./assets/icons/logo-256-moolah-points.png");
 				--logo-retailzpos: url("./assets/icons/logo-256-retailzpos.png");
 				--logo-vitreous-retailz-ticket: url("./assets/icons/logo-256-vitreous-support-ticket.png");
+				--logo-google-sheets-icon: url("https://ik.imagekit.io/p9tpmhodug/logo_sheets_2026_color_2x_web_48dp.png");
 			}
 
 			body.dark-mode {
@@ -1038,7 +1039,7 @@
 			}
 
 			.icon-custom {
-				--icon-size: 2em;
+				--icon-size: 1.8em;
 				display: inline-block;
 				width: var(--icon-size);
 				height: var(--icon-size);
@@ -1060,6 +1061,10 @@
 
 			.icon-ticket {
 				background-image: var(--logo-vitreous-retailz-ticket);
+			}
+
+			.icon-google-sheets {
+				background-image: var(--logo-google-sheets-icon);
 			}
 
 			.login-action-btn {
@@ -1155,6 +1160,11 @@
 				color: #bfe1f6;
 				border: 1px solid #bfe1f6;
 				background: #1b2c36;
+			}
+			.bulk-bar .pending-tracker-toggle {
+				background: #07542b;
+				color: white;
+				border-color: #64ffa7;
 			}
 			.pending-tracker-btn {
 				background: var(--warning);
@@ -1767,11 +1777,11 @@
 					<button id="exportCsvBtn" class="export-btn"><i class="bi bi-filetype-csv"></i> EXPORT</button>
 					<button id="importCsvBtn" class="import-btn"><i class="bi bi-file-earmark-arrow-up"></i> IMPORT</button>
 					<button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
-					<button id="pendingTrackerToggleBtn" class="pending-tracker-toggle" style="background: #6c5ce7; color: white">📋 My Pending Tickets (Sheet)</button>
+					<button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom icon-google-sheets"></i> My Pending Tickets (Sheet)</button>
 					<span class="counter-badge resolved">✅ Resolved: <span id="counterResolved">0</span></span>
 					<span class="counter-badge pending">⏳ Pending: <span id="counterPending">0</span></span>
 					<span class="counter-badge other">📋 Other Task: <span id="counterOther">0</span></span>
-					<button id="manualRefreshBtn" title="Refresh counters now" style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">🔄</button>
+					<button id="manualRefreshBtn" title="Refresh counters now" style="background: none; border: none; font-size: 1.2rem; cursor: pointer">🔄</button>
 				</div>
 
 				<div style="overflow-x: auto">
@@ -5614,34 +5624,32 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					});
 					resetIdleTimer();
 
-				// --- Auto‑refresh counters every 30 seconds ---
-				let refreshInterval = null;
+					// --- Auto‑refresh counters every 30 seconds ---
+					let refreshInterval = null;
 
-				function startCounterRefresh() {
-					if (refreshInterval) clearInterval(refreshInterval);
-					refreshInterval = setInterval(() => {
-						updateStatusCounters();
-					}, 30000); // 30 seconds
-				}
-
-				function stopCounterRefresh() {
-					if (refreshInterval) {
-						clearInterval(refreshInterval);
-						refreshInterval = null;
+					function startCounterRefresh() {
+						if (refreshInterval) clearInterval(refreshInterval);
+						refreshInterval = setInterval(() => {
+							updateStatusCounters();
+						}, 30000); // 30 seconds
 					}
+
+					function stopCounterRefresh() {
+						if (refreshInterval) {
+							clearInterval(refreshInterval);
+							refreshInterval = null;
+						}
+					}
+
+					// Start the refresh after initial load
+					startCounterRefresh();
+
+					// Stop refresh on logout to avoid unnecessary calls
+					const originalLogout = logoutProfileBtn.onclick;
+					logoutProfileBtn.addEventListener("click", () => {
+						stopCounterRefresh();
+					});
 				}
-
-				// Start the refresh after initial load
-				startCounterRefresh();
-
-				// Stop refresh on logout to avoid unnecessary calls
-				const originalLogout = logoutProfileBtn.onclick;
-				logoutProfileBtn.addEventListener("click", () => {
-					stopCounterRefresh();
-				});
-				}
-
-				
 
 				window.switchTab = switchTab;
 				window.clock = clock;
