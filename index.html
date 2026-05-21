@@ -5115,7 +5115,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						updateStatusCounters(); // <-- add this
 					} else {
 						toggleBtn.classList.remove("active");
-						toggleBtn.textContent = "📋 My Pending Tickets (Sheet)";
+						toggleBtn.innerHTML = '<i class="icon-custom icon-google-sheets"></i> My Pending Tickets (Sheet)';
 						renderTable();
 						updateStatusCounters(); // <-- add this
 						updateStatusCounters();
