@@ -2,11 +2,11 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="description" content="Vitreous ? Unified Creation System for RetailzPOS - Streamline your ticket, RetailzPOS store, and Moolah Points creation process with our all-in-one solution designed for efficiency and ease of use." />
+		<meta name="description" content="Vitreous · Unified Creation System for RetailzPOS - Streamline your ticket, RetailzPOS store, and Moolah Points creation process with our all-in-one solution designed for efficiency and ease of use." />
 		<meta name="keywords" content="Vitreous, RetailzPOS, Moolah Creation, Store Creation, Ticket Creation, Support Ticket, Unified Creation System" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<link rel="icon" type="image/x-icon" href="./assets/icons/logo-256-vitreous-support-ticket.png" />
-		<title>RetailzPOS ? Unified Creation System</title>
+		<title>RetailzPOS · Unified Creation System</title>
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 		<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Code:ital,wght@0,300..800;1,300..800&family=Google+Sans:ital,opsz,wght@0,17..18,400..700;1,17..18,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Noto+Sans+Meroitic&family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
@@ -481,7 +481,7 @@
 			}
 
 			.search-header::before {
-				content: "??";
+				content: "🔍";
 				font-size: 1.2rem;
 			}
 
@@ -797,14 +797,10 @@
 				color: white;
 				border-color: var(--warning);
 			}
-			.bulk-bar .shift-report-btn,
-			.bulk-bar .pending-tracker-toggle {
+			.bulk-bar .shift-report-btn {
 				background: #b93131;
 				color: white;
 				border-color: #b93131;
-				width: 240px;
-				justify-content: center;
-				white-space: nowrap;
 			}
 			.bulk-bar .sheets-key-btn {
 				background: #8b5cf6;
@@ -1160,6 +1156,21 @@
 				gap: 6px;
 				align-items: center;
 			}
+			.counter-badge.resolved {
+				color: #11734b;
+				border: 1px solid #11734b;
+				background: #152921;
+			}
+			.counter-badge.pending {
+				color: #b10202;
+				border: 1px solid #b10202;
+				background: #381c1c;
+			}
+			.counter-badge.other {
+				color: #bfe1f6;
+				border: 1px solid #bfe1f6;
+				background: #1b2c36;
+			}
 			.bulk-bar .pending-tracker-toggle {
 				background: #b93131;
 				color: white;
@@ -1180,10 +1191,10 @@
 				filter: brightness(1.05);
 			}
 			.pending-tracker-toggle.active {
-				background: #b93131 !important;
-				color: white;
-				border-color: #b93131;
-				box-shadow: none;
+				background: #e17055 !important;
+				box-shadow:
+					0 0 0 2px #fff,
+					0 0 0 4px #e17055;
 			}
 		</style>
 	</head>
@@ -1201,22 +1212,22 @@
 				<div style="margin-bottom: 16px; position: relative">
 					<label style="display: block; margin-bottom: 4px" for="loginPassword">Password</label>
 					<input type="password" id="loginPassword" class="no-uppercase" name="loginPassword" style="width: 100%; padding-right: 40px" />
-					<button id="togglePassword" type="button" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem" title="Show password">??</button>
+					<button id="togglePassword" type="button" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem" title="Show password">🙉</button>
 				</div>
 				<div id="loginError" style="color: #ef4444; margin-bottom: 16px; text-align: center"></div>
 				<button id="loginBtn" class="login-action-btn" style="width: 100%; padding: 12px">Login</button>
 				<div style="margin-top: 16px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap">
-					<button id="setSheetsKeyFromLogin" class="login-action-btn">?? Sheets Key</button>
-					<button id="setGeminiKeyFromLogin" class="login-action-btn">?? Gemini Key</button>
+					<button id="setSheetsKeyFromLogin" class="login-action-btn">🔑 Sheets Key</button>
+					<button id="setGeminiKeyFromLogin" class="login-action-btn">🤖 Gemini Key</button>
 				</div>
 				<div id="keyStatus" style="margin-top: 12px; text-align: center; font-size: 0.8rem; color: var(--text-muted)"></div>
 			</div>
 		</div>
 		<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem">
-			<h1 style="margin: 0">?? RetailzPOS ? Unified Creation System</h1>
+			<h1 style="margin: 0">🏬 RetailzPOS · Unified Creation System</h1>
 			<div style="display: flex; gap: 12px">
-				<button class="theme-toggle" id="themeToggle" title="Toggle dark mode">??</button>
-				<button class="theme-toggle" id="profileBtn" title="Profile">??</button>
+				<button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+				<button class="theme-toggle" id="profileBtn" title="Profile">👤</button>
 			</div>
 		</div>
 		<div class="app-container">
@@ -1238,7 +1249,7 @@
 							<div id="ticketHistoryContent" class="history-content"></div>
 						</div>
 						<div class="left-panel">
-							<h3>?? TICKET CREATION FORM</h3>
+							<h3>📋 TICKET CREATION FORM</h3>
 							<div class="search-section">
 								<div class="search-header">STORE SEARCH</div>
 								<div class="search-input-wrapper">
@@ -1320,7 +1331,7 @@
 									<td>
 										<div id="ticket-resolution-editor" style="height: 200px"></div>
 										<div class="mt-2" style="margin-top: 10px">
-											<label for="ticket-template-select" style="font-size: 0.8rem; font-weight: 500">?? Load Troubleshooting Template:</label>
+											<label for="ticket-template-select" style="font-size: 0.8rem; font-weight: 500">📋 Load Troubleshooting Template:</label>
 											<select id="ticket-template-select" class="form-select" style="font-size: 0.8rem">
 												<option value="">-- Select a template --</option>
 											</select>
@@ -1344,7 +1355,7 @@
 							</div>
 						</div>
 						<div class="right-panel" id="ticket-previewPanel">
-							<h3>?? PREVIEW</h3>
+							<h3>🔍 PREVIEW</h3>
 							<div><strong>PORTAL:</strong> <span id="ticket-previewPortal"></span></div>
 							<div>
 								<strong>STORE NAME:</strong>
@@ -1370,16 +1381,16 @@
 								<span id="ticket-previewNote" class="preview-multiline"></span>
 							</div>
 							<br />
-							<div><strong>?? CONTACT:</strong></div>
+							<div><strong>📞 CONTACT:</strong></div>
 							<div><strong>CALLER NAME:&nbsp;</strong><span id="ticket-previewContactPerson"></span></div>
 							<div><strong>CONTACT NUMBER:&nbsp;</strong><span id="ticket-previewContactNumber"></span></div>
 							<br />
-							<div><strong>?? TROUBLESHOOTING:</strong></div>
+							<div><strong>🔧 TROUBLESHOOTING:</strong></div>
 							<div>
 								<span id="ticket-previewTroubleshooting" class="preview-multiline"></span>
 							</div>
 							<br />
-							<div><strong>? RESOLUTION:</strong></div>
+							<div><strong>✅ RESOLUTION:</strong></div>
 							<div>
 								<span id="ticket-previewResolution" class="preview-multiline"></span>
 							</div>
@@ -1397,7 +1408,7 @@
 							<div id="storeHistoryContent" class="history-content"></div>
 						</div>
 						<div class="left-panel">
-							<h3>?? STORE CREATION FORM</h3>
+							<h3>📋 STORE CREATION FORM</h3>
 							<div class="search-section">
 								<div class="search-header">STORE SEARCH</div>
 								<div class="search-input-wrapper">
@@ -1454,9 +1465,9 @@
 								</tr>
 								<tr>
 									<th>CITY</th>
-									<td style="display: flex; gap: 8px; align-items: center">
-										<input type="text" id="store-city" style="flex: 1" />
-										<input type="text" id="store-state" style="width: 80px" placeholder="ST" />
+									<td style="display:flex;gap:8px;align-items:center;">
+										<input type="text" id="store-city" style="flex:1" />
+										<input type="text" id="store-state" style="width:80px" placeholder="ST" />
 									</td>
 								</tr>
 								<tr>
@@ -1504,7 +1515,7 @@
 							</div>
 						</div>
 						<div class="right-panel" id="store-previewPanel">
-							<h3>?? PREVIEW</h3>
+							<h3>🔍 PREVIEW</h3>
 							<div>
 								<strong>URL:-</strong>
 								<span id="store-preview-url">https://portal[PORTAL].retailzpos.com/</span>
@@ -1613,7 +1624,7 @@
 							<div id="moolahHistoryContent" class="history-content"></div>
 						</div>
 						<div class="left-panel">
-							<h3>?? MOOLAH CREATION FORM</h3>
+							<h3>📋 MOOLAH CREATION FORM</h3>
 							<div class="search-section">
 								<div class="search-header">STORE SEARCH</div>
 								<div class="search-input-wrapper">
@@ -1670,9 +1681,9 @@
 								</tr>
 								<tr>
 									<th>CITY</th>
-									<td style="display: flex; gap: 8px; align-items: center">
-										<input type="text" id="moolah-city" style="flex: 1" />
-										<input type="text" id="moolah-state" style="width: 80px" placeholder="ST" />
+									<td style="display:flex;gap:8px;align-items:center;">
+										<input type="text" id="moolah-city" style="flex:1" />
+										<input type="text" id="moolah-state" style="width:80px" placeholder="ST" />
 									</td>
 								</tr>
 								<tr>
@@ -1714,7 +1725,7 @@
 							</div>
 						</div>
 						<div class="right-panel" id="moolah-previewPanel">
-							<h3>?? PREVIEW</h3>
+							<h3>🔍 PREVIEW</h3>
 							<div>
 								<strong>MOOLAH CREATION DATE:</strong>
 								<span id="moolah-preview-date"></span>
@@ -1808,11 +1819,11 @@
 					<button id="bulkUpdateStatusBtn" title="Update status for selected rows"><i class="bi bi-pencil-square"></i> UPDATE</button>
 					<button id="exportCsvBtn" class="export-btn"><i class="bi bi-filetype-csv"></i> EXPORT</button>
 					<button id="importCsvBtn" class="import-btn"><i class="bi bi-file-earmark-arrow-up"></i> IMPORT</button>
-					<button id="shiftReportBtn" class="shift-report-btn" title="Generate end-of-shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
-					<button id="pendingTrackerToggleBtn" class="pending-tracker-toggle">PENDING TICKETS VIEW</button>
-					<button class="counter-badge resolved" disabled aria-hidden="true">? RESOLVED: <span id="counterResolved">0</span></button>
-					<button class="counter-badge pending" disabled aria-hidden="true">? PENDING: <span id="counterPending">0</span></button>
-					<button class="counter-badge other" disabled aria-hidden="true">?? OTHER TASK: <span id="counterOther">0</span></button>
+					<button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
+					<button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom icon-google-sheets"></i> My Pending Tickets (Sheet)</button>
+					<button class="counter-badge resolved" disabled aria-hidden="true">✅ RESOLVED: <span id="counterResolved">0</span></button>
+					<button class="counter-badge pending" disabled aria-hidden="true">⏳ PENDING: <span id="counterPending">0</span></button>
+					<button class="counter-badge other" disabled aria-hidden="true">📋 OTHER TASK: <span id="counterOther">0</span></button>
 					<button id="manualRefreshBtn" title="Refresh counters now" style="background: none; border: none; font-size: 1.2rem; cursor: pointer">REFRESH</button>
 				</div>
 
@@ -1865,15 +1876,15 @@
 			<h3 style="margin-bottom: 16px">Change Password</h3>
 			<div style="margin-bottom: 12px">
 				<input type="password" id="oldPassword" placeholder="Old Password" style="width: 100%" />
-				<button class="togglePwd" data-target="oldPassword" style="position: relative; float: right; margin-top: -34px; margin-right: 8px; background: none; border: none">??</button>
+				<button class="togglePwd" data-target="oldPassword" style="position: relative; float: right; margin-top: -34px; margin-right: 8px; background: none; border: none">🙉</button>
 			</div>
 			<div style="margin-bottom: 12px">
 				<input type="password" id="newPassword" placeholder="New Password" style="width: 100%" />
-				<button class="togglePwd" data-target="newPassword" style="position: relative; float: right; margin-top: -34px; margin-right: 8px; background: none; border: none">??</button>
+				<button class="togglePwd" data-target="newPassword" style="position: relative; float: right; margin-top: -34px; margin-right: 8px; background: none; border: none">🙉</button>
 			</div>
 			<div style="margin-bottom: 12px">
 				<input type="password" id="confirmPassword" placeholder="Confirm New Password" style="width: 100%" />
-				<button class="togglePwd" data-target="confirmPassword" style="position: relative; float: right; margin-top: -34px; margin-right: 8px; background: none; border: none">??</button>
+				<button class="togglePwd" data-target="confirmPassword" style="position: relative; float: right; margin-top: -34px; margin-right: 8px; background: none; border: none">🙉</button>
 			</div>
 			<div id="pwdError" style="color: #ef4444; margin-bottom: 12px; font-size: 0.8rem"></div>
 			<div style="display: flex; gap: 8px">
@@ -1985,7 +1996,7 @@
 						clearSearchResults();
 						["ticket", "store", "moolah"].forEach((prefix) => {
 							const statusEl = document.getElementById(`${prefix}-loadStatus`);
-							if (statusEl) statusEl.innerHTML = '<span class="error">?? API key not set. Click SET SHEETS KEY in bulk bar.</span>';
+							if (statusEl) statusEl.innerHTML = '<span class="error">⚠️ API key not set. Click SET SHEETS KEY in bulk bar.</span>';
 						});
 					}
 				}
@@ -1996,7 +2007,7 @@
 					"7:30AM - 6:30PM": ["07:30 AM", "06:30 PM"],
 				};
 
-				const CONSTANT_ISSUE = `CREATE MOOLAH ACCOUNT - DONE ?\nINSTALL & UPDATE ALL APPS - DONE ?\nASSIGN STORE - DONE ?`;
+				const CONSTANT_ISSUE = `CREATE MOOLAH ACCOUNT - DONE ✅\nINSTALL & UPDATE ALL APPS - DONE ✅\nASSIGN STORE - DONE ✅`;
 
 				const MODULE_OPTIONS = ["POS", "Portal", "Mobile App", "Cash Register", "Item Management", "Inventory", "Back Office", "Credit Card Terminal", "Printer", "Transactions", "Scan-Data", "Promotions", "Reports", "Register Setup", "Store Creation", "Rocket Application", "Moolah", "API", "Database import/export", "Gift Card", "Employee", "EDI", "Demo", "Training", "Credentials", "Other", "MIGRATION", "VERSION UPDATE", "EBT", "Cash drawer", "LABEL PRINTER", "BULK CHANGE", "CRASH - APK", "SERVER", "TOUCH SCREEN", "CHANGE STORE/EMAIL ID", "Customer Module", "Age Check", "Internet", "SYNC DATA", "Surcharge", "Image set", "Scanner", "TENDER", "TIME CARD", "BANK DEPOSITE", "E-Commerce", "Dual Price", "Lotto Guru", "Tax", "LABEL UTILITY", "FACTORY RESET", "DB EXPORT", "Adjustments", "NVR", "RECEIPT", "RETAILZGO", "INVOICE", "SOLINK INTEGRATION", "Price Level", "CashBack", "Customer Screen", "Active / Deactive", "Store", "OCR", "DEVICE ID"];
 				const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
@@ -2181,6 +2192,8 @@
 				const HAWAII = new Set(["HI"]);
 
 				function getTimezone(state, z) {
+					
+
 					if (state === "FL") return z >= 32400 && z <= 32599 ? "CT" : "ET";
 
 					if (state === "IN") return (z >= 46300 && z <= 46499) || (z >= 47000 && z <= 47799) ? "CT" : "ET";
@@ -2204,6 +2217,8 @@
 					if (state === "ID") return z >= 83500 ? "PT" : "MT";
 
 					if (state === "OR") return z >= 97900 && z <= 97999 ? "MT" : "PT";
+
+					
 
 					if (EASTERN.has(state)) return "ET";
 					if (CENTRAL.has(state)) return "CT";
@@ -2235,11 +2250,11 @@
 					try {
 						fetch(`https://api.zippopotam.us/us/${zip}`)
 							.then((res) => {
-								if (!res.ok) throw new Error("no-data");
+								if (!res.ok) throw new Error('no-data');
 								return res.json();
 							})
 							.then((data) => {
-								const place = data.places && data.places[0] ? data.places[0]["place name"] : "";
+								const place = data.places && data.places[0] ? data.places[0]['place name'] : "";
 								if (place) {
 									const cityEl = document.getElementById(`${prefix}-city`);
 									if (cityEl && (!cityEl.value || cityEl.value.trim() === "")) cityEl.value = place;
@@ -2296,7 +2311,7 @@
 						if (line.trim() === "") return line;
 						let lowerLine = line.toLowerCase();
 						lowerLine = lowerLine.charAt(0).toUpperCase() + lowerLine.slice(1);
-						if (lowerLine.startsWith("?")) {
+						if (lowerLine.startsWith("•")) {
 							if (lowerLine.length > 2 && lowerLine[2] === " ") {
 								lowerLine = lowerLine.substring(0, 3) + lowerLine[3].toUpperCase() + lowerLine.substring(4);
 							}
@@ -2393,7 +2408,7 @@
 
 					const apiKey = getGoogleApiKey();
 					if (!apiKey) {
-						const msg = "?? API key not set. Click SET SHEETS KEY in bulk bar.";
+						const msg = "⚠️ API key not set. Click SET SHEETS KEY in bulk bar.";
 						Object.values(statusEls).forEach((el) => {
 							if (el) el.innerHTML = `<span class="error">${msg}</span>`;
 						});
@@ -2415,7 +2430,7 @@
 						for (let i = 1; i < data.values.length; i++) {
 							const row = data.values[i];
 							const portal = (row[CONFIG.PORTAL_COL] || "").toString().trim();
-							const sku = (row[CONFIG.SKU_COL] || "").toString().trim();
+							const sku = (row[CONFIG.SKU_COL] || "").toString().trim(); 
 							const storeName = (row[CONFIG.STORE_NAME_COL] || "").toString().trim();
 							const zipCode = (row[CONFIG.ZIP_CODE_COL] || "").toString().trim();
 							let status = (row[CONFIG.STATUS_COL] || "").toString().trim().toUpperCase();
@@ -2439,13 +2454,13 @@
 						storeData.sort((a, b) => a.storeName.localeCompare(b.storeName));
 
 						Object.values(statusEls).forEach((el) => {
-							if (el) el.innerHTML = `<span class="success">? Loaded ${storeData.length} stores successfully!</span>`;
+							if (el) el.innerHTML = `<span class="success">✅ Loaded ${storeData.length} stores successfully!</span>`;
 						});
 						clearSearchResults();
 						showNotification(`Loaded ${storeData.length} stores`);
 					} catch (error) {
 						Object.values(statusEls).forEach((el) => {
-							if (el) el.innerHTML = `<span class="error">? Error: ${error.message}</span>`;
+							if (el) el.innerHTML = `<span class="error">❌ Error: ${error.message}</span>`;
 						});
 						storeData = [];
 					}
@@ -2462,9 +2477,11 @@
 						other = 0;
 
 					rows.forEach((row) => {
+						
 						const firstCell = row.querySelector("td");
 						if (firstCell && firstCell.colSpan > 1) return;
 
+						
 						const statusCell = row.cells[12];
 						if (!statusCell) return;
 
@@ -2539,8 +2556,8 @@
                                     <span class="status-badge ${statusClass}">${store.status}</span>
                                 </div>
                                 <div class="result-details">
-                                    <span>?? PORTAL ${store.portal || "N/A"}</span>
-                                    <span class="result-zip">?? ${store.zipCode || "N/A"}</span>
+                                    <span>📌 PORTAL ${store.portal || "N/A"}</span>
+                                    <span class="result-zip">📍 ${store.zipCode || "N/A"}</span>
                                 </div>
                             </div>
                         </div>
@@ -2735,19 +2752,19 @@
 					document.getElementById("moolah-preview-anydeskId").innerHTML = formatMultilinePreview(anydeskId);
 
 					// set state input and preview
-					const stateFull = state ? STATE_FULL_NAMES[state] || "" : "";
+					const stateFull = state ? (STATE_FULL_NAMES[state] || "") : "";
 					const stateInput = document.getElementById("moolah-state");
 					if (stateInput) stateInput.value = state || "";
 					document.getElementById("moolah-preview-stateFull").textContent = stateFull || state || "";
 
 					// fetch city for valid 5-digit zip, clear city when zip cleared
 					if (/^\d{5}$/.test(zipcode)) {
-						fetchCityFromZip(zipcode, "moolah");
+						fetchCityFromZip(zipcode, 'moolah');
 					} else {
-						const cityEl = document.getElementById("moolah-city");
-						if (cityEl) cityEl.value = "";
-						const previewCity = document.getElementById("moolah-preview-city");
-						if (previewCity) previewCity.textContent = "";
+						const cityEl = document.getElementById('moolah-city');
+						if (cityEl) cityEl.value = '';
+						const previewCity = document.getElementById('moolah-preview-city');
+						if (previewCity) previewCity.textContent = '';
 					}
 
 					const namingLine = `${skuClean}_${statePart}_${storeClean}_LIVE-${portalClean}_${zipClean}_MOOLAH-1`;
@@ -2795,19 +2812,19 @@
 					document.getElementById("store-preview-anydeskId").innerHTML = formatMultilinePreview(anydeskId);
 
 					// set state input and preview
-					const stateFull = state ? STATE_FULL_NAMES[state] || "" : "";
+					const stateFull = state ? (STATE_FULL_NAMES[state] || "") : "";
 					const stateInput = document.getElementById("store-state");
 					if (stateInput) stateInput.value = state || "";
 					document.getElementById("store-preview-stateFull").textContent = stateFull || state || "";
 
 					// fetch city from zip if valid 5-digit, otherwise clear city
 					if (/^\d{5}$/.test(zipcode)) {
-						fetchCityFromZip(zipcode, "store");
+						fetchCityFromZip(zipcode, 'store');
 					} else {
-						const cityEl = document.getElementById("store-city");
-						if (cityEl) cityEl.value = "";
-						const previewCity = document.getElementById("store-preview-city");
-						if (previewCity) previewCity.textContent = "";
+						const cityEl = document.getElementById('store-city');
+						if (cityEl) cityEl.value = '';
+						const previewCity = document.getElementById('store-preview-city');
+						if (previewCity) previewCity.textContent = '';
 					}
 
 					const skuPart = sku || "[SKU]";
@@ -2873,6 +2890,7 @@
 					syncPreviewHeight();
 				}
 
+				
 				async function summarizeText(text) {
 					let apiKey = localStorage.getItem("geminiApiKey");
 					if (!apiKey) {
@@ -2881,7 +2899,16 @@
 						localStorage.setItem("geminiApiKey", apiKey.trim());
 					}
 
-					const models = ["gemini-2.5-flash-lite", "gemini-3-flash-preview", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-3-pro-preview", "gemini-3.1-pro-preview", "gemini-2.5-pro", "gemini-pro-latest"];
+					const models = [
+						"gemini-2.5-flash-lite", 
+						"gemini-3-flash-preview", 
+						"gemini-2.5-flash", 
+						"gemini-2.0-flash", 
+						"gemini-3-pro-preview", 
+						"gemini-3.1-pro-preview", 
+						"gemini-2.5-pro", 
+						"gemini-pro-latest", 
+					];
 					let lastError = null;
 
 					for (const model of models) {
@@ -2940,7 +2967,7 @@
 					const targetBtn = Array.from(allSummarizeBtns).find((btn) => btn.dataset.id == entryId);
 					if (targetBtn) {
 						targetBtn.disabled = true;
-						targetBtn.textContent = "?";
+						targetBtn.textContent = "⏳";
 					}
 
 					const summary = await summarizeText(troubleshootingText);
@@ -2954,16 +2981,18 @@
 
 					if (targetBtn) {
 						targetBtn.disabled = false;
-						targetBtn.textContent = "??";
+						targetBtn.textContent = "🔄";
 					}
 				}
 
+				
 				async function addEntry(prefix) {
 					if (prefix !== "ticket") {
 						await addEntryLegacy(prefix);
 						return;
 					}
 
+					
 					let requiredIds = ["ticket-portal", "ticket-store", "ticket-zip"];
 					let valid = true;
 					requiredIds.forEach((id) => {
@@ -3014,7 +3043,7 @@
 							const oldTroubleshooting = existingEntry.troubleshooting || "";
 							const troubleshootingChanged = newTroubleshooting !== oldTroubleshooting;
 							if (troubleshootingChanged && !isTroubleshootingEmpty(newTroubleshooting)) {
-								addBtn.textContent = "? SUMMARIZING...";
+								addBtn.textContent = "⏳ SUMMARIZING...";
 								addBtn.disabled = true;
 								const plainText = newTroubleshooting.replace(/<[^>]*>/g, "");
 								const summary = await summarizeText(plainText);
@@ -3031,7 +3060,7 @@
 						}
 					} else {
 						if (!isTroubleshootingEmpty(newTroubleshooting)) {
-							addBtn.textContent = "? SUMMARIZING...";
+							addBtn.textContent = "⏳ SUMMARIZING...";
 							addBtn.disabled = true;
 							const plainText = newTroubleshooting.replace(/<[^>]*>/g, "");
 							const summary = await summarizeText(plainText);
@@ -3137,7 +3166,9 @@
 					syncPreviewHeight();
 				}
 
+				
 				async function addEntryLegacy(prefix) {
+					
 					const portalEl = document.getElementById(`${prefix}-portal`);
 					const storeNameEl = document.getElementById(`${prefix}-storeName`);
 					const zipcodeEl = document.getElementById(`${prefix}-zipcode`);
@@ -3168,25 +3199,25 @@
 					if (prefix === "store") {
 						issueText =
 							window._storeCurrentIssue ||
-							`NEW STORE CREATION FORM SENT - DONE ?
-STORE CREATION - DONE ?
+							`NEW STORE CREATION FORM SENT - DONE ✅
+STORE CREATION - DONE ✅
 						document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
 						document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
 						document.getElementById("moolah-city").value = entry.moduleData?.city || "";
 						document.getElementById("moolah-state").value = entry.moduleData?.state || "";
-INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ?
-UPLOAD DATABASE - PENDING ?`;
+INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
+UPLOAD DATABASE - PENDING ❌`;
 					} else if (prefix === "moolah") {
 						issueText =
 							window._moolahCurrentIssue ||
-							`CREATE MOOLAH ACCOUNT - DONE ?
-INSTALL & UPDATE ALL APPS - DONE ?
-ASSIGN STORE - DONE ?`;
+							`CREATE MOOLAH ACCOUNT - DONE ✅
+INSTALL & UPDATE ALL APPS - DONE ✅
+ASSIGN STORE - DONE ✅`;
 					}
-					document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
-					document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
-					document.getElementById("store-city").value = entry.moduleData?.city || "";
-					document.getElementById("store-state").value = entry.moduleData?.state || "";
+						document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
+						document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
+						document.getElementById("store-city").value = entry.moduleData?.city || "";
+						document.getElementById("store-state").value = entry.moduleData?.state || "";
 
 					let moduleData = {};
 					if (prefix === "store") {
@@ -3222,6 +3253,7 @@ ASSIGN STORE - DONE ?`;
 					const addBtn = document.querySelector(`#tab-${prefix} .add`);
 
 					if (editId) {
+						
 						const index = allEntries.findIndex((e) => e.id === editId);
 						if (index !== -1) {
 							allEntries[index] = {
@@ -3241,6 +3273,7 @@ ASSIGN STORE - DONE ?`;
 							};
 							showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry updated!`);
 						} else {
+							
 							const newEntry = {
 								id: Date.now(),
 								date: formattedDate,
@@ -3267,13 +3300,14 @@ ASSIGN STORE - DONE ?`;
 							allEntries.unshift(newEntry);
 							showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry added (edit target missing)!`);
 						}
-
+						
 						editId = null;
 						if (addBtn) {
 							addBtn.textContent = "ADD ENTRY";
 							addBtn.classList.remove("editing");
 						}
 					} else {
+						
 						const newEntry = {
 							id: Date.now(),
 							date: formattedDate,
@@ -3301,15 +3335,16 @@ ASSIGN STORE - DONE ?`;
 						showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry added!`);
 					}
 
+					
 					if (prefix === "store") {
-						["address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"].forEach((id) => {
+						["address1","address2","city","state","agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"].forEach((id) => {
 							const el = document.getElementById(`store-${id}`);
 							if (el) el.value = "";
 						});
 						storeUpdatePreview();
 						saveFormData("store");
 					} else if (prefix === "moolah") {
-						["address1", "address2", "city", "state", "email", "password", "sku", "noOfTabs", "mokiId", "anydeskId"].forEach((id) => {
+						["address1","address2","city","state","email", "password", "sku", "noOfTabs", "mokiId", "anydeskId"].forEach((id) => {
 							const el = document.getElementById(`moolah-${id}`);
 							if (el) el.value = "";
 						});
@@ -3380,8 +3415,9 @@ ASSIGN STORE - DONE ?`;
 
 				function editEntry(buttonOrId) {
 					let entryId, entry;
-
+					
 					if (typeof buttonOrId === "object" && buttonOrId !== null) {
+						
 						const id = buttonOrId.closest ? buttonOrId.closest("tr")?.dataset.id || buttonOrId.dataset.id : buttonOrId.dataset.id;
 						if (!id) return;
 						entryId = parseInt(id);
@@ -3688,7 +3724,7 @@ ASSIGN STORE - DONE ?`;
 							collapseState.months[month] = month !== currentMonthKey;
 						}
 						const isMonthCollapsed = collapseState.months[month];
-						const monthArrow = isMonthCollapsed ? "?" : "?";
+						const monthArrow = isMonthCollapsed ? "▶" : "▼";
 						html += `<div class="sidebar-group">
                     <div class="month-header" onclick="toggleMonth('${month.replace(/'/g, "\\'")}')">
                         <span class="month-arrow">${monthArrow}</span> ${month}
@@ -3697,11 +3733,12 @@ ASSIGN STORE - DONE ?`;
 							const dates = grouped[month];
 							const sortedDates = Object.keys(dates).sort((a, b) => new Date(b) - new Date(a));
 							for (const dateKey of sortedDates) {
+								
 								if (collapseState.dates[dateKey] === undefined) {
 									collapseState.dates[dateKey] = dateKey !== yesterdayFormatted;
 								}
 								const isDateCollapsed = collapseState.dates[dateKey];
-								const dateArrow = isDateCollapsed ? "?" : "?";
+								const dateArrow = isDateCollapsed ? "▶" : "▼";
 								html += `<div class="date-group">
                             <div class="date-header" onclick="toggleDate('${dateKey.replace(/'/g, "\\'")}')">
                                 <span class="date-arrow">${dateArrow}</span> ${dateKey}
@@ -3744,13 +3781,13 @@ ASSIGN STORE - DONE ?`;
                                 <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || "-")}</div>
                                 <div class="card-actions">
                                     <div class="card-actions-row stack-row">
-                                        <button class="copy-store" data-id="${entry.id}">?? DETAILS</button>
-                                        <button class="copy-details" data-id="${entry.id}">?? HRMS</button>
+                                        <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
+                                        <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
                                     </div>
                                     <div class="card-actions-row">
-                                        <button class="edit-entry stack-btn" data-id="${entry.id}">??<br>EDIT</button>
-                                        <button class="return-entry stack-btn" data-id="${entry.id}">??<br>RETURN</button>
-                                        <button class="delete-entry stack-btn" data-id="${entry.id}">???<br>DELETE</button>
+                                        <button class="edit-entry stack-btn" data-id="${entry.id}">✏️<br>EDIT</button>
+                                        <button class="return-entry stack-btn" data-id="${entry.id}">↩️<br>RETURN</button>
+                                        <button class="delete-entry stack-btn" data-id="${entry.id}">🗑️<br>DELETE</button>
                                     </div>
                                 </div>
                             </div>
@@ -3888,25 +3925,25 @@ ${escapeHtml(entry.note || "").replace(/\n/g, "<br>")}`;
 								const troubleshootingPlain = htmlToPlainText(troubleshootingHtml);
 								const formattedResolution = entry.resolution || "";
 
-								const plainText = `?? CONTACT:
+								const plainText = `📞 CONTACT:
 CALLER NAME: ${entry.contact}
 CONTACT NUMBER: ${entry.contactNumber}
 
-?? TROUBLESHOOTING:
+🔧 TROUBLESHOOTING:
 ${troubleshootingPlain}
 
-? RESOLUTION:
+✅ RESOLUTION:
 ${formattedResolution}`;
 
 								const htmlCopy = `
-<strong>?? CONTACT: </strong><br>
+<strong>📞 CONTACT: </strong><br>
 <strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
 <strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
 <br>
-<strong>?? TROUBLESHOOTING: </strong><br>
+<strong>🔧 TROUBLESHOOTING: </strong><br>
 ${troubleshootingHtml || escapeHtml(troubleshootingPlain).replace(/\n/g, "<br>")}
 <br>
-<strong>? RESOLUTION: </strong><br>
+<strong>✅ RESOLUTION: </strong><br>
 ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 `;
 								try {
@@ -4194,7 +4231,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					a.click();
 					URL.revokeObjectURL(url);
 
-					showNotification(`? Exported ${visibleEntries.length} entries (only visible in database panel)`);
+					showNotification(`✅ Exported ${visibleEntries.length} entries (only visible in database panel)`);
 				}
 
 				function parseCSV(text) {
@@ -4299,7 +4336,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						saveAllEntries();
 						renderTable();
 						renderSidebar();
-						let msg = `? Imported ${newEntries.length} entries into today's database panel`;
+						let msg = `✅ Imported ${newEntries.length} entries into today's database panel`;
 						if (skippedEmptyDate) msg += `, skipped ${skippedEmptyDate} rows with empty date`;
 						showNotification(msg);
 					};
@@ -4510,7 +4547,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					}
 
 					const title = document.createElement("h3");
-					title.textContent = "End-of-Shift Report";
+					title.textContent = "End‑of‑Shift Report";
 					title.style.marginBottom = "16px";
 					title.style.fontSize = "1.2rem";
 					modal.appendChild(title);
@@ -4611,17 +4648,17 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					const savedTheme = localStorage.getItem("theme");
 					if (savedTheme === "dark") {
 						document.body.classList.add("dark-mode");
-						document.getElementById("themeToggle").textContent = "??";
+						document.getElementById("themeToggle").textContent = "☀️";
 					} else {
 						document.body.classList.remove("dark-mode");
-						document.getElementById("themeToggle").textContent = "??";
+						document.getElementById("themeToggle").textContent = "🌙";
 					}
 				}
 
 				function toggleTheme() {
 					const isDark = document.body.classList.toggle("dark-mode");
 					localStorage.setItem("theme", isDark ? "dark" : "light");
-					document.getElementById("themeToggle").textContent = isDark ? "??" : "??";
+					document.getElementById("themeToggle").textContent = isDark ? "☀️" : "🌙";
 					syncPreviewHeight();
 				}
 
@@ -4811,9 +4848,9 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 							const missing = [];
 							if (!sheetsKey) missing.push("Sheets API Key");
 							if (!geminiKey) missing.push("Gemini API Key");
-							keyStatusEl.textContent = `?? Missing: ${missing.join(", ")}. Please set both keys before login.`;
+							keyStatusEl.textContent = `⚠️ Missing: ${missing.join(", ")}. Please set both keys before login.`;
 						} else {
-							keyStatusEl.textContent = "? Both API keys are set. You can login.";
+							keyStatusEl.textContent = "✅ Both API keys are set. You can login.";
 						}
 					}
 					updateKeyStatus();
@@ -4847,7 +4884,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					togglePwd.addEventListener("click", () => {
 						const type = loginPassword.getAttribute("type") === "password" ? "text" : "password";
 						loginPassword.setAttribute("type", type);
-						togglePwd.textContent = type === "password" ? "??" : "??";
+						togglePwd.textContent = type === "password" ? "🙉" : "🙈";
 					});
 
 					loginBtn.addEventListener("click", async () => {
@@ -5019,7 +5056,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 				async function fetchWorkloadSheetData() {
 					const apiKey = getGoogleApiKey();
 					if (!apiKey) {
-						showNotification("? Google Sheets API key not set.");
+						showNotification("❌ Google Sheets API key not set.");
 						return [];
 					}
 					const sheetName = "WORKLOAD TRACKER 2026";
@@ -5034,7 +5071,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						}
 
 						const headers = data.values[0].map((h) => (h || "").trim());
-						console.log("?? Headers from sheet:", headers);
+						console.log("📋 Headers from sheet:", headers);
 
 						const findCol = (name) => headers.findIndex((h) => h.toUpperCase() === name.toUpperCase());
 
@@ -5061,7 +5098,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
 						const rows = data.values.slice(1);
 						const currentUserSupport = (currentUser?.support || "").trim();
-						console.log(`?? Current user support: "${currentUserSupport}"`);
+						console.log(`🔍 Current user support: "${currentUserSupport}"`);
 
 						const pendingRows = rows.filter((row) => {
 							const status = (row[statusIdx] || "").trim().toUpperCase();
@@ -5069,7 +5106,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 							return status === "PENDING" && support === currentUserSupport.toUpperCase();
 						});
 
-						console.log(`?? Found ${pendingRows.length} pending tickets for "${currentUserSupport}"`);
+						console.log(`📊 Found ${pendingRows.length} pending tickets for "${currentUserSupport}"`);
 
 						if (pendingRows.length === 0 && rows.length > 0) {
 							console.log("Sample of first 3 rows (status, support):");
@@ -5111,7 +5148,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					const tbody = document.querySelector("#entryTable tbody");
 					tbody.innerHTML = "";
 					if (!entries.length) {
-						tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">? No pending tickets found for you in WORKLOAD TRACKER 2026 ?</td></tr>`;
+						tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">✨ No pending tickets found for you in WORKLOAD TRACKER 2026 ✨</td></tr>`;
 						return;
 					}
 					entries.forEach((entry) => {
@@ -5152,7 +5189,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					const toggleBtn = document.getElementById("pendingTrackerToggleBtn");
 					if (isPendingTrackerMode) {
 						toggleBtn.classList.add("active");
-						toggleBtn.textContent = "LOCAL DATABASE VIEW";
+						toggleBtn.textContent = "🔙 Back to Local DB";
 						showNotification("Loading your pending tickets from WORKLOAD TRACKER 2026...");
 						const pendingEntries = await fetchWorkloadSheetData();
 						cachedPendingEntries = pendingEntries;
@@ -5160,7 +5197,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						updateStatusCounters();
 					} else {
 						toggleBtn.classList.remove("active");
-						toggleBtn.textContent = "PENDING TICKETS VIEW";
+						toggleBtn.innerHTML = '<i class="icon-custom icon-google-sheets"></i> My Pending Tickets (Sheet)';
 						renderTable();
 						updateStatusCounters();
 						updateStatusCounters();
@@ -5222,7 +5259,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					} else {
 						["ticket", "store", "moolah"].forEach((prefix) => {
 							const statusEl = document.getElementById(`${prefix}-loadStatus`);
-							if (statusEl) statusEl.innerHTML = '<span class="error">?? API key not set. Click SET SHEETS KEY in bulk bar.</span>';
+							if (statusEl) statusEl.innerHTML = '<span class="error">⚠️ API key not set. Click SET SHEETS KEY in bulk bar.</span>';
 						});
 					}
 
@@ -5408,7 +5445,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						};
 						let lines = [];
 						for (let [key, label] of Object.entries(steps)) {
-							const status = window.storeSteps[key] === "done" ? "DONE ?" : "PENDING ?";
+							const status = window.storeSteps[key] === "done" ? "DONE ✅" : "PENDING ❌";
 							lines.push(`${label} - ${status}`);
 						}
 						const issueText = lines.join("\n");
@@ -5425,7 +5462,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						};
 						let lines = [];
 						for (let [key, label] of Object.entries(steps)) {
-							const status = window.moolahSteps[key] === "done" ? "DONE ?" : "PENDING ?";
+							const status = window.moolahSteps[key] === "done" ? "DONE ✅" : "PENDING ❌";
 							lines.push(`${label} - ${status}`);
 						}
 						const issueText = lines.join("\n");
@@ -5577,10 +5614,10 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 							const input = document.getElementById(targetId);
 							if (input.type === "password") {
 								input.type = "text";
-								btn.textContent = "??";
+								btn.textContent = "🙈";
 							} else {
 								input.type = "password";
-								btn.textContent = "??";
+								btn.textContent = "🙉";
 							}
 						});
 					});
@@ -5626,7 +5663,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						const toggleBtn = document.getElementById("pendingTrackerToggleBtn");
 						if (toggleBtn) {
 							toggleBtn.classList.add("active");
-							toggleBtn.textContent = "?? Back to Local DB";
+							toggleBtn.textContent = "🔙 Back to Local DB";
 
 							fetchWorkloadSheetData().then((entries) => {
 								cachedPendingEntries = entries;
@@ -5698,3 +5735,4 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 		<script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
 	</body>
 </html>
+
