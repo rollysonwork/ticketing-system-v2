@@ -1119,14 +1119,11 @@
 
 			.store-step-btn,
 			.moolah-step-btn {
-				/* background: var(--accent-color);
-				color: white;
-				border-color: var(--accent-color); */
 				height: 2em;
 				width: 2em;
 				transition: var(--transition);
 				cursor: pointer;
-				/* border: none; */
+
 				border-radius: 10px;
 				font-weight: 600;
 				text-transform: uppercase;
@@ -1189,10 +1186,8 @@
 		</style>
 	</head>
 	<body>
-		<!-- Login Overlay -->
 		<div id="loginOverlay" style="display: none; position: fixed; inset: 0; background-image: url(&quot;https://patelprocessing.com/Login-Page-(1920x1080).jpg&quot;); background-size: cover; background-position: center; z-index: 2000; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px">
 			<div style="background: var(--bg-secondary); border-radius: 20px; padding: 32px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); max-width: 400px; width: 90%">
-				<!-- Logo inside the card -->
 				<div style="text-align: center; margin-bottom: 16px">
 					<img src="https://vitreous.support/logo.png?v=1777764480010_0.43758564004058664" alt="Logo" style="max-width: 300px; height: auto" />
 				</div>
@@ -1232,7 +1227,6 @@
 					</div>
 				</div>
 
-				<!-- TICKET TAB (three panels) -->
 				<div id="tab-ticket" class="tab-content active">
 					<div class="three-panels">
 						<div class="history-panel">
@@ -1392,7 +1386,6 @@
 					</div>
 				</div>
 
-				<!-- STORE TAB (three panels) -->
 				<div id="tab-store" class="tab-content">
 					<div class="three-panels">
 						<div class="history-panel">
@@ -1590,7 +1583,6 @@
 					</div>
 				</div>
 
-				<!-- MOOLAH TAB (three panels) -->
 				<div id="tab-moolah" class="tab-content">
 					<div class="three-panels">
 						<div class="history-panel">
@@ -1814,7 +1806,6 @@
 
 		<div id="notification"></div>
 
-		<!-- Profile Modal -->
 		<div id="profileModal" style="display: none; position: fixed; top: 20px; right: 20px; background: var(--bg-secondary); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); width: 300px; z-index: 1100; padding: 16px">
 			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
 				<strong>Profile</strong>
@@ -1830,7 +1821,6 @@
 			<button id="logoutBtnProfile" class="login-action-btn" type="button" style="width: 100%; background: #ef4444">Logout</button>
 		</div>
 
-		<!-- Change Password Modal -->
 		<div id="changePwdModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 350px; z-index: 1200; border: 1px solid var(--border-color)">
 			<h3 style="margin-bottom: 16px">Change Password</h3>
 			<div style="margin-bottom: 12px">
@@ -1854,7 +1844,7 @@
 		<div id="pwdModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
 
 		<script>
-			const PASSWORD_UPDATE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_NOXzj_IQChM9QV90sgtyiL43YY9rwSwkQ3g21THcbsrqc5tfYBnCAWI0CCDL0-lb/exec"; // Replace with actual URL
+			const PASSWORD_UPDATE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_NOXzj_IQChM9QV90sgtyiL43YY9rwSwkQ3g21THcbsrqc5tfYBnCAWI0CCDL0-lb/exec";
 
 			(function () {
 				"use strict";
@@ -1927,7 +1917,7 @@
 				const CONFIG = {
 					GOOGLE_SHEET_ID: "1IDsVjZrWCP0hXRn_EufLNgpOMtYFtV6jVZx9P5rvbcA",
 					SHEET_NAME: "SERVER MANAGEMENT",
-					CRED_SHEET_NAME: "CREDENTIALS", // <-- new
+					CRED_SHEET_NAME: "CREDENTIALS",
 					TEMPLATE_SHEET_NAME: "TROUBLESHOOTING TEMPLATES",
 					PORTAL_COL: 0,
 					SKU_COL: 1,
@@ -1983,7 +1973,6 @@
 
 				let quillEditor = null;
 
-				// ========== NEW: Collapse state management ==========
 				const collapseState = { months: {}, dates: {} };
 
 				function loadCollapseState() {
@@ -2018,7 +2007,6 @@
 					saveCollapseState();
 					renderSidebar();
 				};
-				// ====================================================
 
 				function getESTDateString() {
 					const now = new Date();
@@ -2072,10 +2060,6 @@
 					if (!text) return "";
 					return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 				}
-
-				/* ================================
-			   ZIP → STATE
-			================================ */
 
 				const ZIP_TO_STATE = [
 					{ min: 35000, max: 36999, state: "AL" },
@@ -2145,10 +2129,6 @@
 					return match ? match.state : "";
 				}
 
-				/* ================================
-			   TIMEZONE SETS
-			================================ */
-
 				const EASTERN = new Set(["CT", "DE", "GA", "ME", "MD", "MA", "NH", "NJ", "NY", "NC", "OH", "PA", "RI", "SC", "VT", "VA", "WV", "DC"]);
 
 				const CENTRAL = new Set(["AL", "AR", "IL", "IA", "LA", "MN", "MS", "MO", "OK", "WI"]);
@@ -2160,12 +2140,8 @@
 				const ALASKA = new Set(["AK"]);
 				const HAWAII = new Set(["HI"]);
 
-				/* ================================
-			   STATE → TIMEZONE
-			================================ */
-
 				function getTimezone(state, z) {
-					// Split-state logic
+					
 
 					if (state === "FL") return z >= 32400 && z <= 32599 ? "CT" : "ET";
 
@@ -2191,7 +2167,7 @@
 
 					if (state === "OR") return z >= 97900 && z <= 97999 ? "MT" : "PT";
 
-					// Standard zones
+					
 
 					if (EASTERN.has(state)) return "ET";
 					if (CENTRAL.has(state)) return "CT";
@@ -2202,10 +2178,6 @@
 
 					return "ET";
 				}
-
-				/* ================================
-			   ZIP → TIMEZONE
-			================================ */
 
 				function getTimeZoneFromZip(zip) {
 					const zipStr = String(zip).trim();
@@ -2220,10 +2192,6 @@
 
 					return getTimezone(state, z);
 				}
-
-				/* ================================
-			   TIMEZONE LABEL
-			================================ */
 
 				function getTimeZoneLabel(tzCode) {
 					switch ((tzCode || "").toUpperCase()) {
@@ -2385,7 +2353,7 @@
 						for (let i = 1; i < data.values.length; i++) {
 							const row = data.values[i];
 							const portal = (row[CONFIG.PORTAL_COL] || "").toString().trim();
-							const sku = (row[CONFIG.SKU_COL] || "").toString().trim(); // NEW
+							const sku = (row[CONFIG.SKU_COL] || "").toString().trim(); 
 							const storeName = (row[CONFIG.STORE_NAME_COL] || "").toString().trim();
 							const zipCode = (row[CONFIG.ZIP_CODE_COL] || "").toString().trim();
 							let status = (row[CONFIG.STATUS_COL] || "").toString().trim().toUpperCase();
@@ -2432,11 +2400,11 @@
 						other = 0;
 
 					rows.forEach((row) => {
-						// Skip the "no pending tickets" message row (colspan > 1)
+						
 						const firstCell = row.querySelector("td");
 						if (firstCell && firstCell.colSpan > 1) return;
 
-						// Status is the 13th column (index 12, 0-based)
+						
 						const statusCell = row.cells[12];
 						if (!statusCell) return;
 
@@ -2809,7 +2777,7 @@
 					syncPreviewHeight();
 				}
 
-				// ========== ENHANCED SUMMARIZATION WITH FALLBACK MODELS ==========
+				
 				async function summarizeText(text) {
 					let apiKey = localStorage.getItem("geminiApiKey");
 					if (!apiKey) {
@@ -2819,14 +2787,14 @@
 					}
 
 					const models = [
-						"gemini-2.5-flash-lite", // ⚡ fastest stable low-latency
-						"gemini-3-flash-preview", // very fast next-gen Flash
-						"gemini-2.5-flash", // fast general-purpose
-						"gemini-2.0-flash", // older Flash, still fast
-						"gemini-3-pro-preview", // slower than Flash but powerful
-						"gemini-3.1-pro-preview", // similar/slightly heavier Pro
-						"gemini-2.5-pro", // slower reasoning model
-						"gemini-pro-latest", // slowest (legacy large model)
+						"gemini-2.5-flash-lite", 
+						"gemini-3-flash-preview", 
+						"gemini-2.5-flash", 
+						"gemini-2.0-flash", 
+						"gemini-3-pro-preview", 
+						"gemini-3.1-pro-preview", 
+						"gemini-2.5-pro", 
+						"gemini-pro-latest", 
 					];
 					let lastError = null;
 
@@ -2904,14 +2872,14 @@
 					}
 				}
 
-				// Replace the existing addEntry function with this one
+				
 				async function addEntry(prefix) {
 					if (prefix !== "ticket") {
 						await addEntryLegacy(prefix);
 						return;
 					}
 
-					// --- existing ticket logic (unchanged) ---
+					
 					let requiredIds = ["ticket-portal", "ticket-store", "ticket-zip"];
 					let valid = true;
 					requiredIds.forEach((id) => {
@@ -3085,9 +3053,9 @@
 					syncPreviewHeight();
 				}
 
-				// ----- NEW: addEntryLegacy for store & moolah -----
+				
 				async function addEntryLegacy(prefix) {
-					// Validate required fields
+					
 					const portalEl = document.getElementById(`${prefix}-portal`);
 					const storeNameEl = document.getElementById(`${prefix}-storeName`);
 					const zipcodeEl = document.getElementById(`${prefix}-zipcode`);
@@ -3156,7 +3124,7 @@ ASSIGN STORE - DONE ✅`;
 					const addBtn = document.querySelector(`#tab-${prefix} .add`);
 
 					if (editId) {
-						// UPDATE existing entry
+						
 						const index = allEntries.findIndex((e) => e.id === editId);
 						if (index !== -1) {
 							allEntries[index] = {
@@ -3176,7 +3144,7 @@ ASSIGN STORE - DONE ✅`;
 							};
 							showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry updated!`);
 						} else {
-							// fallback: create new
+							
 							const newEntry = {
 								id: Date.now(),
 								date: formattedDate,
@@ -3203,14 +3171,14 @@ ASSIGN STORE - DONE ✅`;
 							allEntries.unshift(newEntry);
 							showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry added (edit target missing)!`);
 						}
-						// Reset edit mode
+						
 						editId = null;
 						if (addBtn) {
 							addBtn.textContent = "ADD ENTRY";
 							addBtn.classList.remove("editing");
 						}
 					} else {
-						// CREATE new entry
+						
 						const newEntry = {
 							id: Date.now(),
 							date: formattedDate,
@@ -3238,7 +3206,7 @@ ASSIGN STORE - DONE ✅`;
 						showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry added!`);
 					}
 
-					// Clear module-specific fields (keep portal/store/zip)
+					
 					if (prefix === "store") {
 						["agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"].forEach((id) => {
 							const el = document.getElementById(`store-${id}`);
@@ -3318,9 +3286,9 @@ ASSIGN STORE - DONE ✅`;
 
 				function editEntry(buttonOrId) {
 					let entryId, entry;
-					// Handle both cases: button from table row (has closest tr) or from sidebar (data-id directly)
+					
 					if (typeof buttonOrId === "object" && buttonOrId !== null) {
-						// It's a DOM element
+						
 						const id = buttonOrId.closest ? buttonOrId.closest("tr")?.dataset.id || buttonOrId.dataset.id : buttonOrId.dataset.id;
 						if (!id) return;
 						entryId = parseInt(id);
@@ -3339,13 +3307,10 @@ ASSIGN STORE - DONE ✅`;
 						else prefix = "ticket";
 					}
 
-					// Switch to the correct tab
 					const tabBtn = Array.from(document.querySelectorAll(".tab-button")).find((btn) => btn.textContent.trim().toLowerCase().includes(prefix));
 					if (tabBtn) switchTab(prefix, tabBtn);
 
-					// Wait for tab to fully render
 					setTimeout(() => {
-						// Load common fields
 						const dateParts = entry.date.split("/");
 						if (dateParts.length === 3) {
 							const month = dateParts[0].padStart(2, "0");
@@ -3368,7 +3333,6 @@ ASSIGN STORE - DONE ✅`;
 							document.getElementById(`${prefix}-note`).value = entry.note || "";
 						}
 
-						// Module-specific fields
 						if (prefix === "moolah") {
 							document.getElementById("moolah-email").value = entry.moduleData?.email || "";
 							document.getElementById("moolah-password").value = entry.moduleData?.password || "";
@@ -3407,21 +3371,19 @@ ASSIGN STORE - DONE ✅`;
 							}
 						}
 
-						// Force preview update
 						const updatePreview = () => {
 							if (prefix === "moolah") moolahUpdatePreview();
 							else if (prefix === "store") storeUpdatePreview();
 							else updatePreviewWithEntry(entry);
 						};
 						updatePreview();
-						// Dispatch input events to trigger any bound listeners
+
 						document.querySelectorAll(`#tab-${prefix} input, #tab-${prefix} textarea, #tab-${prefix} select`).forEach((el) => {
 							el.dispatchEvent(new Event("input", { bubbles: true }));
 						});
-						// Extra delay for any async rendering
+
 						setTimeout(updatePreview, 100);
 
-						// Set edit mode and change button text
 						editId = entry.id;
 						const addBtn = document.querySelector(`#tab-${prefix} .add`);
 						if (addBtn) {
@@ -3434,7 +3396,6 @@ ASSIGN STORE - DONE ✅`;
 							saveAllEntries();
 						}
 
-						// Auto-grow textareas
 						document.querySelectorAll(`#tab-${prefix} textarea`).forEach((ta) => autoGrow(ta));
 						syncPreviewHeight();
 					}, 50);
@@ -3582,7 +3543,6 @@ ASSIGN STORE - DONE ✅`;
 
 					if (containers.length === 0) return;
 
-					// Determine current month key and yesterday formatted
 					const now = new Date();
 					const currentMonthKey = `${now.toLocaleString("default", { month: "long" })} ${now.getFullYear()}`;
 					const yesterdayFormatted = getYesterdayFormatted();
@@ -3623,7 +3583,6 @@ ASSIGN STORE - DONE ✅`;
 
 					let html = "";
 					for (const month of sortedMonths) {
-						// Set default collapsed state for month if not already set
 						if (collapseState.months[month] === undefined) {
 							collapseState.months[month] = month !== currentMonthKey;
 						}
@@ -3637,7 +3596,7 @@ ASSIGN STORE - DONE ✅`;
 							const dates = grouped[month];
 							const sortedDates = Object.keys(dates).sort((a, b) => new Date(b) - new Date(a));
 							for (const dateKey of sortedDates) {
-								// Set default collapsed state for date if not already set
+								
 								if (collapseState.dates[dateKey] === undefined) {
 									collapseState.dates[dateKey] = dateKey !== yesterdayFormatted;
 								}
@@ -3874,7 +3833,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						btn.addEventListener("click", (e) => {
 							e.stopPropagation();
 							const id = parseInt(btn.dataset.id);
-							editEntry(id); // pass the id directly
+							editEntry(id);
 						});
 					});
 
@@ -3937,9 +3896,9 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						return yesterday;
 					}
 					const uniqueShifts = [...new Set(visibleEntries.map((e) => e.shift).filter((s) => s))];
-					// Only current date if there is exactly one shift and it's the day shift
+
 					if (uniqueShifts.length === 1 && uniqueShifts[0] === "7:30AM - 6:30PM") {
-						return new Date(); // today
+						return new Date();
 					} else {
 						const yesterday = new Date();
 						yesterday.setDate(yesterday.getDate() - 1);
@@ -4656,8 +4615,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					});
 				}
 
-				// Load credentials from Google Sheets
-				let credentials = []; // will hold objects: { support, email, password, role }
+				let credentials = [];
 
 				async function loadCredentials() {
 					const apiKey = getGoogleApiKey();
@@ -4697,24 +4655,22 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					document.getElementById("loginError").textContent = msg;
 				}
 
-				// Apply role-based restrictions
 				function applyRoleRestrictions(role) {
 					role = role.toUpperCase();
 					const pendingToggleBtn = document.getElementById("pendingTrackerToggleBtn");
 
 					if (role === "LEVEL 1") {
-						// hide moolah tab & store tab
 						document.querySelectorAll(".tab-button").forEach((btn) => {
 							const text = btn.textContent.toUpperCase();
 							if (text.includes("MOOLAH") || text.includes("STORE")) {
 								btn.style.display = "none";
 							}
 						});
-						// hide bulk bar buttons: import, export, shift report
+
 						document.getElementById("importCsvBtn").style.display = "none";
 						document.getElementById("exportCsvBtn").style.display = "none";
 						document.getElementById("shiftReportBtn").style.display = "none";
-						// Ensure pending tracker button is visible
+
 						if (pendingToggleBtn) pendingToggleBtn.style.display = "";
 					} else if (role === "LEVEL 2") {
 						document.getElementById("importCsvBtn").style.display = "none";
@@ -4722,7 +4678,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						document.getElementById("shiftReportBtn").style.display = "none";
 						if (pendingToggleBtn) pendingToggleBtn.style.display = "";
 					} else {
-						// LEVEL 3 or any other – ensure button is visible
 						if (pendingToggleBtn) pendingToggleBtn.style.display = "";
 					}
 				}
@@ -4734,7 +4689,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					document.getElementById("store-support").readOnly = true;
 					document.getElementById("moolah-support").value = supportName;
 					document.getElementById("moolah-support").readOnly = true;
-					// trigger sync
+
 					syncShiftSupportFromTicket();
 				}
 
@@ -4747,7 +4702,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					const loginPassword = document.getElementById("loginPassword");
 					const keyStatusEl = document.getElementById("keyStatus");
 
-					// Helper to update key status message and enable/disable login button
 					function updateKeyStatus() {
 						const sheetsKey = getGoogleApiKey();
 						const geminiKey = localStorage.getItem("geminiApiKey");
@@ -4764,7 +4718,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					}
 					updateKeyStatus();
 
-					// Set Sheets API key
 					setSheetsBtn.addEventListener("click", () => {
 						const key = prompt("Enter your Google Sheets API key:");
 						if (key !== null) {
@@ -4778,7 +4731,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						}
 					});
 
-					// Set Gemini API key
 					setGeminiBtn.addEventListener("click", () => {
 						const key = prompt("Enter your Google Gemini API key:");
 						if (key !== null) {
@@ -4792,14 +4744,12 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						}
 					});
 
-					// Toggle password visibility
 					togglePwd.addEventListener("click", () => {
 						const type = loginPassword.getAttribute("type") === "password" ? "text" : "password";
 						loginPassword.setAttribute("type", type);
 						togglePwd.textContent = type === "password" ? "🙉" : "🙈";
 					});
 
-					// Login action
 					loginBtn.addEventListener("click", async () => {
 						const email = loginEmail.value.trim();
 						const pwd = loginPassword.value.trim();
@@ -4807,7 +4757,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 							showLoginError("Please enter email and password.");
 							return;
 						}
-						// Final check (button may be disabled, but just in case)
+
 						if (!getGoogleApiKey() || !localStorage.getItem("geminiApiKey")) {
 							showLoginError("Both API keys must be set before logging in.");
 							return;
@@ -4831,7 +4781,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						}
 					});
 
-					// Allow Enter key to login
 					[loginEmail, loginPassword].forEach((el) => {
 						el.addEventListener("keydown", (e) => {
 							if (e.key === "Enter") loginBtn.click();
@@ -4843,7 +4792,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					const url = `${PASSWORD_UPDATE_SCRIPT_URL}?email=${encodeURIComponent(email)}&oldPassword=${encodeURIComponent(oldPassword)}&newPassword=${encodeURIComponent(newPassword)}`;
 					try {
 						await fetch(url, { method: "GET", mode: "no-cors" });
-						// With no-cors, we can't read the response, but the request reaches the server.
+
 						showNotification("Password change request sent. Check your sheet.");
 						return true;
 					} catch (err) {
@@ -4852,7 +4801,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					}
 				}
 
-				// Store all templates globally
 				let allTemplates = [];
 
 				async function loadTroubleshootingTemplates() {
@@ -4965,9 +4913,8 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					});
 				}
 
-				// ---------- PENDING TRACKER (Workload Sheet) ----------
-				let isPendingTrackerMode = false; // false = local DB, true = sheet pending view
-				let cachedPendingEntries = []; // store fetched pending entries
+				let isPendingTrackerMode = false;
+				let cachedPendingEntries = [];
 
 				async function fetchWorkloadSheetData() {
 					const apiKey = getGoogleApiKey();
@@ -4989,7 +4936,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						const headers = data.values[0].map((h) => (h || "").trim());
 						console.log("📋 Headers from sheet:", headers);
 
-						// Helper to find column index (case‑insensitive)
 						const findCol = (name) => headers.findIndex((h) => h.toUpperCase() === name.toUpperCase());
 
 						const dateIdx = findCol("DATE");
@@ -5032,7 +4978,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 							});
 						}
 
-						// Map to entry object expected by renderTable
 						return pendingRows.map((row) => ({
 							id: Date.now() + Math.random(),
 							date: dateIdx !== -1 ? row[dateIdx] || "" : "",
@@ -5112,12 +5057,12 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						const pendingEntries = await fetchWorkloadSheetData();
 						cachedPendingEntries = pendingEntries;
 						renderPendingTableView(pendingEntries);
-						updateStatusCounters(); // <-- add this
+						updateStatusCounters();
 					} else {
 						toggleBtn.classList.remove("active");
 						toggleBtn.innerHTML = '<i class="icon-custom icon-google-sheets"></i> My Pending Tickets (Sheet)';
 						renderTable();
-						updateStatusCounters(); // <-- add this
+						updateStatusCounters();
 						updateStatusCounters();
 					}
 				}
@@ -5125,24 +5070,21 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 				function init() {
 					const loggedInUser = getLoggedInUser();
 					if (!loggedInUser) {
-						// Show login overlay and disable main UI
 						document.getElementById("loginOverlay").style.display = "flex";
 						document.querySelector(".app-container").style.display = "none";
 						document.getElementById("entryTable").style.display = "none";
 						document.querySelector(".bulk-bar").style.display = "none";
 						setupLoginListeners();
-						return; // rest of init will run after login
+						return;
 					}
 
-					// User is logged in – show main UI and continue
 					document.getElementById("loginOverlay").style.display = "none";
 					document.querySelector(".app-container").style.display = "";
 					document.getElementById("entryTable").style.display = "";
 					document.querySelector(".bulk-bar").style.display = "";
 
-					// Apply role restrictions
 					applyRoleRestrictions(loggedInUser.role);
-					// Auto‑fill support name everywhere
+
 					autoFillSupportName(loggedInUser.support);
 					window.currentUser = loggedInUser;
 
@@ -5163,7 +5105,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					loadFormData("moolah");
 					loadFormData("store");
 					loadFormData("ticket");
-					// Force the support name to the logged‑in user (overwrites any saved value)
+
 					autoFillSupportName(currentUser.support);
 					syncShiftSupportFromTicket();
 					loadAllEntries();
@@ -5186,11 +5128,9 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
 					document.querySelectorAll("textarea").forEach((ta) => autoGrow(ta));
 
-					// ... existing code ...
 					setupAutocomplete("ticket-module", MODULE_OPTIONS, "ticket-issue");
 					setupAutocomplete("ticket-status", STATUS_OPTIONS, "ticket-remarks");
 
-					// Module change listener for templates
 					const moduleField = document.getElementById("ticket-module");
 					if (moduleField) {
 						moduleField.addEventListener("change", () => updateTemplateDropdown());
@@ -5257,7 +5197,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					});
 
 					document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach((el) => {
-						// Exclude password modal fields and ticket specific fields
 						if (el.id === "ticket-issue" || el.id === "ticket-remarks" || el.id === "ticket-resolution" || el.id === "ticket-note" || el.id === "oldPassword" || el.id === "newPassword" || el.id === "confirmPassword") {
 							return;
 						}
@@ -5325,7 +5264,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					}
 					setInterval(checkAndRefreshTable, 60000);
 
-					loadCollapseState(); // Load saved collapse state
+					loadCollapseState();
 
 					quillEditor = new Quill("#ticket-resolution-editor", {
 						theme: "snow",
@@ -5334,7 +5273,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						},
 					});
 
-					// Load troubleshooting templates from Google Sheets
 					loadTroubleshootingTemplates();
 					initTemplateSelector();
 
@@ -5349,7 +5287,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						saveFormData("ticket");
 					});
 
-					// ----- Store & Moolah Step Management -----
 					window.storeSteps = {
 						form: "done",
 						creation: "done",
@@ -5487,7 +5424,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					updateStoreIssuePreview();
 					updateMoolahIssuePreview();
 
-					// Profile modal logic
 					const profileBtn = document.getElementById("profileBtn");
 					const profileModal = document.getElementById("profileModal");
 					const closeProfile = document.getElementById("closeProfileModal");
@@ -5508,7 +5444,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
 					logoutProfileBtn.addEventListener("click", () => {
 						if (confirm("Logout?")) {
-							// Clear all form data from localStorage
 							localStorage.removeItem("moolahFormData");
 							localStorage.removeItem("storeFormData");
 							localStorage.removeItem("ticketFormData");
@@ -5517,7 +5452,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						}
 					});
 
-					// Change password modal
 					const changePwdModal = document.getElementById("changePwdModal");
 					const backdrop = document.getElementById("pwdModalBackdrop");
 					changePwdBtn.addEventListener("click", () => {
@@ -5537,7 +5471,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						backdrop.style.display = "none";
 					});
 
-					// Toggle password visibility for modals
 					document.querySelectorAll(".togglePwd").forEach((btn) => {
 						btn.addEventListener("click", (e) => {
 							const targetId = btn.getAttribute("data-target");
@@ -5587,7 +5520,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						}
 					});
 
-					// ---------- PENDING TRACKER INITIALISATION (no button hiding) ----------
 					const savedMode = localStorage.getItem("pendingTrackerMode");
 					if (savedMode === "true" && currentUser) {
 						isPendingTrackerMode = true;
@@ -5595,7 +5527,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						if (toggleBtn) {
 							toggleBtn.classList.add("active");
 							toggleBtn.textContent = "🔙 Back to Local DB";
-							// ❌ REMOVED: hiding bulk buttons
+
 							fetchWorkloadSheetData().then((entries) => {
 								cachedPendingEntries = entries;
 								renderPendingTableView(entries);
@@ -5606,7 +5538,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					}
 					document.getElementById("pendingTrackerToggleBtn").addEventListener("click", togglePendingTracker);
 
-					// Idle refresh
 					const IDLE_REFRESH_DELAY = 900000;
 					let idleTimeout;
 					function idleReload() {
@@ -5624,14 +5555,13 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					});
 					resetIdleTimer();
 
-					// --- Auto‑refresh counters every 30 seconds ---
 					let refreshInterval = null;
 
 					function startCounterRefresh() {
 						if (refreshInterval) clearInterval(refreshInterval);
 						refreshInterval = setInterval(() => {
 							updateStatusCounters();
-						}, 30000); // 30 seconds
+						}, 30000);
 					}
 
 					function stopCounterRefresh() {
@@ -5641,10 +5571,8 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						}
 					}
 
-					// Start the refresh after initial load
 					startCounterRefresh();
 
-					// Stop refresh on logout to avoid unnecessary calls
 					const originalLogout = logoutProfileBtn.onclick;
 					logoutProfileBtn.addEventListener("click", () => {
 						stopCounterRefresh();
@@ -5670,3 +5598,4 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 		<script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
 	</body>
 </html>
+
