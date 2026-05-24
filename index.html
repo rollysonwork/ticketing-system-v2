@@ -1465,9 +1465,9 @@
 								</tr>
 								<tr>
 									<th>CITY</th>
-									<td style="display:flex;gap:8px;align-items:center;">
-										<input type="text" id="store-city" style="flex:1" />
-										<input type="text" id="store-state" style="width:80px" placeholder="ST" />
+									<td style="display: flex; gap: 8px; align-items: center">
+										<input type="text" id="store-city" style="flex: 1" />
+										<input type="text" id="store-state" style="width: 80px" placeholder="ST" />
 									</td>
 								</tr>
 								<tr>
@@ -1681,9 +1681,9 @@
 								</tr>
 								<tr>
 									<th>CITY</th>
-									<td style="display:flex;gap:8px;align-items:center;">
-										<input type="text" id="moolah-city" style="flex:1" />
-										<input type="text" id="moolah-state" style="width:80px" placeholder="ST" />
+									<td style="display: flex; gap: 8px; align-items: center">
+										<input type="text" id="moolah-city" style="flex: 1" />
+										<input type="text" id="moolah-state" style="width: 80px" placeholder="ST" />
 									</td>
 								</tr>
 								<tr>
@@ -2192,8 +2192,6 @@
 				const HAWAII = new Set(["HI"]);
 
 				function getTimezone(state, z) {
-					
-
 					if (state === "FL") return z >= 32400 && z <= 32599 ? "CT" : "ET";
 
 					if (state === "IN") return (z >= 46300 && z <= 46499) || (z >= 47000 && z <= 47799) ? "CT" : "ET";
@@ -2217,8 +2215,6 @@
 					if (state === "ID") return z >= 83500 ? "PT" : "MT";
 
 					if (state === "OR") return z >= 97900 && z <= 97999 ? "MT" : "PT";
-
-					
 
 					if (EASTERN.has(state)) return "ET";
 					if (CENTRAL.has(state)) return "CT";
@@ -2244,17 +2240,16 @@
 					return getTimezone(state, z);
 				}
 
-				// Fetch city name for a US ZIP code using Zippopotam (free) and populate inputs/previews
 				function fetchCityFromZip(zip, prefix) {
 					if (!/^\d{5}$/.test(String(zip).trim())) return;
 					try {
 						fetch(`https://api.zippopotam.us/us/${zip}`)
 							.then((res) => {
-								if (!res.ok) throw new Error('no-data');
+								if (!res.ok) throw new Error("no-data");
 								return res.json();
 							})
 							.then((data) => {
-								const place = data.places && data.places[0] ? data.places[0]['place name'] : "";
+								const place = data.places && data.places[0] ? data.places[0]["place name"] : "";
 								if (place) {
 									const cityEl = document.getElementById(`${prefix}-city`);
 									if (cityEl && (!cityEl.value || cityEl.value.trim() === "")) cityEl.value = place;
@@ -2262,12 +2257,8 @@
 									if (preview) preview.textContent = place;
 								}
 							})
-							.catch(() => {
-								// ignore lookup failures
-							});
-					} catch (e) {
-						// noop
-					}
+							.catch(() => {});
+					} catch (e) {}
 				}
 
 				function getTimeZoneLabel(tzCode) {
@@ -2430,7 +2421,7 @@
 						for (let i = 1; i < data.values.length; i++) {
 							const row = data.values[i];
 							const portal = (row[CONFIG.PORTAL_COL] || "").toString().trim();
-							const sku = (row[CONFIG.SKU_COL] || "").toString().trim(); 
+							const sku = (row[CONFIG.SKU_COL] || "").toString().trim();
 							const storeName = (row[CONFIG.STORE_NAME_COL] || "").toString().trim();
 							const zipCode = (row[CONFIG.ZIP_CODE_COL] || "").toString().trim();
 							let status = (row[CONFIG.STATUS_COL] || "").toString().trim().toUpperCase();
@@ -2477,11 +2468,9 @@
 						other = 0;
 
 					rows.forEach((row) => {
-						
 						const firstCell = row.querySelector("td");
 						if (firstCell && firstCell.colSpan > 1) return;
 
-						
 						const statusCell = row.cells[12];
 						if (!statusCell) return;
 
@@ -2751,20 +2740,18 @@
 					document.getElementById("moolah-preview-mokiId").innerHTML = formatMultilinePreview(mokiId);
 					document.getElementById("moolah-preview-anydeskId").innerHTML = formatMultilinePreview(anydeskId);
 
-					// set state input and preview
-					const stateFull = state ? (STATE_FULL_NAMES[state] || "") : "";
+					const stateFull = state ? STATE_FULL_NAMES[state] || "" : "";
 					const stateInput = document.getElementById("moolah-state");
 					if (stateInput) stateInput.value = state || "";
 					document.getElementById("moolah-preview-stateFull").textContent = stateFull || state || "";
 
-					// fetch city for valid 5-digit zip, clear city when zip cleared
 					if (/^\d{5}$/.test(zipcode)) {
-						fetchCityFromZip(zipcode, 'moolah');
+						fetchCityFromZip(zipcode, "moolah");
 					} else {
-						const cityEl = document.getElementById('moolah-city');
-						if (cityEl) cityEl.value = '';
-						const previewCity = document.getElementById('moolah-preview-city');
-						if (previewCity) previewCity.textContent = '';
+						const cityEl = document.getElementById("moolah-city");
+						if (cityEl) cityEl.value = "";
+						const previewCity = document.getElementById("moolah-preview-city");
+						if (previewCity) previewCity.textContent = "";
 					}
 
 					const namingLine = `${skuClean}_${statePart}_${storeClean}_LIVE-${portalClean}_${zipClean}_MOOLAH-1`;
@@ -2811,20 +2798,18 @@
 					document.getElementById("store-preview-mokiId").innerHTML = formatMultilinePreview(mokiId);
 					document.getElementById("store-preview-anydeskId").innerHTML = formatMultilinePreview(anydeskId);
 
-					// set state input and preview
-					const stateFull = state ? (STATE_FULL_NAMES[state] || "") : "";
+					const stateFull = state ? STATE_FULL_NAMES[state] || "" : "";
 					const stateInput = document.getElementById("store-state");
 					if (stateInput) stateInput.value = state || "";
 					document.getElementById("store-preview-stateFull").textContent = stateFull || state || "";
 
-					// fetch city from zip if valid 5-digit, otherwise clear city
 					if (/^\d{5}$/.test(zipcode)) {
-						fetchCityFromZip(zipcode, 'store');
+						fetchCityFromZip(zipcode, "store");
 					} else {
-						const cityEl = document.getElementById('store-city');
-						if (cityEl) cityEl.value = '';
-						const previewCity = document.getElementById('store-preview-city');
-						if (previewCity) previewCity.textContent = '';
+						const cityEl = document.getElementById("store-city");
+						if (cityEl) cityEl.value = "";
+						const previewCity = document.getElementById("store-preview-city");
+						if (previewCity) previewCity.textContent = "";
 					}
 
 					const skuPart = sku || "[SKU]";
@@ -2890,7 +2875,6 @@
 					syncPreviewHeight();
 				}
 
-				
 				async function summarizeText(text) {
 					let apiKey = localStorage.getItem("geminiApiKey");
 					if (!apiKey) {
@@ -2899,16 +2883,7 @@
 						localStorage.setItem("geminiApiKey", apiKey.trim());
 					}
 
-					const models = [
-						"gemini-2.5-flash-lite", 
-						"gemini-3-flash-preview", 
-						"gemini-2.5-flash", 
-						"gemini-2.0-flash", 
-						"gemini-3-pro-preview", 
-						"gemini-3.1-pro-preview", 
-						"gemini-2.5-pro", 
-						"gemini-pro-latest", 
-					];
+					const models = ["gemini-2.5-flash-lite", "gemini-3-flash-preview", "gemini-2.5-flash", "gemini-2.0-flash", "gemini-3-pro-preview", "gemini-3.1-pro-preview", "gemini-2.5-pro", "gemini-pro-latest"];
 					let lastError = null;
 
 					for (const model of models) {
@@ -2985,14 +2960,12 @@
 					}
 				}
 
-				
 				async function addEntry(prefix) {
 					if (prefix !== "ticket") {
 						await addEntryLegacy(prefix);
 						return;
 					}
 
-					
 					let requiredIds = ["ticket-portal", "ticket-store", "ticket-zip"];
 					let valid = true;
 					requiredIds.forEach((id) => {
@@ -3166,9 +3139,7 @@
 					syncPreviewHeight();
 				}
 
-				
 				async function addEntryLegacy(prefix) {
-					
 					const portalEl = document.getElementById(`${prefix}-portal`);
 					const storeNameEl = document.getElementById(`${prefix}-storeName`);
 					const zipcodeEl = document.getElementById(`${prefix}-zipcode`);
@@ -3214,10 +3185,10 @@ UPLOAD DATABASE - PENDING ❌`;
 INSTALL & UPDATE ALL APPS - DONE ✅
 ASSIGN STORE - DONE ✅`;
 					}
-						document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
-						document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
-						document.getElementById("store-city").value = entry.moduleData?.city || "";
-						document.getElementById("store-state").value = entry.moduleData?.state || "";
+					document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
+					document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
+					document.getElementById("store-city").value = entry.moduleData?.city || "";
+					document.getElementById("store-state").value = entry.moduleData?.state || "";
 
 					let moduleData = {};
 					if (prefix === "store") {
@@ -3253,7 +3224,6 @@ ASSIGN STORE - DONE ✅`;
 					const addBtn = document.querySelector(`#tab-${prefix} .add`);
 
 					if (editId) {
-						
 						const index = allEntries.findIndex((e) => e.id === editId);
 						if (index !== -1) {
 							allEntries[index] = {
@@ -3273,7 +3243,6 @@ ASSIGN STORE - DONE ✅`;
 							};
 							showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry updated!`);
 						} else {
-							
 							const newEntry = {
 								id: Date.now(),
 								date: formattedDate,
@@ -3300,14 +3269,13 @@ ASSIGN STORE - DONE ✅`;
 							allEntries.unshift(newEntry);
 							showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry added (edit target missing)!`);
 						}
-						
+
 						editId = null;
 						if (addBtn) {
 							addBtn.textContent = "ADD ENTRY";
 							addBtn.classList.remove("editing");
 						}
 					} else {
-						
 						const newEntry = {
 							id: Date.now(),
 							date: formattedDate,
@@ -3335,16 +3303,15 @@ ASSIGN STORE - DONE ✅`;
 						showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry added!`);
 					}
 
-					
 					if (prefix === "store") {
-						["address1","address2","city","state","agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"].forEach((id) => {
+						["address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"].forEach((id) => {
 							const el = document.getElementById(`store-${id}`);
 							if (el) el.value = "";
 						});
 						storeUpdatePreview();
 						saveFormData("store");
 					} else if (prefix === "moolah") {
-						["address1","address2","city","state","email", "password", "sku", "noOfTabs", "mokiId", "anydeskId"].forEach((id) => {
+						["address1", "address2", "city", "state", "email", "password", "sku", "noOfTabs", "mokiId", "anydeskId"].forEach((id) => {
 							const el = document.getElementById(`moolah-${id}`);
 							if (el) el.value = "";
 						});
@@ -3415,9 +3382,8 @@ ASSIGN STORE - DONE ✅`;
 
 				function editEntry(buttonOrId) {
 					let entryId, entry;
-					
+
 					if (typeof buttonOrId === "object" && buttonOrId !== null) {
-						
 						const id = buttonOrId.closest ? buttonOrId.closest("tr")?.dataset.id || buttonOrId.dataset.id : buttonOrId.dataset.id;
 						if (!id) return;
 						entryId = parseInt(id);
@@ -3733,7 +3699,6 @@ ASSIGN STORE - DONE ✅`;
 							const dates = grouped[month];
 							const sortedDates = Object.keys(dates).sort((a, b) => new Date(b) - new Date(a));
 							for (const dateKey of sortedDates) {
-								
 								if (collapseState.dates[dateKey] === undefined) {
 									collapseState.dates[dateKey] = dateKey !== yesterdayFormatted;
 								}
@@ -5735,4 +5700,3 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 		<script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
 	</body>
 </html>
-
