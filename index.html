@@ -1177,24 +1177,14 @@
 				border-color: #b93131;
 			}
 			.pending-tracker-btn {
-				background: var(--warning);
-				border: none;
-				border-radius: 40px;
-				padding: 6px 14px;
-				font-weight: 600;
-				font-size: 0.8rem;
+				background: #b93131;
 				color: white;
-				transition: var(--transition);
-			}
-			.pending-tracker-btn:hover {
-				transform: translateY(-2px);
-				filter: brightness(1.05);
+				border-color: #b93131;
 			}
 			.pending-tracker-toggle.active {
-				background: #e17055 !important;
-				box-shadow:
-					0 0 0 2px #fff,
-					0 0 0 4px #e17055;
+				background: #b93131;
+				color: white;
+				border-color: #b93131;
 			}
 		</style>
 	</head>
@@ -1599,6 +1589,14 @@
 							<div><strong id="store-preview-skuLine"></strong></div>
 							<br />
 							<div>
+								<strong>ADDRESS 1:</strong>
+								<span id="store-preview-address1"></span>
+							</div>
+							<div>
+								<strong>ADDRESS 2:</strong>
+								<span id="store-preview-address2"></span>
+							</div>
+							<div>
 								<strong>CITY:</strong>
 								<span id="store-preview-city"></span>
 							</div>
@@ -1795,6 +1793,14 @@
 							<br />
 							<div><strong id="moolah-preview-namingLine"></strong></div>
 							<br />
+							<div>
+								<strong>ADDRESS 1:</strong>
+								<span id="moolah-preview-address1"></span>
+							</div>
+							<div>
+								<strong>ADDRESS 2:</strong>
+								<span id="moolah-preview-address2"></span>
+							</div>
 							<div>
 								<strong>CITY:</strong>
 								<span id="moolah-preview-city"></span>
@@ -2711,6 +2717,8 @@
 					const portal = document.getElementById("moolah-portal").value.trim();
 					const storeName = document.getElementById("moolah-storeName").value.trim();
 					const zipcode = document.getElementById("moolah-zipcode").value.trim();
+					const address1 = document.getElementById("moolah-address1").value.trim();
+					const address2 = document.getElementById("moolah-address2").value.trim();
 					const city = document.getElementById("moolah-city").value.trim();
 					const email = document.getElementById("moolah-email").value.trim();
 					const password = document.getElementById("moolah-password").value.trim();
@@ -2731,6 +2739,8 @@
 					document.getElementById("moolah-preview-date").textContent = storeGetFormattedDateMinusOne();
 					document.getElementById("moolah-preview-storeName").textContent = storeName || "";
 					document.getElementById("moolah-preview-zipcode").textContent = zipcode || "";
+					document.getElementById("moolah-preview-address1").textContent = address1 || "";
+					document.getElementById("moolah-preview-address2").textContent = address2 || "";
 					document.getElementById("moolah-preview-city").textContent = city || "";
 					document.getElementById("moolah-preview-portal").textContent = portal || "";
 					document.getElementById("moolah-preview-email").textContent = email || "";
@@ -2767,6 +2777,8 @@
 					const portal = document.getElementById("store-portal").value.trim();
 					const storeName = document.getElementById("store-storeName").value.trim();
 					const zipcode = document.getElementById("store-zipcode").value.trim();
+					const address1 = document.getElementById("store-address1").value.trim();
+					const address2 = document.getElementById("store-address2").value.trim();
 					const city = document.getElementById("store-city").value.trim();
 					const agent = document.getElementById("store-agent").value.trim();
 					const email = document.getElementById("store-email").value.trim();
@@ -2787,6 +2799,8 @@
 					document.getElementById("store-preview-date").textContent = dateStr;
 					document.getElementById("store-preview-storeName").textContent = storeName || "";
 					document.getElementById("store-preview-zipcode").textContent = zipcode || "";
+					document.getElementById("store-preview-address1").textContent = address1 || "";
+					document.getElementById("store-preview-address2").textContent = address2 || "";
 					document.getElementById("store-preview-city").textContent = city || "";
 					document.getElementById("store-preview-portal").textContent = portal || "";
 					document.getElementById("store-preview-agent").textContent = agent || "";
