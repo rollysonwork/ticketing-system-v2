@@ -1830,11 +1830,11 @@
 					<button id="exportCsvBtn" class="export-btn"><i class="bi bi-filetype-csv"></i> EXPORT</button>
 					<button id="importCsvBtn" class="import-btn"><i class="bi bi-file-earmark-arrow-up"></i> IMPORT</button>
 					<button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
-					<button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom icon-google-sheets"></i> My Pending Tickets (Sheet)</button>
+					<button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom icon-google-sheets"></i> SHOW ALL PENDING</button>
 					<button class="counter-badge resolved" disabled aria-hidden="true">✅ RESOLVED: <span id="counterResolved">0</span></button>
 					<button class="counter-badge pending" disabled aria-hidden="true">⏳ PENDING: <span id="counterPending">0</span></button>
 					<button class="counter-badge other" disabled aria-hidden="true">📋 OTHER TASK: <span id="counterOther">0</span></button>
-					<button id="manualRefreshBtn" title="Refresh counters now" style="background: none; border: none; font-size: 1.2rem; cursor: pointer">REFRESH</button>
+					<button disabled aria-hidden="true">REFRESH</button>
 				</div>
 
 				<div style="overflow-x: auto">
@@ -5172,7 +5172,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					const toggleBtn = document.getElementById("pendingTrackerToggleBtn");
 					if (isPendingTrackerMode) {
 						toggleBtn.classList.add("active");
-						toggleBtn.textContent = "🔙 Back to Local DB";
+						toggleBtn.textContent = "SHOW LOCAL ENTRIES";
 						showNotification("Loading your pending tickets from WORKLOAD TRACKER 2026...");
 						const pendingEntries = await fetchWorkloadSheetData();
 						cachedPendingEntries = pendingEntries;
@@ -5180,7 +5180,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						updateStatusCounters();
 					} else {
 						toggleBtn.classList.remove("active");
-						toggleBtn.innerHTML = '<i class="icon-custom icon-google-sheets"></i> My Pending Tickets (Sheet)';
+						toggleBtn.innerHTML = '<i class="icon-custom icon-google-sheets"></i> SHOW ALL PENDING';
 						renderTable();
 						updateStatusCounters();
 						updateStatusCounters();
