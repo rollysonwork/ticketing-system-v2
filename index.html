@@ -843,7 +843,7 @@
 				font-weight: 600;
 				font-size: 0.7rem;
 				letter-spacing: 0.03em;
-				text-transform: uppercase;
+				/* text-transform: uppercase; */
 				padding: 12px 8px;
 				border: 1px solid var(--border-color);
 				text-align: center;
@@ -1507,7 +1507,7 @@
 								</tr>
 								<tr>
 									<th>MOKI ID</th>
-									<td><textarea id="store-mokiId" rows="2"></textarea></td>
+									<td><textarea id="store-mokiId" class="no-uppercase" rows="2"></textarea></td>
 								</tr>
 								<tr>
 									<th>ANYDESK ID</th>
@@ -1515,10 +1515,10 @@
 								</tr>
 							</table>
 							<div class="button-row">
-								<button class="add" onclick="addEntry('store')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
-								<button class="form-clear-btn" onclick="clearFormOnly('store')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
-								<button class="clock" onclick="clock('IN', 'store')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
-								<button class="clock" onclick="clock('OUT', 'store')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
+								<button type="button" class="add" onclick="addEntry('store')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
+								<button type="button" class="form-clear-btn" onclick="clearFormOnly('store')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
+								<button type="button" class="clock" onclick="clock('IN', 'store')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
+								<button type="button" class="clock" onclick="clock('OUT', 'store')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
 							</div>
 						</div>
 						<div class="right-panel" id="store-previewPanel">
