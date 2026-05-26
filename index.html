@@ -1438,6 +1438,56 @@
 				background: rgba(0, 0, 0, 0.5);
 				z-index: 1150;
 			}
+
+			/* Utility classes moved from inline usage in templates and JS */
+			.table-overflow {
+				overflow-x: auto;
+			}
+			.col-30 {
+				width: 30px;
+			}
+			.search-placeholder {
+				padding: 20px;
+				text-align: center;
+				color: #64748b;
+			}
+			.prewrap {
+				white-space: pre-wrap;
+			}
+			.centered-text {
+				text-align: center;
+			}
+			.ml-25 {
+				margin-left: 25px;
+			}
+			.ml-50 {
+				margin-left: 50px;
+			}
+			.mt-8 {
+				margin-top: 8px;
+			}
+			.mt-4 {
+				margin-top: 4px;
+			}
+			.report-body {
+				font-family: sans-serif;
+				line-height: 1.4;
+			}
+			.reminders-list {
+				margin: 4px 0 0 25px;
+				padding-left: 20px;
+			}
+			.reminder-li {
+				margin: 0;
+			}
+			/* small helper sizes */
+			.small-muted {
+				font-size: 0.7rem;
+				color: var(--text-muted);
+			}
+			.issue-color {
+				color: var(--issue-color);
+			}
 		</style>
 	</head>
 	<body>
@@ -2085,11 +2135,11 @@
 					<button disabled aria-hidden="true">REFRESH</button>
 				</div>
 
-				<div style="overflow-x: auto">
+				<div class="table-overflow">
 					<table id="entryTable">
 						<thead>
 							<tr>
-								<th style="width: 30px"></th>
+								<th class="col-30"></th>
 								<th>DATE</th>
 								<th>SHIFT</th>
 								<th>SUPPORT</th>
@@ -2749,7 +2799,7 @@
 				function clearSearchResults() {
 					["ticket", "store", "moolah"].forEach((prefix) => {
 						document.getElementById(`${prefix}-storeSearch`).value = "";
-						document.getElementById(`${prefix}-searchResults`).innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
+						document.getElementById(`${prefix}-searchResults`).innerHTML = '<div class="search-placeholder">Type to search for stores...</div>';
 					});
 					filteredResults.moolah = [];
 					filteredResults.store = [];
@@ -2773,12 +2823,12 @@
 					const resultsContainer = document.getElementById(`${prefix}-searchResults`);
 
 					if (!storeData || storeData.length === 0) {
-						resultsContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">No store data loaded. Click SET SHEETS KEY to load.</div>';
+						resultsContainer.innerHTML = '<div class="search-placeholder">No store data loaded. Click SET SHEETS KEY to load.</div>';
 						syncPreviewHeight();
 						return;
 					}
 					if (!searchTerm) {
-						resultsContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
+						resultsContainer.innerHTML = '<div class="search-placeholder">Type to search for stores...</div>';
 						filteredResults[prefix] = [];
 						syncPreviewHeight();
 						return;
@@ -2787,7 +2837,7 @@
 					filteredResults[prefix] = storeData.filter((store) => store.storeName.includes(searchTerm) || store.zipCode.includes(searchTerm) || (store.notes && store.notes.includes(searchTerm))).slice(0, 100);
 
 					if (filteredResults[prefix].length === 0) {
-						resultsContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">No stores found</div>';
+						resultsContainer.innerHTML = '<div class="search-placeholder">No stores found</div>';
 						syncPreviewHeight();
 						return;
 					}
@@ -2841,7 +2891,7 @@
 					}
 
 					document.getElementById(`${prefix}-storeSearch`).value = "";
-					document.getElementById(`${prefix}-searchResults`).innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
+					document.getElementById(`${prefix}-searchResults`).innerHTML = '<div class="search-placeholder">Type to search for stores...</div>';
 					filteredResults[prefix] = [];
 					selectedIndex[prefix] = -1;
 
@@ -3878,11 +3928,11 @@ ASSIGN STORE - DONE ✅`;
                                              <td>${entry.contact}</td>
                                              <td>${entry.contactNumber}</td>
                                              <td>${entry.module}</td>
-                                    <td style="white-space: pre-wrap;">${entry.issue || ""}</td>
+									<td class="prewrap">${entry.issue || ""}</td>
                                              <td>${entry.escalated}</td>
                                              <td>${entry.status}</td>
-                                             <td style="white-space: pre-wrap;">${entry.remarks || ""}</td>
-                                    <td style="white-space: pre-wrap;">${entry.resolution || ""}</td>
+											 <td class="prewrap">${entry.remarks || ""}</td>
+									<td class="prewrap">${entry.resolution || ""}</td>
                                     <td class="action-cell">
                                         <div class="action-container">
                                             <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
@@ -4002,7 +4052,7 @@ ASSIGN STORE - DONE ✅`;
 											default:
 												issueTextColor = "";
 										}
-										const styleIssue = issueTextColor ? `style="color: ${issueTextColor};"` : "";
+										const styleIssue = issueTextColor ? `class="issue-color" style="--issue-color: ${issueTextColor};"` : "";
 
 										html += `
                             <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
@@ -4033,7 +4083,7 @@ ASSIGN STORE - DONE ✅`;
 					}
 
 					if (historyEntries.length === 0) {
-						html = '<div style="padding:20px; text-align:center; color:#64748b;">No entries yet.</div>';
+						html = '<div class="search-placeholder">No entries yet.</div>';
 					}
 
 					containers.forEach((container) => {
@@ -4668,11 +4718,11 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 							.map((e) => {
 								const storeName = escapeHtml(e.store || "Unknown Store");
 								const issueText = escapeHtml(e.issue || "No issue details");
-								return `<div style="margin-left:25px;"><b>${storeName}</b> - <i>${issueText}</i></div>`;
+								return `<div class="ml-25"><b>${storeName}</b> - <i>${issueText}</i></div>`;
 							})
 							.join("");
 					} else {
-						pendingListHtml = `<div style="margin-left:25px;">No Pending Tickets</div>`;
+						pendingListHtml = `<div class="ml-25">No Pending Tickets</div>`;
 					}
 
 					const totalCalls = visible.filter((e) => e.status?.toUpperCase() !== "OTHER TASK").length;
@@ -4694,38 +4744,38 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 							}
 						});
 						otherListHtml = Array.from(uniqueItems)
-							.map((item) => `<div style="margin-left:25px;">${escapeHtml(item)}</div>`)
+							.map((item) => `<div class="ml-25">${escapeHtml(item)}</div>`)
 							.join("");
 					} else {
-						otherListHtml = `<div style="margin-left:25px;">No Other Tasks</div>`;
+						otherListHtml = `<div class="ml-25">No Other Tasks</div>`;
 					}
 
 					const trainingEntries = otherEntries.filter((e) => e.module?.toUpperCase() === "TRAINING");
 					const demoEntries = otherEntries.filter((e) => e.module?.toUpperCase() === "DEMO");
-					const trainingLine = trainingEntries.length > 0 ? `<div style="margin-left:25px;">Scheduled Training: ${escapeHtml(trainingEntries.map((e) => e.support || "Unknown Support").join(", "))}</div>` : `<div style="margin-left:25px;">No Training for today</div>`;
-					const demoLine = demoEntries.length > 0 ? `<div style="margin-left:25px;">Scheduled Demo: ${escapeHtml(demoEntries.map((e) => e.support || "Unknown Support").join(", "))}</div>` : `<div style="margin-left:25px;">No Demo for today</div>`;
+					const trainingLine = trainingEntries.length > 0 ? `<div class="ml-25">Scheduled Training: ${escapeHtml(trainingEntries.map((e) => e.support || "Unknown Support").join(", "))}</div>` : `<div class="ml-25">No Training for today</div>`;
+					const demoLine = demoEntries.length > 0 ? `<div class="ml-25">Scheduled Demo: ${escapeHtml(demoEntries.map((e) => e.support || "Unknown Support").join(", "))}</div>` : `<div class="ml-25">No Demo for today</div>`;
 
 					const versionHtml = `
-        <div style="margin-left:25px;">The current latest versions:</div>
-        <div style="margin-left:50px;">RetailzPOS: Version Code 227 (Portal 1, 2, 3, 4, 6, 7, 8)</div>
-        <div style="margin-left:50px;">Moolah Points: Version Code 39 (Portal 1, 2, 3, 4, 6, 7, 8)</div>
+		<div class="ml-25">The current latest versions:</div>
+		<div class="ml-50">RetailzPOS: Version Code 227 (Portal 1, 2, 3, 4, 6, 7, 8)</div>
+		<div class="ml-50">Moolah Points: Version Code 39 (Portal 1, 2, 3, 4, 6, 7, 8)</div>
     `;
 
 					const remindersItems = ["Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.", "Ask seniors assistance for issue that needed to be escalated to the India team", "Observe professional call etiquette at all times when handling calls.", "Follow up on any pending tickets and ensure timely updates.", "Review pending issues and escalations using the newly added features in our existing workload tracker", "Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.", "Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history."];
-					const remindersListHtml = `<ul style="margin:4px 0 0 25px; padding-left:20px;">` + remindersItems.map((item) => `<li style="margin:0;">${escapeHtml(item)}</li>`).join("") + `</ul>`;
+					const remindersListHtml = `<ul class="reminders-list">` + remindersItems.map((item) => `<li class="reminder-li">${escapeHtml(item)}</li>`).join("") + `</ul>`;
 
 					const staticSections = `
         <div><strong>5. Updates / Notices</strong></div>
         ${versionHtml}
-        <div style="margin-top:8px;"></div>
-        <div style="margin-left:25px;">Reminders for Retailz team members:</div>
-        ${remindersListHtml}
-        <div style="margin-top:8px;"><strong>6. Training (Retailz Members):</strong> No training for today</div>
-        <div style="margin-top:4px;"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</div>
+		<div class="mt-8"></div>
+		<div class="ml-25">Reminders for Retailz team members:</div>
+		${remindersListHtml}
+		<div class="mt-8"><strong>6. Training (Retailz Members):</strong> No training for today</div>
+		<div class="mt-4"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</div>
     `;
 
 					return `
-        <div style="font-family: sans-serif; line-height:1.4;">
+		<div class="report-body">
             <div>${escapeHtml(dateLine)}</div>
             <div>${escapeHtml(shiftLine)}</div>
             <div><br></div>
@@ -5379,7 +5429,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					const tbody = document.querySelector("#entryTable tbody");
 					tbody.innerHTML = "";
 					if (!entries.length) {
-						tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">✨ No pending tickets found for you in WORKLOAD TRACKER 2026 ✨</td></tr>`;
+						tbody.innerHTML = `<tr><td colspan="16" class="centered-text">✨ No pending tickets found for you in WORKLOAD TRACKER 2026 ✨</td></tr>`;
 						return;
 					}
 					entries.forEach((entry) => {
@@ -5396,11 +5446,11 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
                   <td>${escapeHtml(entry.contact)}</td>
                   <td>${escapeHtml(entry.contactNumber)}</td>
                   <td>${escapeHtml(entry.module)}</td>
-                  <td style="white-space: pre-wrap;">${escapeHtml(entry.issue)}</td>
+				  <td class="prewrap">${escapeHtml(entry.issue)}</td>
                   <td>${escapeHtml(entry.escalated)}</td>
                   <td>${escapeHtml(entry.status)}</td>
-                  <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks)}</td>
-                  <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution)}</td>
+				  <td class="prewrap">${escapeHtml(entry.remarks)}</td>
+				  <td class="prewrap">${escapeHtml(entry.resolution)}</td>
                   <td class="action-cell">
                       <div class="action-container">
                           <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
