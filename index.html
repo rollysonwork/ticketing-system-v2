@@ -1743,7 +1743,9 @@
 								</tr>
 								<tr>
 									<th>MOKI ID</th>
-									<td><textarea id="store-mokiId" class="no-uppercase" rows="2"></textarea></td>
+									<td>
+										<textarea id="store-mokiId" class="no-uppercase" rows="2"></textarea>
+									</td>
 								</tr>
 								<tr>
 									<th>ANYDESK ID</th>
@@ -3438,24 +3440,16 @@
 						issueText =
 							window._storeCurrentIssue ||
 							`NEW STORE CREATION FORM SENT - DONE ✅
-STORE CREATION - DONE ✅
-						document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
-						document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
-						document.getElementById("moolah-city").value = entry.moduleData?.city || "";
-						document.getElementById("moolah-state").value = entry.moduleData?.state || "";
-INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
-UPLOAD DATABASE - PENDING ❌`;
+				STORE CREATION - DONE ✅
+				INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
+				UPLOAD DATABASE - PENDING ❌`;
 					} else if (prefix === "moolah") {
 						issueText =
 							window._moolahCurrentIssue ||
 							`CREATE MOOLAH ACCOUNT - DONE ✅
-INSTALL & UPDATE ALL APPS - DONE ✅
-ASSIGN STORE - DONE ✅`;
+				INSTALL & UPDATE ALL APPS - DONE ✅
+				ASSIGN STORE - DONE ✅`;
 					}
-					document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
-					document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
-					document.getElementById("store-city").value = entry.moduleData?.city || "";
-					document.getElementById("store-state").value = entry.moduleData?.state || "";
 
 					let moduleData = {};
 					if (prefix === "store") {
