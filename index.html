@@ -1693,7 +1693,7 @@
 								<tr>
 									<th>ZIP CODE *</th>
 									<td>
-										<input type="text" id="store-zipcode" maxlength="5" class="required-field" />
+										<input type="text" id="store-zipcode" maxlength="6" class="required-field" />
 									</td>
 								</tr>
 								<tr>
@@ -1919,7 +1919,7 @@
 								<tr>
 									<th>ZIP CODE *</th>
 									<td>
-										<input type="text" id="moolah-zipcode" maxlength="5" class="required" />
+										<input type="text" id="moolah-zipcode" maxlength="6" class="required" />
 									</td>
 								</tr>
 								<tr>
@@ -3005,7 +3005,7 @@
 
 					const stateFull = state ? STATE_FULL_NAMES[state] || "" : "";
 					const stateInput = document.getElementById("moolah-state");
-					if (stateInput) stateInput.value = state || "";
+					if (stateInput) stateInput.value = stateFull || "";
 					document.getElementById("moolah-preview-stateFull").textContent = stateFull || state || "";
 
 					if (/^\d{5}$/.test(zipcode)) {
@@ -3067,7 +3067,7 @@
 
 					const stateFull = state ? STATE_FULL_NAMES[state] || "" : "";
 					const stateInput = document.getElementById("store-state");
-					if (stateInput) stateInput.value = state || "";
+					if (stateInput) stateInput.value = stateFull || "";
 					document.getElementById("store-preview-stateFull").textContent = stateFull || state || "";
 
 					if (/^\d{5}$/.test(zipcode)) {
