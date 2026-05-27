@@ -3190,10 +3190,6 @@
 							window._storeCurrentIssue ||
 							`NEW STORE CREATION FORM SENT - DONE ✅
 STORE CREATION - DONE ✅
-						document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
-						document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
-						document.getElementById("moolah-city").value = entry.moduleData?.city || "";
-						document.getElementById("moolah-state").value = entry.moduleData?.state || "";
 INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
 UPLOAD DATABASE - PENDING ❌`;
 					} else if (prefix === "moolah") {
@@ -3203,10 +3199,6 @@ UPLOAD DATABASE - PENDING ❌`;
 INSTALL & UPDATE ALL APPS - DONE ✅
 ASSIGN STORE - DONE ✅`;
 					}
-					document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
-					document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
-					document.getElementById("store-city").value = entry.moduleData?.city || "";
-					document.getElementById("store-state").value = entry.moduleData?.state || "";
 
 					let moduleData = {};
 					if (prefix === "store") {
