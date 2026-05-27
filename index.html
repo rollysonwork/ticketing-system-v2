@@ -824,7 +824,6 @@
 				border: 1px solid var(--border-color);
 				background: var(--bg-tertiary);
 				color: var(--text-secondary);
-				cursor: text;
 			}
 
 			#entryTable {
@@ -844,7 +843,7 @@
 				font-weight: 600;
 				font-size: 0.7rem;
 				letter-spacing: 0.03em;
-				/* text-transform: uppercase; */
+				text-transform: uppercase;
 				padding: 12px 8px;
 				border: 1px solid var(--border-color);
 				text-align: center;
@@ -1085,19 +1084,6 @@
 				background-image: var(--logo-google-sheets-icon);
 			}
 
-			.icon-custom-smaller {
-				--icon-size: 1.3em;
-				display: inline-block;
-				width: var(--icon-size);
-				height: var(--icon-size);
-				margin-right: 4px;
-				vertical-align: middle;
-				background-size: contain;
-				background-repeat: no-repeat;
-				background-position: center;
-				line-height: 1;
-			}
-
 			.login-action-btn {
 				transition: var(--transition);
 				cursor: pointer;
@@ -1204,269 +1190,36 @@
 				color: white;
 				border-color: #b93131;
 			}
-
-			#loginOverlay {
-				display: none;
-				position: fixed;
-				inset: 0;
-				background-image: url("https://patelprocessing.com/Login-Page-(1920x1080).jpg");
-				background-size: cover;
-				background-position: center;
-				z-index: 2000;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex-direction: column;
-				gap: 16px;
-			}
-
-			#loginOverlay .login-card {
-				background: var(--bg-secondary);
-				border-radius: 20px;
-				padding: 32px;
-				box-shadow: var(--card-shadow);
-				border: 1px solid var(--border-color);
-				max-width: 400px;
-				width: 90%;
-			}
-
-			#loginOverlay .form-group {
-				margin-bottom: 16px;
-			}
-
-			#loginOverlay .form-group label {
-				display: block;
-				margin-bottom: 4px;
-			}
-
-			#loginOverlay .form-group input {
-				width: 100%;
-			}
-
-			#loginOverlay .password-field-wrapper {
-				margin-bottom: 16px;
-				position: relative;
-			}
-
-			#loginOverlay #togglePassword {
-				position: absolute;
-				right: 10px;
-				background: none;
-				border: none;
-				cursor: pointer;
-				font-size: 1.2rem;
-			}
-
-			#loginOverlay #loginError {
-				color: var(--danger);
-				margin-bottom: 16px;
-				text-align: center;
-			}
-
-			#loginOverlay #loginBtn {
-				width: 100%;
-				padding: 12px;
-			}
-
-			#loginOverlay .login-card .button-row {
-				margin-top: 16px;
-				display: flex;
-				gap: 8px;
-				justify-content: center;
-				flex-wrap: wrap;
-			}
-
-			#loginOverlay #keyStatus {
-				margin-top: 12px;
-				text-align: center;
-				font-size: 0.8rem;
-				color: var(--text-muted);
-			}
-
-			.header-toolbar {
-				display: flex;
-				align-items: center;
-				justify-content: space-between;
-				margin-bottom: 2rem;
-			}
-
-			.header-toolbar h1 {
-				margin: 0;
-			}
-
-			.header-toolbar .header-actions {
-				display: flex;
-				gap: 12px;
-			}
-
-			#ticket-resolution-editor {
-				min-height: 200px;
-			}
-
-			#ticket-template-select {
-				font-size: 0.8rem;
-			}
-
-			.template-label {
-				font-size: 0.8rem;
-				font-weight: 500;
-			}
-
-			.template-hint {
-				font-size: 0.7rem;
-				color: var(--text-muted);
-			}
-
-			#ticket-resolution {
-				display: none;
-			}
-
-			.address-inline {
-				display: flex;
-				gap: 8px;
-				align-items: center;
-			}
-
-			.address-inline .flex-grow,
-			.address-inline .state-short {
-				flex: 1;           /* Each takes equal remaining space */
-				min-width: 0;      /* Prevents overflow */
-			}
-
-			#profileModal {
-				display: none;
-				position: fixed;
-				top: 20px;
-				right: 20px;
-				background: var(--bg-secondary);
-				border-radius: 16px;
-				box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
-				border: 1px solid var(--border-color);
-				width: 300px;
-				z-index: 1100;
-				padding: 16px;
-			}
-
-			#profileModal .modal-header {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				margin-bottom: 16px;
-			}
-
-			#profileModal #closeProfileModal {
-				background: none;
-				border: none;
-				font-size: 1.2rem;
-				cursor: pointer;
-			}
-
-			#profileModal hr {
-				margin: 12px 0;
-				border-color: var(--border-color);
-			}
-
-			#profileModal #changePasswordBtn,
-			#profileModal #logoutBtnProfile {
-				width: 100%;
-			}
-
-			#profileModal #logoutBtnProfile {
-				background: var(--danger);
-			}
-
-			#changePwdModal {
-				display: none;
-				position: fixed;
-				top: 50%;
-				left: 50%;
-				transform: translate(-50%, -50%);
-				background: var(--bg-secondary);
-				border-radius: 20px;
-				padding: 24px;
-				box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3);
-				width: 350px;
-				z-index: 1200;
-				border: 1px solid var(--border-color);
-			}
-
-			#changePwdModal h3 {
-				margin-bottom: 16px;
-			}
-
-			#changePwdModal .modal-field {
-				margin-bottom: 12px;
-			}
-
-			#changePwdModal input {
-				width: 100%;
-			}
-
-			#changePwdModal .togglePwd {
-				position: relative;
-				float: right;
-				margin-top: -34px;
-				margin-right: 8px;
-				background: none;
-				border: none;
-			}
-
-			#changePwdModal #pwdError {
-				color: var(--danger);
-				margin-bottom: 12px;
-				font-size: 0.8rem;
-			}
-
-			#changePwdModal .modal-actions {
-				display: flex;
-				gap: 8px;
-			}
-
-			#changePwdModal .modal-actions button {
-				flex: 1;
-			}
-
-			#changePwdModal .cancel-btn {
-				background: #6b7280;
-			}
-
-			#pwdModalBackdrop {
-				display: none;
-				position: fixed;
-				inset: 0;
-				background: rgba(0, 0, 0, 0.5);
-				z-index: 1150;
-			}
 		</style>
 	</head>
 	<body>
-		<div id="loginOverlay">
-			<div class="login-card">
-				<div class="login-card__header">
-					<img src="https://vitreous.support/logo.png?v=1777764480010_0.43758564004058664" alt="Logo" class="login-card__logo" />
+		<div id="loginOverlay" style="display: none; position: fixed; inset: 0; background-image: url(&quot;https://patelprocessing.com/Login-Page-(1920x1080).jpg&quot;); background-size: cover; background-position: center; z-index: 2000; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px">
+			<div style="background: var(--bg-secondary); border-radius: 20px; padding: 32px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); max-width: 400px; width: 90%">
+				<div style="text-align: center; margin-bottom: 16px">
+					<img src="https://vitreous.support/logo.png?v=1777764480010_0.43758564004058664" alt="Logo" style="max-width: 300px; height: auto" />
 				</div>
-				<h2 class="login-card__title">Welcome Back!</h2>
-				<div class="form-group">
-					<label>Email</label>
-					<input type="email" id="loginEmail" placeholder="you@example.com" class="no-uppercase" />
+				<h2 style="text-align: center; margin-bottom: 24px">Welcome Back!</h2>
+				<div style="margin-bottom: 16px">
+					<label style="display: block; margin-bottom: 4px">Email</label>
+					<input type="email" id="loginEmail" placeholder="you@example.com" class="no-uppercase" style="width: 100%" />
 				</div>
-				<div class="form-group password-field-wrapper">
-					<label for="loginPassword">Password</label>
-					<input type="password" id="loginPassword" class="no-uppercase" name="loginPassword" />
-					<button id="togglePassword" type="button" title="Show password">🙉</button>
+				<div style="margin-bottom: 16px; position: relative">
+					<label style="display: block; margin-bottom: 4px" for="loginPassword">Password</label>
+					<input type="password" id="loginPassword" class="no-uppercase" name="loginPassword" style="width: 100%; padding-right: 40px" />
+					<button id="togglePassword" type="button" style="position: absolute; right: 10px; background: none; border: none; cursor: pointer; font-size: 1.2rem" title="Show password">🙉</button>
 				</div>
-				<div id="loginError"></div>
-				<button id="loginBtn" class="login-action-btn">Login</button>
-				<div class="button-row">
+				<div id="loginError" style="color: #ef4444; margin-bottom: 16px; text-align: center"></div>
+				<button id="loginBtn" class="login-action-btn" style="width: 100%; padding: 12px">Login</button>
+				<div style="margin-top: 16px; display: flex; gap: 8px; justify-content: center; flex-wrap: wrap">
 					<button id="setSheetsKeyFromLogin" class="login-action-btn">🔑 Sheets Key</button>
 					<button id="setGeminiKeyFromLogin" class="login-action-btn">🤖 Gemini Key</button>
 				</div>
-				<div id="keyStatus"></div>
+				<div id="keyStatus" style="margin-top: 12px; text-align: center; font-size: 0.8rem; color: var(--text-muted)"></div>
 			</div>
 		</div>
-		<div class="header-toolbar">
-			<h1>🏬 RetailzPOS · Unified Creation System</h1>
-			<div class="header-actions">
+		<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem">
+			<h1 style="margin: 0">🏬 RetailzPOS · Unified Creation System</h1>
+			<div style="display: flex; gap: 12px">
 				<button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
 				<button class="theme-toggle" id="profileBtn" title="Profile">👤</button>
 			</div>
@@ -1570,15 +1323,15 @@
 								<tr>
 									<th>RESOLUTION</th>
 									<td>
-										<div id="ticket-resolution-editor"></div>
-										<div class="mt-2 template-load">
-											<label for="ticket-template-select" class="template-label">📋 Load Troubleshooting Template:</label>
-											<select id="ticket-template-select" class="form-select">
+										<div id="ticket-resolution-editor" style="height: 200px"></div>
+										<div class="mt-2" style="margin-top: 10px">
+											<label for="ticket-template-select" style="font-size: 0.8rem; font-weight: 500">📋 Load Troubleshooting Template:</label>
+											<select id="ticket-template-select" class="form-select" style="font-size: 0.8rem">
 												<option value="">-- Select a template --</option>
 											</select>
-											<small class="template-hint">Selecting a template will replace current troubleshooting steps (you can edit afterwards).</small>
+											<small style="font-size: 0.7rem; color: var(--text-muted)">Selecting a template will replace current troubleshooting steps (you can edit afterwards).</small>
 										</div>
-										<textarea id="ticket-resolution"></textarea>
+										<textarea id="ticket-resolution" style="display: none"></textarea>
 									</td>
 								</tr>
 								<tr>
@@ -1693,22 +1446,22 @@
 								<tr>
 									<th>ZIP CODE *</th>
 									<td>
-										<input type="text" id="store-zipcode" maxlength="6" class="required-field" />
+										<input type="text" id="store-zipcode" maxlength="5" class="required-field" />
 									</td>
 								</tr>
 								<tr>
 									<th>ADDRESS LINE 1</th>
-									<td><input type="text" id="store-address1" class="no-uppercase"/></td>
+									<td><input type="text" id="store-address1" /></td>
 								</tr>
 								<tr>
 									<th>ADDRESS LINE 2</th>
-									<td><input type="text" id="store-address2" class="no-uppercase"/></td>
+									<td><input type="text" id="store-address2" /></td>
 								</tr>
 								<tr>
-									<th></th>
-									<td class="address-inline">
-										<input type="text" id="store-city" class="flex-grow no-uppercase" placeholder="CITY" />
-										<input type="text" id="store-state" class="state-short no-uppercase" placeholder="STATE" />
+									<th>CITY</th>
+									<td style="display: flex; gap: 8px; align-items: center">
+										<input type="text" id="store-city" style="flex: 1" />
+										<input type="text" id="store-state" style="width: 80px" placeholder="ST" />
 									</td>
 								</tr>
 								<tr>
@@ -1741,9 +1494,7 @@
 								</tr>
 								<tr>
 									<th>MOKI ID</th>
-									<td>
-										<textarea id="store-mokiId" class="no-uppercase" rows="2"></textarea>
-									</td>
+									<td><textarea id="store-mokiId" rows="2"></textarea></td>
 								</tr>
 								<tr>
 									<th>ANYDESK ID</th>
@@ -1751,10 +1502,10 @@
 								</tr>
 							</table>
 							<div class="button-row">
-								<button type="button" class="add" onclick="addEntry('store')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
-								<button type="button" class="form-clear-btn" onclick="clearFormOnly('store')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
-								<button type="button" class="clock" onclick="clock('IN', 'store')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
-								<button type="button" class="clock" onclick="clock('OUT', 'store')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
+								<button class="add" onclick="addEntry('store')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
+								<button class="form-clear-btn" onclick="clearFormOnly('store')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
+								<button class="clock" onclick="clock('IN', 'store')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
+								<button class="clock" onclick="clock('OUT', 'store')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
 							</div>
 						</div>
 						<div class="right-panel" id="store-previewPanel">
@@ -1919,22 +1670,22 @@
 								<tr>
 									<th>ZIP CODE *</th>
 									<td>
-										<input type="text" id="moolah-zipcode" maxlength="6" class="required" />
+										<input type="text" id="moolah-zipcode" maxlength="5" class="required" />
 									</td>
 								</tr>
 								<tr>
 									<th>ADDRESS LINE 1</th>
-									<td><input type="text" id="moolah-address1" class="no-uppercase"/></td>
+									<td><input type="text" id="moolah-address1" /></td>
 								</tr>
 								<tr>
 									<th>ADDRESS LINE 2</th>
-									<td><input type="text" id="moolah-address2" class="no-uppercase" /></td>
+									<td><input type="text" id="moolah-address2" /></td>
 								</tr>
 								<tr>
-									<th></th>
-									<td class="address-inline">
-										<input type="text" id="moolah-city" class="flex-grow no-uppercase" placeholder="CITY" />
-										<input type="text" id="moolah-state" class="state-short no-uppercase" placeholder="STATE" />
+									<th>CITY</th>
+									<td style="display: flex; gap: 8px; align-items: center">
+										<input type="text" id="moolah-city" style="flex: 1" />
+										<input type="text" id="moolah-state" style="width: 80px" placeholder="ST" />
 									</td>
 								</tr>
 								<tr>
@@ -2079,10 +1830,10 @@
 					<button id="exportCsvBtn" class="export-btn"><i class="bi bi-filetype-csv"></i> EXPORT</button>
 					<button id="importCsvBtn" class="import-btn"><i class="bi bi-file-earmark-arrow-up"></i> IMPORT</button>
 					<button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
-					<button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom-smaller icon-google-sheets"></i> SHOW ALL PENDING</button>
-					<button disabled aria-hidden="true">✅ RESOLVED: <span id="counterResolved">0</span></button>
-					<button disabled aria-hidden="true">⏳ PENDING: <span id="counterPending">0</span></button>
-					<button disabled aria-hidden="true">📋 OTHER TASK: <span id="counterOther">0</span></button>
+					<button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom icon-google-sheets"></i> SHOW ALL PENDING</button>
+					<button class="counter-badge resolved" disabled aria-hidden="true">✅ RESOLVED: <span id="counterResolved">0</span></button>
+					<button class="counter-badge pending" disabled aria-hidden="true">⏳ PENDING: <span id="counterPending">0</span></button>
+					<button class="counter-badge other" disabled aria-hidden="true">📋 OTHER TASK: <span id="counterOther">0</span></button>
 					<button disabled aria-hidden="true">REFRESH</button>
 				</div>
 
@@ -2116,42 +1867,42 @@
 
 		<div id="notification"></div>
 
-		<div id="profileModal">
-			<div class="modal-header">
+		<div id="profileModal" style="display: none; position: fixed; top: 20px; right: 20px; background: var(--bg-secondary); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); width: 300px; z-index: 1100; padding: 16px">
+			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
 				<strong>Profile</strong>
-				<button id="closeProfileModal" type="button">&times;</button>
+				<button id="closeProfileModal" type="button" style="background: none; border: none; font-size: 1.2rem; cursor: pointer">&times;</button>
 			</div>
 			<div id="profileInfo">
 				<div><strong>Support:</strong> <span id="profileSupport"></span></div>
 				<div><strong>Email:</strong> <span id="profileEmail"></span></div>
 				<div><strong>Role:</strong> <span id="profileRole"></span></div>
 			</div>
-			<hr />
-			<button id="changePasswordBtn" class="login-action-btn" type="button">Change Password</button>
-			<button id="logoutBtnProfile" class="login-action-btn" type="button">Logout</button>
+			<hr style="margin: 12px 0; border-color: var(--border-color)" />
+			<button id="changePasswordBtn" class="login-action-btn" type="button" style="width: 100%; margin-bottom: 8px">Change Password</button>
+			<button id="logoutBtnProfile" class="login-action-btn" type="button" style="width: 100%; background: #ef4444">Logout</button>
 		</div>
 
-		<div id="changePwdModal">
-			<h3>Change Password</h3>
-			<div class="modal-field">
-				<input type="password" id="oldPassword" placeholder="Old Password" />
-				<button class="togglePwd" data-target="oldPassword">🙉</button>
+		<div id="changePwdModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 350px; z-index: 1200; border: 1px solid var(--border-color)">
+			<h3 style="margin-bottom: 16px">Change Password</h3>
+			<div style="margin-bottom: 12px">
+				<input type="password" id="oldPassword" placeholder="Old Password" style="width: 100%" />
+				<button class="togglePwd" data-target="oldPassword" style="position: relative; float: right; margin-top: -34px; margin-right: 8px; background: none; border: none">🙉</button>
 			</div>
-			<div class="modal-field">
-				<input type="password" id="newPassword" placeholder="New Password" />
-				<button class="togglePwd" data-target="newPassword">🙉</button>
+			<div style="margin-bottom: 12px">
+				<input type="password" id="newPassword" placeholder="New Password" style="width: 100%" />
+				<button class="togglePwd" data-target="newPassword" style="position: relative; float: right; margin-top: -34px; margin-right: 8px; background: none; border: none">🙉</button>
 			</div>
-			<div class="modal-field">
-				<input type="password" id="confirmPassword" placeholder="Confirm New Password" />
-				<button class="togglePwd" data-target="confirmPassword">🙉</button>
+			<div style="margin-bottom: 12px">
+				<input type="password" id="confirmPassword" placeholder="Confirm New Password" style="width: 100%" />
+				<button class="togglePwd" data-target="confirmPassword" style="position: relative; float: right; margin-top: -34px; margin-right: 8px; background: none; border: none">🙉</button>
 			</div>
-			<div id="pwdError"></div>
-			<div class="modal-actions">
-				<button id="submitPasswordChange" class="login-action-btn">Update</button>
-				<button id="cancelPwdChange" class="login-action-btn cancel-btn">Cancel</button>
+			<div id="pwdError" style="color: #ef4444; margin-bottom: 12px; font-size: 0.8rem"></div>
+			<div style="display: flex; gap: 8px">
+				<button id="submitPasswordChange" class="login-action-btn" style="flex: 1">Update</button>
+				<button id="cancelPwdChange" class="login-action-btn" style="flex: 1; background: #6b7280">Cancel</button>
 			</div>
 		</div>
-		<div id="pwdModalBackdrop"></div>
+		<div id="pwdModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
 
 		<script>
 			const PASSWORD_UPDATE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_NOXzj_IQChM9QV90sgtyiL43YY9rwSwkQ3g21THcbsrqc5tfYBnCAWI0CCDL0-lb/exec";
@@ -3005,7 +2756,7 @@
 
 					const stateFull = state ? STATE_FULL_NAMES[state] || "" : "";
 					const stateInput = document.getElementById("moolah-state");
-					if (stateInput) stateInput.value = stateFull || "";
+					if (stateInput) stateInput.value = state || "";
 					document.getElementById("moolah-preview-stateFull").textContent = stateFull || state || "";
 
 					if (/^\d{5}$/.test(zipcode)) {
@@ -3067,7 +2818,7 @@
 
 					const stateFull = state ? STATE_FULL_NAMES[state] || "" : "";
 					const stateInput = document.getElementById("store-state");
-					if (stateInput) stateInput.value = stateFull || "";
+					if (stateInput) stateInput.value = state || "";
 					document.getElementById("store-preview-stateFull").textContent = stateFull || state || "";
 
 					if (/^\d{5}$/.test(zipcode)) {
@@ -3438,16 +3189,24 @@
 						issueText =
 							window._storeCurrentIssue ||
 							`NEW STORE CREATION FORM SENT - DONE ✅
-				STORE CREATION - DONE ✅
-				INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
-				UPLOAD DATABASE - PENDING ❌`;
+STORE CREATION - DONE ✅
+						document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
+						document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
+						document.getElementById("moolah-city").value = entry.moduleData?.city || "";
+						document.getElementById("moolah-state").value = entry.moduleData?.state || "";
+INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
+UPLOAD DATABASE - PENDING ❌`;
 					} else if (prefix === "moolah") {
 						issueText =
 							window._moolahCurrentIssue ||
 							`CREATE MOOLAH ACCOUNT - DONE ✅
-				INSTALL & UPDATE ALL APPS - DONE ✅
-				ASSIGN STORE - DONE ✅`;
+INSTALL & UPDATE ALL APPS - DONE ✅
+ASSIGN STORE - DONE ✅`;
 					}
+					document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
+					document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
+					document.getElementById("store-city").value = entry.moduleData?.city || "";
+					document.getElementById("store-state").value = entry.moduleData?.state || "";
 
 					let moduleData = {};
 					if (prefix === "store") {
@@ -5421,7 +5180,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						updateStatusCounters();
 					} else {
 						toggleBtn.classList.remove("active");
-						toggleBtn.innerHTML = '<i class="icon-custom-smaller icon-google-sheets"></i> SHOW ALL PENDING';
+						toggleBtn.innerHTML = '<i class="icon-custom icon-google-sheets"></i> SHOW ALL PENDING';
 						renderTable();
 						updateStatusCounters();
 						updateStatusCounters();
@@ -5714,7 +5473,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						const lines = issueText
 							.split(/\r?\n/)
 							.map((line) => line.trim())
-							.filter((line) => line.length > 0);a
+							.filter((line) => line.length > 0);
 						lines.forEach((line) => {
 							for (const [step, label] of Object.entries(stepLabels)) {
 								if (!line.toLowerCase().includes(label.toLowerCase())) continue;
