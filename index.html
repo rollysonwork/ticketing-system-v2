@@ -1327,12 +1327,10 @@
 				align-items: center;
 			}
 
-			.address-inline .flex-grow {
-				flex: 1;
-			}
-
+			.address-inline .flex-grow,
 			.address-inline .state-short {
-				width: 80px;
+				flex: 1;           /* Each takes equal remaining space */
+				min-width: 0;      /* Prevents overflow */
 			}
 
 			#profileModal {
@@ -1700,17 +1698,17 @@
 								</tr>
 								<tr>
 									<th>ADDRESS LINE 1</th>
-									<td><input type="text" id="store-address1" /></td>
+									<td><input type="text" id="store-address1" class="no-uppercase"/></td>
 								</tr>
 								<tr>
 									<th>ADDRESS LINE 2</th>
-									<td><input type="text" id="store-address2" /></td>
+									<td><input type="text" id="store-address2" class="no-uppercase"/></td>
 								</tr>
 								<tr>
-									<th>CITY</th>
+									<th></th>
 									<td class="address-inline">
-										<input type="text" id="store-city" class="flex-grow" />
-										<input type="text" id="store-state" class="state-short" placeholder="ST" />
+										<input type="text" id="store-city" class="flex-grow no-uppercase" placeholder="CITY" />
+										<input type="text" id="store-state" class="state-short no-uppercase" placeholder="STATE" />
 									</td>
 								</tr>
 								<tr>
@@ -1926,17 +1924,17 @@
 								</tr>
 								<tr>
 									<th>ADDRESS LINE 1</th>
-									<td><input type="text" id="moolah-address1" /></td>
+									<td><input type="text" id="moolah-address1" class="no-uppercase"/></td>
 								</tr>
 								<tr>
 									<th>ADDRESS LINE 2</th>
-									<td><input type="text" id="moolah-address2" /></td>
+									<td><input type="text" id="moolah-address2" class="no-uppercase" /></td>
 								</tr>
 								<tr>
-									<th>CITY</th>
+									<th></th>
 									<td class="address-inline">
-										<input type="text" id="moolah-city" class="flex-grow" />
-										<input type="text" id="moolah-state" class="state-short" placeholder="ST" />
+										<input type="text" id="moolah-city" class="flex-grow no-uppercase" placeholder="CITY" />
+										<input type="text" id="moolah-state" class="state-short no-uppercase" placeholder="STATE" />
 									</td>
 								</tr>
 								<tr>
@@ -5716,7 +5714,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						const lines = issueText
 							.split(/\r?\n/)
 							.map((line) => line.trim())
-							.filter((line) => line.length > 0);
+							.filter((line) => line.length > 0);a
 						lines.forEach((line) => {
 							for (const [step, label] of Object.entries(stepLabels)) {
 								if (!line.toLowerCase().includes(label.toLowerCase())) continue;
