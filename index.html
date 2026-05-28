@@ -182,6 +182,14 @@
 				}
 			}
 
+			.button-accented-color {
+				border: 1px solid var(--border-color);
+				border-radius: 12px;
+				background: var(--bg-secondary);
+				color: var(--text-primary);
+				transition: var(--transition);
+			}
+
 			.three-panels {
 				display: flex;
 				gap: 24px;
@@ -1275,12 +1283,18 @@
 								<tr>
 									<th><label for="ticket-shift">SHIFT SCHEDULE</label></th>
 									<td>
-										<select id="ticket-shift">
-											<option value="">-- SELECT --</option>
-											<option value="6PM - 5AM">6PM - 5AM</option>
-											<option value="9PM - 8AM">9PM - 8AM</option>
-											<option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option>
-										</select>
+										<div class="dropdown w-100">
+											<input type="hidden" id="ticket-shift" />
+											<button class="btn btn-secondary dropdown-toggle w-100 text-start button-accented-color" type="button" id="ticket-shift-dropdown-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+												<span id="ticket-shiftDropdownLabel">Select shift</span>
+											</button>
+											<div class="dropdown-menu p-2 w-100" aria-labelledby="ticket-shift-dropdown-btn" style="max-height: 220px; overflow: auto">
+												<div class="mb-2">
+													<input type="search" id="ticket-shift-search" class="form-control" placeholder="Search shift..." autocomplete="off" />
+												</div>
+												<div id="ticket-shiftDropdownMenu"></div>
+											</div>
+										</div>
 									</td>
 								</tr>
 								<tr>
@@ -1313,7 +1327,20 @@
 								</tr>
 								<tr>
 									<th><label for="ticket-module">MODULE</label></th>
-									<td><input id="ticket-module" list="ticket-moduleList" class="no-uppercase" autocomplete="off" /><datalist id="ticket-moduleList"></datalist></td>
+									<td>
+										<div class="dropdown w-100">
+											<input type="hidden" id="ticket-module" />
+											<button class="btn btn-secondary dropdown-toggle w-100 text-start button-accented-color" type="button" id="ticket-module-dropdown-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+												<span id="ticket-moduleDropdownLabel">Select module</span>
+											</button>
+											<div class="dropdown-menu p-2 w-100" aria-labelledby="ticket-module-dropdown-btn" style="max-height: 260px; overflow: auto">
+												<div class="mb-2">
+													<input type="search" id="ticket-module-search" class="form-control" placeholder="Search module..." autocomplete="off" />
+												</div>
+												<div id="ticket-moduleDropdownMenu"></div>
+											</div>
+										</div>
+									</td>
 								</tr>
 								<tr>
 									<th><label for="ticket-issue">ISSUE</label></th>
@@ -1327,7 +1354,20 @@
 								</tr>
 								<tr>
 									<th><label for="ticket-status">STATUS</label></th>
-									<td><input id="ticket-status" list="ticket-statusList" autocomplete="off" /><datalist id="ticket-statusList"></datalist></td>
+									<td>
+										<div class="dropdown w-100">
+											<input type="hidden" id="ticket-status" />
+											<button class="btn btn-secondary dropdown-toggle w-100 text-start button-accented-color" type="button" id="ticket-status-dropdown-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+												<span id="ticket-statusDropdownLabel">Select status</span>
+											</button>
+											<div class="dropdown-menu p-2 w-100" aria-labelledby="ticket-status-dropdown-btn" style="max-height: 220px; overflow: auto">
+												<div class="mb-2">
+													<input type="search" id="ticket-status-search" class="form-control" placeholder="Search status..." autocomplete="off" />
+												</div>
+												<div id="ticket-statusDropdownMenu"></div>
+											</div>
+										</div>
+									</td>
 								</tr>
 								<tr>
 									<th><label for="ticket-remarks">REMARKS</label></th>
@@ -2034,6 +2074,7 @@
 
 				const MODULE_OPTIONS = ["POS", "Portal", "Mobile App", "Cash Register", "Item Management", "Inventory", "Back Office", "Credit Card Terminal", "Printer", "Transactions", "Scan-Data", "Promotions", "Reports", "Register Setup", "Store Creation", "Rocket Application", "Moolah", "API", "Database import/export", "Gift Card", "Employee", "EDI", "Demo", "Training", "Credentials", "Other", "MIGRATION", "VERSION UPDATE", "EBT", "Cash drawer", "LABEL PRINTER", "BULK CHANGE", "CRASH - APK", "SERVER", "TOUCH SCREEN", "CHANGE STORE/EMAIL ID", "Customer Module", "Age Check", "Internet", "SYNC DATA", "Surcharge", "Image set", "Scanner", "TENDER", "TIME CARD", "BANK DEPOSITE", "E-Commerce", "Dual Price", "Lotto Guru", "Tax", "LABEL UTILITY", "FACTORY RESET", "DB EXPORT", "Adjustments", "NVR", "RECEIPT", "RETAILZGO", "INVOICE", "SOLINK INTEGRATION", "Price Level", "CashBack", "Customer Screen", "Active / Deactive", "Store", "OCR", "DEVICE ID"];
 				const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
+				const SHIFT_OPTIONS = ["6PM - 5AM", "9PM - 8AM", "11PM - 10AM", "7:30AM - 6:30PM"];
 
 				let currentActiveTab = "ticket";
 				let allEntries = [];
@@ -3356,6 +3397,14 @@ ASSIGN STORE - DONE ✅`;
 							const el = document.getElementById(`ticket-${id}`);
 							if (el) el.value = "";
 						});
+						const moduleLabel = document.getElementById("ticket-moduleDropdownLabel");
+						if (moduleLabel) moduleLabel.textContent = "Select module";
+						const moduleSearch = document.getElementById("ticket-module-search");
+						if (moduleSearch) moduleSearch.value = "";
+						const statusLabel = document.getElementById("ticket-statusDropdownLabel");
+						if (statusLabel) statusLabel.textContent = "Select status";
+						const statusSearch = document.getElementById("ticket-status-search");
+						if (statusSearch) statusSearch.value = "";
 						if (quillEditor) {
 							quillEditor.root.innerHTML = "";
 							document.getElementById("ticket-resolution").value = "";
@@ -3487,9 +3536,13 @@ ASSIGN STORE - DONE ✅`;
 							}
 						} else {
 							document.getElementById("ticket-module").value = entry.module;
+							const moduleLabel = document.getElementById("ticket-moduleDropdownLabel");
+							if (moduleLabel) moduleLabel.textContent = entry.module || "Select module";
 							document.getElementById("ticket-issue").value = entry.issue;
 							document.getElementById("ticket-escalated").value = entry.escalated;
 							document.getElementById("ticket-status").value = entry.status;
+							const statusLabel = document.getElementById("ticket-statusDropdownLabel");
+							if (statusLabel) statusLabel.textContent = entry.status || "Select status";
 							document.getElementById("ticket-remarks").value = entry.remarks;
 							if (quillEditor && entry.troubleshooting) {
 								quillEditor.root.innerHTML = entry.troubleshooting;
@@ -4650,6 +4703,78 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					syncPreviewHeight();
 				}
 
+				function getBootstrapDropdownDefaultLabel(inputId) {
+					if (inputId === "ticket-status") return "Select status";
+					if (inputId === "ticket-module") return "Select module";
+					if (inputId === "ticket-shift") return "Select shift";
+					return "Select";
+				}
+
+				function setBootstrapDropdownValue(inputId, value) {
+					const input = document.getElementById(inputId);
+					const label = document.getElementById(`${inputId}DropdownLabel`);
+					const defaultLabel = getBootstrapDropdownDefaultLabel(inputId);
+					if (input) input.value = value || "";
+					if (label) label.textContent = value ? value : defaultLabel;
+				}
+
+				function setupBootstrapDropdown(inputId, options, nextFieldId) {
+					const input = document.getElementById(inputId);
+					const dropdownBtn = document.getElementById(`${inputId}-dropdown-btn`);
+					const menu = document.getElementById(`${inputId}DropdownMenu`);
+					const searchInput = document.getElementById(`${inputId}-search`);
+					if (!input || !dropdownBtn || !menu || !searchInput) return;
+
+					function renderMenu(filter = "") {
+						const query = filter.trim().toLowerCase();
+						const filtered = query === "" ? options.slice() : options.filter((opt) => opt.toLowerCase().includes(query));
+						menu.innerHTML = "";
+
+						if (filtered.length === 0) {
+							const emptyItem = document.createElement("div");
+							emptyItem.className = "dropdown-item text-muted";
+							emptyItem.textContent = "No matching options";
+							menu.appendChild(emptyItem);
+							return;
+						}
+
+						filtered.forEach((opt) => {
+							const item = document.createElement("button");
+							item.type = "button";
+							item.className = "dropdown-item";
+							item.textContent = opt;
+							item.addEventListener("click", () => {
+								setBootstrapDropdownValue(inputId, opt);
+								input.dispatchEvent(new Event("input", { bubbles: true }));
+								input.dispatchEvent(new Event("change", { bubbles: true }));
+								if (nextFieldId) {
+									setTimeout(() => document.getElementById(nextFieldId)?.focus(), 10);
+								}
+							});
+							menu.appendChild(item);
+						});
+					}
+
+					dropdownBtn.addEventListener("click", () => {
+						searchInput.value = "";
+						renderMenu("");
+						setTimeout(() => searchInput.focus(), 0);
+					});
+
+					searchInput.addEventListener("input", function () {
+						renderMenu(this.value);
+					});
+
+					searchInput.addEventListener("keydown", function (e) {
+						if (e.key === "Escape") {
+							dropdownBtn.focus();
+						}
+					});
+
+					setBootstrapDropdownValue(inputId, input.value);
+					renderMenu("");
+				}
+
 				function setupAutocomplete(inputId, options, nextFieldId) {
 					const input = document.getElementById(inputId);
 					const listId = inputId + "List";
@@ -5253,9 +5378,9 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
 					document.querySelectorAll("textarea").forEach((ta) => autoGrow(ta));
 
-					setupAutocomplete("ticket-module", MODULE_OPTIONS, "ticket-issue");
-					setupAutocomplete("ticket-status", STATUS_OPTIONS, "ticket-remarks");
-
+					setupBootstrapDropdown("ticket-module", MODULE_OPTIONS, "ticket-issue");
+					setupBootstrapDropdown("ticket-status", STATUS_OPTIONS, "ticket-remarks");
+					setupBootstrapDropdown("ticket-shift", SHIFT_OPTIONS, "ticket-support");
 					const moduleField = document.getElementById("ticket-module");
 					if (moduleField) {
 						moduleField.addEventListener("change", () => updateTemplateDropdown());
