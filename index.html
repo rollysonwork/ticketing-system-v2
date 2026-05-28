@@ -171,6 +171,10 @@
 				animation: fadeIn 0.2s ease;
 			}
 
+			.btn-no-fontsize {
+				font-size: inherit;
+			}
+
 			@keyframes fadeIn {
 				from {
 					opacity: 0;
@@ -1211,6 +1215,9 @@
 				color: white;
 				border-color: #b93131;
 			}
+			.dropdown-selection-div * {
+				font-size: 0.95em;
+			}
 		</style>
 	</head>
 	<body>
@@ -1283,7 +1290,7 @@
 								<tr>
 									<th><label for="ticket-shift">SHIFT SCHEDULE</label></th>
 									<td>
-										<div class="dropdown w-100">
+										<div class="dropdown w-100 dropdown-selection-div">
 											<input type="hidden" id="ticket-shift" />
 											<button class="btn btn-secondary dropdown-toggle w-100 text-start button-accented-color" type="button" id="ticket-shift-dropdown-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
 												<span id="ticket-shiftDropdownLabel">Select shift</span>
@@ -1328,7 +1335,7 @@
 								<tr>
 									<th><label for="ticket-module">MODULE</label></th>
 									<td>
-										<div class="dropdown w-100">
+										<div class="dropdown w-100 dropdown-selection-div">
 											<input type="hidden" id="ticket-module" />
 											<button class="btn btn-secondary dropdown-toggle w-100 text-start button-accented-color" type="button" id="ticket-module-dropdown-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
 												<span id="ticket-moduleDropdownLabel">Select module</span>
@@ -1355,7 +1362,7 @@
 								<tr>
 									<th><label for="ticket-status">STATUS</label></th>
 									<td>
-										<div class="dropdown w-100">
+										<div class="dropdown w-100 dropdown-selection-div">
 											<input type="hidden" id="ticket-status" />
 											<button class="btn btn-secondary dropdown-toggle w-100 text-start button-accented-color" type="button" id="ticket-status-dropdown-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
 												<span id="ticket-statusDropdownLabel">Select status</span>
