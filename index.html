@@ -5389,13 +5389,39 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						moduleField.addEventListener("input", () => updateTemplateDropdown());
 					}
 
+					// Format as user types (no leading zero padding)
 					document.getElementById("ticket-contactNumber").addEventListener("input", function () {
-						let v = this.value.replace(/\D/g, "");
-						if (v.length > 0) v = "(" + v;
-						if (v.length > 4) v = v.slice(0, 4) + ") " + v.slice(4);
-						if (v.length > 9) v = v.slice(0, 9) + "-" + v.slice(9, 13);
-						this.value = v.slice(0, 14);
+						let digits = this.value.replace(/\D/g, "");
+						// Limit to 10 digits maximum
+						if (digits.length > 10) {
+							digits = digits.slice(0, 10);
+						}
+						// Progressive formatting
+						let formatted = "";
+						if (digits.length > 0) {
+							if (digits.length <= 3) {
+								formatted = `(${digits}`;
+							} else if (digits.length <= 6) {
+								formatted = `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+							} else {
+								formatted = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+							}
+						}
+						this.value = formatted;
 						saveFormData("ticket");
+						ticketUpdatePreview();
+					});
+
+					// On blur, pad with leading zeros if needed to make 10 digits
+					document.getElementById("ticket-contactNumber").addEventListener("blur", function () {
+						let digits = this.value.replace(/\D/g, "");
+						if (digits.length > 0 && digits.length < 10) {
+							digits = digits.padStart(10, "0");
+							let formatted = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+							this.value = formatted;
+							saveFormData("ticket");
+							ticketUpdatePreview();
+						}
 					});
 
 					document.getElementById("moolah-support").addEventListener("input", () => {
