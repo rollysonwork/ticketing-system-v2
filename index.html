@@ -2358,11 +2358,11 @@
 				}
 
 				function storeGetFormattedDateMinusOne() {
-					const d = new Date();
-					d.setDate(d.getDate() - 1);
-					const mm = String(d.getMonth() + 1).padStart(2, "0");
-					const dd = String(d.getDate()).padStart(2, "0");
-					const yyyy = d.getFullYear();
+					const now = new Date();
+					const estDate = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
+					const mm = String(estDate.getMonth() + 1).padStart(2, "0");
+					const dd = String(estDate.getDate()).padStart(2, "0");
+					const yyyy = estDate.getFullYear();
 					return `${mm}/${dd}/${yyyy}`;
 				}
 
@@ -5345,15 +5345,10 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					autoFillSupportName(loggedInUser.support);
 					window.currentUser = loggedInUser;
 
-					const yesterday = new Date();
-					yesterday.setDate(yesterday.getDate() - 1);
-					const yyyy = yesterday.getFullYear();
-					const mm = String(yesterday.getMonth() + 1).padStart(2, "0");
-					const dd = String(yesterday.getDate()).padStart(2, "0");
-					const yesterdayStr = `${yyyy}-${mm}-${dd}`;
-					document.getElementById("moolah-date").value = yesterdayStr;
-					document.getElementById("store-date").value = yesterdayStr;
-					document.getElementById("ticket-date").value = yesterdayStr;
+					const todayEST = getESTDateString(); // returns YYYY-MM-DD in EST
+					document.getElementById("moolah-date").value = todayEST;
+					document.getElementById("store-date").value = todayEST;
+					document.getElementById("ticket-date").value = todayEST;
 
 					const savedTab = localStorage.getItem("activeTab") || "ticket";
 					const tabButton = Array.from(document.querySelectorAll(".tab-button")).find((btn) => btn.textContent.trim().toLowerCase().includes(savedTab));
