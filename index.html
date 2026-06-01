@@ -3577,12 +3577,31 @@ ASSIGN STORE - DONE ✅`;
 								document.getElementById("store-generated-issue").innerText = entry.issue;
 							}
 						} else {
-							document.getElementById("ticket-module").value = entry.module;
+							// Set module without triggering dropdown
+							const moduleInput = document.getElementById("ticket-module-combobox");
+							const moduleHidden = document.getElementById("ticket-module");
+							if (moduleInput) {
+								moduleInput._skipNextInput = true;
+								moduleInput.value = entry.module || "";
+								setTimeout(() => {
+									delete moduleInput._skipNextInput;
+								}, 100);
+							}
+							if (moduleHidden) moduleHidden.value = entry.module || "";
 							const moduleLabel = document.getElementById("ticket-moduleDropdownLabel");
 							if (moduleLabel) moduleLabel.textContent = entry.module || "Select module";
-							document.getElementById("ticket-issue").value = entry.issue;
-							document.getElementById("ticket-escalated").value = entry.escalated;
-							document.getElementById("ticket-status").value = entry.status;
+
+							// Set status without triggering dropdown
+							const statusInput = document.getElementById("ticket-status-combobox");
+							const statusHidden = document.getElementById("ticket-status");
+							if (statusInput) {
+								statusInput._skipNextInput = true;
+								statusInput.value = entry.status || "";
+								setTimeout(() => {
+									delete statusInput._skipNextInput;
+								}, 100);
+							}
+							if (statusHidden) statusHidden.value = entry.status || "";
 							const statusLabel = document.getElementById("ticket-statusDropdownLabel");
 							if (statusLabel) statusLabel.textContent = entry.status || "Select status";
 							document.getElementById("ticket-remarks").value = entry.remarks;
@@ -5419,7 +5438,12 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					}
 
 					input.addEventListener("input", (e) => {
-						if (ignoreNextRender) return; // ✅ Skip during cooldown
+						// Skip if we are programmatically setting the value during edit
+						if (input._skipNextInput) {
+							delete input._skipNextInput;
+							return;
+						}
+						if (ignoreNextRender) return;
 						const val = e.target.value;
 						hidden.value = val;
 						renderSuggestions(val);
