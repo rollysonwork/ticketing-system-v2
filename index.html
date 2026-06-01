@@ -3423,25 +3423,34 @@ ASSIGN STORE - DONE ✅`;
 
 				function clearFormFields(prefix) {
 					if (prefix === "ticket") {
-						const fields = ["portal", "store", "zip", "contactPerson", "contactNumber", "module", "issue", "escalated", "status", "remarks", "note"];
+						const fields = ["portal", "store", "zip", "contactPerson", "contactNumber", "issue", "escalated", "remarks", "note"];
 						fields.forEach((id) => {
 							const el = document.getElementById(`ticket-${id}`);
 							if (el) el.value = "";
 						});
-						const moduleLabel = document.getElementById("ticket-moduleDropdownLabel");
-						if (moduleLabel) moduleLabel.textContent = "Select module";
-						const moduleSearch = document.getElementById("ticket-module-search");
-						if (moduleSearch) moduleSearch.value = "";
-						const statusLabel = document.getElementById("ticket-statusDropdownLabel");
-						if (statusLabel) statusLabel.textContent = "Select status";
-						const statusSearch = document.getElementById("ticket-status-search");
-						if (statusSearch) statusSearch.value = "";
+
+						// ✅ Clear Module combobox
+						const moduleInput = document.getElementById("ticket-module-combobox");
+						const moduleHidden = document.getElementById("ticket-module");
+						if (moduleInput) moduleInput.value = "";
+						if (moduleHidden) moduleHidden.value = "";
+
+						// ✅ Clear Status combobox
+						const statusInput = document.getElementById("ticket-status-combobox");
+						const statusHidden = document.getElementById("ticket-status");
+						if (statusInput) statusInput.value = "";
+						if (statusHidden) statusHidden.value = "";
+
+						// Reset Quill editor (troubleshooting)
 						if (quillEditor) {
 							quillEditor.root.innerHTML = "";
 							document.getElementById("ticket-resolution").value = "";
 						}
+
+						// Reset preview panels
 						document.getElementById("ticket-previewResolution").innerHTML = "";
 						document.getElementById("ticket-previewTroubleshooting").innerHTML = "";
+
 						const textareas = document.querySelectorAll(`#tab-ticket textarea`);
 						textareas.forEach((ta) => autoGrow(ta));
 					} else if (prefix === "store") {
