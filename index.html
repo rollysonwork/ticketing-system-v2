@@ -5619,7 +5619,9 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 							});
 					});
 
-					document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach((el) => {
+					// Exclude ISSUE, ESCALATED, REMARKS, NOTE from uppercase conversion
+					const excludeIds = "#ticket-issue, #ticket-escalated, #ticket-remarks, #ticket-note";
+					document.querySelectorAll(`input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase):not(${excludeIds}), textarea:not(.no-uppercase):not(${excludeIds})`).forEach((el) => {
 						// Skip combobox inputs
 						if (el.id === "ticket-module-combobox" || el.id === "ticket-status-combobox") return;
 
