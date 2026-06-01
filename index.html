@@ -1218,6 +1218,44 @@
 			.dropdown-selection-div * {
 				font-size: 0.95em;
 			}
+			.combobox-wrapper {
+				position: relative;
+				width: 100%;
+			}
+			.combobox-input {
+				width: 100%;
+			}
+			.combobox-suggestions {
+				position: absolute;
+				top: 100%;
+				left: 0;
+				right: 0;
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-color);
+				border-radius: 12px;
+				max-height: 250px;
+				overflow-y: auto;
+				z-index: 1000;
+				display: none;
+				box-shadow: var(--card-shadow);
+				margin-top: 4px;
+			}
+			.combobox-suggestion-item {
+				padding: 8px 12px;
+				cursor: pointer;
+				transition: var(--transition);
+				font-size: 14px;
+				color: var(--text-primary);
+				border-bottom: 1px solid var(--border-color);
+			}
+			.combobox-suggestion-item:last-child {
+				border-bottom: none;
+			}
+			.combobox-suggestion-item:hover,
+			.combobox-suggestion-item.selected {
+				background: var(--accent-soft);
+				color: var(--accent-color);
+			}
 		</style>
 	</head>
 	<body>
@@ -1335,17 +1373,10 @@
 								<tr>
 									<th><label for="ticket-module">MODULE</label></th>
 									<td>
-										<div class="dropdown w-100 dropdown-selection-div">
-											<input type="hidden" id="ticket-module" class="no-uppercase" />
-											<button class="btn btn-secondary dropdown-toggle w-100 text-start button-accented-color" type="button" id="ticket-module-dropdown-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-												<span id="ticket-moduleDropdownLabel">Select module</span>
-											</button>
-											<div class="dropdown-menu p-2 w-100" aria-labelledby="ticket-module-dropdown-btn" style="max-height: 260px; overflow: auto">
-												<div class="mb-2">
-													<input type="search" id="ticket-module-search" class="form-control no-uppercase" placeholder="Search module..." autocomplete="off" />
-												</div>
-												<div id="ticket-moduleDropdownMenu"></div>
-											</div>
+										<div class="combobox-wrapper">
+											<input type="text" id="ticket-module-combobox" class="combobox-input" autocomplete="off" placeholder="Type or select module" />
+											<input type="hidden" id="ticket-module" />
+											<div id="ticket-module-suggestions" class="combobox-suggestions"></div>
 										</div>
 									</td>
 								</tr>
@@ -1362,17 +1393,10 @@
 								<tr>
 									<th><label for="ticket-status">STATUS</label></th>
 									<td>
-										<div class="dropdown w-100 dropdown-selection-div">
+										<div class="combobox-wrapper">
+											<input type="text" id="ticket-status-combobox" class="combobox-input" autocomplete="off" placeholder="Type or select status" />
 											<input type="hidden" id="ticket-status" />
-											<button class="btn btn-secondary dropdown-toggle w-100 text-start button-accented-color" type="button" id="ticket-status-dropdown-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-												<span id="ticket-statusDropdownLabel">Select status</span>
-											</button>
-											<div class="dropdown-menu p-2 w-100" aria-labelledby="ticket-status-dropdown-btn" style="max-height: 220px; overflow: auto">
-												<div class="mb-2">
-													<input type="search" id="ticket-status-search" class="form-control" placeholder="Search status..." autocomplete="off" />
-												</div>
-												<div id="ticket-statusDropdownMenu"></div>
-											</div>
+											<div id="ticket-status-suggestions" class="combobox-suggestions"></div>
 										</div>
 									</td>
 								</tr>
@@ -5324,6 +5348,120 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					}
 				}
 
+				function initCombobox(comboboxId, hiddenId, optionsArray, suggestionsId, onSelectCallback) {
+					const input = document.getElementById(comboboxId);
+					const hidden = document.getElementById(hiddenId);
+					const suggestionsDiv = document.getElementById(suggestionsId);
+					if (!input || !hidden || !suggestionsDiv) return;
+
+					let currentFocus = -1;
+					let currentOptions = [];
+					let ignoreNextRender = false; // ✅ Prevents immediate reopening after selection
+
+					function renderSuggestions(filterText) {
+						if (ignoreNextRender) return; // ✅ Skip if just selected
+						const filter = filterText.trim().toLowerCase();
+						currentOptions = filter === "" ? [...optionsArray] : optionsArray.filter((opt) => opt.toLowerCase().includes(filter));
+						suggestionsDiv.innerHTML = "";
+						if (currentOptions.length === 0) {
+							suggestionsDiv.style.display = "none";
+							return;
+						}
+						currentOptions.forEach((opt, idx) => {
+							const div = document.createElement("div");
+							div.className = "combobox-suggestion-item";
+							div.textContent = opt;
+							div.setAttribute("data-value", opt);
+							div.addEventListener("click", (e) => {
+								e.stopPropagation();
+								selectOption(opt);
+							});
+							div.addEventListener("mouseenter", () => {
+								setFocus(idx);
+							});
+							suggestionsDiv.appendChild(div);
+						});
+						suggestionsDiv.style.display = "block";
+						currentFocus = -1;
+					}
+
+					function selectOption(value) {
+						input.value = value;
+						hidden.value = value;
+						suggestionsDiv.style.display = "none";
+						ignoreNextRender = true; // ✅ Block next render
+						if (onSelectCallback) onSelectCallback(value);
+						input.dispatchEvent(new Event("input", { bubbles: true }));
+						setTimeout(() => {
+							ignoreNextRender = false;
+						}, 100); // ✅ Re-enable after 100ms
+					}
+
+					function setFocus(index) {
+						const items = suggestionsDiv.querySelectorAll(".combobox-suggestion-item");
+						items.forEach((item, i) => {
+							if (i === index) item.classList.add("selected");
+							else item.classList.remove("selected");
+						});
+						currentFocus = index;
+						if (index >= 0 && items[index]) items[index].scrollIntoView({ block: "nearest" });
+					}
+
+					input.addEventListener("input", (e) => {
+						if (ignoreNextRender) return; // ✅ Skip during cooldown
+						const val = e.target.value;
+						hidden.value = val;
+						renderSuggestions(val);
+						if (onSelectCallback) onSelectCallback(val);
+					});
+
+					input.addEventListener("focus", () => {
+						if (ignoreNextRender) return; // ✅ Skip during cooldown
+						renderSuggestions(input.value);
+					});
+
+					input.addEventListener("keydown", (e) => {
+						const items = suggestionsDiv.querySelectorAll(".combobox-suggestion-item");
+
+						if (e.key === "ArrowDown") {
+							e.preventDefault();
+							if (currentFocus < items.length - 1) setFocus(currentFocus + 1);
+							else if (items.length > 0) setFocus(0);
+						} else if (e.key === "ArrowUp") {
+							e.preventDefault();
+							if (currentFocus > 0) setFocus(currentFocus - 1);
+							else if (items.length > 0) setFocus(items.length - 1);
+						} else if (e.key === "Enter" && currentFocus >= 0 && items[currentFocus]) {
+							e.preventDefault();
+							selectOption(items[currentFocus].textContent);
+						} else if (e.key === "Tab") {
+							if (suggestionsDiv.style.display === "block" && currentOptions.length > 0) {
+								e.preventDefault();
+								const selectedValue = currentFocus >= 0 && items[currentFocus] ? items[currentFocus].textContent : currentOptions[0];
+								selectOption(selectedValue);
+								setTimeout(() => {
+									const focusable = document.querySelectorAll('input, button, textarea, select, [tabindex]:not([tabindex="-1"])');
+									let idx = Array.from(focusable).findIndex((el) => el === input);
+									if (idx !== -1 && focusable[idx + 1]) {
+										focusable[idx + 1].focus();
+									}
+								}, 0);
+							}
+						} else if (e.key === "Escape") {
+							suggestionsDiv.style.display = "none";
+						}
+					});
+
+					document.addEventListener("click", (e) => {
+						if (!input.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+							suggestionsDiv.style.display = "none";
+							ignoreNextRender = false; // Reset flag if needed
+						}
+					});
+
+					if (hidden.value) input.value = hidden.value;
+				}
+
 				function init() {
 					const loggedInUser = getLoggedInUser();
 					if (!loggedInUser) {
@@ -5380,8 +5518,15 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
 					document.querySelectorAll("textarea").forEach((ta) => autoGrow(ta));
 
-					setupBootstrapDropdown("ticket-module", MODULE_OPTIONS, "ticket-issue");
-					setupBootstrapDropdown("ticket-status", STATUS_OPTIONS, "ticket-remarks");
+					initCombobox("ticket-module-combobox", "ticket-module", MODULE_OPTIONS, "ticket-module-suggestions", () => {
+						ticketUpdatePreview();
+						saveFormData("ticket");
+					});
+					initCombobox("ticket-status-combobox", "ticket-status", STATUS_OPTIONS, "ticket-status-suggestions", () => {
+						ticketUpdatePreview();
+						saveFormData("ticket");
+					});
+
 					setupBootstrapDropdown("ticket-shift", SHIFT_OPTIONS, "ticket-support");
 					const moduleField = document.getElementById("ticket-module");
 					if (moduleField) {
