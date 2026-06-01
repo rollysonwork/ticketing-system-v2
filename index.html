@@ -2943,22 +2943,20 @@
 					document.getElementById("ticket-previewPortal").textContent = document.getElementById("ticket-portal").value.toUpperCase();
 					document.getElementById("ticket-previewStore").textContent = document.getElementById("ticket-store").value.toUpperCase();
 					document.getElementById("ticket-previewZip").textContent = document.getElementById("ticket-zip").value.toUpperCase();
-					const contactPerson = document.getElementById("ticket-contactPerson").value.toUpperCase();
-					document.getElementById("ticket-previewContactPerson").textContent = contactPerson;
-					document.getElementById("ticket-previewCaller").textContent = contactPerson;
+					document.getElementById("ticket-previewContactPerson").textContent = document.getElementById("ticket-contactPerson").value.toUpperCase();
+					document.getElementById("ticket-previewCaller").textContent = document.getElementById("ticket-contactPerson").value.toUpperCase();
 					document.getElementById("ticket-previewContactNumber").textContent = document.getElementById("ticket-contactNumber").value;
 					document.getElementById("ticket-previewContact").textContent = document.getElementById("ticket-contactNumber").value;
 
-					const issueOriginal = document.getElementById("ticket-issue").value;
-					document.getElementById("ticket-previewIssue").innerHTML = formatMultilinePreview(issueOriginal);
+					// Directly read issue value – no clearing
+					const issueRaw = document.getElementById("ticket-issue").value;
+					document.getElementById("ticket-previewIssue").innerHTML = formatMultilinePreview(issueRaw);
 
 					const noteRaw = document.getElementById("ticket-note").value;
 					document.getElementById("ticket-previewNote").innerHTML = formatMultilinePreview(noteRaw);
 
 					const troubleshootingRaw = document.getElementById("ticket-resolution").value;
-					const troubleshootingContent = !isHtmlEmpty(troubleshootingRaw) ? troubleshootingRaw : "";
-					document.getElementById("ticket-previewTroubleshooting").innerHTML = troubleshootingContent;
-
+					document.getElementById("ticket-previewTroubleshooting").innerHTML = !isHtmlEmpty(troubleshootingRaw) ? troubleshootingRaw : "";
 					syncPreviewHeight();
 				}
 
@@ -3494,152 +3492,153 @@ ASSIGN STORE - DONE ✅`;
 					syncPreviewHeight();
 				}
 
-				function editEntry(buttonOrId) {
-					let entryId, entry;
+function editEntry(buttonOrId) {
+    let entryId, entry;
+    if (typeof buttonOrId === "object" && buttonOrId !== null) {
+        const id = buttonOrId.closest ? buttonOrId.closest("tr")?.dataset.id || buttonOrId.dataset.id : buttonOrId.dataset.id;
+        if (!id) return;
+        entryId = parseInt(id);
+    } else if (typeof buttonOrId === "number") {
+        entryId = buttonOrId;
+    } else {
+        return;
+    }
+    entry = allEntries.find((e) => e.id === entryId);
+    if (!entry) return;
 
-					if (typeof buttonOrId === "object" && buttonOrId !== null) {
-						const id = buttonOrId.closest ? buttonOrId.closest("tr")?.dataset.id || buttonOrId.dataset.id : buttonOrId.dataset.id;
-						if (!id) return;
-						entryId = parseInt(id);
-					} else if (typeof buttonOrId === "number") {
-						entryId = buttonOrId;
-					} else {
-						return;
-					}
-					entry = allEntries.find((e) => e.id === entryId);
-					if (!entry) return;
+    let prefix = entry.source;
+    if (!prefix) {
+        if (entry.module === "Moolah") prefix = "moolah";
+        else if (entry.module === "Store Creation") prefix = "store";
+        else prefix = "ticket";
+    }
 
-					let prefix = entry.source;
-					if (!prefix) {
-						if (entry.module === "Moolah") prefix = "moolah";
-						else if (entry.module === "Store Creation") prefix = "store";
-						else prefix = "ticket";
-					}
+    const tabBtn = Array.from(document.querySelectorAll(".tab-button")).find((btn) => btn.textContent.trim().toLowerCase().includes(prefix));
+    if (tabBtn) switchTab(prefix, tabBtn);
 
-					const tabBtn = Array.from(document.querySelectorAll(".tab-button")).find((btn) => btn.textContent.trim().toLowerCase().includes(prefix));
-					if (tabBtn) switchTab(prefix, tabBtn);
+    setTimeout(() => {
+        // Common fields
+        const dateParts = entry.date.split("/");
+        if (dateParts.length === 3) {
+            const month = dateParts[0].padStart(2, "0");
+            const day = dateParts[1].padStart(2, "0");
+            const year = dateParts[2];
+            document.getElementById(`${prefix}-date`).value = `${year}-${month}-${day}`;
+        }
+        document.getElementById(`${prefix}-shift`).value = entry.shift;
+        document.getElementById(`${prefix}-support`).value = entry.support;
+        document.getElementById(`${prefix}-portal`).value = entry.portal;
 
-					setTimeout(() => {
-						const dateParts = entry.date.split("/");
-						if (dateParts.length === 3) {
-							const month = dateParts[0].padStart(2, "0");
-							const day = dateParts[1].padStart(2, "0");
-							const year = dateParts[2];
-							document.getElementById(`${prefix}-date`).value = `${year}-${month}-${day}`;
-						}
-						document.getElementById(`${prefix}-shift`).value = entry.shift;
-						document.getElementById(`${prefix}-support`).value = entry.support;
-						document.getElementById(`${prefix}-portal`).value = entry.portal;
+        if (prefix === "moolah" || prefix === "store") {
+            document.getElementById(`${prefix}-storeName`).value = entry.store;
+            document.getElementById(`${prefix}-zipcode`).value = entry.zip;
+        } else {
+            document.getElementById(`${prefix}-store`).value = entry.store;
+            document.getElementById(`${prefix}-zip`).value = entry.zip;
+            document.getElementById(`${prefix}-contactPerson`).value = entry.contact;
+            document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
+            document.getElementById(`${prefix}-note`).value = entry.note || "";
 
-						if (prefix === "moolah" || prefix === "store") {
-							document.getElementById(`${prefix}-storeName`).value = entry.store;
-							document.getElementById(`${prefix}-zipcode`).value = entry.zip;
-						} else {
-							document.getElementById(`${prefix}-store`).value = entry.store;
-							document.getElementById(`${prefix}-zip`).value = entry.zip;
-							document.getElementById(`${prefix}-contactPerson`).value = entry.contact;
-							document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
-							document.getElementById(`${prefix}-note`).value = entry.note || "";
-						}
+            // ========== FIX: Restore ISSUE without any interference ==========
+            const issueField = document.getElementById("ticket-issue");
+            if (issueField) {
+                issueField.value = entry.issue || "";
+                autoGrow(issueField);
+                // Manually trigger preview update (without dispatching input event)
+                ticketUpdatePreview();
+            }
 
-						if (prefix === "moolah") {
-							document.getElementById("moolah-email").value = entry.moduleData?.email || "";
-							document.getElementById("moolah-password").value = entry.moduleData?.password || "";
-							document.getElementById("moolah-sku").value = entry.moduleData?.sku || "";
-							document.getElementById("moolah-noOfTabs").value = entry.moduleData?.noOfTabs || "";
-							document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
-							document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
-							document.getElementById("moolah-city").value = entry.moduleData?.city || "";
-							document.getElementById("moolah-state").value = entry.moduleData?.state || "";
-							document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
-							document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
-							if (entry.issue) {
-								window._moolahCurrentIssue = entry.issue;
-								if (typeof syncMoolahButtonsFromIssueText === "function") syncMoolahButtonsFromIssueText(entry.issue);
-								document.getElementById("moolah-generated-issue").innerText = entry.issue;
-							}
-						} else if (prefix === "store") {
-							document.getElementById("store-agent").value = entry.moduleData?.agent || "";
-							document.getElementById("store-email").value = entry.moduleData?.email || "";
-							document.getElementById("store-password").value = entry.moduleData?.password || "";
-							document.getElementById("store-sku").value = entry.moduleData?.sku || "";
-							document.getElementById("store-database").value = entry.moduleData?.database || "";
-							document.getElementById("store-noOfReg").value = entry.moduleData?.noOfReg || "";
-							document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
-							document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
-							document.getElementById("store-city").value = entry.moduleData?.city || "";
-							document.getElementById("store-state").value = entry.moduleData?.state || "";
-							document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
-							document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
-							if (entry.issue) {
-								window._storeCurrentIssue = entry.issue;
-								if (typeof syncStoreButtonsFromIssueText === "function") syncStoreButtonsFromIssueText(entry.issue);
-								document.getElementById("store-generated-issue").innerText = entry.issue;
-							}
-						} else {
-							// Set module without triggering dropdown
-							const moduleInput = document.getElementById("ticket-module-combobox");
-							const moduleHidden = document.getElementById("ticket-module");
-							if (moduleInput) {
-								moduleInput._skipNextInput = true;
-								moduleInput.value = entry.module || "";
-								setTimeout(() => {
-									delete moduleInput._skipNextInput;
-								}, 100);
-							}
-							if (moduleHidden) moduleHidden.value = entry.module || "";
-							const moduleLabel = document.getElementById("ticket-moduleDropdownLabel");
-							if (moduleLabel) moduleLabel.textContent = entry.module || "Select module";
+            // Module & Status comboboxes
+            const moduleInput = document.getElementById("ticket-module-combobox");
+            const moduleHidden = document.getElementById("ticket-module");
+            if (moduleInput) {
+                moduleInput._skipNextInput = true;
+                moduleInput.value = entry.module || "";
+                setTimeout(() => delete moduleInput._skipNextInput, 100);
+            }
+            if (moduleHidden) moduleHidden.value = entry.module || "";
 
-							// Set status without triggering dropdown
-							const statusInput = document.getElementById("ticket-status-combobox");
-							const statusHidden = document.getElementById("ticket-status");
-							if (statusInput) {
-								statusInput._skipNextInput = true;
-								statusInput.value = entry.status || "";
-								setTimeout(() => {
-									delete statusInput._skipNextInput;
-								}, 100);
-							}
-							if (statusHidden) statusHidden.value = entry.status || "";
-							const statusLabel = document.getElementById("ticket-statusDropdownLabel");
-							if (statusLabel) statusLabel.textContent = entry.status || "Select status";
-							document.getElementById("ticket-remarks").value = entry.remarks;
-							if (quillEditor && entry.troubleshooting) {
-								quillEditor.root.innerHTML = entry.troubleshooting;
-								document.getElementById("ticket-resolution").value = entry.troubleshooting;
-							}
-						}
+            const statusInput = document.getElementById("ticket-status-combobox");
+            const statusHidden = document.getElementById("ticket-status");
+            if (statusInput) {
+                statusInput._skipNextInput = true;
+                statusInput.value = entry.status || "";
+                setTimeout(() => delete statusInput._skipNextInput, 100);
+            }
+            if (statusHidden) statusHidden.value = entry.status || "";
 
-						const updatePreview = () => {
-							if (prefix === "moolah") moolahUpdatePreview();
-							else if (prefix === "store") storeUpdatePreview();
-							else updatePreviewWithEntry(entry);
-						};
-						updatePreview();
+            document.getElementById("ticket-remarks").value = entry.remarks || "";
 
-						document.querySelectorAll(`#tab-${prefix} input, #tab-${prefix} textarea, #tab-${prefix} select`).forEach((el) => {
-							el.dispatchEvent(new Event("input", { bubbles: true }));
-						});
+            if (quillEditor && entry.troubleshooting) {
+                quillEditor.root.innerHTML = entry.troubleshooting;
+                document.getElementById("ticket-resolution").value = entry.troubleshooting;
+            }
+        }
 
-						setTimeout(updatePreview, 100);
+        // For store/moolah (unchanged)
+        if (prefix === "moolah") {
+            document.getElementById("moolah-email").value = entry.moduleData?.email || "";
+            document.getElementById("moolah-password").value = entry.moduleData?.password || "";
+            document.getElementById("moolah-sku").value = entry.moduleData?.sku || "";
+            document.getElementById("moolah-noOfTabs").value = entry.moduleData?.noOfTabs || "";
+            document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
+            document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
+            document.getElementById("moolah-city").value = entry.moduleData?.city || "";
+            document.getElementById("moolah-state").value = entry.moduleData?.state || "";
+            document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
+            document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
+            if (entry.issue) {
+                window._moolahCurrentIssue = entry.issue;
+                document.getElementById("moolah-generated-issue").innerText = entry.issue;
+            }
+        } else if (prefix === "store") {
+            document.getElementById("store-agent").value = entry.moduleData?.agent || "";
+            document.getElementById("store-email").value = entry.moduleData?.email || "";
+            document.getElementById("store-password").value = entry.moduleData?.password || "";
+            document.getElementById("store-sku").value = entry.moduleData?.sku || "";
+            document.getElementById("store-database").value = entry.moduleData?.database || "";
+            document.getElementById("store-noOfReg").value = entry.moduleData?.noOfReg || "";
+            document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
+            document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
+            document.getElementById("store-city").value = entry.moduleData?.city || "";
+            document.getElementById("store-state").value = entry.moduleData?.state || "";
+            document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
+            document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
+            if (entry.issue) {
+                window._storeCurrentIssue = entry.issue;
+                document.getElementById("store-generated-issue").innerText = entry.issue;
+            }
+        }
 
-						editId = entry.id;
-						const addBtn = document.querySelector(`#tab-${prefix} .add`);
-						if (addBtn) {
-							addBtn.textContent = "EDIT ENTRY";
-							addBtn.classList.add("editing");
-						}
+        // Update preview (already called for ticket inside the condition)
+        if (prefix === "moolah") moolahUpdatePreview();
+        else if (prefix === "store") storeUpdatePreview();
+        // ticket preview already updated above
 
-						if (entry.imported) {
-							entry.imported = false;
-							saveAllEntries();
-						}
+        editId = entry.id;
+        const addBtn = document.querySelector(`#tab-${prefix} .add`);
+        if (addBtn) {
+            addBtn.textContent = "EDIT ENTRY";
+            addBtn.classList.add("editing");
+        }
 
-						document.querySelectorAll(`#tab-${prefix} textarea`).forEach((ta) => autoGrow(ta));
-						syncPreviewHeight();
-					}, 50);
-				}
+        if (entry.imported) {
+            entry.imported = false;
+            saveAllEntries();
+        }
+
+        // Dispatch input events for all fields EXCEPT the issue field
+        const allFields = document.querySelectorAll(`#tab-${prefix} input, #tab-${prefix} textarea, #tab-${prefix} select`);
+        allFields.forEach((el) => {
+            if (el.id !== "ticket-issue") {  // skip issue to avoid accidental clearing
+                el.dispatchEvent(new Event("input", { bubbles: true }));
+            }
+        });
+
+        document.querySelectorAll(`#tab-${prefix} textarea`).forEach((ta) => autoGrow(ta));
+        syncPreviewHeight();
+    }, 50);
+}
 
 				function softDeleteEntry(button) {
 					const row = button.closest("tr");
