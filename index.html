@@ -5620,9 +5620,9 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					});
 
 					document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach((el) => {
-						if (el.id === "ticket-issue" || el.id === "ticket-remarks" || el.id === "ticket-resolution" || el.id === "ticket-note" || el.id === "oldPassword" || el.id === "newPassword" || el.id === "confirmPassword") {
-							return;
-						}
+						// Skip combobox inputs
+						if (el.id === "ticket-module-combobox" || el.id === "ticket-status-combobox") return;
+
 						el.addEventListener("input", function () {
 							if (!this.value) return;
 							const start = this.selectionStart;
