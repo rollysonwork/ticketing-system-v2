@@ -3772,153 +3772,160 @@ ASSIGN STORE - DONE ✅`;
 				}
 
 				function editEntry(buttonOrId) {
-					let entryId, entry;
-					if (typeof buttonOrId === "object" && buttonOrId !== null) {
-						const id = buttonOrId.closest ? buttonOrId.closest("tr")?.dataset.id || buttonOrId.dataset.id : buttonOrId.dataset.id;
-						if (!id) return;
-						entryId = parseInt(id);
-					} else if (typeof buttonOrId === "number") {
-						entryId = buttonOrId;
-					} else {
-						return;
-					}
-					entry = allEntries.find((e) => e.id === entryId);
-					if (!entry) return;
+    let entryId, entry;
+    if (typeof buttonOrId === "object" && buttonOrId !== null) {
+        const id = buttonOrId.closest ? buttonOrId.closest("tr")?.dataset.id || buttonOrId.dataset.id : buttonOrId.dataset.id;
+        if (!id) return;
+        entryId = parseInt(id);
+    } else if (typeof buttonOrId === "number") {
+        entryId = buttonOrId;
+    } else {
+        return;
+    }
+    entry = allEntries.find((e) => e.id === entryId);
+    if (!entry) return;
 
-					let prefix = entry.source;
-					if (!prefix) {
-						if (entry.module === "Moolah") prefix = "moolah";
-						else if (entry.module === "Store Creation") prefix = "store";
-						else prefix = "ticket";
-					}
+    let prefix = entry.source;
+    if (!prefix) {
+        if (entry.module === "Moolah") prefix = "moolah";
+        else if (entry.module === "Store Creation") prefix = "store";
+        else prefix = "ticket";
+    }
 
-					const tabBtn = Array.from(document.querySelectorAll(".tab-button")).find((btn) => btn.textContent.trim().toLowerCase().includes(prefix));
-					if (tabBtn) switchTab(prefix, tabBtn);
+    const tabBtn = Array.from(document.querySelectorAll(".tab-button")).find((btn) => btn.textContent.trim().toLowerCase().includes(prefix));
+    if (tabBtn) switchTab(prefix, tabBtn);
 
-					setTimeout(() => {
-						// Common fields
-						const dateParts = entry.date.split("/");
-						if (dateParts.length === 3) {
-							const month = dateParts[0].padStart(2, "0");
-							const day = dateParts[1].padStart(2, "0");
-							const year = dateParts[2];
-							document.getElementById(`${prefix}-date`).value = `${year}-${month}-${day}`;
-						}
-						document.getElementById(`${prefix}-shift`).value = entry.shift;
-						document.getElementById(`${prefix}-support`).value = entry.support;
-						document.getElementById(`${prefix}-portal`).value = entry.portal;
+    setTimeout(() => {
+        // Common fields
+        const dateParts = entry.date.split("/");
+        if (dateParts.length === 3) {
+            const month = dateParts[0].padStart(2, "0");
+            const day = dateParts[1].padStart(2, "0");
+            const year = dateParts[2];
+            document.getElementById(`${prefix}-date`).value = `${year}-${month}-${day}`;
+        }
+        document.getElementById(`${prefix}-shift`).value = entry.shift;
+        document.getElementById(`${prefix}-support`).value = entry.support;
+        document.getElementById(`${prefix}-portal`).value = entry.portal;
 
-						if (prefix === "moolah" || prefix === "store") {
-							document.getElementById(`${prefix}-storeName`).value = entry.store;
-							document.getElementById(`${prefix}-zipcode`).value = entry.zip;
-						} else {
-							document.getElementById(`${prefix}-store`).value = entry.store;
-							document.getElementById(`${prefix}-zip`).value = entry.zip;
-							document.getElementById(`${prefix}-contactPerson`).value = entry.contact;
-							document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
-							document.getElementById(`${prefix}-note`).value = entry.note || "";
+        if (prefix === "moolah" || prefix === "store") {
+            document.getElementById(`${prefix}-storeName`).value = entry.store;
+            document.getElementById(`${prefix}-zipcode`).value = entry.zip;
+        } else {
+            document.getElementById(`${prefix}-store`).value = entry.store;
+            document.getElementById(`${prefix}-zip`).value = entry.zip;
+            document.getElementById(`${prefix}-contactPerson`).value = entry.contact;
+            document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
+            document.getElementById(`${prefix}-note`).value = entry.note || "";
 
-							// ========== FIX: Restore ISSUE without any interference ==========
-							const issueField = document.getElementById("ticket-issue");
-							if (issueField) {
-								issueField.value = entry.issue || "";
-								autoGrow(issueField);
-								// Manually trigger preview update (without dispatching input event)
-								ticketUpdatePreview();
-							}
+            // Restore ISSUE without interference
+            const issueField = document.getElementById("ticket-issue");
+            if (issueField) {
+                issueField.value = entry.issue || "";
+                autoGrow(issueField);
+                ticketUpdatePreview();
+            }
 
-							// Module & Status comboboxes
-							const moduleInput = document.getElementById("ticket-module-combobox");
-							const moduleHidden = document.getElementById("ticket-module");
-							if (moduleInput) {
-								moduleInput._skipNextInput = true;
-								moduleInput.value = entry.module || "";
-								setTimeout(() => delete moduleInput._skipNextInput, 100);
-							}
-							if (moduleHidden) moduleHidden.value = entry.module || "";
+            // Module & Status comboboxes
+            const moduleInput = document.getElementById("ticket-module-combobox");
+            const moduleHidden = document.getElementById("ticket-module");
+            if (moduleInput) {
+                moduleInput._skipNextInput = true;
+                moduleInput.value = entry.module || "";
+                setTimeout(() => delete moduleInput._skipNextInput, 100);
+            }
+            if (moduleHidden) moduleHidden.value = entry.module || "";
 
-							const statusInput = document.getElementById("ticket-status-combobox");
-							const statusHidden = document.getElementById("ticket-status");
-							if (statusInput) {
-								statusInput._skipNextInput = true;
-								statusInput.value = entry.status || "";
-								setTimeout(() => delete statusInput._skipNextInput, 100);
-							}
-							if (statusHidden) statusHidden.value = entry.status || "";
+            const statusInput = document.getElementById("ticket-status-combobox");
+            const statusHidden = document.getElementById("ticket-status");
+            if (statusInput) {
+                statusInput._skipNextInput = true;
+                statusInput.value = entry.status || "";
+                setTimeout(() => delete statusInput._skipNextInput, 100);
+            }
+            if (statusHidden) statusHidden.value = entry.status || "";
 
-							document.getElementById("ticket-remarks").value = entry.remarks || "";
+            document.getElementById("ticket-remarks").value = entry.remarks || "";
 
-							if (quillEditor && entry.troubleshooting) {
-								quillEditor.root.innerHTML = entry.troubleshooting;
-								document.getElementById("ticket-resolution").value = entry.troubleshooting;
-							}
-						}
+            if (quillEditor && entry.troubleshooting) {
+                quillEditor.root.innerHTML = entry.troubleshooting;
+                document.getElementById("ticket-resolution").value = entry.troubleshooting;
+            }
+        }
 
-						// For store/moolah (unchanged)
-						if (prefix === "moolah") {
-							document.getElementById("moolah-email").value = entry.moduleData?.email || "";
-							document.getElementById("moolah-password").value = entry.moduleData?.password || "";
-							document.getElementById("moolah-sku").value = entry.moduleData?.sku || "";
-							document.getElementById("moolah-noOfTabs").value = entry.moduleData?.noOfTabs || "";
-							document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
-							document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
-							document.getElementById("moolah-city").value = entry.moduleData?.city || "";
-							document.getElementById("moolah-state").value = entry.moduleData?.state || "";
-							document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
-							document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
-							if (entry.issue) {
-								window._moolahCurrentIssue = entry.issue;
-								document.getElementById("moolah-generated-issue").innerText = entry.issue;
-							}
-						} else if (prefix === "store") {
-							document.getElementById("store-agent").value = entry.moduleData?.agent || "";
-							document.getElementById("store-email").value = entry.moduleData?.email || "";
-							document.getElementById("store-password").value = entry.moduleData?.password || "";
-							document.getElementById("store-sku").value = entry.moduleData?.sku || "";
-							document.getElementById("store-database").value = entry.moduleData?.database || "";
-							document.getElementById("store-noOfReg").value = entry.moduleData?.noOfReg || "";
-							document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
-							document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
-							document.getElementById("store-city").value = entry.moduleData?.city || "";
-							document.getElementById("store-state").value = entry.moduleData?.state || "";
-							document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
-							document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
-							if (entry.issue) {
-								window._storeCurrentIssue = entry.issue;
-								document.getElementById("store-generated-issue").innerText = entry.issue;
-							}
-						}
+        // For moolah
+        if (prefix === "moolah") {
+            document.getElementById("moolah-email").value = entry.moduleData?.email || "";
+            document.getElementById("moolah-password").value = entry.moduleData?.password || "";
+            document.getElementById("moolah-sku").value = entry.moduleData?.sku || "";
+            document.getElementById("moolah-noOfTabs").value = entry.moduleData?.noOfTabs || "";
+            document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
+            document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
+            document.getElementById("moolah-city").value = entry.moduleData?.city || "";
+            document.getElementById("moolah-state").value = entry.moduleData?.state || "";
+            document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
+            document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
+            if (entry.issue) {
+                window._moolahCurrentIssue = entry.issue;
+                document.getElementById("moolah-generated-issue").innerText = entry.issue;
+            }
+        }
+        // For store
+        else if (prefix === "store") {
+            document.getElementById("store-agent").value = entry.moduleData?.agent || "";
+            document.getElementById("store-email").value = entry.moduleData?.email || "";
+            document.getElementById("store-password").value = entry.moduleData?.password || "";
+            document.getElementById("store-sku").value = entry.moduleData?.sku || "";
+            document.getElementById("store-database").value = entry.moduleData?.database || "";
+            document.getElementById("store-noOfReg").value = entry.moduleData?.noOfReg || "";
+            document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
+            document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
+            document.getElementById("store-city").value = entry.moduleData?.city || "";
+            document.getElementById("store-state").value = entry.moduleData?.state || "";
+            document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
+            document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
+            if (entry.issue) {
+                window._storeCurrentIssue = entry.issue;
+                document.getElementById("store-generated-issue").innerText = entry.issue;
+            }
+        }
 
-						// Update preview (already called for ticket inside the condition)
-						if (prefix === "moolah") moolahUpdatePreview();
-						else if (prefix === "store") storeUpdatePreview();
-						// ticket preview already updated above
+        // Update previews
+        if (prefix === "moolah") moolahUpdatePreview();
+        else if (prefix === "store") storeUpdatePreview();
+        else {
+            ticketUpdatePreview();
+            // FIX: Update resolution preview from the entry's resolution
+            const resolutionPreview = document.getElementById("ticket-previewResolution");
+            if (resolutionPreview) {
+                resolutionPreview.innerHTML = formatMultilinePreview(entry.resolution || "");
+            }
+        }
 
-						editId = entry.id;
-						const addBtn = document.querySelector(`#tab-${prefix} .add`);
-						if (addBtn) {
-							addBtn.textContent = "EDIT ENTRY";
-							addBtn.classList.add("editing");
-						}
+        editId = entry.id;
+        const addBtn = document.querySelector(`#tab-${prefix} .add`);
+        if (addBtn) {
+            addBtn.textContent = "EDIT ENTRY";
+            addBtn.classList.add("editing");
+        }
 
-						if (entry.imported) {
-							entry.imported = false;
-							saveAllEntries();
-						}
+        if (entry.imported) {
+            entry.imported = false;
+            saveAllEntries();
+        }
 
-						// Dispatch input events for all fields EXCEPT the issue field
-						const allFields = document.querySelectorAll(`#tab-${prefix} input, #tab-${prefix} textarea, #tab-${prefix} select`);
-						allFields.forEach((el) => {
-							if (el.id !== "ticket-issue") {
-								// skip issue to avoid accidental clearing
-								el.dispatchEvent(new Event("input", { bubbles: true }));
-							}
-						});
+        // Dispatch input events for all fields EXCEPT the issue field
+        const allFields = document.querySelectorAll(`#tab-${prefix} input, #tab-${prefix} textarea, #tab-${prefix} select`);
+        allFields.forEach((el) => {
+            if (el.id !== "ticket-issue") {
+                el.dispatchEvent(new Event("input", { bubbles: true }));
+            }
+        });
 
-						document.querySelectorAll(`#tab-${prefix} textarea`).forEach((ta) => autoGrow(ta));
-						syncPreviewHeight();
-					}, 50);
-				}
+        document.querySelectorAll(`#tab-${prefix} textarea`).forEach((ta) => autoGrow(ta));
+        syncPreviewHeight();
+    }, 50);
+}
 
 				function softDeleteEntry(button) {
 					const row = button.closest("tr");
