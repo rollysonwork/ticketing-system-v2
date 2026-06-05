@@ -3400,14 +3400,14 @@ ASSIGN STORE - DONE ✅`;
 					}
 
 					if (prefix === "store") {
-						["address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"].forEach((id) => {
+						["portal", "storeName", "zipcode", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"].forEach((id) => {
 							const el = document.getElementById(`store-${id}`);
 							if (el) el.value = "";
 						});
 						storeUpdatePreview();
 						saveFormData("store");
 					} else if (prefix === "moolah") {
-						["address1", "address2", "city", "state", "email", "password", "sku", "noOfTabs", "mokiId", "anydeskId"].forEach((id) => {
+						["portal", "storeName", "zipcode", "address1", "address2", "city", "state", "email", "password", "sku", "noOfTabs", "mokiId", "anydeskId"].forEach((id) => {
 							const el = document.getElementById(`moolah-${id}`);
 							if (el) el.value = "";
 						});
