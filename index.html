@@ -1294,9 +1294,10 @@
 			<div class="main-content">
 				<div class="tab-container">
 					<div class="tab-buttons">
-						<button class="tab-button active" onclick="switchTab('ticket', this)"><i class="icon-custom icon-ticket"></i> TICKET CREATION</button>
-						<button class="tab-button" onclick="switchTab('store', this)"><i class="icon-custom icon-retailz"></i> STORE CREATION</button>
-						<button class="tab-button" onclick="switchTab('moolah', this)"><i class="icon-custom icon-moolah"></i> MOOLAH CREATION</button>
+						<button class="tab-button active" data-tab="ticket" onclick="switchTab('ticket', this)"><i class="icon-custom icon-ticket"></i> TICKET CREATION</button>
+						<button class="tab-button" data-tab="store" onclick="switchTab('store', this)"><i class="icon-custom icon-retailz"></i> STORE CREATION</button>
+						<button class="tab-button" data-tab="moolah" onclick="switchTab('moolah', this)"><i class="icon-custom icon-moolah"></i> MOOLAH CREATION</button>
+						<button class="tab-button" data-tab="ecommerce" onclick="switchTab('ecommerce', this)"><i class="bi bi-cart-fill"></i> E‑COMMERCE</button>
 					</div>
 				</div>
 
@@ -1905,7 +1906,92 @@
 						</div>
 					</div>
 				</div>
+				<div id="tab-ecommerce" class="tab-content">
+					<div class="three-panels">
+						<!-- History panel (same as others) -->
+						<div class="history-panel">
+							<div class="sidebar-header">
+								<h3><i class="bi bi-ticket-detailed-fill"></i> TICKET HISTORY</h3>
+							</div>
+							<div id="ecommerceHistoryContent" class="history-content"></div>
+						</div>
 
+						<!-- Left panel: form -->
+						<div class="left-panel">
+							<h3>📋 E‑COMMERCE FORM</h3>
+							<div class="search-section">
+								<div class="search-header">STORE SEARCH</div>
+								<div class="search-input-wrapper">
+									<input type="text" id="ecommerce-storeSearch" autocomplete="off" placeholder="SEARCH STORE..." />
+								</div>
+								<div id="ecommerce-searchResults" class="search-results"></div>
+								<div id="ecommerce-loadStatus" class="load-status"></div>
+							</div>
+							<table>
+								<tr>
+									<th>DATE</th>
+									<td><input type="date" id="ecommerce-date" readonly /></td>
+								</tr>
+								<tr>
+									<th>SHIFT SCHEDULE</th>
+									<td>
+										<select id="ecommerce-shift">
+											<option value="">-- SELECT --</option>
+											<option value="6PM - 5AM">6PM - 5AM</option>
+											<option value="9PM - 8AM">9PM - 8AM</option>
+											<option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>SUPPORT NAME</th>
+									<td><input type="text" id="ecommerce-support" readonly /></td>
+								</tr>
+								<tr>
+									<th>PORTAL NUMBER *</th>
+									<td><input type="text" id="ecommerce-portal" class="required-field" /></td>
+								</tr>
+								<tr>
+									<th>STORE NAME *</th>
+									<td><input type="text" id="ecommerce-storeName" class="required-field" /></td>
+								</tr>
+								<tr>
+									<th>ZIP CODE *</th>
+									<td><input type="text" id="ecommerce-zipcode" maxlength="5" class="required-field" /></td>
+								</tr>
+								<tr>
+									<th>API</th>
+									<td>
+										<div class="combobox-wrapper">
+											<input type="text" id="ecommerce-api-combobox" class="combobox-input" autocomplete="off" placeholder="Type or select API" />
+											<input type="hidden" id="ecommerce-api" />
+											<div id="ecommerce-api-suggestions" class="combobox-suggestions"></div>
+										</div>
+									</td>
+								</tr>
+							</table>
+							<div class="button-row">
+								<button class="add" onclick="addEntry('ecommerce')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
+								<button class="form-clear-btn" onclick="clearFormOnly('ecommerce')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
+								<button class="clock" onclick="clock('IN', 'ecommerce')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
+								<button class="clock" onclick="clock('OUT', 'ecommerce')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
+							</div>
+						</div>
+
+						<!-- Right panel: preview -->
+						<div class="right-panel" id="ecommerce-previewPanel">
+							<h3>🔍 PREVIEW</h3>
+							<div><strong>STORE NAME:</strong> <span id="ecommerce-preview-storeName"></span></div>
+							<div><strong>ZIPCODE:</strong> <span id="ecommerce-preview-zipcode"></span></div>
+							<div><strong>PORTAL:</strong> <span id="ecommerce-preview-portal"></span></div>
+							<br />
+							<div><strong>API:</strong> <span id="ecommerce-preview-api"></span></div>
+							<div><strong>LINK:</strong> <span id="ecommerce-preview-link"></span></div>
+							<div><strong>USERNAME:</strong> <span id="ecommerce-preview-username"></span></div>
+							<div><strong>PASSWORD:</strong> <span id="ecommerce-preview-password"></span></div>
+						</div>
+					</div>
+				</div>
 				<div class="bulk-bar">
 					<label><input type="checkbox" id="selectAllCheckbox" /> Select All</label>
 					<button id="bulkDeleteBtn" title="Remove selected rows (only from main table)"><i class="bi bi-trash-fill"></i> REMOVE</button>
@@ -2088,7 +2174,7 @@
 						showNotification("API key removed.");
 						storeData = [];
 						clearSearchResults();
-						["ticket", "store", "moolah"].forEach((prefix) => {
+						["ticket", "store", "moolah", "ecommerce"].forEach((prefix) => {
 							const statusEl = document.getElementById(`${prefix}-loadStatus`);
 							if (statusEl) statusEl.innerHTML = '<span class="error">⚠️ API key not set. Click SET SHEETS KEY in bulk bar.</span>';
 						});
@@ -2117,8 +2203,8 @@
 				let undoStack = [];
 				let redoStack = [];
 
-				const filteredResults = { moolah: [], store: [], ticket: [] };
-				const selectedIndex = { moolah: -1, store: -1, ticket: -1 };
+				const filteredResults = { moolah: [], store: [], ticket: [], ecommerce: [] };
+				const selectedIndex = { moolah: -1, store: -1, ticket: -1, ecommerce: -1 };
 
 				let quillEditor = null;
 
@@ -2587,16 +2673,21 @@
 				}
 
 				function clearSearchResults() {
-					["ticket", "store", "moolah"].forEach((prefix) => {
-						document.getElementById(`${prefix}-storeSearch`).value = "";
-						document.getElementById(`${prefix}-searchResults`).innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
+					// Add 'ecommerce' to the array
+					["ticket", "store", "moolah", "ecommerce"].forEach((prefix) => {
+						const searchInput = document.getElementById(`${prefix}-storeSearch`);
+						const resultsDiv = document.getElementById(`${prefix}-searchResults`);
+						if (searchInput) searchInput.value = "";
+						if (resultsDiv) resultsDiv.innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
 					});
 					filteredResults.moolah = [];
 					filteredResults.store = [];
 					filteredResults.ticket = [];
+					filteredResults.ecommerce = []; // add this line
 					selectedIndex.moolah = -1;
 					selectedIndex.store = -1;
 					selectedIndex.ticket = -1;
+					selectedIndex.ecommerce = -1; // add this line
 					syncPreviewHeight();
 				}
 
@@ -2678,6 +2769,12 @@
 						document.getElementById("ticket-zip").value = store.zipCode;
 						ticketUpdatePreview();
 						saveFormData("ticket");
+					} else if (prefix === "ecommerce") {
+						document.getElementById("ecommerce-portal").value = store.portal;
+						document.getElementById("ecommerce-storeName").value = store.storeName;
+						document.getElementById("ecommerce-zipcode").value = store.zipCode;
+						ecommerceUpdatePreview();
+						saveFormData("ecommerce");
 					}
 
 					document.getElementById(`${prefix}-storeSearch`).value = "";
@@ -2740,6 +2837,7 @@
 						moolah: ["shift", "support", "portal", "storeName", "zipcode", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"],
 						store: ["shift", "support", "portal", "storeName", "zipcode", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"],
 						ticket: ["shift", "support", "portal", "store", "zip", "contactPerson", "contactNumber", "module", "issue", "escalated", "status", "remarks", "resolution", "note"],
+						ecommerce: ["shift", "support", "portal", "storeName", "zipcode", "api"],
 					};
 					const formData = {};
 					fields[prefix].forEach((id) => {
@@ -2780,6 +2878,10 @@
 					document.getElementById("moolah-shift").value = ticketShift;
 					document.getElementById("moolah-support").value = ticketSupport;
 					document.getElementById("moolah-date").value = ticketDate;
+
+					document.getElementById("ecommerce-shift").value = ticketShift;
+					document.getElementById("ecommerce-support").value = ticketSupport;
+					document.getElementById("ecommerce-date").value = ticketDate;
 
 					storeUpdatePreview();
 					moolahUpdatePreview();
@@ -2862,6 +2964,146 @@
 					document.getElementById("moolah-preview-stateFull").textContent = fullState;
 					document.getElementById("moolah-preview-timezoneLine").textContent = tzLabel;
 
+					syncPreviewHeight();
+				}
+
+				const ECOMMERCE_API_OPTIONS = ["LILU", "Go To Liquor", "Drizli", "Moolah", "SoCommerce", "Doordash", "City Hive", "Uber Eats", "Instacart", "Gruhhub"];
+
+				function ecommerceUpdatePreview() {
+					const portal = document.getElementById("ecommerce-portal").value.trim();
+					let storeName = document.getElementById("ecommerce-storeName").value.trim();
+					const zipcode = document.getElementById("ecommerce-zipcode").value.trim();
+					const api = document.getElementById("ecommerce-api").value.trim();
+
+					document.getElementById("ecommerce-preview-storeName").textContent = storeName || "";
+					document.getElementById("ecommerce-preview-zipcode").textContent = zipcode || "";
+					document.getElementById("ecommerce-preview-portal").textContent = portal || "";
+					document.getElementById("ecommerce-preview-api").textContent = api || "";
+
+					const link = portal ? `https://console${portal}.retailzpos.com/` : "https://console[PORTAL].retailzpos.com/";
+					document.getElementById("ecommerce-preview-link").textContent = link;
+
+					// Format storeName: remove spaces, then propercase each word
+					let formattedStoreName = "";
+					if (storeName) {
+						// Split by spaces, filter out empty strings
+						const words = storeName.split(/\s+/).filter((w) => w.length > 0);
+						const properWords = words.map((word) => {
+							if (word.length === 0) return "";
+							return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+						});
+						formattedStoreName = properWords.join("");
+					}
+
+					// Generate username: formattedStoreName + zipcode + "_" + api
+					const derivedUsername = formattedStoreName && zipcode && api ? `${formattedStoreName}${zipcode}_${api}` : "";
+					document.getElementById("ecommerce-preview-username").textContent = derivedUsername;
+
+					// Fixed password
+					document.getElementById("ecommerce-preview-password").textContent = "P@$$w0rd123";
+				}
+
+				async function addEntryEcommerce() {
+					const portalEl = document.getElementById("ecommerce-portal");
+					const storeNameEl = document.getElementById("ecommerce-storeName");
+					const zipcodeEl = document.getElementById("ecommerce-zipcode");
+					let valid = true;
+					[portalEl, storeNameEl, zipcodeEl].forEach((el) => {
+						el.classList.remove("invalid");
+						if (!el.value.trim()) {
+							el.classList.add("invalid");
+							valid = false;
+						}
+					});
+					if (!valid) {
+						showNotification("Please fill PORTAL, STORE NAME, and ZIP CODE!");
+						return;
+					}
+
+					pushUndo();
+
+					const dateStr = document.getElementById("ecommerce-date").value;
+					const formattedDate = dateStr ? new Date(dateStr).toLocaleDateString("en-US") : storeGetFormattedDateMinusOne();
+					const shift = document.getElementById("ecommerce-shift").value;
+					const support = document.getElementById("ecommerce-support").value.toUpperCase();
+					const portal = portalEl.value.trim();
+					const storeName = storeNameEl.value.trim();
+					const zipcode = zipcodeEl.value.trim();
+					const api = document.getElementById("ecommerce-api").value.trim();
+
+					// Generate username automatically
+					const derivedUsername = storeName && zipcode && api ? `${storeName}${zipcode}_${api}` : "";
+					const defaultPassword = "P@$$w0rd123";
+
+					const moduleData = { api, username: derivedUsername, password: defaultPassword };
+					const issueText = api ? `Wants to integrate ${api}` : "Wants to integrate E‑Commerce";
+
+					if (editId && allEntries.find((e) => e.id === editId && e.source === "ecommerce")) {
+						const index = allEntries.findIndex((e) => e.id === editId);
+						if (index !== -1) {
+							allEntries[index] = {
+								...allEntries[index],
+								date: formattedDate,
+								shift: shift,
+								support: support,
+								portal: portal,
+								store: storeName,
+								zip: zipcode,
+								issue: issueText,
+								module: "E‑Commerce",
+								status: "OTHER TASK",
+								moduleData: moduleData,
+								source: "ecommerce",
+								deleted: false,
+								imported: false,
+							};
+							showNotification("E‑Commerce entry updated!");
+							editId = null;
+							const addBtn = document.querySelector("#tab-ecommerce .add");
+							if (addBtn) {
+								addBtn.textContent = "ADD ENTRY";
+								addBtn.classList.remove("editing");
+							}
+						}
+					} else {
+						const newEntry = {
+							id: Date.now(),
+							date: formattedDate,
+							shift: shift,
+							support: support,
+							portal: portal,
+							store: storeName,
+							zip: zipcode,
+							contact: "",
+							contactNumber: "",
+							module: "E‑Commerce",
+							issue: issueText,
+							note: "",
+							escalated: "",
+							status: "OTHER TASK",
+							remarks: "",
+							troubleshooting: "",
+							resolution: "",
+							moduleData: moduleData,
+							source: "ecommerce",
+							deleted: false,
+							imported: false,
+						};
+						allEntries.unshift(newEntry);
+						showNotification("E‑Commerce entry added!");
+					}
+
+					// Clear only the remaining form fields (no username/password inputs anymore)
+					["portal", "storeName", "zipcode", "api"].forEach((id) => {
+						const el = document.getElementById(`ecommerce-${id}`);
+						if (el) el.value = "";
+					});
+					ecommerceUpdatePreview();
+					saveFormData("ecommerce");
+					saveAllEntries();
+					updateStatusCounters();
+					renderTable();
+					renderSidebar();
 					syncPreviewHeight();
 				}
 
@@ -3065,6 +3307,11 @@
 				}
 
 				async function addEntry(prefix) {
+					if (prefix === "ecommerce") {
+						await addEntryEcommerce();
+						return;
+					}
+
 					if (prefix !== "ticket") {
 						await addEntryLegacy(prefix);
 						return;
@@ -3479,7 +3726,7 @@ ASSIGN STORE - DONE ✅`;
 				}
 
 				function clearFormOnly(prefix) {
-					clearFormFields(prefix);
+					clearFormFields(prefix); // now handles ecommerce as well
 					if (editId) {
 						editId = null;
 						document.querySelector("#tab-moolah .add").textContent = "ADD ENTRY";
@@ -3488,6 +3735,28 @@ ASSIGN STORE - DONE ✅`;
 						document.querySelector("#tab-store .add").classList.remove("editing");
 						document.querySelector("#tab-ticket .add").textContent = "ADD ENTRY";
 						document.querySelector("#tab-ticket .add").classList.remove("editing");
+						// Also reset ecommerce add button if needed
+						const ecommerceAddBtn = document.querySelector("#tab-ecommerce .add");
+						if (ecommerceAddBtn) {
+							ecommerceAddBtn.textContent = "ADD ENTRY";
+							ecommerceAddBtn.classList.remove("editing");
+						}
+					} else if (prefix === "ecommerce") {
+						// Clear all input fields (including combobox)
+						const fields = ["portal", "storeName", "zipcode"];
+						fields.forEach((id) => {
+							const el = document.getElementById(`ecommerce-${id}`);
+							if (el) el.value = "";
+						});
+						// Clear API combobox (both visible and hidden)
+						const apiCombobox = document.getElementById("ecommerce-api-combobox");
+						const apiHidden = document.getElementById("ecommerce-api");
+						if (apiCombobox) apiCombobox.value = "";
+						if (apiHidden) apiHidden.value = "";
+
+						// Update preview and save cleared state
+						ecommerceUpdatePreview();
+						saveFormData("ecommerce");
 					}
 					showNotification("Form cleared!");
 					syncPreviewHeight();
@@ -3780,7 +4049,12 @@ ASSIGN STORE - DONE ✅`;
 				}
 
 				function renderSidebar() {
-					const containers = [document.getElementById("ticketHistoryContent"), document.getElementById("storeHistoryContent"), document.getElementById("moolahHistoryContent")].filter((c) => c);
+					const containers = [
+						document.getElementById("ticketHistoryContent"),
+						document.getElementById("storeHistoryContent"),
+						document.getElementById("moolahHistoryContent"),
+						document.getElementById("ecommerceHistoryContent"), // add this line
+					].filter((c) => c);
 
 					if (containers.length === 0) return;
 
@@ -5001,6 +5275,8 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					document.getElementById("store-support").readOnly = true;
 					document.getElementById("moolah-support").value = supportName;
 					document.getElementById("moolah-support").readOnly = true;
+					document.getElementById("ecommerce-support").value = supportName;
+					document.getElementById("ecommerce-support").readOnly = true;
 
 					syncShiftSupportFromTicket();
 				}
@@ -5523,30 +5799,36 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					document.getElementById("moolah-date").value = todayEST;
 					document.getElementById("store-date").value = todayEST;
 					document.getElementById("ticket-date").value = todayEST;
+					document.getElementById("ecommerce-date").value = todayEST;
 
 					const savedTab = localStorage.getItem("activeTab") || "ticket";
-					const tabButton = Array.from(document.querySelectorAll(".tab-button")).find((btn) => btn.textContent.trim().toLowerCase().includes(savedTab));
-					if (tabButton) switchTab(savedTab, tabButton);
+					const tabButton = document.querySelector(`.tab-button[data-tab="${savedTab}"]`);
+					if (tabButton) {
+						switchTab(savedTab, tabButton);
+					} else {
+						// fallback to ticket if something goes wrong
+						const defaultBtn = document.querySelector('.tab-button[data-tab="ticket"]');
+						if (defaultBtn) switchTab("ticket", defaultBtn);
+					}
 
 					loadFormData("moolah");
 					loadFormData("store");
 					loadFormData("ticket");
 
 					autoFillSupportName(currentUser.support);
-					syncShiftSupportFromTicket();
 					loadAllEntries();
 					updateStatusCounters();
 					archiveOldEntries();
 					saveAllEntries();
 
-					["moolah", "store", "ticket"].forEach((prefix) => {
+					["moolah", "store", "ticket", "ecommerce"].forEach((prefix) => {
 						setupSearchKeyboard(prefix);
 					});
 
 					if (getGoogleApiKey()) {
 						setTimeout(loadSheetData, 500);
 					} else {
-						["ticket", "store", "moolah"].forEach((prefix) => {
+						["ticket", "store", "moolah", "ecommerce"].forEach((prefix) => {
 							const statusEl = document.getElementById(`${prefix}-loadStatus`);
 							if (statusEl) statusEl.innerHTML = '<span class="error">⚠️ API key not set. Click SET SHEETS KEY in bulk bar.</span>';
 						});
@@ -5621,6 +5903,14 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						saveFormData("ticket");
 						ticketUpdatePreview();
 					});
+
+					document.getElementById("ecommerce-shift")?.addEventListener("change", () => saveFormData("ecommerce"));
+					saveFormData("ecommerce");
+					ticketUpdatePreview();
+					document.getElementById("ecommerce-support")?.addEventListener("input", () => saveFormData("ecommerce"));
+					saveFormData("ecommerce");
+					ticketUpdatePreview();
+
 					document.getElementById("ticket-shift").addEventListener("change", () => saveFormData("ticket"));
 
 					document.getElementById("ticket-date").addEventListener("change", syncShiftSupportFromTicket);
@@ -6037,6 +6327,22 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					const originalLogout = logoutProfileBtn.onclick;
 					logoutProfileBtn.addEventListener("click", () => {
 						stopCounterRefresh();
+					});
+
+					initCombobox("ecommerce-api-combobox", "ecommerce-api", ECOMMERCE_API_OPTIONS, "ecommerce-api-suggestions", () => {
+						ecommerceUpdatePreview();
+						saveFormData("ecommerce");
+					});
+
+					const ecommerceFields = ["portal", "storeName", "zipcode", "api"];
+					ecommerceFields.forEach((id) => {
+						const el = document.getElementById(`ecommerce-${id}`);
+						if (el) {
+							el.addEventListener("input", () => {
+								ecommerceUpdatePreview();
+								saveFormData("ecommerce");
+							});
+						}
 					});
 				}
 
