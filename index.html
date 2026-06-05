@@ -1507,8 +1507,11 @@
 										<select id="store-shift" disabled>
 											<option value="">-- SELECT --</option>
 											<option value="6PM - 5AM">6PM - 5AM</option>
+											<option value="9PM - 6AM">9PM - 6AM</option>
 											<option value="9PM - 8AM">9PM - 8AM</option>
+											<option value="11PM - 10AM">11PM - 10AM</option>
 											<option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option>
+											<option value="12AM - 11AM">12AM - 11AM</option>
 										</select>
 									</td>
 								</tr>
@@ -1731,8 +1734,11 @@
 										<select id="moolah-shift" disabled>
 											<option value="">-- SELECT --</option>
 											<option value="6PM - 5AM">6PM - 5AM</option>
+											<option value="9PM - 6AM">9PM - 6AM</option>
 											<option value="9PM - 8AM">9PM - 8AM</option>
+											<option value="11PM - 10AM">11PM - 10AM</option>
 											<option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option>
+											<option value="12AM - 11AM">12AM - 11AM</option>
 										</select>
 									</td>
 								</tr>
@@ -1935,11 +1941,14 @@
 								<tr>
 									<th>SHIFT SCHEDULE</th>
 									<td>
-										<select id="ecommerce-shift">
+										<select id="ecommerce-shift" disabled>
 											<option value="">-- SELECT --</option>
 											<option value="6PM - 5AM">6PM - 5AM</option>
+											<option value="9PM - 6AM">9PM - 6AM</option>
 											<option value="9PM - 8AM">9PM - 8AM</option>
+											<option value="11PM - 10AM">11PM - 10AM</option>
 											<option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option>
+											<option value="12AM - 11AM">12AM - 11AM</option>
 										</select>
 									</td>
 								</tr>
@@ -5814,6 +5823,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					loadFormData("moolah");
 					loadFormData("store");
 					loadFormData("ticket");
+					loadFormData("ecommerce");
 
 					autoFillSupportName(currentUser.support);
 					loadAllEntries();
