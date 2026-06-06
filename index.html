@@ -1380,7 +1380,7 @@
 									<th><label for="ticket-module">MODULE</label></th>
 									<td>
 										<div class="combobox-wrapper">
-											<input type="text" id="ticket-module-combobox" class="combobox-input" autocomplete="off" placeholder="Type or select module" />
+											<input type="text" id="ticket-module-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select module" />
 											<input type="hidden" id="ticket-module" />
 											<div id="ticket-module-suggestions" class="combobox-suggestions"></div>
 										</div>
@@ -4556,7 +4556,6 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 
 					navigator.clipboard.writeText(csvContent).then(() => showNotification(`Copied ${selectedRows.length} rows (newest last, no headers)`));
 				}
-
 
 				function exportToCSV() {
 					const visibleEntries = getVisibleEntries();
