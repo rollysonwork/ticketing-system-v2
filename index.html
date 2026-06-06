@@ -1380,7 +1380,7 @@
 									<th><label for="ticket-module">MODULE</label></th>
 									<td>
 										<div class="combobox-wrapper">
-											<input type="text" id="ticket-module-combobox" class="combobox-input" autocomplete="off" placeholder="Type or select module" />
+											<input type="text" id="ticket-module-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select module" />
 											<input type="hidden" id="ticket-module" />
 											<div id="ticket-module-suggestions" class="combobox-suggestions"></div>
 										</div>
@@ -1400,7 +1400,7 @@
 									<th><label for="ticket-status">STATUS</label></th>
 									<td>
 										<div class="combobox-wrapper">
-											<input type="text" id="ticket-status-combobox" class="combobox-input" autocomplete="off" placeholder="Type or select status" />
+											<input type="text" id="ticket-status-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select status" />
 											<input type="hidden" id="ticket-status" />
 											<div id="ticket-status-suggestions" class="combobox-suggestions"></div>
 										</div>
@@ -1977,7 +1977,7 @@
 									<th>API</th>
 									<td>
 										<div class="combobox-wrapper">
-											<input type="text" id="ecommerce-api-combobox" class="combobox-input" autocomplete="off" placeholder="Type or select API" />
+											<input t<input type="text" id="ecommerce-api-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select API" />t" autocomplete="off" placeholder="Type or select API" />
 											<input type="hidden" id="ecommerce-api" />
 											<div id="ecommerce-api-suggestions" class="combobox-suggestions"></div>
 										</div>
@@ -5921,23 +5921,24 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 							});
 					});
 
-					// Exclude ISSUE, ESCALATED, REMARKS, NOTE from uppercase conversion
-					const excludeIds = "#ticket-issue, #ticket-escalated, #ticket-remarks, #ticket-note, #ticket-module-combobox, #ticket-status-combobox";
-					document.querySelectorAll(`input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase):not(${excludeIds}), textarea:not(.no-uppercase):not(${excludeIds})`).forEach((el) => {
-						// Skip combobox inputs
-						if (el.id === "ticket-module-combobox" || el.id === "ticket-status-combobox") return;
+					// Apply uppercase conversion only to inputs/textarea that do NOT have the .no-uppercase class
+document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach((el) => {
+    // Skip hidden inputs (they cause setSelectionRange errors)
+    if (el.type === 'hidden') return;
 
-						el.addEventListener("input", function () {
-							if (!this.value) return;
-							const start = this.selectionStart;
-							const end = this.selectionEnd;
-							this.value = this.value.toUpperCase();
-							this.setSelectionRange(start, end);
-						});
-						el.addEventListener("blur", function () {
-							if (this.value) this.value = this.value.toUpperCase();
-						});
-					});
+    el.addEventListener("input", function () {
+        if (!this.value) return;
+        const start = this.selectionStart;
+        const end = this.selectionEnd;
+        this.value = this.value.toUpperCase();
+        if (typeof this.setSelectionRange === 'function') {
+            this.setSelectionRange(start, end);
+        }
+    });
+    el.addEventListener("blur", function () {
+        if (this.value) this.value = this.value.toUpperCase();
+    });
+});
 
 					initTheme();
 					document.getElementById("themeToggle").addEventListener("click", toggleTheme);
