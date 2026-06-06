@@ -1977,7 +1977,7 @@
 									<th>API</th>
 									<td>
 										<div class="combobox-wrapper">
-											<input t<input type="text" id="ecommerce-api-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select API" />t" autocomplete="off" placeholder="Type or select API" />
+											<input type="text" id="ecommerce-api-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select API" />t" autocomplete="off" placeholder="Type or select API" />
 											<input type="hidden" id="ecommerce-api" />
 											<div id="ecommerce-api-suggestions" class="combobox-suggestions"></div>
 										</div>
@@ -4557,7 +4557,6 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					navigator.clipboard.writeText(csvContent).then(() => showNotification(`Copied ${selectedRows.length} rows (newest last, no headers)`));
 				}
 
-
 				function exportToCSV() {
 					const visibleEntries = getVisibleEntries();
 
@@ -5922,23 +5921,23 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					});
 
 					// Apply uppercase conversion only to inputs/textarea that do NOT have the .no-uppercase class
-document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach((el) => {
-    // Skip hidden inputs (they cause setSelectionRange errors)
-    if (el.type === 'hidden') return;
+					document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach((el) => {
+						// Skip hidden inputs (they cause setSelectionRange errors)
+						if (el.type === "hidden") return;
 
-    el.addEventListener("input", function () {
-        if (!this.value) return;
-        const start = this.selectionStart;
-        const end = this.selectionEnd;
-        this.value = this.value.toUpperCase();
-        if (typeof this.setSelectionRange === 'function') {
-            this.setSelectionRange(start, end);
-        }
-    });
-    el.addEventListener("blur", function () {
-        if (this.value) this.value = this.value.toUpperCase();
-    });
-});
+						el.addEventListener("input", function () {
+							if (!this.value) return;
+							const start = this.selectionStart;
+							const end = this.selectionEnd;
+							this.value = this.value.toUpperCase();
+							if (typeof this.setSelectionRange === "function") {
+								this.setSelectionRange(start, end);
+							}
+						});
+						el.addEventListener("blur", function () {
+							if (this.value) this.value = this.value.toUpperCase();
+						});
+					});
 
 					initTheme();
 					document.getElementById("themeToggle").addEventListener("click", toggleTheme);
