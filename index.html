@@ -1380,7 +1380,7 @@
 									<th><label for="ticket-module">MODULE</label></th>
 									<td>
 										<div class="combobox-wrapper">
-											<input type="text" id="ticket-module-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select module" />
+											<input type="text" id="ticket-module-combobox" class="combobox-input" autocomplete="off" placeholder="Type or select module" />
 											<input type="hidden" id="ticket-module" />
 											<div id="ticket-module-suggestions" class="combobox-suggestions"></div>
 										</div>
@@ -2155,13 +2155,6 @@
 						return m;
 					});
 					return escaped.replace(/\n/g, "<br>");
-				}
-
-				function normalizeHtml(html) {
-					if (!html) return "";
-					const div = document.createElement("div");
-					div.innerHTML = html;
-					return div.innerHTML; // browser normalizes tags and attributes
 				}
 
 				const CONFIG = {
@@ -3423,9 +3416,8 @@
 					if (editId) {
 						const existingEntry = allEntries.find((e) => e.id === editId);
 						if (existingEntry) {
-							const oldTroubleshooting = normalizeHtml(existingEntry.troubleshooting || "");
-							const newTroubleshootingNormalized = normalizeHtml(newTroubleshooting);
-							const troubleshootingChanged = newTroubleshootingNormalized !== oldTroubleshooting;
+							const oldTroubleshooting = existingEntry.troubleshooting || "";
+							const troubleshootingChanged = newTroubleshooting !== oldTroubleshooting;
 							if (troubleshootingChanged && !isTroubleshootingEmpty(newTroubleshooting)) {
 								addBtn.textContent = "⏳ SUMMARIZING...";
 								addBtn.disabled = true;
@@ -3923,13 +3915,8 @@ ASSIGN STORE - DONE ✅`;
 							document.getElementById("ticket-remarks").value = entry.remarks || "";
 
 							if (quillEditor && entry.troubleshooting) {
-								// Use Quill's official clipboard method to avoid unwanted normalization
-								quillEditor.clipboard.dangerouslyPasteHTML(entry.troubleshooting);
-
-								// Normalize and store back to ensure future comparisons work
-								const normalized = quillEditor.root.innerHTML;
-								entry.troubleshooting = normalized;
-								document.getElementById("ticket-resolution").value = normalized;
+								quillEditor.root.innerHTML = entry.troubleshooting;
+								document.getElementById("ticket-resolution").value = entry.troubleshooting;
 							}
 						}
 
@@ -4470,21 +4457,13 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						try {
 							allEntries = JSON.parse(saved);
 							allEntries.forEach((entry) => {
-								// --- Original fallback assignments ---
 								if (entry.troubleshooting === undefined) entry.troubleshooting = entry.resolution || "";
 								if (entry.resolution === undefined && entry.originalResolution) entry.resolution = entry.originalResolution;
 								if (entry.deleted === undefined) entry.deleted = false;
 								if (entry.imported === undefined) entry.imported = false;
 								if (entry.note === undefined) entry.note = "";
-
-								// --- NEW: Normalize existing troubleshooting HTML to avoid future mismatches ---
-								if (entry.troubleshooting) {
-									entry.troubleshooting = normalizeHtml(entry.troubleshooting);
-								}
 							});
-						} catch (e) {
-							console.error("Failed to parse saved entries", e);
-						}
+						} catch (e) {}
 					}
 					renderTable();
 					renderSidebar();
@@ -4577,6 +4556,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 
 					navigator.clipboard.writeText(csvContent).then(() => showNotification(`Copied ${selectedRows.length} rows (newest last, no headers)`));
 				}
+
 
 				function exportToCSV() {
 					const visibleEntries = getVisibleEntries();
@@ -6353,7 +6333,7 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 				window.selectStore = selectStore;
 				window.highlightResult = highlightResult;
 				window.summarizeEntryResolution = summarizeEntryResolution;
-		
+
 				document.addEventListener("DOMContentLoaded", init);
 			})();
 		</script>
