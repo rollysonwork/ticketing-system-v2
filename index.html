@@ -1256,6 +1256,11 @@
 				background: var(--accent-soft);
 				color: var(--accent-color);
 			}
+			.status-filter-btn.active {
+				background: var(--accent-color) !important;
+				color: white !important;
+				border-color: var(--accent-color) !important;
+			}
 		</style>
 	</head>
 	<body>
@@ -2010,10 +2015,9 @@
 					<button id="importCsvBtn" class="import-btn"><i class="bi bi-file-earmark-arrow-up"></i> IMPORT</button>
 					<button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
 					<button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom-smaller icon-google-sheets"></i> SHOW ALL PENDING</button>
-					<button class="counter-badge resolved" disabled aria-hidden="true">✅ RESOLVED: <span id="counterResolved">0</span></button>
-					<button class="counter-badge pending" disabled aria-hidden="true">⏳ PENDING: <span id="counterPending">0</span></button>
-					<button class="counter-badge other" disabled aria-hidden="true">📋 OTHER TASK: <span id="counterOther">0</span></button>
-					<button disabled aria-hidden="true">REFRESH</button>
+					<button class="counter-badge status-filter-btn" data-status="RESOLVED" onclick="filterByStatus('RESOLVED')">✅ RESOLVED: <span id="counterResolved">0</span></button>
+					<button class="counter-badge status-filter-btn" data-status="PENDING" onclick="filterByStatus('PENDING')">⏳ PENDING: <span id="counterPending">0</span></button>
+					<button class="counter-badge status-filter-btn" data-status="OTHER TASK" onclick="filterByStatus('OTHER TASK')">📋 OTHER TASK: <span id="counterOther">0</span></button>
 				</div>
 
 				<div style="overflow-x: auto">
@@ -2205,6 +2209,7 @@
 				const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
 				const SHIFT_OPTIONS = ["6PM - 5AM", "9PM - 6AM", "9PM - 8AM", "11PM - 10AM", "7:30AM - 6:30PM", "12AM - 11AM"];
 
+				let currentStatusFilter = null;
 				let currentActiveTab = "ticket";
 				let allEntries = [];
 				let storeData = [];
@@ -2652,33 +2657,26 @@
 				}
 
 				function updateStatusCounters() {
-					const tbody = document.querySelector("#entryTable tbody");
-					if (!tbody) return;
-
-					const rows = tbody.querySelectorAll("tr");
+					const todayEST = getESTDateString();
+					const baseEntries = allEntries.filter((entry) => {
+						if (entry.deleted) return false;
+						const dateObj = parseDateFromString(entry.date);
+						if (!dateObj) return false;
+						const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, "0")}-${String(dateObj.getDate()).padStart(2, "0")}`;
+						return entryDateStr <= todayEST;
+					});
 					let resolved = 0,
 						pending = 0,
 						other = 0;
-
-					rows.forEach((row) => {
-						const firstCell = row.querySelector("td");
-						if (firstCell && firstCell.colSpan > 1) return;
-
-						const statusCell = row.cells[12];
-						if (!statusCell) return;
-
-						const status = statusCell.textContent.trim().toUpperCase();
+					baseEntries.forEach((entry) => {
+						const status = (entry.status || "").toUpperCase();
 						if (status === "RESOLVED") resolved++;
 						else if (status === "PENDING") pending++;
 						else if (status === "OTHER TASK") other++;
 					});
-
-					const resolvedSpan = document.getElementById("counterResolved");
-					const pendingSpan = document.getElementById("counterPending");
-					const otherSpan = document.getElementById("counterOther");
-					if (resolvedSpan) resolvedSpan.innerText = resolved;
-					if (pendingSpan) pendingSpan.innerText = pending;
-					if (otherSpan) otherSpan.innerText = other;
+					document.getElementById("counterResolved").innerText = resolved;
+					document.getElementById("counterPending").innerText = pending;
+					document.getElementById("counterOther").innerText = other;
 				}
 
 				function clearSearchResults() {
@@ -3262,29 +3260,29 @@
 						localStorage.setItem("geminiApiKey", apiKey.trim());
 					}
 
-const models = [
-  // Fastest
-  "gemini-2.5-flash-lite",
+					const models = [
+						// Fastest
+						"gemini-2.5-flash-lite",
 
-  // Very fast
-  "gemini-3.1-flash-lite-preview",
-  "gemini-2.0-flash-lite",
+						// Very fast
+						"gemini-3.1-flash-lite-preview",
+						"gemini-2.0-flash-lite",
 
-  // Fast
-  "gemini-2.0-flash",
-  "gemini-3-flash-preview",
-  "gemini-2.5-flash",
+						// Fast
+						"gemini-2.0-flash",
+						"gemini-3-flash-preview",
+						"gemini-2.5-flash",
 
-  // Medium
-  "gemini-pro-latest",
+						// Medium
+						"gemini-pro-latest",
 
-  // Slower reasoning models
-  "gemini-3-pro-preview",
-  "gemini-3.1-pro-preview",
+						// Slower reasoning models
+						"gemini-3-pro-preview",
+						"gemini-3.1-pro-preview",
 
-  // Slowest / highest reasoning
-  "gemini-2.5-pro"
-];
+						// Slowest / highest reasoning
+						"gemini-2.5-pro",
+					];
 					let lastError = null;
 
 					for (const model of models) {
@@ -4082,42 +4080,37 @@ ASSIGN STORE - DONE ✅`;
 				}
 
 				function renderTable() {
-					const todayEST = getESTDateString();
-					const filteredEntries = allEntries.filter((entry) => {
-						if (entry.deleted) return false;
-						const dateObj = parseDateFromString(entry.date);
-						if (!dateObj) return false;
-						const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, "0")}-${String(dateObj.getDate()).padStart(2, "0")}`;
-						return entryDateStr <= todayEST;
-					});
+					const visibleEntries = getVisibleEntries(); // ← uses status filter
 					const tbody = document.querySelector("#entryTable tbody");
 					tbody.innerHTML = "";
-					filteredEntries.forEach((entry) => {
+					visibleEntries.forEach((entry) => {
 						const row = document.createElement("tr");
 						row.dataset.id = entry.id;
-						row.innerHTML = `<td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-                                             <td>${entry.date}</td>
-                                             <td>${entry.shift}</td>
-                                             <td>${entry.support}</td>
-                                             <td>${entry.portal}</td>
-                                             <td>${entry.store}</td>
-                                             <td>${entry.zip}</td>
-                                             <td>${entry.contact}</td>
-                                             <td>${entry.contactNumber}</td>
-                                             <td>${entry.module}</td>
-                                    <td style="white-space: pre-wrap;">${entry.issue || ""}</td>
-                                             <td>${entry.escalated}</td>
-                                             <td>${entry.status}</td>
-                                             <td style="white-space: pre-wrap;">${entry.remarks || ""}</td>
-                                    <td style="white-space: pre-wrap;">${entry.resolution || ""}</td>
-                                    <td class="action-cell">
-                                        <div class="action-container">
-                                            <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
-                                            <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
-                                            <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
-                                            <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
-                                        </div>
-                                        </table>`;
+						row.innerHTML = `
+    <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+    <td>${entry.date}</td>
+    <td>${entry.shift}</td>
+    <td>${entry.support}</td>
+    <td>${entry.portal}</td>
+    <td>${entry.store}</td>
+    <td>${entry.zip}</td>
+    <td>${entry.contact}</td>
+    <td>${entry.contactNumber}</td>
+    <td>${entry.module}</td>
+    <td style="white-space: pre-wrap;">${entry.issue || ""}</td>
+    <td>${entry.escalated}</td>
+    <td>${entry.status}</td>
+    <td style="white-space: pre-wrap;">${entry.remarks || ""}</td>
+    <td style="white-space: pre-wrap;">${entry.resolution || ""}</td>
+    <td class="action-cell">
+        <div class="action-container">
+            <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
+            <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
+            <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
+            <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
+        </div>
+    </td>
+`;
 						tbody.appendChild(row);
 					});
 					updateSelectAllCheckboxState();
@@ -4479,13 +4472,35 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 
 				function getVisibleEntries() {
 					const todayEST = getESTDateString();
-					return allEntries.filter((entry) => {
+					let entries = allEntries.filter((entry) => {
 						if (entry.deleted) return false;
 						const dateObj = parseDateFromString(entry.date);
 						if (!dateObj) return false;
 						const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, "0")}-${String(dateObj.getDate()).padStart(2, "0")}`;
 						return entryDateStr <= todayEST;
 					});
+					if (currentStatusFilter) {
+						entries = entries.filter((entry) => (entry.status || "").toUpperCase() === currentStatusFilter);
+					}
+					return entries;
+				}
+
+				function filterByStatus(status) {
+					if (currentStatusFilter === status) {
+						// Clear filter
+						currentStatusFilter = null;
+					} else {
+						currentStatusFilter = status;
+					}
+					// Update active class on buttons
+					document.querySelectorAll(".status-filter-btn").forEach((btn) => {
+						if (btn.dataset.status === currentStatusFilter) {
+							btn.classList.add("active");
+						} else {
+							btn.classList.remove("active");
+						}
+					});
+					renderTable(); // re-render with filter
 				}
 
 				function getShiftReportBaseDate() {
@@ -6101,6 +6116,8 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					});
 
 					window.addEventListener("resize", syncPreviewHeight);
+
+					window.filterByStatus = filterByStatus;
 
 					document.getElementById("ticket-shift").addEventListener("change", syncShiftSupportFromTicket);
 					document.getElementById("ticket-support").addEventListener("input", syncShiftSupportFromTicket);
