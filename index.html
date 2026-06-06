@@ -2010,7 +2010,6 @@
 					<label><input type="checkbox" id="selectAllCheckbox" /> Select All</label>
 					<button id="bulkDeleteBtn" title="Remove selected rows (only from main table)"><i class="bi bi-trash-fill"></i> REMOVE</button>
 					<button id="bulkCopyBtn" title="Copy selected rows"><i class="bi bi-copy"></i> COPY</button>
-					<button id="bulkUpdateStatusBtn" title="Update status for selected rows"><i class="bi bi-pencil-square"></i> UPDATE</button>
 					<button id="exportCsvBtn" class="export-btn"><i class="bi bi-filetype-csv"></i> EXPORT</button>
 					<button id="importCsvBtn" class="import-btn"><i class="bi bi-file-earmark-arrow-up"></i> IMPORT</button>
 					<button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
@@ -4558,139 +4557,6 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					navigator.clipboard.writeText(csvContent).then(() => showNotification(`Copied ${selectedRows.length} rows (newest last, no headers)`));
 				}
 
-				function bulkUpdateStatus() {
-					const ids = getSelectedRowIds();
-					if (ids.length === 0) {
-						showNotification("No rows selected");
-						return;
-					}
-
-					const modal = document.createElement("div");
-					modal.style.position = "fixed";
-					modal.style.top = "50%";
-					modal.style.left = "50%";
-					modal.style.transform = "translate(-50%, -50%)";
-					modal.style.backgroundColor = "#fff";
-					modal.style.padding = "24px";
-					modal.style.borderRadius = "16px";
-					modal.style.boxShadow = "0 20px 35px -10px rgba(0,0,0,0.3)";
-					modal.style.zIndex = "1000";
-					modal.style.minWidth = "320px";
-					modal.style.border = "1px solid #cdddee";
-
-					if (document.body.classList.contains("dark-mode")) {
-						modal.style.backgroundColor = "#2d3748";
-						modal.style.borderColor = "#4a5568";
-						modal.style.color = "#e2e8f0";
-					}
-
-					const title = document.createElement("h3");
-					title.textContent = "SELECT NEW STATUS";
-					title.style.marginBottom = "16px";
-					title.style.fontSize = "1.2rem";
-					modal.appendChild(title);
-
-					const options = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
-					let selectedStatus = options[0];
-
-					options.forEach((status) => {
-						const label = document.createElement("label");
-						label.style.display = "flex";
-						label.style.alignItems = "center";
-						label.style.marginBottom = "12px";
-						label.style.cursor = "pointer";
-						label.style.gap = "8px";
-
-						const radio = document.createElement("input");
-						radio.type = "radio";
-						radio.name = "status";
-						radio.value = status;
-						radio.checked = status === selectedStatus;
-						radio.style.width = "16px";
-						radio.style.height = "16px";
-						radio.style.margin = "0";
-						radio.style.cursor = "pointer";
-						radio.addEventListener("change", () => {
-							selectedStatus = status;
-						});
-
-						const span = document.createElement("span");
-						span.textContent = status;
-						span.style.flex = "1";
-
-						label.appendChild(radio);
-						label.appendChild(span);
-						modal.appendChild(label);
-					});
-
-					const buttonRow = document.createElement("div");
-					buttonRow.style.display = "flex";
-					buttonRow.style.justifyContent = "flex-end";
-					buttonRow.style.gap = "8px";
-					buttonRow.style.marginTop = "20px";
-
-					const cancelBtn = document.createElement("button");
-					cancelBtn.textContent = "CANCEL";
-					cancelBtn.style.padding = "8px 16px";
-					cancelBtn.style.border = "none";
-					cancelBtn.style.borderRadius = "30px";
-					cancelBtn.style.cursor = "pointer";
-					cancelBtn.style.backgroundColor = "#6b7280";
-					cancelBtn.style.color = "white";
-					cancelBtn.style.fontWeight = "600";
-					cancelBtn.style.textTransform = "uppercase";
-					cancelBtn.addEventListener("click", () => {
-						document.body.removeChild(backdrop);
-						document.body.removeChild(modal);
-					});
-
-					const applyBtn = document.createElement("button");
-					applyBtn.textContent = "APPLY";
-					applyBtn.style.padding = "8px 16px";
-					applyBtn.style.border = "none";
-					applyBtn.style.borderRadius = "30px";
-					applyBtn.style.cursor = "pointer";
-					applyBtn.style.backgroundColor = "#2563eb";
-					applyBtn.style.color = "white";
-					applyBtn.style.fontWeight = "600";
-					applyBtn.style.textTransform = "uppercase";
-					applyBtn.addEventListener("click", () => {
-						pushUndo();
-						allEntries = allEntries.map((entry) => {
-							if (ids.includes(entry.id.toString())) {
-								entry.status = selectedStatus;
-							}
-							return entry;
-						});
-						saveAllEntries();
-						updateStatusCounters();
-						renderTable();
-						renderSidebar();
-						document.body.removeChild(backdrop);
-						document.body.removeChild(modal);
-						showNotification(`Updated ${ids.length} entries to ${selectedStatus}`);
-					});
-
-					buttonRow.appendChild(cancelBtn);
-					buttonRow.appendChild(applyBtn);
-					modal.appendChild(buttonRow);
-
-					const backdrop = document.createElement("div");
-					backdrop.style.position = "fixed";
-					backdrop.style.top = "0";
-					backdrop.style.left = "0";
-					backdrop.style.width = "100%";
-					backdrop.style.height = "100%";
-					backdrop.style.backgroundColor = "rgba(0,0,0,0.5)";
-					backdrop.style.zIndex = "999";
-					backdrop.addEventListener("click", () => {
-						document.body.removeChild(backdrop);
-						document.body.removeChild(modal);
-					});
-
-					document.body.appendChild(backdrop);
-					document.body.appendChild(modal);
-				}
 
 				function exportToCSV() {
 					const visibleEntries = getVisibleEntries();
@@ -6078,7 +5944,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
 					document.getElementById("bulkDeleteBtn").addEventListener("click", bulkDelete);
 					document.getElementById("bulkCopyBtn").addEventListener("click", bulkCopy);
-					document.getElementById("bulkUpdateStatusBtn").addEventListener("click", bulkUpdateStatus);
 					document.getElementById("exportCsvBtn").addEventListener("click", exportToCSV);
 					document.getElementById("manualRefreshBtn")?.addEventListener("click", () => {
 						updateStatusCounters();
