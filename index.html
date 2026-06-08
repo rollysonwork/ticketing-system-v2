@@ -1977,7 +1977,7 @@
 									<th>API</th>
 									<td>
 										<div class="combobox-wrapper">
-											<input type="text" id="ecommerce-api-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select API"/>
+											<input type="text" id="ecommerce-api-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select API" />
 											<input type="hidden" id="ecommerce-api" />
 											<div id="ecommerce-api-suggestions" class="combobox-suggestions"></div>
 										</div>
@@ -5492,8 +5492,6 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						}
 
 						const headers = data.values[0].map((h) => (h || "").trim());
-						console.log("📋 Headers from sheet:", headers);
-
 						const findCol = (name) => headers.findIndex((h) => h.toUpperCase() === name.toUpperCase());
 
 						const dateIdx = findCol("DATE");
@@ -5518,21 +5516,30 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						}
 
 						const rows = data.values.slice(1);
-						const currentUserSupport = (currentUser?.support || "").trim();
-						console.log(`🔍 Current user support: "${currentUserSupport}"`);
+						const currentUserSupport = (window.currentUser?.support || "").trim();
+						const currentUserRole = (window.currentUser?.role || "").trim().toUpperCase();
+						const isTL = currentUserRole === "TL";
 
-						const pendingRows = rows.filter((row) => {
+						let pendingRows = rows.filter((row) => {
 							const status = (row[statusIdx] || "").trim().toUpperCase();
-							const support = (row[supportIdx] || "").trim().toUpperCase();
-							return status === "PENDING" && support === currentUserSupport.toUpperCase();
+							if (status !== "PENDING") return false;
+							if (isTL) {
+								return true;
+							} else {
+								const support = (row[supportIdx] || "").trim().toUpperCase();
+								return support === currentUserSupport.toUpperCase();
+							}
 						});
 
-						console.log(`📊 Found ${pendingRows.length} pending tickets for "${currentUserSupport}"`);
-
-						if (pendingRows.length === 0 && rows.length > 0) {
-							console.log("Sample of first 3 rows (status, support):");
-							rows.slice(0, 3).forEach((row, i) => {
-								console.log(`  Row ${i + 1}: status="${row[statusIdx]}", support="${row[supportIdx]}"`);
+						// 🔁 Sort pending rows by date descending (newest first)
+						if (dateIdx !== -1) {
+							pendingRows.sort((a, b) => {
+								const dateA = parseDateFromString(a[dateIdx] || "");
+								const dateB = parseDateFromString(b[dateIdx] || "");
+								if (!dateA && !dateB) return 0;
+								if (!dateA) return 1;
+								if (!dateB) return -1;
+								return dateB - dateA;
 							});
 						}
 
@@ -5609,13 +5616,15 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					localStorage.setItem("pendingTrackerMode", isPendingTrackerMode ? "true" : "false");
 					const toggleBtn = document.getElementById("pendingTrackerToggleBtn");
 					if (isPendingTrackerMode) {
-						toggleBtn.classList.add("active");
-						toggleBtn.textContent = "SHOW LOCAL ENTRIES";
-						showNotification("Loading your pending tickets from WORKLOAD TRACKER 2026...");
+						// Show a contextual message for TL users
+						if (window.currentUser?.role === "TL") {
+							showNotification("📋 TL mode: Showing all pending tickets for all agents");
+						} else {
+							showNotification("Loading your pending tickets from WORKLOAD TRACKER 2026...");
+						}
 						const pendingEntries = await fetchWorkloadSheetData();
 						cachedPendingEntries = pendingEntries;
 						renderPendingTableView(pendingEntries);
-						updateStatusCounters();
 					} else {
 						toggleBtn.classList.remove("active");
 						toggleBtn.innerHTML = '<i class="icon-custom-smaller icon-google-sheets"></i> SHOW ALL PENDING';
