@@ -1515,7 +1515,6 @@
 											<option value="9PM - 6AM">9PM - 6AM</option>
 											<option value="9PM - 8AM">9PM - 8AM</option>
 											<option value="11PM - 10AM">11PM - 10AM</option>
-											<option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option>
 											<option value="12AM - 11AM">12AM - 11AM</option>
 										</select>
 									</td>
@@ -1741,8 +1740,6 @@
 											<option value="6PM - 5AM">6PM - 5AM</option>
 											<option value="9PM - 6AM">9PM - 6AM</option>
 											<option value="9PM - 8AM">9PM - 8AM</option>
-											<option value="11PM - 10AM">11PM - 10AM</option>
-											<option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option>
 											<option value="12AM - 11AM">12AM - 11AM</option>
 										</select>
 									</td>
@@ -1951,8 +1948,6 @@
 											<option value="6PM - 5AM">6PM - 5AM</option>
 											<option value="9PM - 6AM">9PM - 6AM</option>
 											<option value="9PM - 8AM">9PM - 8AM</option>
-											<option value="11PM - 10AM">11PM - 10AM</option>
-											<option value="7:30AM - 6:30PM">7:30AM - 6:30PM</option>
 											<option value="12AM - 11AM">12AM - 11AM</option>
 										</select>
 									</td>
@@ -2197,8 +2192,6 @@
 					"6PM - 5AM": ["06:00 PM", "05:00 AM"],
 					"9PM - 6AM": ["09:00 PM", "06:00 AM"],
 					"9PM - 8AM": ["09:00 PM", "08:00 AM"],
-					"11PM - 10AM": ["11:00 PM", "10:00 AM"],
-					"7:30AM - 6:30PM": ["07:30 AM", "06:30 PM"],
 					"12AM - 11AM": ["12:00 AM", "11:00 AM"],
 				};
 
@@ -2206,7 +2199,7 @@
 
 				const MODULE_OPTIONS = ["POS", "Portal", "Mobile App", "Cash Register", "Item Management", "Inventory", "Back Office", "Credit Card Terminal", "Printer", "Transactions", "Scan-Data", "Promotions", "Reports", "Register Setup", "Store Creation", "Rocket Application", "Moolah", "API", "Database import/export", "Gift Card", "Employee", "EDI", "Demo", "Training", "Credentials", "Other", "MIGRATION", "VERSION UPDATE", "EBT", "Cash drawer", "LABEL PRINTER", "BULK CHANGE", "CRASH - APK", "SERVER", "TOUCH SCREEN", "CHANGE STORE/EMAIL ID", "Customer Module", "Age Check", "Internet", "SYNC DATA", "Surcharge", "Image set", "Scanner", "TENDER", "TIME CARD", "BANK DEPOSITE", "E-Commerce", "Dual Price", "Lotto Guru", "Tax", "LABEL UTILITY", "FACTORY RESET", "DB EXPORT", "Adjustments", "NVR", "RECEIPT", "RETAILZGO", "INVOICE", "SOLINK INTEGRATION", "Price Level", "CashBack", "Customer Screen", "Active / Deactive", "Store", "OCR", "DEVICE ID", "Invoicely RAI", "Exe Install", "NETWORK"];
 				const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
-				const SHIFT_OPTIONS = ["6PM - 5AM", "9PM - 6AM", "9PM - 8AM", "11PM - 10AM", "7:30AM - 6:30PM", "12AM - 11AM"];
+				const SHIFT_OPTIONS = ["6PM - 5AM", "9PM - 6AM", "9PM - 8AM", "12AM - 11AM"];
 
 				let currentStatusFilter = null;
 				let currentActiveTab = "ticket";
@@ -4503,21 +4496,9 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 				}
 
 				function getShiftReportBaseDate() {
-					const visibleEntries = getVisibleEntries();
-					if (visibleEntries.length === 0) {
-						const yesterday = new Date();
-						yesterday.setDate(yesterday.getDate() - 1);
-						return yesterday;
-					}
-					const uniqueShifts = [...new Set(visibleEntries.map((e) => e.shift).filter((s) => s))];
-
-					if (uniqueShifts.length === 1 && uniqueShifts[0] === "7:30AM - 6:30PM") {
-						return new Date();
-					} else {
-						const yesterday = new Date();
-						yesterday.setDate(yesterday.getDate() - 1);
-						return yesterday;
-					}
+					const yesterday = new Date();
+					yesterday.setDate(yesterday.getDate() - 1);
+					return yesterday;
 				}
 
 				function getSelectedRowIds() {
