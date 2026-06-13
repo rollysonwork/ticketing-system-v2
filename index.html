@@ -2207,6 +2207,7 @@
 				let storeData = [];
 				let editId = null;
 				const EDIT_STORAGE_KEY = "editingEntryId";
+				const EDIT_DRAFT_KEY = "editingDraft_";
 				let undoStack = [];
 				let redoStack = [];
 
@@ -2727,19 +2728,19 @@
 					filteredResults[prefix].forEach((store, index) => {
 						const statusClass = getStatusClass(store.status);
 						html += `
-                        <div class="result-item" onclick="selectStore('${prefix}', ${index})" onmouseenter="highlightResult('${prefix}', ${index})">
-                            <div class="result-info">
-                                <div class="result-store">
-                                    ${store.storeName || "?"}
-                                    <span class="status-badge ${statusClass}">${store.status}</span>
-                                </div>
-                                <div class="result-details">
-                                    <span>📌 PORTAL ${store.portal || "N/A"}</span>
-                                    <span class="result-zip">📍 ${store.zipCode || "N/A"}</span>
-                                </div>
-                            </div>
-                        </div>
-                    `;
+			                        <div class="result-item" onclick="selectStore('${prefix}', ${index})" onmouseenter="highlightResult('${prefix}', ${index})">
+			                            <div class="result-info">
+			                                <div class="result-store">
+			                                    ${store.storeName || "?"}
+			                                    <span class="status-badge ${statusClass}">${store.status}</span>
+			                                </div>
+			                                <div class="result-details">
+			                                    <span>📌 PORTAL ${store.portal || "N/A"}</span>
+			                                    <span class="result-zip">📍 ${store.zipCode || "N/A"}</span>
+			                                </div>
+			                            </div>
+			                        </div>
+			                    `;
 					});
 					resultsContainer.innerHTML = html;
 					syncPreviewHeight();
@@ -3082,7 +3083,8 @@
 							};
 							showNotification("E‑Commerce entry updated!");
 
-							// FIX: Clear edit mode
+							// Clear draft and edit mode
+							localStorage.removeItem(EDIT_DRAFT_KEY + editId);
 							editId = null;
 							localStorage.removeItem(EDIT_STORAGE_KEY);
 							const addBtn = document.querySelector("#tab-ecommerce .add");
@@ -3119,7 +3121,6 @@
 						showNotification("E‑Commerce entry added!");
 					}
 
-					// Clear form fields
 					["portal", "storeName", "zipcode", "api"].forEach((id) => {
 						const el = document.getElementById(`ecommerce-${id}`);
 						if (el) el.value = "";
@@ -3473,7 +3474,8 @@
 							allEntries[existingEntryIndex] = newEntry;
 							showNotification("Entry updated!");
 
-							// FIX: Clear edit mode after successful update
+							// Clear draft and edit mode
+							localStorage.removeItem(EDIT_DRAFT_KEY + editId);
 							editId = null;
 							localStorage.removeItem(EDIT_STORAGE_KEY);
 							const addBtnReset = document.querySelector("#tab-ticket .add");
@@ -3507,8 +3509,7 @@
 							};
 							allEntries.unshift(newEntry);
 							showNotification("Entry added (previous entry not found)!");
-
-							// Also clear edit mode if target missing
+							localStorage.removeItem(EDIT_DRAFT_KEY + editId);
 							editId = null;
 							localStorage.removeItem(EDIT_STORAGE_KEY);
 							const addBtnReset = document.querySelector("#tab-ticket .add");
@@ -3585,15 +3586,15 @@
 						issueText =
 							window._storeCurrentIssue ||
 							`NEW STORE CREATION FORM SENT - DONE ✅
-STORE CREATION - DONE ✅
-INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
-UPLOAD DATABASE - PENDING ❌`;
+			STORE CREATION - DONE ✅
+			INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
+			UPLOAD DATABASE - PENDING ❌`;
 					} else if (prefix === "moolah") {
 						issueText =
 							window._moolahCurrentIssue ||
 							`CREATE MOOLAH ACCOUNT - DONE ✅
-INSTALL & UPDATE ALL APPS - DONE ✅
-ASSIGN STORE - DONE ✅`;
+			INSTALL & UPDATE ALL APPS - DONE ✅
+			ASSIGN STORE - DONE ✅`;
 					}
 
 					let moduleData = {};
@@ -3648,6 +3649,15 @@ ASSIGN STORE - DONE ✅`;
 								imported: false,
 							};
 							showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry updated!`);
+
+							// Clear draft and edit mode
+							localStorage.removeItem(EDIT_DRAFT_KEY + editId);
+							editId = null;
+							localStorage.removeItem(EDIT_STORAGE_KEY);
+							if (addBtn) {
+								addBtn.textContent = "ADD ENTRY";
+								addBtn.classList.remove("editing");
+							}
 						} else {
 							const newEntry = {
 								id: Date.now(),
@@ -3674,12 +3684,13 @@ ASSIGN STORE - DONE ✅`;
 							};
 							allEntries.unshift(newEntry);
 							showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry added (edit target missing)!`);
-						}
-
-						editId = null;
-						if (addBtn) {
-							addBtn.textContent = "ADD ENTRY";
-							addBtn.classList.remove("editing");
+							localStorage.removeItem(EDIT_DRAFT_KEY + editId);
+							editId = null;
+							localStorage.removeItem(EDIT_STORAGE_KEY);
+							if (addBtn) {
+								addBtn.textContent = "ADD ENTRY";
+								addBtn.classList.remove("editing");
+							}
 						}
 					} else {
 						const newEntry = {
@@ -3813,11 +3824,10 @@ ASSIGN STORE - DONE ✅`;
 				}
 
 				function clearFormOnly(prefix) {
-					// FIX: If we are in edit mode, abort it
 					if (editId) {
+						localStorage.removeItem(EDIT_DRAFT_KEY + editId);
 						editId = null;
 						localStorage.removeItem(EDIT_STORAGE_KEY);
-						// Reset all add buttons
 						document.querySelectorAll(".add").forEach((btn) => {
 							btn.textContent = "ADD ENTRY";
 							btn.classList.remove("editing");
@@ -3833,6 +3843,128 @@ ASSIGN STORE - DONE ✅`;
 					saveFormData(prefix);
 					showNotification("Form cleared!");
 					syncPreviewHeight();
+				}
+
+				function populateFormFromEntry(prefix, entry) {
+					// Date
+					const dateParts = entry.date.split("/");
+					if (dateParts.length === 3) {
+						const month = dateParts[0].padStart(2, "0");
+						const day = dateParts[1].padStart(2, "0");
+						const year = dateParts[2];
+						document.getElementById(`${prefix}-date`).value = `${year}-${month}-${day}`;
+					}
+					document.getElementById(`${prefix}-shift`).value = entry.shift;
+					document.getElementById(`${prefix}-support`).value = entry.support;
+					document.getElementById(`${prefix}-portal`).value = entry.portal;
+
+					if (prefix === "moolah" || prefix === "store") {
+						document.getElementById(`${prefix}-storeName`).value = entry.store;
+						document.getElementById(`${prefix}-zipcode`).value = entry.zip;
+					} else {
+						document.getElementById(`${prefix}-store`).value = entry.store;
+						document.getElementById(`${prefix}-zip`).value = entry.zip;
+						document.getElementById(`${prefix}-contactPerson`).value = entry.contact;
+						document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
+						document.getElementById(`${prefix}-note`).value = entry.note || "";
+						document.getElementById("ticket-issue").value = entry.issue || "";
+
+						const moduleInput = document.getElementById("ticket-module-combobox");
+						const moduleHidden = document.getElementById("ticket-module");
+						if (moduleInput) {
+							moduleInput._skipNextInput = true;
+							moduleInput.value = entry.module || "";
+							setTimeout(() => delete moduleInput._skipNextInput, 100);
+						}
+						if (moduleHidden) moduleHidden.value = entry.module || "";
+
+						const statusInput = document.getElementById("ticket-status-combobox");
+						const statusHidden = document.getElementById("ticket-status");
+						if (statusInput) {
+							statusInput._skipNextInput = true;
+							statusInput.value = entry.status || "";
+							setTimeout(() => delete statusInput._skipNextInput, 100);
+						}
+						if (statusHidden) statusHidden.value = entry.status || "";
+
+						document.getElementById("ticket-remarks").value = entry.remarks || "";
+						if (quillEditor && entry.troubleshooting) {
+							quillEditor.root.innerHTML = entry.troubleshooting;
+							document.getElementById("ticket-resolution").value = entry.troubleshooting;
+						}
+					}
+
+					if (prefix === "moolah") {
+						document.getElementById("moolah-email").value = entry.moduleData?.email || "";
+						document.getElementById("moolah-password").value = entry.moduleData?.password || "";
+						document.getElementById("moolah-sku").value = entry.moduleData?.sku || "";
+						document.getElementById("moolah-noOfTabs").value = entry.moduleData?.noOfTabs || "";
+						document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
+						document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
+						document.getElementById("moolah-city").value = entry.moduleData?.city || "";
+						document.getElementById("moolah-state").value = entry.moduleData?.state || "";
+						document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
+						document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
+						if (entry.issue) window._moolahCurrentIssue = entry.issue;
+					} else if (prefix === "store") {
+						document.getElementById("store-agent").value = entry.moduleData?.agent || "";
+						document.getElementById("store-email").value = entry.moduleData?.email || "";
+						document.getElementById("store-password").value = entry.moduleData?.password || "";
+						document.getElementById("store-sku").value = entry.moduleData?.sku || "";
+						document.getElementById("store-database").value = entry.moduleData?.database || "";
+						document.getElementById("store-noOfReg").value = entry.moduleData?.noOfReg || "";
+						document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
+						document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
+						document.getElementById("store-city").value = entry.moduleData?.city || "";
+						document.getElementById("store-state").value = entry.moduleData?.state || "";
+						document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
+						document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
+						if (entry.issue) window._storeCurrentIssue = entry.issue;
+					}
+				}
+
+				function populateFormFromData(prefix, draftData) {
+					populateFormFromEntry(prefix, draftData);
+				}
+
+				function attachDraftAutoSave(prefix, entryId) {
+					const draftKey = EDIT_DRAFT_KEY + entryId;
+					const saveDraft = () => {
+						if (!editId || editId !== entryId) return;
+						const formData = {};
+						const fields = {
+							moolah: ["shift", "support", "portal", "storeName", "zipcode", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId", "date"],
+							store: ["shift", "support", "portal", "storeName", "zipcode", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId", "date"],
+							ticket: ["shift", "support", "portal", "store", "zip", "contactPerson", "contactNumber", "module", "issue", "escalated", "status", "remarks", "resolution", "note", "date"],
+							ecommerce: ["shift", "support", "portal", "storeName", "zipcode", "api", "date"],
+						};
+						fields[prefix].forEach((id) => {
+							const el = document.getElementById(`${prefix}-${id}`);
+							if (el) formData[id] = el.value;
+						});
+						if (prefix === "ticket" && quillEditor) {
+							formData.troubleshooting = quillEditor.root.innerHTML;
+						}
+						formData.id = entryId;
+						formData.store = formData.storeName || formData.store;
+						formData.zip = formData.zipcode || formData.zip;
+						// For ticket: ensure contact field exists (used by populateFormFromEntry)
+						if (prefix === "ticket") {
+							formData.contact = formData.contactPerson;
+						}
+						localStorage.setItem(draftKey, JSON.stringify(formData));
+					};
+
+					const elements = document.querySelectorAll(`#tab-${prefix} input, #tab-${prefix} textarea, #tab-${prefix} select`);
+					elements.forEach((el) => {
+						el.removeEventListener("input", saveDraft);
+						el.addEventListener("input", saveDraft);
+					});
+					if (prefix === "ticket" && quillEditor) {
+						quillEditor.off("text-change", saveDraft);
+						quillEditor.on("text-change", saveDraft);
+					}
+					saveDraft();
 				}
 
 				function editEntry(buttonOrId) {
@@ -3860,114 +3992,30 @@ ASSIGN STORE - DONE ✅`;
 					if (tabBtn) switchTab(prefix, tabBtn);
 
 					setTimeout(() => {
-						// Common fields
-						const dateParts = entry.date.split("/");
-						if (dateParts.length === 3) {
-							const month = dateParts[0].padStart(2, "0");
-							const day = dateParts[1].padStart(2, "0");
-							const year = dateParts[2];
-							document.getElementById(`${prefix}-date`).value = `${year}-${month}-${day}`;
-						}
-						document.getElementById(`${prefix}-shift`).value = entry.shift;
-						document.getElementById(`${prefix}-support`).value = entry.support;
-						document.getElementById(`${prefix}-portal`).value = entry.portal;
-
-						if (prefix === "moolah" || prefix === "store") {
-							document.getElementById(`${prefix}-storeName`).value = entry.store;
-							document.getElementById(`${prefix}-zipcode`).value = entry.zip;
-						} else {
-							document.getElementById(`${prefix}-store`).value = entry.store;
-							document.getElementById(`${prefix}-zip`).value = entry.zip;
-							document.getElementById(`${prefix}-contactPerson`).value = entry.contact;
-							document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
-							document.getElementById(`${prefix}-note`).value = entry.note || "";
-
-							// Restore ISSUE without interference
-							const issueField = document.getElementById("ticket-issue");
-							if (issueField) {
-								issueField.value = entry.issue || "";
-								autoGrow(issueField);
-								ticketUpdatePreview();
-							}
-
-							// Module & Status comboboxes
-							const moduleInput = document.getElementById("ticket-module-combobox");
-							const moduleHidden = document.getElementById("ticket-module");
-							if (moduleInput) {
-								moduleInput._skipNextInput = true;
-								moduleInput.value = entry.module || "";
-								setTimeout(() => delete moduleInput._skipNextInput, 100);
-							}
-							if (moduleHidden) moduleHidden.value = entry.module || "";
-
-							const statusInput = document.getElementById("ticket-status-combobox");
-							const statusHidden = document.getElementById("ticket-status");
-							if (statusInput) {
-								statusInput._skipNextInput = true;
-								statusInput.value = entry.status || "";
-								setTimeout(() => delete statusInput._skipNextInput, 100);
-							}
-							if (statusHidden) statusHidden.value = entry.status || "";
-
-							document.getElementById("ticket-remarks").value = entry.remarks || "";
-
-							if (quillEditor && entry.troubleshooting) {
-								quillEditor.root.innerHTML = entry.troubleshooting;
-								document.getElementById("ticket-resolution").value = entry.troubleshooting;
-							}
-						}
-
-						// For moolah
-						if (prefix === "moolah") {
-							document.getElementById("moolah-email").value = entry.moduleData?.email || "";
-							document.getElementById("moolah-password").value = entry.moduleData?.password || "";
-							document.getElementById("moolah-sku").value = entry.moduleData?.sku || "";
-							document.getElementById("moolah-noOfTabs").value = entry.moduleData?.noOfTabs || "";
-							document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
-							document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
-							document.getElementById("moolah-city").value = entry.moduleData?.city || "";
-							document.getElementById("moolah-state").value = entry.moduleData?.state || "";
-							document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
-							document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
-							if (entry.issue) {
-								window._moolahCurrentIssue = entry.issue;
-								document.getElementById("moolah-generated-issue").innerText = entry.issue;
-							}
-						}
-						// For store
-						else if (prefix === "store") {
-							document.getElementById("store-agent").value = entry.moduleData?.agent || "";
-							document.getElementById("store-email").value = entry.moduleData?.email || "";
-							document.getElementById("store-password").value = entry.moduleData?.password || "";
-							document.getElementById("store-sku").value = entry.moduleData?.sku || "";
-							document.getElementById("store-database").value = entry.moduleData?.database || "";
-							document.getElementById("store-noOfReg").value = entry.moduleData?.noOfReg || "";
-							document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
-							document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
-							document.getElementById("store-city").value = entry.moduleData?.city || "";
-							document.getElementById("store-state").value = entry.moduleData?.state || "";
-							document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
-							document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
-							if (entry.issue) {
-								window._storeCurrentIssue = entry.issue;
-								document.getElementById("store-generated-issue").innerText = entry.issue;
-							}
-						}
-
-						// Update previews
-						if (prefix === "moolah") moolahUpdatePreview();
-						else if (prefix === "store") storeUpdatePreview();
-						else {
-							ticketUpdatePreview();
-							const resolutionPreview = document.getElementById("ticket-previewResolution");
-							if (resolutionPreview) {
-								resolutionPreview.innerHTML = formatMultilinePreview(entry.resolution || "");
-							}
-						}
-
-						// FIX: Store editId in both memory and localStorage
 						editId = entry.id;
 						localStorage.setItem(EDIT_STORAGE_KEY, editId);
+
+						const draftKey = EDIT_DRAFT_KEY + editId;
+						const savedDraft = localStorage.getItem(draftKey);
+						let useDraft = false;
+						if (savedDraft) {
+							try {
+								const draftData = JSON.parse(savedDraft);
+								if (draftData.id === editId) {
+									useDraft = true;
+									populateFormFromData(prefix, draftData);
+									showNotification("Restored your unsaved changes. Click UPDATE to save.");
+								}
+							} catch (e) {}
+						}
+
+						if (!useDraft) {
+							populateFormFromEntry(prefix, entry);
+						}
+
+						if (prefix === "moolah") moolahUpdatePreview();
+						else if (prefix === "store") storeUpdatePreview();
+						else ticketUpdatePreview();
 
 						const addBtn = document.querySelector(`#tab-${prefix} .add`);
 						if (addBtn) {
@@ -3980,7 +4028,8 @@ ASSIGN STORE - DONE ✅`;
 							saveAllEntries();
 						}
 
-						// Dispatch input events for all fields EXCEPT the issue field
+						attachDraftAutoSave(prefix, editId);
+
 						const allFields = document.querySelectorAll(`#tab-${prefix} input, #tab-${prefix} textarea, #tab-${prefix} select`);
 						allFields.forEach((el) => {
 							if (el.id !== "ticket-issue") {
@@ -4096,30 +4145,30 @@ ASSIGN STORE - DONE ✅`;
 						const row = document.createElement("tr");
 						row.dataset.id = entry.id;
 						row.innerHTML = `
-    <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-    <td>${entry.date}</td>
-    <td>${entry.shift}</td>
-    <td>${entry.support}</td>
-    <td>${entry.portal}</td>
-    <td>${entry.store}</td>
-    <td>${entry.zip}</td>
-    <td>${entry.contact}</td>
-    <td>${entry.contactNumber}</td>
-    <td>${entry.module}</td>
-    <td style="white-space: pre-wrap;">${entry.issue || ""}</td>
-    <td>${entry.escalated}</td>
-    <td>${entry.status}</td>
-    <td style="white-space: pre-wrap;">${entry.remarks || ""}</td>
-    <td style="white-space: pre-wrap;">${entry.resolution || ""}</td>
-    <td class="action-cell">
-        <div class="action-container">
-            <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
-            <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
-            <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
-            <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
-        </div>
-    </td>
-`;
+			    <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+			    <td>${entry.date}</td>
+			    <td>${entry.shift}</td>
+			    <td>${entry.support}</td>
+			    <td>${entry.portal}</td>
+			    <td>${entry.store}</td>
+			    <td>${entry.zip}</td>
+			    <td>${entry.contact}</td>
+			    <td>${entry.contactNumber}</td>
+			    <td>${entry.module}</td>
+			    <td style="white-space: pre-wrap;">${entry.issue || ""}</td>
+			    <td>${entry.escalated}</td>
+			    <td>${entry.status}</td>
+			    <td style="white-space: pre-wrap;">${entry.remarks || ""}</td>
+			    <td style="white-space: pre-wrap;">${entry.resolution || ""}</td>
+			    <td class="action-cell">
+			        <div class="action-container">
+			            <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
+			            <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
+			            <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
+			            <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
+			        </div>
+			    </td>
+			`;
 						tbody.appendChild(row);
 					});
 					updateSelectAllCheckboxState();
@@ -4192,9 +4241,9 @@ ASSIGN STORE - DONE ✅`;
 						const isMonthCollapsed = collapseState.months[month];
 						const monthArrow = isMonthCollapsed ? "▶" : "▼";
 						html += `<div class="sidebar-group">
-                    <div class="month-header" onclick="toggleMonth('${month.replace(/'/g, "\\'")}')">
-                        <span class="month-arrow">${monthArrow}</span> ${month}
-                    </div>`;
+			                    <div class="month-header" onclick="toggleMonth('${month.replace(/'/g, "\\'")}')">
+			                        <span class="month-arrow">${monthArrow}</span> ${month}
+			                    </div>`;
 						if (!isMonthCollapsed) {
 							const dates = grouped[month];
 							const sortedDates = Object.keys(dates).sort((a, b) => new Date(b) - new Date(a));
@@ -4205,9 +4254,9 @@ ASSIGN STORE - DONE ✅`;
 								const isDateCollapsed = collapseState.dates[dateKey];
 								const dateArrow = isDateCollapsed ? "▶" : "▼";
 								html += `<div class="date-group">
-                            <div class="date-header" onclick="toggleDate('${dateKey.replace(/'/g, "\\'")}')">
-                                <span class="date-arrow">${dateArrow}</span> ${dateKey}
-                            </div>`;
+			                            <div class="date-header" onclick="toggleDate('${dateKey.replace(/'/g, "\\'")}')">
+			                                <span class="date-arrow">${dateArrow}</span> ${dateKey}
+			                            </div>`;
 								if (!isDateCollapsed) {
 									html += `<div class="date-entries">`;
 									for (const entry of dates[dateKey]) {
@@ -4239,24 +4288,24 @@ ASSIGN STORE - DONE ✅`;
 										const styleIssue = issueTextColor ? `style="color: ${issueTextColor};"` : "";
 
 										html += `
-                            <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
-                                <div class="preview-item issue-item" ${styleIssue}>${escapeHtml(issueDisplay)}</div>
-                                <div class="preview-item"><strong>Portal:</strong> ${escapeHtml(entry.portal || "-")}</div>
-                                <div class="preview-item"><strong>Store:</strong> ${escapeHtml(entry.store || "-")}</div>
-                                <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || "-")}</div>
-                                <div class="card-actions">
-                                    <div class="card-actions-row stack-row">
-                                        <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
-                                        <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
-                                    </div>
-                                    <div class="card-actions-row">
-                                        <button class="edit-entry stack-btn" data-id="${entry.id}">✏️<br>EDIT</button>
-                                        <button class="return-entry stack-btn" data-id="${entry.id}">↩️<br>RETURN</button>
-                                        <button class="delete-entry stack-btn" data-id="${entry.id}">🗑️<br>DELETE</button>
-                                    </div>
-                                </div>
-                            </div>
-                        `;
+			                            <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
+			                                <div class="preview-item issue-item" ${styleIssue}>${escapeHtml(issueDisplay)}</div>
+			                                <div class="preview-item"><strong>Portal:</strong> ${escapeHtml(entry.portal || "-")}</div>
+			                                <div class="preview-item"><strong>Store:</strong> ${escapeHtml(entry.store || "-")}</div>
+			                                <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || "-")}</div>
+			                                <div class="card-actions">
+			                                    <div class="card-actions-row stack-row">
+			                                        <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
+			                                        <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
+			                                    </div>
+			                                    <div class="card-actions-row">
+			                                        <button class="edit-entry stack-btn" data-id="${entry.id}">✏️<br>EDIT</button>
+			                                        <button class="return-entry stack-btn" data-id="${entry.id}">↩️<br>RETURN</button>
+			                                        <button class="delete-entry stack-btn" data-id="${entry.id}">🗑️<br>DELETE</button>
+			                                    </div>
+			                                </div>
+			                            </div>
+			                        `;
 									}
 									html += `</div>`;
 								}
@@ -4284,28 +4333,28 @@ ASSIGN STORE - DONE ✅`;
 							const entry = allEntries.find((e) => e.id == id);
 							if (entry) {
 								const plainText = `PORTAL: ${entry.portal}
-STORE NAME: ${entry.store}
-ZIPCODE: ${entry.zip}
-CALLER NAME: ${entry.contact}
-CONTACT NUMBER: ${entry.contactNumber}
+			STORE NAME: ${entry.store}
+			ZIPCODE: ${entry.zip}
+			CALLER NAME: ${entry.contact}
+			CONTACT NUMBER: ${entry.contactNumber}
 
-ISSUE:
-${entry.issue || ""}
+			ISSUE:
+			${entry.issue || ""}
 
-NOTE:
-${entry.note || ""}`;
+			NOTE:
+			${entry.note || ""}`;
 
 								const htmlContent = `<strong>PORTAL: </strong>${escapeHtml(entry.portal)}<br>
-<strong>STORE NAME: </strong>${escapeHtml(entry.store)}<br>
-<strong>ZIPCODE: </strong>${escapeHtml(entry.zip)}<br>
-<strong>CALLER NAME: </strong>${escapeHtml(entry.contact)}<br>
-<strong>CONTACT NUMBER: </strong>${escapeHtml(entry.contactNumber)}<br>
-<br>
-<strong>ISSUE:</strong><br>
-${escapeHtml(entry.issue || "").replace(/\n/g, "<br>")}<br>
-<br>
-<strong>NOTE:</strong><br>
-${escapeHtml(entry.note || "").replace(/\n/g, "<br>")}`;
+			<strong>STORE NAME: </strong>${escapeHtml(entry.store)}<br>
+			<strong>ZIPCODE: </strong>${escapeHtml(entry.zip)}<br>
+			<strong>CALLER NAME: </strong>${escapeHtml(entry.contact)}<br>
+			<strong>CONTACT NUMBER: </strong>${escapeHtml(entry.contactNumber)}<br>
+			<br>
+			<strong>ISSUE:</strong><br>
+			${escapeHtml(entry.issue || "").replace(/\n/g, "<br>")}<br>
+			<br>
+			<strong>NOTE:</strong><br>
+			${escapeHtml(entry.note || "").replace(/\n/g, "<br>")}`;
 
 								try {
 									const blobHtml = new Blob([htmlContent], {
@@ -4391,26 +4440,26 @@ ${escapeHtml(entry.note || "").replace(/\n/g, "<br>")}`;
 								const formattedResolution = entry.resolution || "";
 
 								const plainText = `📞 CONTACT:
-CALLER NAME: ${entry.contact}
-CONTACT NUMBER: ${entry.contactNumber}
+			CALLER NAME: ${entry.contact}
+			CONTACT NUMBER: ${entry.contactNumber}
 
-🔧 TROUBLESHOOTING:
-${troubleshootingPlain}
+			🔧 TROUBLESHOOTING:
+			${troubleshootingPlain}
 
-✅ RESOLUTION:
-${formattedResolution}`;
+			✅ RESOLUTION:
+			${formattedResolution}`;
 
 								const htmlCopy = `
-<strong>📞 CONTACT: </strong><br>
-<strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
-<strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
-<br>
-<strong>🔧 TROUBLESHOOTING: </strong><br>
-${troubleshootingHtml || escapeHtml(troubleshootingPlain).replace(/\n/g, "<br>")}
-<br>
-<strong>✅ RESOLUTION: </strong><br>
-${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
-`;
+			<strong>📞 CONTACT: </strong><br>
+			<strong>CALLER NAME: </strong> ${escapeHtml(entry.contact)}<br>
+			<strong>CONTACT NUMBER: </strong> ${escapeHtml(entry.contactNumber)}<br>
+			<br>
+			<strong>🔧 TROUBLESHOOTING: </strong><br>
+			${troubleshootingHtml || escapeHtml(troubleshootingPlain).replace(/\n/g, "<br>")}
+			<br>
+			<strong>✅ RESOLUTION: </strong><br>
+			${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
+			`;
 								try {
 									const blob = new Blob([htmlCopy], { type: "text/html" });
 									const plainBlob = new Blob([plainText], {
@@ -4739,22 +4788,22 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					const demoLine = demoEntries.length > 0 ? `${indent(2)}Scheduled Demo: ${demoEntries.map((e) => e.support || "Unknown Support").join(", ")}` : `${indent(2)}No Demo for today`;
 
 					const staticSections = `${indent(1)}5. Updates / Notices
-${indent(2)}The current latest versions:
-${indent(3)}RetailzPOS: Version Code 227 (Portal 1, 2, 3, 4, 6, 7, 8)
-${indent(3)}Moolah Points: Version Code 39 (Portal 1, 2, 3, 4, 6, 7, 8)
+			${indent(2)}The current latest versions:
+			${indent(3)}RetailzPOS: Version Code 227 (Portal 1, 2, 3, 4, 6, 7, 8)
+			${indent(3)}Moolah Points: Version Code 39 (Portal 1, 2, 3, 4, 6, 7, 8)
 
-${indent(2)}Reminders for Retailz team members:
-${indent(2)}- Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.
-${indent(2)}- Ask seniors assistance for issue that needed to be escalated to the India team
-${indent(2)}- Observe professional call etiquette at all times when handling calls.
-${indent(2)}- Follow up on any pending tickets and ensure timely updates.
-${indent(2)}- Review pending issues and escalations using the newly added features in our existing workload tracker
-${indent(2)}- Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.
-${indent(2)}- Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.
+			${indent(2)}Reminders for Retailz team members:
+			${indent(2)}- Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.
+			${indent(2)}- Ask seniors assistance for issue that needed to be escalated to the India team
+			${indent(2)}- Observe professional call etiquette at all times when handling calls.
+			${indent(2)}- Follow up on any pending tickets and ensure timely updates.
+			${indent(2)}- Review pending issues and escalations using the newly added features in our existing workload tracker
+			${indent(2)}- Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.
+			${indent(2)}- Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.
 
-${indent(1)}6. Training (Retailz Members): No training for today
+			${indent(1)}6. Training (Retailz Members): No training for today
 
-${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
+			${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
 					return [dateLine, shiftLine, "", "Good day everyone,", "", "Please find below the shift report for today,", "", `${indent(1)}1. Pending Tickets: ${pendingCount}`, pendingList, "", `${indent(1)}2. Total Calls: ${totalCalls}`, "", "", `${indent(1)}3. Total Other Tasks: ${otherCount}`, otherList, "", `${indent(1)}4. Scheduled Training/Demo (Merchant)`, trainingLine, demoLine, "", staticSections].join("\n");
 				}
@@ -4816,49 +4865,49 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					const demoLine = demoEntries.length > 0 ? `<div style="margin-left:25px;">Scheduled Demo: ${escapeHtml(demoEntries.map((e) => e.support || "Unknown Support").join(", "))}</div>` : `<div style="margin-left:25px;">No Demo for today</div>`;
 
 					const versionHtml = `
-        <div style="margin-left:25px;">The current latest versions:</div>
-        <div style="margin-left:50px;">RetailzPOS: Version Code 227 (Portal 1, 2, 3, 4, 6, 7, 8)</div>
-        <div style="margin-left:50px;">Moolah Points: Version Code 39 (Portal 1, 2, 3, 4, 6, 7, 8)</div>
-    `;
+			        <div style="margin-left:25px;">The current latest versions:</div>
+			        <div style="margin-left:50px;">RetailzPOS: Version Code 227 (Portal 1, 2, 3, 4, 6, 7, 8)</div>
+			        <div style="margin-left:50px;">Moolah Points: Version Code 39 (Portal 1, 2, 3, 4, 6, 7, 8)</div>
+			    `;
 
 					const remindersItems = ["Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.", "Ask seniors assistance for issue that needed to be escalated to the India team", "Observe professional call etiquette at all times when handling calls.", "Follow up on any pending tickets and ensure timely updates.", "Review pending issues and escalations using the newly added features in our existing workload tracker", "Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.", "Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history."];
 					const remindersListHtml = `<ul style="margin:4px 0 0 25px; padding-left:20px;">` + remindersItems.map((item) => `<li style="margin:0;">${escapeHtml(item)}</li>`).join("") + `</ul>`;
 
 					const staticSections = `
-        <div><strong>5. Updates / Notices</strong></div>
-        ${versionHtml}
-        <div style="margin-top:8px;"></div>
-        <div style="margin-left:25px;">Reminders for Retailz team members:</div>
-        ${remindersListHtml}
-        <div style="margin-top:8px;"><strong>6. Training (Retailz Members):</strong> No training for today</div>
-        <div style="margin-top:4px;"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</div>
-    `;
+			        <div><strong>5. Updates / Notices</strong></div>
+			        ${versionHtml}
+			        <div style="margin-top:8px;"></div>
+			        <div style="margin-left:25px;">Reminders for Retailz team members:</div>
+			        ${remindersListHtml}
+			        <div style="margin-top:8px;"><strong>6. Training (Retailz Members):</strong> No training for today</div>
+			        <div style="margin-top:4px;"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</div>
+			    `;
 
 					return `
-        <div style="font-family: sans-serif; line-height:1.4;">
-            <div>${escapeHtml(dateLine)}</div>
-            <div>${escapeHtml(shiftLine)}</div>
-            <div><br></div>
-            <div>Good day everyone,</div>
-            <div><br></div>
-            <div>Please find below the shift report for today,</div>
-            <div><br></div>
-            <div><strong>1. Pending Tickets: ${pendingCount}</strong></div>
-            ${pendingListHtml}
-            <div><br></div>
-            <div><strong>2. Total Calls: ${totalCalls}</strong></div>
-            <div><br></div>
-            <div><br></div>
-            <div><strong>3. Total Other Tasks: ${otherCount}</strong></div>
-            ${otherListHtml}
-            <div><br></div>
-            <div><strong>4. Scheduled Training/Demo (Merchant)</strong></div>
-            ${trainingLine}
-            ${demoLine}
-            <div><br></div>
-            ${staticSections}
-        </div>
-    `;
+			        <div style="font-family: sans-serif; line-height:1.4;">
+			            <div>${escapeHtml(dateLine)}</div>
+			            <div>${escapeHtml(shiftLine)}</div>
+			            <div><br></div>
+			            <div>Good day everyone,</div>
+			            <div><br></div>
+			            <div>Please find below the shift report for today,</div>
+			            <div><br></div>
+			            <div><strong>1. Pending Tickets: ${pendingCount}</strong></div>
+			            ${pendingListHtml}
+			            <div><br></div>
+			            <div><strong>2. Total Calls: ${totalCalls}</strong></div>
+			            <div><br></div>
+			            <div><br></div>
+			            <div><strong>3. Total Other Tasks: ${otherCount}</strong></div>
+			            ${otherListHtml}
+			            <div><br></div>
+			            <div><strong>4. Scheduled Training/Demo (Merchant)</strong></div>
+			            ${trainingLine}
+			            ${demoLine}
+			            <div><br></div>
+			            ${staticSections}
+			        </div>
+			    `;
 				}
 
 				function showShiftReportModal() {
@@ -5581,29 +5630,29 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 						const row = document.createElement("tr");
 						row.dataset.id = entry.id;
 						row.innerHTML = `
-                  <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-                  <td>${escapeHtml(entry.date)}</td>
-                  <td>${escapeHtml(entry.shift)}</td>
-                  <td>${escapeHtml(entry.support)}</td>
-                  <td>${escapeHtml(entry.portal)}</td>
-                  <td>${escapeHtml(entry.store)}</td>
-                  <td>${escapeHtml(entry.zip)}</td>
-                  <td>${escapeHtml(entry.contact)}</td>
-                  <td>${escapeHtml(entry.contactNumber)}</td>
-                  <td>${escapeHtml(entry.module)}</td>
-                  <td style="white-space: pre-wrap;">${escapeHtml(entry.issue)}</td>
-                  <td>${escapeHtml(entry.escalated)}</td>
-                  <td>${escapeHtml(entry.status)}</td>
-                  <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks)}</td>
-                  <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution)}</td>
-                  <td class="action-cell">
-                      <div class="action-container">
-                          <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
-                          <button class="icon-btn edit-btn disabled" disabled title="Edit not allowed in tracker view"><i class="bi bi-pencil-square"></i></button>
-                          <button class="icon-btn delete-btn disabled" disabled title="Delete not allowed"><i class="bi bi-trash3-fill"></i></button>
-                      </div>
-                  </td>
-              `;
+			                  <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+			                  <td>${escapeHtml(entry.date)}</td>
+			                  <td>${escapeHtml(entry.shift)}</td>
+			                  <td>${escapeHtml(entry.support)}</td>
+			                  <td>${escapeHtml(entry.portal)}</td>
+			                  <td>${escapeHtml(entry.store)}</td>
+			                  <td>${escapeHtml(entry.zip)}</td>
+			                  <td>${escapeHtml(entry.contact)}</td>
+			                  <td>${escapeHtml(entry.contactNumber)}</td>
+			                  <td>${escapeHtml(entry.module)}</td>
+			                  <td style="white-space: pre-wrap;">${escapeHtml(entry.issue)}</td>
+			                  <td>${escapeHtml(entry.escalated)}</td>
+			                  <td>${escapeHtml(entry.status)}</td>
+			                  <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks)}</td>
+			                  <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution)}</td>
+			                  <td class="action-cell">
+			                      <div class="action-container">
+			                          <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
+			                          <button class="icon-btn edit-btn disabled" disabled title="Edit not allowed in tracker view"><i class="bi bi-pencil-square"></i></button>
+			                          <button class="icon-btn delete-btn disabled" disabled title="Delete not allowed"><i class="bi bi-trash3-fill"></i></button>
+			                      </div>
+			                  </td>
+			              `;
 						tbody.appendChild(row);
 					});
 					updateSelectAllCheckboxState();
@@ -5798,19 +5847,23 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 					autoFillSupportName(currentUser.support);
 					loadAllEntries();
 
-					// --- FIX: Restore edit mode after page reload ---
+					// --- Restore edit mode with draft if available ---
 					const storedEditId = localStorage.getItem(EDIT_STORAGE_KEY);
 					if (storedEditId) {
 						const id = parseInt(storedEditId);
 						const entryToEdit = allEntries.find((e) => e.id === id && !e.deleted);
 						if (entryToEdit) {
 							setTimeout(() => {
-								editEntry(id);
-								showNotification("Restored your in-progress edit. Click UPDATE to save changes.");
+								editEntry(id); // this will load draft if exists
 							}, 100);
 						} else {
 							localStorage.removeItem(EDIT_STORAGE_KEY);
+							localStorage.removeItem(EDIT_DRAFT_KEY + id);
 						}
+					} else {
+						// Not editing – restore draft for current tab (new entry)
+						const activeTab = currentActiveTab || localStorage.getItem("activeTab") || "ticket";
+						loadFormData(activeTab);
 					}
 
 					updateStatusCounters();
@@ -6343,6 +6396,23 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 								saveFormData("ecommerce");
 							});
 						}
+					});
+
+					// Save all form drafts before page refresh or close
+					window.addEventListener("beforeunload", () => {
+						["ticket", "store", "moolah", "ecommerce"].forEach((prefix) => {
+							saveFormData(prefix);
+						});
+					});
+
+					window.addEventListener("beforeunload", () => {
+						if (editId) {
+							const activeTab = document.querySelector(".tab-content.active").id.replace("tab-", "");
+							attachDraftAutoSave(activeTab, editId);
+						}
+						["ticket", "store", "moolah", "ecommerce"].forEach((prefix) => {
+							saveFormData(prefix);
+						});
 					});
 				}
 
