@@ -2206,6 +2206,7 @@
 				let allEntries = [];
 				let storeData = [];
 				let editId = null;
+				const EDIT_STORAGE_KEY = "editingEntryId";
 				let undoStack = [];
 				let redoStack = [];
 
@@ -3054,7 +3055,6 @@
 					const zipcode = zipcodeEl.value.trim();
 					const api = document.getElementById("ecommerce-api").value.trim();
 
-					// Generate username automatically
 					const derivedUsername = storeName && zipcode && api ? `${storeName}${zipcode}_${api}` : "";
 					const defaultPassword = "P@$$w0rd123";
 
@@ -3081,7 +3081,10 @@
 								imported: false,
 							};
 							showNotification("E‑Commerce entry updated!");
+
+							// FIX: Clear edit mode
 							editId = null;
+							localStorage.removeItem(EDIT_STORAGE_KEY);
 							const addBtn = document.querySelector("#tab-ecommerce .add");
 							if (addBtn) {
 								addBtn.textContent = "ADD ENTRY";
@@ -3116,7 +3119,7 @@
 						showNotification("E‑Commerce entry added!");
 					}
 
-					// Clear only the remaining form fields (no username/password inputs anymore)
+					// Clear form fields
 					["portal", "storeName", "zipcode", "api"].forEach((id) => {
 						const el = document.getElementById(`ecommerce-${id}`);
 						if (el) el.value = "";
@@ -3469,6 +3472,15 @@
 							};
 							allEntries[existingEntryIndex] = newEntry;
 							showNotification("Entry updated!");
+
+							// FIX: Clear edit mode after successful update
+							editId = null;
+							localStorage.removeItem(EDIT_STORAGE_KEY);
+							const addBtnReset = document.querySelector("#tab-ticket .add");
+							if (addBtnReset) {
+								addBtnReset.textContent = "ADD ENTRY";
+								addBtnReset.classList.remove("editing");
+							}
 						} else {
 							newEntry = {
 								id: Date.now(),
@@ -3495,10 +3507,16 @@
 							};
 							allEntries.unshift(newEntry);
 							showNotification("Entry added (previous entry not found)!");
+
+							// Also clear edit mode if target missing
+							editId = null;
+							localStorage.removeItem(EDIT_STORAGE_KEY);
+							const addBtnReset = document.querySelector("#tab-ticket .add");
+							if (addBtnReset) {
+								addBtnReset.textContent = "ADD ENTRY";
+								addBtnReset.classList.remove("editing");
+							}
 						}
-						editId = null;
-						addBtn.textContent = "ADD ENTRY";
-						addBtn.classList.remove("editing");
 					} else {
 						newEntry = {
 							id: Date.now(),
@@ -3795,38 +3813,24 @@ ASSIGN STORE - DONE ✅`;
 				}
 
 				function clearFormOnly(prefix) {
-					clearFormFields(prefix); // now handles ecommerce as well
+					// FIX: If we are in edit mode, abort it
 					if (editId) {
 						editId = null;
-						document.querySelector("#tab-moolah .add").textContent = "ADD ENTRY";
-						document.querySelector("#tab-moolah .add").classList.remove("editing");
-						document.querySelector("#tab-store .add").textContent = "ADD ENTRY";
-						document.querySelector("#tab-store .add").classList.remove("editing");
-						document.querySelector("#tab-ticket .add").textContent = "ADD ENTRY";
-						document.querySelector("#tab-ticket .add").classList.remove("editing");
-						// Also reset ecommerce add button if needed
-						const ecommerceAddBtn = document.querySelector("#tab-ecommerce .add");
-						if (ecommerceAddBtn) {
-							ecommerceAddBtn.textContent = "ADD ENTRY";
-							ecommerceAddBtn.classList.remove("editing");
-						}
-					} else if (prefix === "ecommerce") {
-						// Clear all input fields (including combobox)
-						const fields = ["portal", "storeName", "zipcode"];
-						fields.forEach((id) => {
-							const el = document.getElementById(`ecommerce-${id}`);
-							if (el) el.value = "";
+						localStorage.removeItem(EDIT_STORAGE_KEY);
+						// Reset all add buttons
+						document.querySelectorAll(".add").forEach((btn) => {
+							btn.textContent = "ADD ENTRY";
+							btn.classList.remove("editing");
 						});
-						// Clear API combobox (both visible and hidden)
-						const apiCombobox = document.getElementById("ecommerce-api-combobox");
-						const apiHidden = document.getElementById("ecommerce-api");
-						if (apiCombobox) apiCombobox.value = "";
-						if (apiHidden) apiHidden.value = "";
-
-						// Update preview and save cleared state
-						ecommerceUpdatePreview();
-						saveFormData("ecommerce");
+						showNotification("Edit cancelled. Form cleared.");
 					}
+
+					clearFormFields(prefix);
+					if (prefix === "ticket") ticketUpdatePreview();
+					if (prefix === "store") storeUpdatePreview();
+					if (prefix === "moolah") moolahUpdatePreview();
+					if (prefix === "ecommerce") ecommerceUpdatePreview();
+					saveFormData(prefix);
 					showNotification("Form cleared!");
 					syncPreviewHeight();
 				}
@@ -3955,14 +3959,16 @@ ASSIGN STORE - DONE ✅`;
 						else if (prefix === "store") storeUpdatePreview();
 						else {
 							ticketUpdatePreview();
-							// FIX: Update resolution preview from the entry's resolution
 							const resolutionPreview = document.getElementById("ticket-previewResolution");
 							if (resolutionPreview) {
 								resolutionPreview.innerHTML = formatMultilinePreview(entry.resolution || "");
 							}
 						}
 
+						// FIX: Store editId in both memory and localStorage
 						editId = entry.id;
+						localStorage.setItem(EDIT_STORAGE_KEY, editId);
+
 						const addBtn = document.querySelector(`#tab-${prefix} .add`);
 						if (addBtn) {
 							addBtn.textContent = "EDIT ENTRY";
@@ -3998,6 +4004,16 @@ ASSIGN STORE - DONE ✅`;
 						renderTable();
 						renderSidebar();
 						showNotification("Entry removed from main table (still in history)");
+
+						// FIX: If this entry was being edited, cancel edit mode
+						if (editId == id) {
+							editId = null;
+							localStorage.removeItem(EDIT_STORAGE_KEY);
+							document.querySelectorAll(".add").forEach((btn) => {
+								btn.textContent = "ADD ENTRY";
+								btn.classList.remove("editing");
+							});
+						}
 					}
 
 					if (editId == id) {
@@ -4026,14 +4042,15 @@ ASSIGN STORE - DONE ✅`;
 							saveAllEntries();
 							renderTable();
 							renderSidebar();
+
+							// FIX: If this entry was being edited, cancel edit mode
 							if (editId == entryId) {
 								editId = null;
-								document.querySelector("#tab-moolah .add").textContent = "ADD ENTRY";
-								document.querySelector("#tab-moolah .add").classList.remove("editing");
-								document.querySelector("#tab-store .add").textContent = "ADD ENTRY";
-								document.querySelector("#tab-store .add").classList.remove("editing");
-								document.querySelector("#tab-ticket .add").textContent = "ADD ENTRY";
-								document.querySelector("#tab-ticket .add").classList.remove("editing");
+								localStorage.removeItem(EDIT_STORAGE_KEY);
+								document.querySelectorAll(".add").forEach((btn) => {
+									btn.textContent = "ADD ENTRY";
+									btn.classList.remove("editing");
+								});
 							}
 							showNotification("Entry permanently deleted.");
 						} else {
@@ -5780,6 +5797,22 @@ ${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
 					autoFillSupportName(currentUser.support);
 					loadAllEntries();
+
+					// --- FIX: Restore edit mode after page reload ---
+					const storedEditId = localStorage.getItem(EDIT_STORAGE_KEY);
+					if (storedEditId) {
+						const id = parseInt(storedEditId);
+						const entryToEdit = allEntries.find((e) => e.id === id && !e.deleted);
+						if (entryToEdit) {
+							setTimeout(() => {
+								editEntry(id);
+								showNotification("Restored your in-progress edit. Click UPDATE to save changes.");
+							}, 100);
+						} else {
+							localStorage.removeItem(EDIT_STORAGE_KEY);
+						}
+					}
+
 					updateStatusCounters();
 					archiveOldEntries();
 					saveAllEntries();
