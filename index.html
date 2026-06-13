@@ -3864,7 +3864,7 @@
 					} else {
 						document.getElementById(`${prefix}-store`).value = entry.store;
 						document.getElementById(`${prefix}-zip`).value = entry.zip;
-						document.getElementById(`${prefix}-contactPerson`).value = entry.contact;
+						document.getElementById(`${prefix}-contactPerson`).value = entry.contact || "";
 						document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
 						document.getElementById(`${prefix}-note`).value = entry.note || "";
 						document.getElementById("ticket-issue").value = entry.issue || "";
@@ -3948,7 +3948,10 @@
 						formData.id = entryId;
 						formData.store = formData.storeName || formData.store;
 						formData.zip = formData.zipcode || formData.zip;
-						
+						if (prefix === "ticket") {
+							// Ensure contact field exists (used by populateFormFromEntry)
+							formData.contact = formData.contactPerson;
+						}
 						localStorage.setItem(draftKey, JSON.stringify(formData));
 					};
 
