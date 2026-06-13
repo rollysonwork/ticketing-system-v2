@@ -3948,14 +3948,7 @@
 						formData.id = entryId;
 						formData.store = formData.storeName || formData.store;
 						formData.zip = formData.zipcode || formData.zip;
-						// For ticket: ensure contact field exists (used by populateFormFromEntry)
-						if (prefix === "ticket") {
-							// If there is a resolution field (from previous generation) keep it
-							const resolutionInput = document.getElementById("ticket-resolution");
-							if (resolutionInput && resolutionInput.value) {
-								formData.resolution = resolutionInput.value; // but resolution is not an input? Actually resolution is stored in entry, not in form.
-							}
-						}
+						
 						localStorage.setItem(draftKey, JSON.stringify(formData));
 					};
 
@@ -4024,13 +4017,7 @@
 							storeUpdatePreview();
 						} else {
 							ticketUpdatePreview();
-							// ✅ Set the Resolution preview from the entry (or draft if available)
-							let resolutionText = "";
-							if (useDraft && savedDraftData && savedDraftData.resolution) {
-								resolutionText = savedDraftData.resolution;
-							} else if (entry.resolution) {
-								resolutionText = entry.resolution;
-							}
+							let resolutionText = entry.resolution || "";
 							const resolutionPreviewSpan = document.getElementById("ticket-previewResolution");
 							if (resolutionPreviewSpan) {
 								resolutionPreviewSpan.innerHTML = formatMultilinePreview(resolutionText);
