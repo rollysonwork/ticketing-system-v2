@@ -3950,7 +3950,11 @@
 						formData.zip = formData.zipcode || formData.zip;
 						// For ticket: ensure contact field exists (used by populateFormFromEntry)
 						if (prefix === "ticket") {
-							formData.contact = formData.contactPerson;
+							// If there is a resolution field (from previous generation) keep it
+							const resolutionInput = document.getElementById("ticket-resolution");
+							if (resolutionInput && resolutionInput.value) {
+								formData.resolution = resolutionInput.value; // but resolution is not an input? Actually resolution is stored in entry, not in form.
+							}
 						}
 						localStorage.setItem(draftKey, JSON.stringify(formData));
 					};
@@ -3998,12 +4002,13 @@
 						const draftKey = EDIT_DRAFT_KEY + editId;
 						const savedDraft = localStorage.getItem(draftKey);
 						let useDraft = false;
+						let savedDraftData = null;
 						if (savedDraft) {
 							try {
-								const draftData = JSON.parse(savedDraft);
-								if (draftData.id === editId) {
+								savedDraftData = JSON.parse(savedDraft);
+								if (savedDraftData.id === editId) {
 									useDraft = true;
-									populateFormFromData(prefix, draftData);
+									populateFormFromData(prefix, savedDraftData);
 									showNotification("Restored your unsaved changes. Click UPDATE to save.");
 								}
 							} catch (e) {}
@@ -4013,9 +4018,24 @@
 							populateFormFromEntry(prefix, entry);
 						}
 
-						if (prefix === "moolah") moolahUpdatePreview();
-						else if (prefix === "store") storeUpdatePreview();
-						else ticketUpdatePreview();
+						if (prefix === "moolah") {
+							moolahUpdatePreview();
+						} else if (prefix === "store") {
+							storeUpdatePreview();
+						} else {
+							ticketUpdatePreview();
+							// ✅ Set the Resolution preview from the entry (or draft if available)
+							let resolutionText = "";
+							if (useDraft && savedDraftData && savedDraftData.resolution) {
+								resolutionText = savedDraftData.resolution;
+							} else if (entry.resolution) {
+								resolutionText = entry.resolution;
+							}
+							const resolutionPreviewSpan = document.getElementById("ticket-previewResolution");
+							if (resolutionPreviewSpan) {
+								resolutionPreviewSpan.innerHTML = formatMultilinePreview(resolutionText);
+							}
+						}
 
 						const addBtn = document.querySelector(`#tab-${prefix} .add`);
 						if (addBtn) {
