@@ -2716,7 +2716,12 @@
 						return;
 					}
 
-					filteredResults[prefix] = storeData.filter((store) => store.storeName.includes(searchTerm) || store.zipCode.includes(searchTerm) || (store.notes && store.notes.includes(searchTerm))).slice(0, 100);
+					// 🔁 Include SKU (store.sku) in search
+					filteredResults[prefix] = storeData
+						.filter(
+							(store) => store.storeName.includes(searchTerm) || store.zipCode.includes(searchTerm) || (store.notes && store.notes.includes(searchTerm)) || (store.sku && store.sku.includes(searchTerm)), // ✅ SKU search added
+						)
+						.slice(0, 100);
 
 					if (filteredResults[prefix].length === 0) {
 						resultsContainer.innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">No stores found</div>';
