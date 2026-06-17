@@ -1662,6 +1662,7 @@
 								<button class="btn btn-outline-danger store-step-btn" data-step="form" data-status="pending">
 									<i class="bi bi-x-square-fill"></i>
 								</button>
+								<button class="btn btn-outline-secondary store-step-btn" data-step="form" data-status="cleared"><i class="bi bi-x-circle-fill"></i></button>
 							</div>
 							<div>
 								STORE CREATION
@@ -1671,6 +1672,7 @@
 								<button class="btn btn-outline-danger store-step-btn" data-step="creation" data-status="pending">
 									<i class="bi bi-x-square-fill"></i>
 								</button>
+								<button class="btn btn-outline-secondary store-step-btn" data-step="creation" data-status="cleared"><i class="bi bi-x-circle-fill"></i></button>
 							</div>
 							<div>
 								INSTALL, UPDATE APPS & LOGIN ACCOUNT
@@ -1680,6 +1682,7 @@
 								<button class="btn btn-outline-danger store-step-btn" data-step="install" data-status="pending">
 									<i class="bi bi-x-square-fill"></i>
 								</button>
+								<button class="btn btn-outline-secondary store-step-btn" data-step="install" data-status="cleared"><i class="bi bi-x-circle-fill"></i></button>
 							</div>
 							<div>
 								UPLOAD DATABASE
@@ -1689,6 +1692,7 @@
 								<button class="btn btn-outline-danger store-step-btn" data-step="upload" data-status="pending">
 									<i class="bi bi-x-square-fill"></i>
 								</button>
+								<button class="btn btn-outline-secondary store-step-btn" data-step="upload" data-status="cleared"><i class="bi bi-x-circle-fill"></i></button>
 							</div>
 							<br />
 							<br />
@@ -1892,6 +1896,7 @@
 								<button class="btn btn-outline-danger moolah-step-btn" data-step="create" data-status="pending">
 									<i class="bi bi-x-square-fill"></i>
 								</button>
+								<button class="btn btn-outline-secondary moolah-step-btn" data-step="create" data-status="cleared"><i class="bi bi-x-circle-fill"></i></button>
 							</div>
 							<div class="mb-1">
 								INSTALL & UPDATE ALL APPS
@@ -1901,6 +1906,7 @@
 								<button class="btn btn-outline-danger moolah-step-btn" data-step="install" data-status="pending">
 									<i class="bi bi-x-square-fill"></i>
 								</button>
+								<button class="btn btn-outline-secondary moolah-step-btn" data-step="install" data-status="cleared"><i class="bi bi-x-circle-fill"></i></button>
 							</div>
 							<div class="mb-1">
 								ASSIGN STORE
@@ -1910,6 +1916,7 @@
 								<button class="btn btn-outline-danger moolah-step-btn" data-step="assign" data-status="pending">
 									<i class="bi bi-x-square-fill"></i>
 								</button>
+								<button class="btn btn-outline-secondary moolah-step-btn" data-step="assign" data-status="cleared"><i class="bi bi-x-circle-fill"></i></button>
 							</div>
 							<br />
 							<br />
@@ -3127,7 +3134,6 @@
 							}
 						}
 					} else {
-						// Inside addEntryLegacy(), when creating a NEW entry:
 						const newEntry = {
 							id: Date.now(),
 							date: formattedDate,
@@ -3136,8 +3142,8 @@
 							portal: portal,
 							store: storeName,
 							zip: zipcode,
-							contact: "SHIPPING TEAM", // ← hardcoded
-							contactNumber: "(000) 000-0000", // ← hardcoded
+							contact: "SHIPPING TEAM", // hardcoded
+							contactNumber: "(000) 000-0000", // hardcoded
 							module: prefix === "store" ? "Store Creation" : "Moolah",
 							issue: issueText,
 							note: "",
@@ -3706,8 +3712,8 @@ ASSIGN STORE - DONE ✅`;
 								portal: portal,
 								store: storeName,
 								zip: zipcode,
-								contact: contact,
-								contactNumber: contactNumber,
+								contact: "SHIPPING TEAM", // hardcoded
+								contactNumber: "(000) 000-0000", // hardcoded
 								module: prefix === "store" ? "Store Creation" : "Moolah",
 								issue: issueText,
 								note: "",
@@ -3740,8 +3746,8 @@ ASSIGN STORE - DONE ✅`;
 							portal: portal,
 							store: storeName,
 							zip: zipcode,
-							contact: contact,
-							contactNumber: contactNumber,
+							contact: "SHIPPING TEAM", // hardcoded
+							contactNumber: "(000) 000-0000", // hardcoded
 							module: prefix === "store" ? "Store Creation" : "Moolah",
 							issue: issueText,
 							note: "",
@@ -6187,10 +6193,12 @@ ASSIGN STORE - DONE ✅`;
 							install: "INSTALL, UPDATE APPS & LOGIN ACCOUNT",
 							upload: "UPLOAD DATABASE",
 						};
-						let lines = [];
-						for (let [key, label] of Object.entries(steps)) {
-							const status = window.storeSteps[key] === "done" ? "DONE ✅" : "PENDING ❌";
-							lines.push(`${label} - ${status}`);
+						const lines = [];
+						for (const [key, label] of Object.entries(steps)) {
+							const status = window.storeSteps[key];
+							if (status === "cleared") continue;
+							const statusText = status === "done" ? "DONE ✅" : "PENDING ❌";
+							lines.push(`${label} - ${statusText}`);
 						}
 						const issueText = lines.join("\n");
 						const el = document.getElementById("store-generated-issue");
@@ -6204,10 +6212,12 @@ ASSIGN STORE - DONE ✅`;
 							install: "INSTALL & UPDATE ALL APPS",
 							assign: "ASSIGN STORE",
 						};
-						let lines = [];
-						for (let [key, label] of Object.entries(steps)) {
-							const status = window.moolahSteps[key] === "done" ? "DONE ✅" : "PENDING ❌";
-							lines.push(`${label} - ${status}`);
+						const lines = [];
+						for (const [key, label] of Object.entries(steps)) {
+							const status = window.moolahSteps[key];
+							if (status === "cleared") continue;
+							const statusText = status === "done" ? "DONE ✅" : "PENDING ❌";
+							lines.push(`${label} - ${statusText}`);
 						}
 						const issueText = lines.join("\n");
 						const el = document.getElementById("moolah-generated-issue");
@@ -6251,15 +6261,27 @@ ASSIGN STORE - DONE ✅`;
 					function applyStepButtonStyles(prefix, steps) {
 						document.querySelectorAll(`.${prefix}-step-btn`).forEach((btn) => {
 							const step = btn.dataset.step;
-							if (!step || !steps[step]) return;
-							if (btn.dataset.status === steps[step]) {
-								btn.style.backgroundColor = steps[step] === "done" ? "#198754" : "#dc3545";
-								btn.style.color = "white";
-								btn.style.borderColor = "";
+							if (!step || steps[step] === undefined) return;
+							const status = steps[step];
+							// Reset all styles
+							btn.style.backgroundColor = "";
+							btn.style.color = "";
+							btn.style.borderColor = "";
+							btn.classList.remove("btn-success", "btn-danger", "btn-outline-success", "btn-outline-danger", "btn-outline-secondary");
+							if (status === "cleared") {
+								btn.classList.add("btn-outline-secondary");
+							} else if (btn.dataset.status === status) {
+								if (status === "done") {
+									btn.style.backgroundColor = "#198754";
+									btn.style.color = "white";
+									btn.classList.add("btn-success");
+								} else if (status === "pending") {
+									btn.style.backgroundColor = "#dc3545";
+									btn.style.color = "white";
+									btn.classList.add("btn-danger");
+								}
 							} else {
-								btn.style.backgroundColor = "";
-								btn.style.color = "";
-								btn.style.borderColor = "";
+								btn.classList.add("btn-outline-secondary");
 							}
 						});
 					}
