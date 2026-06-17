@@ -3102,9 +3102,11 @@
 					const moduleData = { api, username: derivedUsername, password: defaultPassword };
 					const issueText = api ? `Wants to integrate ${api}` : "Wants to integrate E‑Commerce";
 
-					if (editId && allEntries.find((e) => e.id === editId && e.source === "ecommerce")) {
-						const index = allEntries.findIndex((e) => e.id === editId);
+					// Check if we are editing an existing ecommerce entry
+					if (editId) {
+						const index = allEntries.findIndex((e) => e.id === editId && e.source === "ecommerce");
 						if (index !== -1) {
+							// Update existing entry
 							allEntries[index] = {
 								...allEntries[index],
 								date: formattedDate,
@@ -3132,8 +3134,44 @@
 								addBtn.textContent = "ADD ENTRY";
 								addBtn.classList.remove("editing");
 							}
+						} else {
+							// Fallback: entry not found, create new
+							const newEntry = {
+								id: Date.now(),
+								date: formattedDate,
+								shift: shift,
+								support: support,
+								portal: portal,
+								store: storeName,
+								zip: zipcode,
+								contact: "", // ecommerce does not use contact
+								contactNumber: "", // ecommerce does not use contact number
+								module: "E‑Commerce",
+								issue: issueText,
+								note: "",
+								escalated: "",
+								status: "OTHER TASK",
+								remarks: "",
+								troubleshooting: "",
+								resolution: "",
+								moduleData: moduleData,
+								source: "ecommerce",
+								deleted: false,
+								imported: false,
+							};
+							allEntries.unshift(newEntry);
+							showNotification("E‑Commerce entry added (edit target missing)!");
+							localStorage.removeItem(EDIT_DRAFT_KEY + editId);
+							editId = null;
+							localStorage.removeItem(EDIT_STORAGE_KEY);
+							const addBtn = document.querySelector("#tab-ecommerce .add");
+							if (addBtn) {
+								addBtn.textContent = "ADD ENTRY";
+								addBtn.classList.remove("editing");
+							}
 						}
 					} else {
+						// New entry
 						const newEntry = {
 							id: Date.now(),
 							date: formattedDate,
@@ -3142,9 +3180,9 @@
 							portal: portal,
 							store: storeName,
 							zip: zipcode,
-							contact: "SHIPPING TEAM", // hardcoded
-							contactNumber: "(000) 000-0000", // hardcoded
-							module: prefix === "store" ? "Store Creation" : "Moolah",
+							contact: "", // ecommerce does not use contact
+							contactNumber: "", // ecommerce does not use contact number
+							module: "E‑Commerce",
 							issue: issueText,
 							note: "",
 							escalated: "",
@@ -3153,7 +3191,7 @@
 							troubleshooting: "",
 							resolution: "",
 							moduleData: moduleData,
-							source: prefix,
+							source: "ecommerce",
 							deleted: false,
 							imported: false,
 						};
@@ -3161,6 +3199,7 @@
 						showNotification("E‑Commerce entry added!");
 					}
 
+					// Clear form fields
 					["portal", "storeName", "zipcode", "api"].forEach((id) => {
 						const el = document.getElementById(`ecommerce-${id}`);
 						if (el) el.value = "";
