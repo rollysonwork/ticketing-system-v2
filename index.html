@@ -1542,6 +1542,14 @@
 									</td>
 								</tr>
 								<tr>
+									<th><label for="store-contact">OWNER</label></th>
+									<td><input type="text" id="store-contact" class="no-uppercase" /></td>
+								</tr>
+								<tr>
+									<th><label for="store-contactNumber">CONTACT NUMBER</label></th>
+									<td><input type="text" id="store-contactNumber" class="no-uppercase" maxlength="14" /></td>
+								</tr>
+								<tr>
 									<th>ADDRESS LINE 1</th>
 									<td><input type="text" id="store-address1" class="no-uppercase" /></td>
 								</tr>
@@ -1618,6 +1626,8 @@
 								<strong>ZIPCODE:</strong>
 								<span id="store-preview-zipcode"></span>
 							</div>
+							<div><strong>CONTACT:</strong> <span id="store-preview-contact"></span></div>
+							<div><strong>CONTACT #:</strong> <span id="store-preview-contactNumber"></span></div>
 							<div><strong>PORTAL:</strong> <span id="store-preview-portal"></span></div>
 							<div><strong>AGENT:</strong> <span id="store-preview-agent"></span></div>
 							<div>
@@ -1767,6 +1777,14 @@
 									</td>
 								</tr>
 								<tr>
+									<th><label for="moolah-contact">CONTACT</label></th>
+									<td><input type="text" id="moolah-contact" class="no-uppercase" /></td>
+								</tr>
+								<tr>
+									<th><label for="moolah-contactNumber">CONTACT NUMBER</label></th>
+									<td><input type="text" id="moolah-contactNumber" class="no-uppercase" maxlength="14" /></td>
+								</tr>
+								<tr>
 									<th>ADDRESS LINE 1</th>
 									<td><input type="text" id="moolah-address1" class="no-uppercase" /></td>
 								</tr>
@@ -1837,7 +1855,14 @@
 								<strong>PORTAL:</strong>
 								<span id="moolah-preview-portal"></span>
 							</div>
-							<br />
+							<div>
+								<strong>OWNER:</strong>
+								<span id="moolah-preview-contact"></span>
+							</div>
+							<div>
+								<strong>CONTACT #:</strong>
+								<span id="moolah-preview-contactNumber"></span>
+							</div>
 							<div>
 								<strong>EMAIL ID:</strong>
 								<span id="moolah-preview-email"></span>
@@ -2840,8 +2865,8 @@
 
 				function saveFormData(prefix) {
 					const fields = {
-						moolah: ["shift", "support", "portal", "storeName", "zipcode", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"],
-						store: ["shift", "support", "portal", "storeName", "zipcode", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"],
+						moolah: ["shift", "support", "portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"],
+						store: ["shift", "support", "portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"],
 						ticket: ["shift", "support", "portal", "store", "zip", "contactPerson", "contactNumber", "module", "issue", "escalated", "status", "remarks", "resolution", "note"],
 						ecommerce: ["shift", "support", "portal", "storeName", "zipcode", "api"],
 					};
@@ -2868,7 +2893,6 @@
 						} catch (e) {}
 					}
 
-					// For store, moolah, and ecommerce: update the disabled shift dropdown label
 					if (prefix === "store" || prefix === "moolah" || prefix === "ecommerce") {
 						const shiftHidden = document.getElementById(`${prefix}-shift`);
 						const shiftLabel = document.getElementById(`${prefix}-shiftDropdownLabel`);
@@ -2941,6 +2965,8 @@
 					const portal = document.getElementById("moolah-portal").value.trim();
 					const storeName = document.getElementById("moolah-storeName").value.trim();
 					const zipcode = document.getElementById("moolah-zipcode").value.trim();
+					const contact = document.getElementById("moolah-contact").value.trim();
+					const contactNumber = document.getElementById("moolah-contactNumber").value.trim();
 					const address1 = document.getElementById("moolah-address1").value.trim();
 					const address2 = document.getElementById("moolah-address2").value.trim();
 					const city = document.getElementById("moolah-city").value.trim();
@@ -2963,6 +2989,8 @@
 					document.getElementById("moolah-preview-date").textContent = storeGetFormattedDateMinusOne();
 					document.getElementById("moolah-preview-storeName").textContent = storeName || "";
 					document.getElementById("moolah-preview-zipcode").textContent = zipcode || "";
+					document.getElementById("moolah-preview-contact").textContent = contact || "";
+					document.getElementById("moolah-preview-contactNumber").textContent = contactNumber || "";
 					document.getElementById("moolah-preview-address1").textContent = address1 || "";
 					document.getElementById("moolah-preview-address2").textContent = address2 || "";
 					document.getElementById("moolah-preview-city").textContent = city || "";
@@ -3099,6 +3127,7 @@
 							}
 						}
 					} else {
+						// Inside addEntryLegacy(), when creating a NEW entry:
 						const newEntry = {
 							id: Date.now(),
 							date: formattedDate,
@@ -3107,9 +3136,9 @@
 							portal: portal,
 							store: storeName,
 							zip: zipcode,
-							contact: "",
-							contactNumber: "",
-							module: "E‑Commerce",
+							contact: "SHIPPING TEAM", // ← hardcoded
+							contactNumber: "(000) 000-0000", // ← hardcoded
+							module: prefix === "store" ? "Store Creation" : "Moolah",
 							issue: issueText,
 							note: "",
 							escalated: "",
@@ -3118,7 +3147,7 @@
 							troubleshooting: "",
 							resolution: "",
 							moduleData: moduleData,
-							source: "ecommerce",
+							source: prefix,
 							deleted: false,
 							imported: false,
 						};
@@ -3143,6 +3172,8 @@
 					const portal = document.getElementById("store-portal").value.trim();
 					const storeName = document.getElementById("store-storeName").value.trim();
 					const zipcode = document.getElementById("store-zipcode").value.trim();
+					const contact = document.getElementById("store-contact").value.trim();
+					const contactNumber = document.getElementById("store-contactNumber").value.trim();
 					const address1 = document.getElementById("store-address1").value.trim();
 					const address2 = document.getElementById("store-address2").value.trim();
 					const city = document.getElementById("store-city").value.trim();
@@ -3165,6 +3196,8 @@
 					document.getElementById("store-preview-date").textContent = dateStr;
 					document.getElementById("store-preview-storeName").textContent = storeName || "";
 					document.getElementById("store-preview-zipcode").textContent = zipcode || "";
+					document.getElementById("store-preview-contact").textContent = contact || "";
+					document.getElementById("store-preview-contactNumber").textContent = contactNumber || "";
 					document.getElementById("store-preview-address1").textContent = address1 || "";
 					document.getElementById("store-preview-address2").textContent = address2 || "";
 					document.getElementById("store-preview-city").textContent = city || "";
@@ -3585,21 +3618,23 @@
 					const portal = portalEl.value.trim();
 					const storeName = storeNameEl.value.trim();
 					const zipcode = zipcodeEl.value.trim();
+					const contact = document.getElementById(`${prefix}-contact`).value.trim();
+					const contactNumber = document.getElementById(`${prefix}-contactNumber`).value.trim();
 
 					let issueText = "";
 					if (prefix === "store") {
 						issueText =
 							window._storeCurrentIssue ||
 							`NEW STORE CREATION FORM SENT - DONE ✅
-			STORE CREATION - DONE ✅
-			INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
-			UPLOAD DATABASE - PENDING ❌`;
+STORE CREATION - DONE ✅
+INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
+UPLOAD DATABASE - PENDING ❌`;
 					} else if (prefix === "moolah") {
 						issueText =
 							window._moolahCurrentIssue ||
 							`CREATE MOOLAH ACCOUNT - DONE ✅
-			INSTALL & UPDATE ALL APPS - DONE ✅
-			ASSIGN STORE - DONE ✅`;
+INSTALL & UPDATE ALL APPS - DONE ✅
+ASSIGN STORE - DONE ✅`;
 					}
 
 					let moduleData = {};
@@ -3639,7 +3674,7 @@
 						const index = allEntries.findIndex((e) => e.id === editId);
 						if (index !== -1) {
 							allEntries[index] = {
-								...allEntries[index],
+								...allEntries[index], // keeps original contact/contactNumber
 								date: formattedDate,
 								shift: shift,
 								support: support,
@@ -3655,7 +3690,6 @@
 							};
 							showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry updated!`);
 
-							// Clear draft and edit mode
 							localStorage.removeItem(EDIT_DRAFT_KEY + editId);
 							editId = null;
 							localStorage.removeItem(EDIT_STORAGE_KEY);
@@ -3672,8 +3706,8 @@
 								portal: portal,
 								store: storeName,
 								zip: zipcode,
-								contact: "SHIPPING TEAM",
-								contactNumber: "(000) 000-0000",
+								contact: contact,
+								contactNumber: contactNumber,
 								module: prefix === "store" ? "Store Creation" : "Moolah",
 								issue: issueText,
 								note: "",
@@ -3706,8 +3740,8 @@
 							portal: portal,
 							store: storeName,
 							zip: zipcode,
-							contact: "SHIPPING TEAM",
-							contactNumber: "(000) 000-0000",
+							contact: contact,
+							contactNumber: contactNumber,
 							module: prefix === "store" ? "Store Creation" : "Moolah",
 							issue: issueText,
 							note: "",
@@ -3726,14 +3760,14 @@
 					}
 
 					if (prefix === "store") {
-						["portal", "storeName", "zipcode", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"].forEach((id) => {
+						["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"].forEach((id) => {
 							const el = document.getElementById(`store-${id}`);
 							if (el) el.value = "";
 						});
 						storeUpdatePreview();
 						saveFormData("store");
 					} else if (prefix === "moolah") {
-						["portal", "storeName", "zipcode", "address1", "address2", "city", "state", "email", "password", "sku", "noOfTabs", "mokiId", "anydeskId"].forEach((id) => {
+						["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "sku", "noOfTabs", "mokiId", "anydeskId"].forEach((id) => {
 							const el = document.getElementById(`moolah-${id}`);
 							if (el) el.value = "";
 						});
@@ -3756,27 +3790,23 @@
 							if (el) el.value = "";
 						});
 
-						// Clear Module combobox
 						const moduleInput = document.getElementById("ticket-module-combobox");
 						const moduleHidden = document.getElementById("ticket-module");
 						if (moduleInput) moduleInput.value = "";
 						if (moduleHidden) moduleHidden.value = "";
 						updateTemplateDropdown();
 
-						// Clear Status combobox
 						const statusInput = document.getElementById("ticket-status-combobox");
 						const statusHidden = document.getElementById("ticket-status");
 						if (statusInput) statusInput.value = "";
 						if (statusHidden) statusHidden.value = "";
 						updateTemplateDropdown();
 
-						// Reset Quill editor (troubleshooting)
 						if (quillEditor) {
 							quillEditor.root.innerHTML = "";
 							document.getElementById("ticket-resolution").value = "";
 						}
 
-						// ✅ Reset the troubleshooting template dropdown: disable and show placeholder
 						const templateSelect = document.getElementById("ticket-template-select");
 						if (templateSelect) {
 							templateSelect.value = "";
@@ -3784,14 +3814,13 @@
 							templateSelect.innerHTML = '<option value="">-- Select a module first --</option>';
 						}
 
-						// Reset preview panels
 						document.getElementById("ticket-previewResolution").innerHTML = "";
 						document.getElementById("ticket-previewTroubleshooting").innerHTML = "";
 
 						const textareas = document.querySelectorAll(`#tab-ticket textarea`);
 						textareas.forEach((ta) => autoGrow(ta));
 					} else if (prefix === "store") {
-						const fields = ["portal", "storeName", "zipcode", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"];
+						const fields = ["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"];
 						fields.forEach((id) => {
 							const el = document.getElementById(`store-${id}`);
 							if (el) el.value = "";
@@ -3799,7 +3828,7 @@
 						const textareas = document.querySelectorAll(`#tab-store textarea`);
 						textareas.forEach((ta) => autoGrow(ta));
 					} else if (prefix === "moolah") {
-						const fields = ["portal", "storeName", "zipcode", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"];
+						const fields = ["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"];
 						fields.forEach((id) => {
 							const el = document.getElementById(`moolah-${id}`);
 							if (el) el.value = "";
@@ -3819,7 +3848,6 @@
 						ecommerceUpdatePreview();
 					}
 
-					// Update preview and save cleared state for the specific tab
 					if (prefix === "ticket") ticketUpdatePreview();
 					if (prefix === "store") storeUpdatePreview();
 					if (prefix === "moolah") moolahUpdatePreview();
@@ -5941,6 +5969,40 @@
 						ticketUpdatePreview();
 					});
 
+					// Apply contact number formatting for store and moolah
+					function applyContactNumberFormatting(input, prefix) {
+						input.addEventListener("input", function () {
+							let digits = this.value.replace(/\D/g, "");
+							if (digits.length > 10) digits = digits.slice(0, 10);
+							let formatted = "";
+							if (digits.length > 0) {
+								if (digits.length <= 3) formatted = `(${digits}`;
+								else if (digits.length <= 6) formatted = `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+								else formatted = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+							}
+							this.value = formatted;
+							saveFormData(prefix);
+							if (prefix === "store") storeUpdatePreview();
+							else if (prefix === "moolah") moolahUpdatePreview();
+						});
+						input.addEventListener("blur", function () {
+							let digits = this.value.replace(/\D/g, "");
+							if (digits.length > 0 && digits.length < 10) {
+								digits = digits.padStart(10, "0");
+								let formatted = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
+								this.value = formatted;
+								saveFormData(prefix);
+								if (prefix === "store") storeUpdatePreview();
+								else if (prefix === "moolah") moolahUpdatePreview();
+							}
+						});
+					}
+
+					const storeContactNumber = document.getElementById("store-contactNumber");
+					const moolahContactNumber = document.getElementById("moolah-contactNumber");
+					if (storeContactNumber) applyContactNumberFormatting(storeContactNumber, "store");
+					if (moolahContactNumber) applyContactNumberFormatting(moolahContactNumber, "moolah");
+
 					// On blur, pad with leading zeros if needed to make 10 digits
 					document.getElementById("ticket-contactNumber").addEventListener("blur", function () {
 						let digits = this.value.replace(/\D/g, "");
@@ -5981,7 +6043,7 @@
 
 					document.getElementById("ticket-date").addEventListener("change", syncShiftSupportFromTicket);
 
-					const moolahFields = ["portal", "storeName", "zipcode", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"];
+					const moolahFields = ["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"];
 					moolahFields.forEach((id) => {
 						const el = document.getElementById(`moolah-${id}`);
 						if (el)
@@ -5991,7 +6053,7 @@
 							});
 					});
 
-					const storeFields = ["portal", "storeName", "zipcode", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"];
+					const storeFields = ["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"];
 					storeFields.forEach((id) => {
 						const el = document.getElementById(`store-${id}`);
 						if (el)
