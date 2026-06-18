@@ -1663,7 +1663,7 @@
 								<button class="btn btn-outline-danger store-step-btn" data-step="form" data-status="pending">
 									<i class="bi bi-x-square-fill"></i>
 								</button>
-								<button class="btn btn-outline-secondary store-step-btn" data-step="form" data-status="cleared"><i class="bi bi-x-circle-fill"></i></button>
+								<button class="btn btn-outline-secondary store-step-btn" data-step="form" data-status="cleared"><i class="bi bi-eraser-fill"></i></button>
 							</div>
 							<div>
 								STORE CREATION
@@ -1673,7 +1673,7 @@
 								<button class="btn btn-outline-danger store-step-btn" data-step="creation" data-status="pending">
 									<i class="bi bi-x-square-fill"></i>
 								</button>
-								<button class="btn btn-outline-secondary store-step-btn" data-step="creation" data-status="cleared"><i class="bi bi-x-circle-fill"></i></button>
+								<button class="btn btn-outline-secondary store-step-btn" data-step="creation" data-status="cleared"><i class="bi bi-eraser-fill"></i></button>
 							</div>
 							<div>
 								INSTALL, UPDATE APPS & LOGIN ACCOUNT
@@ -1683,7 +1683,7 @@
 								<button class="btn btn-outline-danger store-step-btn" data-step="install" data-status="pending">
 									<i class="bi bi-x-square-fill"></i>
 								</button>
-								<button class="btn btn-outline-secondary store-step-btn" data-step="install" data-status="cleared"><i class="bi bi-x-circle-fill"></i></button>
+								<button class="btn btn-outline-secondary store-step-btn" data-step="install" data-status="cleared"><i class="bi bi-eraser-fill"></i></button>
 							</div>
 							<div>
 								UPLOAD DATABASE
@@ -6320,6 +6320,10 @@ ASSIGN STORE - DONE ✅`;
 									btn.style.backgroundColor = "#dc3545";
 									btn.style.color = "white";
 									btn.classList.add("btn-danger");
+								} else if (status === "cleared") {
+									btn.style.backgroundColor = "#dc3545";
+									btn.style.color = "white";
+									btn.classList.add("btn-secondary");
 								}
 							} else {
 								btn.classList.add("btn-outline-secondary");
