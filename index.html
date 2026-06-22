@@ -3040,7 +3040,7 @@
 					const portal = document.getElementById("ecommerce-portal").value.trim();
 					let storeName = document.getElementById("ecommerce-storeName").value.trim();
 					const zipcode = document.getElementById("ecommerce-zipcode").value.trim();
-					const api = document.getElementById("ecommerce-api").value.trim();
+					let api = document.getElementById("ecommerce-api").value.trim();
 
 					document.getElementById("ecommerce-preview-storeName").textContent = storeName || "";
 					document.getElementById("ecommerce-preview-zipcode").textContent = zipcode || "";
@@ -3053,7 +3053,6 @@
 					// Format storeName: remove spaces, then propercase each word
 					let formattedStoreName = "";
 					if (storeName) {
-						// Split by spaces, filter out empty strings
 						const words = storeName.split(/\s+/).filter((w) => w.length > 0);
 						const properWords = words.map((word) => {
 							if (word.length === 0) return "";
@@ -3062,8 +3061,11 @@
 						formattedStoreName = properWords.join("");
 					}
 
-					// Generate username: formattedStoreName + zipcode + "_" + api
-					const derivedUsername = formattedStoreName && zipcode && api ? `${formattedStoreName}${zipcode}_${api}` : "";
+					// Remove spaces from API name
+					const apiNoSpaces = api ? api.replace(/\s/g, "") : "";
+
+					// Generate username: formattedStoreName + zipcode + "_" + apiNoSpaces
+					const derivedUsername = formattedStoreName && zipcode && apiNoSpaces ? `${formattedStoreName}${zipcode}_${apiNoSpaces}` : "";
 					document.getElementById("ecommerce-preview-username").textContent = derivedUsername;
 
 					// Fixed password
@@ -3098,7 +3100,21 @@
 					const zipcode = zipcodeEl.value.trim();
 					const api = document.getElementById("ecommerce-api").value.trim();
 
-					const derivedUsername = storeName && zipcode && api ? `${storeName}${zipcode}_${api}` : "";
+					// Format storeName: remove spaces, propercase each word
+					let formattedStoreName = "";
+					if (storeName) {
+						const words = storeName.split(/\s+/).filter((w) => w.length > 0);
+						const properWords = words.map((word) => {
+							if (word.length === 0) return "";
+							return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+						});
+						formattedStoreName = properWords.join("");
+					}
+
+					// Remove spaces from API name
+					const apiNoSpaces = api ? api.replace(/\s/g, "") : "";
+
+					const derivedUsername = formattedStoreName && zipcode && apiNoSpaces ? `${formattedStoreName}${zipcode}_${apiNoSpaces}` : "";
 					const defaultPassword = "P@$$w0rd123";
 
 					const moduleData = { api, username: derivedUsername, password: defaultPassword };
