@@ -2223,7 +2223,6 @@
 				}
 
 				const CLOCK_TIMES = {
-					"9PM - 8AM": ["09:00 PM", "08:00 AM"],
 					"9PM - 6AM": ["09:00 PM", "06:00 AM"],
 					"5AM - 2PM": ["05:00 AM", "02:00 PM"],
 					"2PM - 11PM": ["02:00 PM", "11:00 PM"],
@@ -2233,7 +2232,7 @@
 
 				const MODULE_OPTIONS = ["POS", "Portal", "Mobile App", "Cash Register", "Item Management", "Inventory", "Back Office", "Credit Card Terminal", "Printer", "Transactions", "Scan-Data", "Promotions", "Reports", "Register Setup", "Store Creation", "Rocket Application", "Moolah", "API", "Database import/export", "Gift Card", "Employee", "EDI", "Demo", "Training", "Credentials", "Other", "MIGRATION", "VERSION UPDATE", "EBT", "Cash drawer", "LABEL PRINTER", "BULK CHANGE", "CRASH - APK", "SERVER", "TOUCH SCREEN", "CHANGE STORE/EMAIL ID", "Customer Module", "Age Check", "Internet", "SYNC DATA", "Surcharge", "Image set", "Scanner", "TENDER", "TIME CARD", "BANK DEPOSITE", "E-Commerce", "Dual Price", "Lotto Guru", "Tax", "LABEL UTILITY", "FACTORY RESET", "DB EXPORT", "Adjustments", "NVR", "RECEIPT", "RETAILZGO", "INVOICE", "SOLINK INTEGRATION", "Price Level", "CashBack", "Customer Screen", "Active / Deactive", "Store", "OCR", "DEVICE ID", "Invoicely RAI", "Exe Install", "NETWORK"];
 				const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
-				const SHIFT_OPTIONS = ["9PM - 8AM", "9PM - 6AM", "5AM - 2PM", "2PM - 11PM"];
+				const SHIFT_OPTIONS = ["9PM - 6AM", "5AM - 2PM", "2PM - 11PM"];
 
 				let currentStatusFilter = null;
 				let currentActiveTab = "ticket";
@@ -3744,6 +3743,8 @@ ASSIGN STORE - DONE ✅`;
 								portal: portal,
 								store: storeName,
 								zip: zipcode,
+								contact: contact,
+								contactNumber: contactNumber,
 								issue: issueText,
 								moduleData: moduleData,
 								status: "OTHER TASK",
@@ -3957,6 +3958,8 @@ ASSIGN STORE - DONE ✅`;
 					if (prefix === "moolah" || prefix === "store") {
 						document.getElementById(`${prefix}-storeName`).value = entry.store;
 						document.getElementById(`${prefix}-zipcode`).value = entry.zip;
+						document.getElementById(`${prefix}-contact`).value = entry.contact || "";
+						document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber || "";
 					} else {
 						document.getElementById(`${prefix}-store`).value = entry.store;
 						document.getElementById(`${prefix}-zip`).value = entry.zip;
@@ -4244,42 +4247,52 @@ ASSIGN STORE - DONE ✅`;
 				}
 
 				function renderTable() {
-					const visibleEntries = getVisibleEntries(); // ← uses status filter
-					const tbody = document.querySelector("#entryTable tbody");
-					tbody.innerHTML = "";
-					visibleEntries.forEach((entry) => {
-						const row = document.createElement("tr");
-						row.dataset.id = entry.id;
-						row.innerHTML = `
-			    <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-			    <td>${entry.date}</td>
-			    <td>${entry.shift}</td>
-			    <td>${entry.support}</td>
-			    <td>${entry.portal}</td>
-			    <td>${entry.store}</td>
-			    <td>${entry.zip}</td>
-			    <td>${entry.contact}</td>
-			    <td>${entry.contactNumber}</td>
-			    <td>${entry.module}</td>
-			    <td style="white-space: pre-wrap;">${entry.issue || ""}</td>
-			    <td>${entry.escalated}</td>
-			    <td>${entry.status}</td>
-			    <td style="white-space: pre-wrap;">${entry.remarks || ""}</td>
-			    <td style="white-space: pre-wrap;">${entry.resolution || ""}</td>
-			    <td class="action-cell">
-			        <div class="action-container">
-			            <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
-			            <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
-			            <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
-			            <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
-			        </div>
-			    </td>
-			`;
-						tbody.appendChild(row);
-					});
-					updateSelectAllCheckboxState();
-					updateStatusCounters();
-				}
+    const visibleEntries = getVisibleEntries(); // uses current status filter
+    const tbody = document.querySelector("#entryTable tbody");
+    tbody.innerHTML = "";
+    visibleEntries.forEach((entry) => {
+        const row = document.createElement("tr");
+        row.dataset.id = entry.id;
+
+        // Determine display values for Contact and Contact #
+        let displayContact = entry.contact;
+        let displayContactNumber = entry.contactNumber;
+        // For store and moolah entries, override with the fixed placeholders
+        if (entry.source === "store" || entry.source === "moolah") {
+            displayContact = "SHIPPING TEAM";
+            displayContactNumber = "(000) 000-0000";
+        }
+
+        row.innerHTML = `
+            <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+            <td>${entry.date}</td>
+            <td>${entry.shift}</td>
+            <td>${entry.support}</td>
+            <td>${entry.portal}</td>
+            <td>${entry.store}</td>
+            <td>${entry.zip}</td>
+            <td>${displayContact}</td>                    <!-- overridden -->
+            <td>${displayContactNumber}</td>              <!-- overridden -->
+            <td>${entry.module}</td>
+            <td style="white-space: pre-wrap;">${entry.issue || ""}</td>
+            <td>${entry.escalated}</td>
+            <td>${entry.status}</td>
+            <td style="white-space: pre-wrap;">${entry.remarks || ""}</td>
+            <td style="white-space: pre-wrap;">${entry.resolution || ""}</td>
+            <td class="action-cell">
+                <div class="action-container">
+                    <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
+                    <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
+                    <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
+                    <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
+                </div>
+            </td>
+        `;
+        tbody.appendChild(row);
+    });
+    updateSelectAllCheckboxState();
+    updateStatusCounters();
+}
 
 				function getYesterdayFormatted() {
 					const yesterday = new Date();
