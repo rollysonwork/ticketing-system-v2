@@ -3680,6 +3680,8 @@
 					const portal = portalEl.value.trim();
 					const storeName = storeNameEl.value.trim();
 					const zipcode = zipcodeEl.value.trim();
+
+					// 🔽 Read actual contact and contact number from the form
 					const contact = document.getElementById(`${prefix}-contact`).value.trim();
 					const contactNumber = document.getElementById(`${prefix}-contactNumber`).value.trim();
 
@@ -3735,16 +3737,17 @@ ASSIGN STORE - DONE ✅`;
 					if (editId) {
 						const index = allEntries.findIndex((e) => e.id === editId);
 						if (index !== -1) {
+							// ✅ Edit mode: preserve and update contact/contactNumber from the form
 							allEntries[index] = {
-								...allEntries[index], // keeps original contact/contactNumber
+								...allEntries[index],
 								date: formattedDate,
 								shift: shift,
 								support: support,
 								portal: portal,
 								store: storeName,
 								zip: zipcode,
-								contact: contact,
-								contactNumber: contactNumber,
+								contact: contact, // <-- use form value
+								contactNumber: contactNumber, // <-- use form value
 								issue: issueText,
 								moduleData: moduleData,
 								status: "OTHER TASK",
@@ -3762,6 +3765,7 @@ ASSIGN STORE - DONE ✅`;
 								addBtn.classList.remove("editing");
 							}
 						} else {
+							// Fallback: entry not found – create a new one
 							const newEntry = {
 								id: Date.now(),
 								date: formattedDate,
@@ -3770,8 +3774,8 @@ ASSIGN STORE - DONE ✅`;
 								portal: portal,
 								store: storeName,
 								zip: zipcode,
-								contact: "SHIPPING TEAM", // hardcoded
-								contactNumber: "(000) 000-0000", // hardcoded
+								contact: contact, // <-- use form value
+								contactNumber: contactNumber, // <-- use form value
 								module: prefix === "store" ? "Store Creation" : "Moolah",
 								issue: issueText,
 								note: "",
@@ -3796,6 +3800,7 @@ ASSIGN STORE - DONE ✅`;
 							}
 						}
 					} else {
+						// ✅ New entry: use the form values (not hardcoded)
 						const newEntry = {
 							id: Date.now(),
 							date: formattedDate,
@@ -3804,8 +3809,8 @@ ASSIGN STORE - DONE ✅`;
 							portal: portal,
 							store: storeName,
 							zip: zipcode,
-							contact: "SHIPPING TEAM", // hardcoded
-							contactNumber: "(000) 000-0000", // hardcoded
+							contact: contact, // <-- use form value
+							contactNumber: contactNumber, // <-- use form value
 							module: prefix === "store" ? "Store Creation" : "Moolah",
 							issue: issueText,
 							note: "",
@@ -3823,6 +3828,7 @@ ASSIGN STORE - DONE ✅`;
 						showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry added!`);
 					}
 
+					// Clear form fields after adding/updating
 					if (prefix === "store") {
 						["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"].forEach((id) => {
 							const el = document.getElementById(`store-${id}`);
@@ -4095,23 +4101,11 @@ ASSIGN STORE - DONE ✅`;
 						localStorage.setItem(EDIT_STORAGE_KEY, editId);
 
 						const draftKey = EDIT_DRAFT_KEY + editId;
-						const savedDraft = localStorage.getItem(draftKey);
-						let useDraft = false;
-						let savedDraftData = null;
-						if (savedDraft) {
-							try {
-								savedDraftData = JSON.parse(savedDraft);
-								if (savedDraftData.id === editId) {
-									useDraft = true;
-									populateFormFromData(prefix, savedDraftData);
-									showNotification("Restored your unsaved changes. Click UPDATE to save.");
-								}
-							} catch (e) {}
-						}
+						// 🔧 FIX: Always delete any existing draft for this entry to prevent stale data
+						localStorage.removeItem(draftKey);
 
-						if (!useDraft) {
-							populateFormFromEntry(prefix, entry);
-						}
+						// Now there will be no draft, so we load from the entry
+						populateFormFromEntry(prefix, entry);
 
 						if (prefix === "moolah") {
 							moolahUpdatePreview();
@@ -4137,6 +4131,7 @@ ASSIGN STORE - DONE ✅`;
 							saveAllEntries();
 						}
 
+						// Re-attach draft autosave (with the draft now cleared)
 						attachDraftAutoSave(prefix, editId);
 
 						const allFields = document.querySelectorAll(`#tab-${prefix} input, #tab-${prefix} textarea, #tab-${prefix} select`);
@@ -4247,23 +4242,21 @@ ASSIGN STORE - DONE ✅`;
 				}
 
 				function renderTable() {
-    const visibleEntries = getVisibleEntries(); // uses current status filter
-    const tbody = document.querySelector("#entryTable tbody");
-    tbody.innerHTML = "";
-    visibleEntries.forEach((entry) => {
-        const row = document.createElement("tr");
-        row.dataset.id = entry.id;
+					const visibleEntries = getVisibleEntries(); // uses current status filter
+					const tbody = document.querySelector("#entryTable tbody");
+					tbody.innerHTML = "";
+					visibleEntries.forEach((entry) => {
+						const row = document.createElement("tr");
+						row.dataset.id = entry.id;
 
-        // Determine display values for Contact and Contact #
-        let displayContact = entry.contact;
-        let displayContactNumber = entry.contactNumber;
-        // For store and moolah entries, override with the fixed placeholders
-        if (entry.source === "store" || entry.source === "moolah") {
-            displayContact = "SHIPPING TEAM";
-            displayContactNumber = "(000) 000-0000";
-        }
+						let displayContact = entry.contact;
+						let displayContactNumber = entry.contactNumber;
+						if (entry.source === "store" || entry.source === "moolah") {
+							displayContact = "SHIPPING TEAM";
+							displayContactNumber = "(000) 000-0000";
+						}
 
-        row.innerHTML = `
+						row.innerHTML = `
             <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
             <td>${entry.date}</td>
             <td>${entry.shift}</td>
@@ -4288,11 +4281,11 @@ ASSIGN STORE - DONE ✅`;
                 </div>
             </td>
         `;
-        tbody.appendChild(row);
-    });
-    updateSelectAllCheckboxState();
-    updateStatusCounters();
-}
+						tbody.appendChild(row);
+					});
+					updateSelectAllCheckboxState();
+					updateStatusCounters();
+				}
 
 				function getYesterdayFormatted() {
 					const yesterday = new Date();
