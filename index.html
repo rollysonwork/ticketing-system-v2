@@ -4724,21 +4724,41 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					const selectedRows = allEntries.filter((entry) => ids.includes(entry.id.toString()));
 					selectedRows.reverse();
 
-					const csvContent = selectedRows.map((row) => [row.date, row.shift, row.support, row.portal, row.store, row.zip, row.contact, row.contactNumber, row.module, row.issue || "", row.escalated || "", row.status || "", row.remarks || "", row.resolution || ""].map((field) => escapeCSV(String(field ?? ""))).join("\t")).join("\n");
+					const rows = selectedRows.map((entry) => {
+						// Override contact and contactNumber for store/moolah entries
+						let contact = entry.contact || "";
+						let contactNumber = entry.contactNumber || "";
+						if (entry.source === "store" || entry.source === "moolah") {
+							contact = "SHIPPING TEAM";
+							contactNumber = "(000) 000-0000";
+						}
+						return [entry.date, entry.shift, entry.support, entry.portal, entry.store, entry.zip, contact, contactNumber, entry.module, entry.issue || "", entry.escalated || "", entry.status || "", entry.remarks || "", entry.resolution || ""].map((field) => escapeCSV(String(field ?? ""))).join("\t");
+					});
 
-					navigator.clipboard.writeText(csvContent).then(() => showNotification(`Copied ${selectedRows.length} rows (newest last, no headers)`));
+					const csvContent = rows.join("\n");
+					navigator.clipboard
+						.writeText(csvContent)
+						.then(() => showNotification(`Copied ${selectedRows.length} rows (newest last, no headers)`))
+						.catch(() => showNotification("Failed to copy"));
 				}
 
 				function exportToCSV() {
 					const visibleEntries = getVisibleEntries();
 
 					const headers = ["DATE", "SHIFT", "SUPPORT", "PORTAL", "STORE", "ZIP", "CONTACT", "CONTACT#", "MODULE", "ISSUE", "ESCALATED", "STATUS", "REMARKS", "RESOLUTION"];
-					const rows = visibleEntries.map((entry) => [entry.date, entry.shift, entry.support, entry.portal, entry.store, entry.zip, entry.contact, entry.contactNumber, entry.module, entry.issue, entry.escalated, entry.status, entry.remarks, entry.resolution].map((field) => escapeCSV(field ?? "")).join(","));
+					const rows = visibleEntries.map((entry) => {
+						// Override contact and contactNumber for store/moolah entries
+						let contact = entry.contact || "";
+						let contactNumber = entry.contactNumber || "";
+						if (entry.source === "store" || entry.source === "moolah") {
+							contact = "SHIPPING TEAM";
+							contactNumber = "(000) 000-0000";
+						}
+						return [entry.date, entry.shift, entry.support, entry.portal, entry.store, entry.zip, contact, contactNumber, entry.module, entry.issue, entry.escalated, entry.status, entry.remarks, entry.resolution].map((field) => escapeCSV(field ?? "")).join(",");
+					});
 
 					const csv = [headers.join(","), ...rows].join("\n");
-					const blob = new Blob(["\uFEFF" + csv], {
-						type: "text/csv;charset=utf-8",
-					});
+					const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
 					const url = URL.createObjectURL(blob);
 					const a = document.createElement("a");
 					a.href = url;
