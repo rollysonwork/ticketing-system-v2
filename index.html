@@ -4361,7 +4361,7 @@ ASSIGN STORE - DONE ✅`;
 							const sortedDates = Object.keys(dates).sort((a, b) => new Date(b) - new Date(a));
 							for (const dateKey of sortedDates) {
 								if (collapseState.dates[dateKey] === undefined) {
-									collapseState.dates[dateKey] = dateKey !== yesterdayFormatted;
+									collapseState.dates[dateKey] = dateKey !== todayFormatted;
 								}
 								const isDateCollapsed = collapseState.dates[dateKey];
 								const dateArrow = isDateCollapsed ? "▶" : "▼";
