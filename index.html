@@ -1362,7 +1362,7 @@
 								</tr>
 								<tr>
 									<th><label for="ticket-zip">ZIP CODE *</label></th>
-									<td><input type="text" id="ticket-zip" /></td>
+									<td><input type="text" id="ticket-zip" maxlength="6" /></td>
 								</tr>
 								<tr>
 									<th>
@@ -1538,7 +1538,7 @@
 								<tr>
 									<th>ZIP CODE *</th>
 									<td>
-										<input type="text" id="store-zipcode" maxlength="5" class="required-field" />
+										<input type="text" id="store-zipcode" maxlength="6" class="required-field" />
 									</td>
 								</tr>
 								<tr>
@@ -1778,7 +1778,7 @@
 								<tr>
 									<th>ZIP CODE *</th>
 									<td>
-										<input type="text" id="moolah-zipcode" maxlength="5" class="required" />
+										<input type="text" id="moolah-zipcode" maxlength="6" class="required" />
 									</td>
 								</tr>
 								<tr>
@@ -2000,7 +2000,15 @@
 								</tr>
 								<tr>
 									<th>ZIP CODE *</th>
-									<td><input type="text" id="ecommerce-zipcode" maxlength="5" class="required-field" /></td>
+									<td><input type="text" id="ecommerce-zipcode" maxlength="6" class="required-field" /></td>
+								</tr>
+								<tr>
+									<th><label for="ecommerce-contact">CONTACT PERSON</label></th>
+									<td><input type="text" id="ecommerce-contact" class="no-uppercase" /></td>
+								</tr>
+								<tr>
+									<th><label for="ecommerce-contactNumber">CONTACT #</label></th>
+									<td><input type="text" id="ecommerce-contactNumber" class="no-uppercase" maxlength="14" /></td>
 								</tr>
 								<tr>
 									<th>API</th>
@@ -2396,7 +2404,7 @@
 				function getStateFromZip(zip) {
 					const zipStr = String(zip).trim();
 
-					if (!/^\d{5}$/.test(zipStr)) return "";
+					if (!/^\d{1,6}$/.test(zipStr)) return "";
 
 					const z = parseInt(zipStr, 10);
 
@@ -2454,7 +2462,7 @@
 				function getTimeZoneFromZip(zip) {
 					const zipStr = String(zip).trim();
 
-					if (!/^\d{5}$/.test(zipStr)) return "";
+					if (!/^\d{1,6}$/.test(zipStr)) return "";
 
 					const z = parseInt(zipStr, 10);
 
@@ -2466,7 +2474,7 @@
 				}
 
 				function fetchCityFromZip(zip, prefix) {
-					if (!/^\d{5}$/.test(String(zip).trim())) return;
+					if (!/^\d{1,6}$/.test(String(zip).trim())) return;
 					try {
 						fetch(`https://api.zippopotam.us/us/${zip}`)
 							.then((res) => {
@@ -2812,6 +2820,8 @@
 						document.getElementById("ecommerce-portal").value = store.portal;
 						document.getElementById("ecommerce-storeName").value = store.storeName;
 						document.getElementById("ecommerce-zipcode").value = store.zipCode;
+						document.getElementById("ecommerce-contact").value = store.contact;
+						document.getElementById("ecommerce-contactNumber").value = store.contactNumber;
 						ecommerceUpdatePreview();
 						saveFormData("ecommerce");
 					}
@@ -2876,7 +2886,7 @@
 						moolah: ["shift", "support", "portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"],
 						store: ["shift", "support", "portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"],
 						ticket: ["shift", "support", "portal", "store", "zip", "contactPerson", "contactNumber", "module", "issue", "escalated", "status", "remarks", "resolution", "note"],
-						ecommerce: ["shift", "support", "portal", "storeName", "zipcode", "api"],
+						ecommerce: ["shift", "support", "portal", "storeName", "zipcode", "contact", "contactNumber", "api"],
 					};
 					const formData = {};
 					fields[prefix].forEach((id) => {
@@ -3015,7 +3025,7 @@
 					if (stateInput) stateInput.value = stateFull;
 					document.getElementById("moolah-preview-stateFull").textContent = stateFull || state || "";
 
-					if (/^\d{5}$/.test(zipcode)) {
+					if (/^\d{1,6}$/.test(zipcode)) {
 						fetchCityFromZip(zipcode, "moolah");
 					} else {
 						const cityEl = document.getElementById("moolah-city");
@@ -3075,6 +3085,8 @@
 					const portalEl = document.getElementById("ecommerce-portal");
 					const storeNameEl = document.getElementById("ecommerce-storeName");
 					const zipcodeEl = document.getElementById("ecommerce-zipcode");
+					const contact = document.getElementById("ecommerce-contact").value.trim();
+					const contactNumber = document.getElementById("ecommerce-contactNumber").value.trim();
 					let valid = true;
 					[portalEl, storeNameEl, zipcodeEl].forEach((el) => {
 						el.classList.remove("invalid");
@@ -3161,8 +3173,8 @@
 								portal: portal,
 								store: storeName,
 								zip: zipcode,
-								contact: "", // ecommerce does not use contact
-								contactNumber: "", // ecommerce does not use contact number
+								contact: contact,
+								contactNumber: contactNumber,
 								module: "E‑Commerce",
 								issue: issueText,
 								note: "",
@@ -3197,8 +3209,8 @@
 							portal: portal,
 							store: storeName,
 							zip: zipcode,
-							contact: "", // ecommerce does not use contact
-							contactNumber: "", // ecommerce does not use contact number
+							contact: contact,
+							contactNumber: contactNumber,
 							module: "E‑Commerce",
 							issue: issueText,
 							note: "",
@@ -3278,7 +3290,7 @@
 					if (stateInput) stateInput.value = stateFull;
 					document.getElementById("store-preview-stateFull").textContent = stateFull || state || "";
 
-					if (/^\d{5}$/.test(zipcode)) {
+					if (/^\d{1,6}$/.test(zipcode)) {
 						fetchCityFromZip(zipcode, "store");
 					} else {
 						const cityEl = document.getElementById("store-city");
@@ -3897,7 +3909,7 @@
 						const textareas = document.querySelectorAll(`#tab-moolah textarea`);
 						textareas.forEach((ta) => autoGrow(ta));
 					} else if (prefix === "ecommerce") {
-						const fields = ["portal", "storeName", "zipcode"];
+						const fields = ["portal", "storeName", "zipcode", "contact", "contactNumber", "api"];
 						fields.forEach((id) => {
 							const el = document.getElementById(`ecommerce-${id}`);
 							if (el) el.value = "";
@@ -6015,15 +6027,15 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 				}
 
 				window.storeSteps = {
-					form: "cleared",
-					creation: "cleared",
-					install: "cleared",
-					upload: "cleared",
+					form: "pending",
+					creation: "pending",
+					install: "pending",
+					upload: "pending",
 				};
 				window.moolahSteps = {
-					create: "cleared",
-					install: "cleared",
-					assign: "cleared",
+					create: "pending",
+					install: "pending",
+					assign: "pending",
 				};
 
 				function updateStoreIssuePreview() {
