@@ -3949,84 +3949,92 @@ ASSIGN STORE - DONE ✅`;
 				}
 
 				function populateFormFromEntry(prefix, entry) {
-					// Date
-					const dateParts = entry.date.split("/");
-					if (dateParts.length === 3) {
-						const month = dateParts[0].padStart(2, "0");
-						const day = dateParts[1].padStart(2, "0");
-						const year = dateParts[2];
-						document.getElementById(`${prefix}-date`).value = `${year}-${month}-${day}`;
-					}
-					document.getElementById(`${prefix}-shift`).value = entry.shift;
-					document.getElementById(`${prefix}-support`).value = entry.support;
-					document.getElementById(`${prefix}-portal`).value = entry.portal;
+    // Date
+    const dateParts = entry.date.split("/");
+    if (dateParts.length === 3) {
+        const month = dateParts[0].padStart(2, "0");
+        const day = dateParts[1].padStart(2, "0");
+        const year = dateParts[2];
+        document.getElementById(`${prefix}-date`).value = `${year}-${month}-${day}`;
+    }
+    document.getElementById(`${prefix}-shift`).value = entry.shift;
+    document.getElementById(`${prefix}-support`).value = entry.support;
+    document.getElementById(`${prefix}-portal`).value = entry.portal;
 
-					if (prefix === "moolah" || prefix === "store") {
-						document.getElementById(`${prefix}-storeName`).value = entry.store;
-						document.getElementById(`${prefix}-zipcode`).value = entry.zip;
-						document.getElementById(`${prefix}-contact`).value = entry.contact || "";
-						document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber || "";
-					} else {
-						document.getElementById(`${prefix}-store`).value = entry.store;
-						document.getElementById(`${prefix}-zip`).value = entry.zip;
-						document.getElementById(`${prefix}-contactPerson`).value = entry.contact || "";
-						document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
-						document.getElementById(`${prefix}-note`).value = entry.note || "";
-						document.getElementById("ticket-issue").value = entry.issue || "";
+    if (prefix === "moolah" || prefix === "store") {
+        document.getElementById(`${prefix}-storeName`).value = entry.store;
+        document.getElementById(`${prefix}-zipcode`).value = entry.zip;
+        document.getElementById(`${prefix}-contact`).value = entry.contact || "";
+        document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber || "";
+    } else {
+        document.getElementById(`${prefix}-store`).value = entry.store;
+        document.getElementById(`${prefix}-zip`).value = entry.zip;
+        document.getElementById(`${prefix}-contactPerson`).value = entry.contact || "";
+        document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
+        document.getElementById(`${prefix}-note`).value = entry.note || "";
+        document.getElementById("ticket-issue").value = entry.issue || "";
 
-						const moduleInput = document.getElementById("ticket-module-combobox");
-						const moduleHidden = document.getElementById("ticket-module");
-						if (moduleInput) {
-							moduleInput._skipNextInput = true;
-							moduleInput.value = entry.module || "";
-							setTimeout(() => delete moduleInput._skipNextInput, 100);
-						}
-						if (moduleHidden) moduleHidden.value = entry.module || "";
+        const moduleInput = document.getElementById("ticket-module-combobox");
+        const moduleHidden = document.getElementById("ticket-module");
+        if (moduleInput) {
+            moduleInput._skipNextInput = true;
+            moduleInput.value = entry.module || "";
+            setTimeout(() => delete moduleInput._skipNextInput, 100);
+        }
+        if (moduleHidden) moduleHidden.value = entry.module || "";
 
-						const statusInput = document.getElementById("ticket-status-combobox");
-						const statusHidden = document.getElementById("ticket-status");
-						if (statusInput) {
-							statusInput._skipNextInput = true;
-							statusInput.value = entry.status || "";
-							setTimeout(() => delete statusInput._skipNextInput, 100);
-						}
-						if (statusHidden) statusHidden.value = entry.status || "";
+        const statusInput = document.getElementById("ticket-status-combobox");
+        const statusHidden = document.getElementById("ticket-status");
+        if (statusInput) {
+            statusInput._skipNextInput = true;
+            statusInput.value = entry.status || "";
+            setTimeout(() => delete statusInput._skipNextInput, 100);
+        }
+        if (statusHidden) statusHidden.value = entry.status || "";
 
-						document.getElementById("ticket-remarks").value = entry.remarks || "";
-						if (quillEditor && entry.troubleshooting) {
-							quillEditor.root.innerHTML = entry.troubleshooting;
-							document.getElementById("ticket-resolution").value = entry.troubleshooting;
-						}
-					}
+        document.getElementById("ticket-remarks").value = entry.remarks || "";
+        if (quillEditor && entry.troubleshooting) {
+            quillEditor.root.innerHTML = entry.troubleshooting;
+            document.getElementById("ticket-resolution").value = entry.troubleshooting;
+        }
+    }
 
-					if (prefix === "moolah") {
-						document.getElementById("moolah-email").value = entry.moduleData?.email || "";
-						document.getElementById("moolah-password").value = entry.moduleData?.password || "";
-						document.getElementById("moolah-sku").value = entry.moduleData?.sku || "";
-						document.getElementById("moolah-noOfTabs").value = entry.moduleData?.noOfTabs || "";
-						document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
-						document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
-						document.getElementById("moolah-city").value = entry.moduleData?.city || "";
-						document.getElementById("moolah-state").value = entry.moduleData?.state || "";
-						document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
-						document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
-						if (entry.issue) window._moolahCurrentIssue = entry.issue;
-					} else if (prefix === "store") {
-						document.getElementById("store-agent").value = entry.moduleData?.agent || "";
-						document.getElementById("store-email").value = entry.moduleData?.email || "";
-						document.getElementById("store-password").value = entry.moduleData?.password || "";
-						document.getElementById("store-sku").value = entry.moduleData?.sku || "";
-						document.getElementById("store-database").value = entry.moduleData?.database || "";
-						document.getElementById("store-noOfReg").value = entry.moduleData?.noOfReg || "";
-						document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
-						document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
-						document.getElementById("store-city").value = entry.moduleData?.city || "";
-						document.getElementById("store-state").value = entry.moduleData?.state || "";
-						document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
-						document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
-						if (entry.issue) window._storeCurrentIssue = entry.issue;
-					}
-				}
+    if (prefix === "moolah") {
+        document.getElementById("moolah-email").value = entry.moduleData?.email || "";
+        document.getElementById("moolah-password").value = entry.moduleData?.password || "";
+        document.getElementById("moolah-sku").value = entry.moduleData?.sku || "";
+        document.getElementById("moolah-noOfTabs").value = entry.moduleData?.noOfTabs || "";
+        document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
+        document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
+        document.getElementById("moolah-city").value = entry.moduleData?.city || "";
+        document.getElementById("moolah-state").value = entry.moduleData?.state || "";
+        document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
+        document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
+        if (entry.issue) {
+            window._moolahCurrentIssue = entry.issue;
+            syncMoolahButtonsFromIssueText(entry.issue);
+            updateMoolahIssuePreview();
+        }
+    } else if (prefix === "store") {
+        document.getElementById("store-agent").value = entry.moduleData?.agent || "";
+        document.getElementById("store-email").value = entry.moduleData?.email || "";
+        document.getElementById("store-password").value = entry.moduleData?.password || "";
+        document.getElementById("store-sku").value = entry.moduleData?.sku || "";
+        document.getElementById("store-database").value = entry.moduleData?.database || "";
+        document.getElementById("store-noOfReg").value = entry.moduleData?.noOfReg || "";
+        document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
+        document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
+        document.getElementById("store-city").value = entry.moduleData?.city || "";
+        document.getElementById("store-state").value = entry.moduleData?.state || "";
+        document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
+        document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
+        if (entry.issue) {
+            window._storeCurrentIssue = entry.issue;
+            syncStoreButtonsFromIssueText(entry.issue);
+            updateStoreIssuePreview();
+        }
+    }
+}
 
 				function populateFormFromData(prefix, draftData) {
 					populateFormFromEntry(prefix, draftData);
@@ -5945,6 +5953,137 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					if (hidden.value) input.value = hidden.value;
 				}
 
+				const STORE_STEP_LABELS = {
+					form: "NEW STORE CREATION FORM SENT",
+					creation: "STORE CREATION",
+					install: "INSTALL, UPDATE APPS & LOGIN ACCOUNT",
+					upload: "UPLOAD DATABASE",
+				};
+
+				const MOOLAH_STEP_LABELS = {
+					create: "CREATE MOOLAH ACCOUNT",
+					install: "INSTALL & UPDATE ALL APPS",
+					assign: "ASSIGN STORE",
+				};
+
+				function parseStepStatusesFromIssue(issueText, stepLabels, currentSteps) {
+					const result = { ...currentSteps };
+					if (!issueText) return result;
+					const lines = issueText
+						.split(/\r?\n/)
+						.map((line) => line.trim())
+						.filter((line) => line.length > 0);
+					lines.forEach((line) => {
+						for (const [step, label] of Object.entries(stepLabels)) {
+							if (!line.toLowerCase().includes(label.toLowerCase())) continue;
+							if (/\bdone\b/i.test(line)) {
+								result[step] = "done";
+							} else if (/\bpending\b/i.test(line)) {
+								result[step] = "pending";
+							}
+						}
+					});
+					return result;
+				}
+
+				function applyStepButtonStyles(prefix, steps) {
+					document.querySelectorAll(`.${prefix}-step-btn`).forEach((btn) => {
+						const step = btn.dataset.step;
+						const status = btn.dataset.status;
+						if (!step || steps[step] === undefined) return;
+						const currentStatus = steps[step];
+						btn.className = btn.className
+							.split(" ")
+							.filter((c) => !c.startsWith("btn-"))
+							.join(" ")
+							.trim();
+						btn.style.backgroundColor = "";
+						btn.style.color = "";
+						btn.style.borderColor = "";
+						const isActive = currentStatus === status;
+						if (isActive) {
+							if (status === "done") {
+								btn.classList.add("btn-success");
+								btn.style.backgroundColor = "#198754";
+								btn.style.color = "white";
+							} else if (status === "pending") {
+								btn.classList.add("btn-danger");
+								btn.style.backgroundColor = "#dc3545";
+								btn.style.color = "white";
+							} else if (status === "cleared") {
+								btn.classList.add("btn-secondary");
+								btn.style.backgroundColor = "#6c757d";
+								btn.style.color = "white";
+							}
+						} else {
+							if (status === "done") btn.classList.add("btn-outline-success");
+							else if (status === "pending") btn.classList.add("btn-outline-danger");
+							else if (status === "cleared") btn.classList.add("btn-outline-secondary");
+						}
+					});
+				}
+
+				window.storeSteps = {
+    form: 'done',
+    creation: 'done',
+    install: 'done',
+    upload: 'pending'
+};
+window.moolahSteps = {
+    create: 'done',
+    install: 'done',
+    assign: 'done'
+};
+
+				function updateStoreIssuePreview() {
+					const steps = {
+						form: "NEW STORE CREATION FORM SENT",
+						creation: "STORE CREATION",
+						install: "INSTALL, UPDATE APPS & LOGIN ACCOUNT",
+						upload: "UPLOAD DATABASE",
+					};
+					const lines = [];
+					for (const [key, label] of Object.entries(steps)) {
+						const status = window.storeSteps[key];
+						if (status === "cleared") continue;
+						const statusText = status === "done" ? "DONE ✅" : "PENDING ❌";
+						lines.push(`${label} - ${statusText}`);
+					}
+					const issueText = lines.join("\n");
+					const el = document.getElementById("store-generated-issue");
+					if (el) el.innerText = issueText;
+					window._storeCurrentIssue = issueText;
+				}
+
+				function updateMoolahIssuePreview() {
+					const steps = {
+						create: "CREATE MOOLAH ACCOUNT",
+						install: "INSTALL & UPDATE ALL APPS",
+						assign: "ASSIGN STORE",
+					};
+					const lines = [];
+					for (const [key, label] of Object.entries(steps)) {
+						const status = window.moolahSteps[key];
+						if (status === "cleared") continue;
+						const statusText = status === "done" ? "DONE ✅" : "PENDING ❌";
+						lines.push(`${label} - ${statusText}`);
+					}
+					const issueText = lines.join("\n");
+					const el = document.getElementById("moolah-generated-issue");
+					if (el) el.innerText = issueText;
+					window._moolahCurrentIssue = issueText;
+				}
+
+				function syncStoreButtonsFromIssueText(issueText) {
+					window.storeSteps = parseStepStatusesFromIssue(issueText, STORE_STEP_LABELS, window.storeSteps);
+					applyStepButtonStyles("store", window.storeSteps);
+				}
+
+				function syncMoolahButtonsFromIssueText(issueText) {
+					window.moolahSteps = parseStepStatusesFromIssue(issueText, MOOLAH_STEP_LABELS, window.moolahSteps);
+					applyStepButtonStyles("moolah", window.moolahSteps);
+				}
+
 				function init() {
 					const loggedInUser = getLoggedInUser();
 					if (!loggedInUser) {
@@ -6269,18 +6408,6 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						ticketUpdatePreview();
 						saveFormData("ticket");
 					});
-
-					window.storeSteps = {
-						form: "done",
-						creation: "done",
-						install: "done",
-						upload: "pending",
-					};
-					window.moolahSteps = {
-						create: "done",
-						install: "done",
-						assign: "done",
-					};
 
 					function updateStoreIssuePreview() {
 						const steps = {
