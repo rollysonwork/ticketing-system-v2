@@ -3021,10 +3021,8 @@
 					document.getElementById("moolah-preview-anydeskId").innerHTML = formatMultilinePreview(anydeskId);
 
 					const stateFull = state ? STATE_FULL_NAMES[state] || "" : "";
-					const stateInput = document.getElementById("store-state");
-					if (stateInput && stateInput.value.trim() === "") {
-						stateInput.value = stateFull;
-					}
+					const stateInput = document.getElementById("moolah-state");
+					if (stateInput) stateInput.value = stateFull;
 					document.getElementById("moolah-preview-stateFull").textContent = stateFull || state || "";
 
 					if (/^\d{1,6}$/.test(zipcode)) {
@@ -3288,10 +3286,8 @@
 					document.getElementById("store-preview-anydeskId").innerHTML = formatMultilinePreview(anydeskId);
 
 					const stateFull = state ? STATE_FULL_NAMES[state] || "" : "";
-					const stateInput = document.getElementById("moolah-state");
-					if (stateInput && stateInput.value.trim() === "") {
-						stateInput.value = stateFull;
-					}
+					const stateInput = document.getElementById("store-state");
+					if (stateInput) stateInput.value = stateFull;
 					document.getElementById("store-preview-stateFull").textContent = stateFull || state || "";
 
 					if (/^\d{1,6}$/.test(zipcode)) {
