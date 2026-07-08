@@ -3687,18 +3687,9 @@
 
 					let issueText = "";
 					if (prefix === "store") {
-						issueText =
-							window._storeCurrentIssue ||
-							`NEW STORE CREATION FORM SENT - DONE ✅
-STORE CREATION - DONE ✅
-INSTALL, UPDATE APPS & LOGIN ACCOUNT - DONE ✅
-UPLOAD DATABASE - PENDING ❌`;
+						issueText = window._storeCurrentIssue || ""; // no hardcoded default
 					} else if (prefix === "moolah") {
-						issueText =
-							window._moolahCurrentIssue ||
-							`CREATE MOOLAH ACCOUNT - DONE ✅
-INSTALL & UPDATE ALL APPS - DONE ✅
-ASSIGN STORE - DONE ✅`;
+						issueText = window._moolahCurrentIssue || ""; // no hardcoded default
 					}
 
 					let moduleData = {};
@@ -3949,92 +3940,92 @@ ASSIGN STORE - DONE ✅`;
 				}
 
 				function populateFormFromEntry(prefix, entry) {
-    // Date
-    const dateParts = entry.date.split("/");
-    if (dateParts.length === 3) {
-        const month = dateParts[0].padStart(2, "0");
-        const day = dateParts[1].padStart(2, "0");
-        const year = dateParts[2];
-        document.getElementById(`${prefix}-date`).value = `${year}-${month}-${day}`;
-    }
-    document.getElementById(`${prefix}-shift`).value = entry.shift;
-    document.getElementById(`${prefix}-support`).value = entry.support;
-    document.getElementById(`${prefix}-portal`).value = entry.portal;
+					// Date
+					const dateParts = entry.date.split("/");
+					if (dateParts.length === 3) {
+						const month = dateParts[0].padStart(2, "0");
+						const day = dateParts[1].padStart(2, "0");
+						const year = dateParts[2];
+						document.getElementById(`${prefix}-date`).value = `${year}-${month}-${day}`;
+					}
+					document.getElementById(`${prefix}-shift`).value = entry.shift;
+					document.getElementById(`${prefix}-support`).value = entry.support;
+					document.getElementById(`${prefix}-portal`).value = entry.portal;
 
-    if (prefix === "moolah" || prefix === "store") {
-        document.getElementById(`${prefix}-storeName`).value = entry.store;
-        document.getElementById(`${prefix}-zipcode`).value = entry.zip;
-        document.getElementById(`${prefix}-contact`).value = entry.contact || "";
-        document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber || "";
-    } else {
-        document.getElementById(`${prefix}-store`).value = entry.store;
-        document.getElementById(`${prefix}-zip`).value = entry.zip;
-        document.getElementById(`${prefix}-contactPerson`).value = entry.contact || "";
-        document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
-        document.getElementById(`${prefix}-note`).value = entry.note || "";
-        document.getElementById("ticket-issue").value = entry.issue || "";
+					if (prefix === "moolah" || prefix === "store") {
+						document.getElementById(`${prefix}-storeName`).value = entry.store;
+						document.getElementById(`${prefix}-zipcode`).value = entry.zip;
+						document.getElementById(`${prefix}-contact`).value = entry.contact || "";
+						document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber || "";
+					} else {
+						document.getElementById(`${prefix}-store`).value = entry.store;
+						document.getElementById(`${prefix}-zip`).value = entry.zip;
+						document.getElementById(`${prefix}-contactPerson`).value = entry.contact || "";
+						document.getElementById(`${prefix}-contactNumber`).value = entry.contactNumber;
+						document.getElementById(`${prefix}-note`).value = entry.note || "";
+						document.getElementById("ticket-issue").value = entry.issue || "";
 
-        const moduleInput = document.getElementById("ticket-module-combobox");
-        const moduleHidden = document.getElementById("ticket-module");
-        if (moduleInput) {
-            moduleInput._skipNextInput = true;
-            moduleInput.value = entry.module || "";
-            setTimeout(() => delete moduleInput._skipNextInput, 100);
-        }
-        if (moduleHidden) moduleHidden.value = entry.module || "";
+						const moduleInput = document.getElementById("ticket-module-combobox");
+						const moduleHidden = document.getElementById("ticket-module");
+						if (moduleInput) {
+							moduleInput._skipNextInput = true;
+							moduleInput.value = entry.module || "";
+							setTimeout(() => delete moduleInput._skipNextInput, 100);
+						}
+						if (moduleHidden) moduleHidden.value = entry.module || "";
 
-        const statusInput = document.getElementById("ticket-status-combobox");
-        const statusHidden = document.getElementById("ticket-status");
-        if (statusInput) {
-            statusInput._skipNextInput = true;
-            statusInput.value = entry.status || "";
-            setTimeout(() => delete statusInput._skipNextInput, 100);
-        }
-        if (statusHidden) statusHidden.value = entry.status || "";
+						const statusInput = document.getElementById("ticket-status-combobox");
+						const statusHidden = document.getElementById("ticket-status");
+						if (statusInput) {
+							statusInput._skipNextInput = true;
+							statusInput.value = entry.status || "";
+							setTimeout(() => delete statusInput._skipNextInput, 100);
+						}
+						if (statusHidden) statusHidden.value = entry.status || "";
 
-        document.getElementById("ticket-remarks").value = entry.remarks || "";
-        if (quillEditor && entry.troubleshooting) {
-            quillEditor.root.innerHTML = entry.troubleshooting;
-            document.getElementById("ticket-resolution").value = entry.troubleshooting;
-        }
-    }
+						document.getElementById("ticket-remarks").value = entry.remarks || "";
+						if (quillEditor && entry.troubleshooting) {
+							quillEditor.root.innerHTML = entry.troubleshooting;
+							document.getElementById("ticket-resolution").value = entry.troubleshooting;
+						}
+					}
 
-    if (prefix === "moolah") {
-        document.getElementById("moolah-email").value = entry.moduleData?.email || "";
-        document.getElementById("moolah-password").value = entry.moduleData?.password || "";
-        document.getElementById("moolah-sku").value = entry.moduleData?.sku || "";
-        document.getElementById("moolah-noOfTabs").value = entry.moduleData?.noOfTabs || "";
-        document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
-        document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
-        document.getElementById("moolah-city").value = entry.moduleData?.city || "";
-        document.getElementById("moolah-state").value = entry.moduleData?.state || "";
-        document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
-        document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
-        if (entry.issue) {
-            window._moolahCurrentIssue = entry.issue;
-            syncMoolahButtonsFromIssueText(entry.issue);
-            updateMoolahIssuePreview();
-        }
-    } else if (prefix === "store") {
-        document.getElementById("store-agent").value = entry.moduleData?.agent || "";
-        document.getElementById("store-email").value = entry.moduleData?.email || "";
-        document.getElementById("store-password").value = entry.moduleData?.password || "";
-        document.getElementById("store-sku").value = entry.moduleData?.sku || "";
-        document.getElementById("store-database").value = entry.moduleData?.database || "";
-        document.getElementById("store-noOfReg").value = entry.moduleData?.noOfReg || "";
-        document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
-        document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
-        document.getElementById("store-city").value = entry.moduleData?.city || "";
-        document.getElementById("store-state").value = entry.moduleData?.state || "";
-        document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
-        document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
-        if (entry.issue) {
-            window._storeCurrentIssue = entry.issue;
-            syncStoreButtonsFromIssueText(entry.issue);
-            updateStoreIssuePreview();
-        }
-    }
-}
+					if (prefix === "moolah") {
+						document.getElementById("moolah-email").value = entry.moduleData?.email || "";
+						document.getElementById("moolah-password").value = entry.moduleData?.password || "";
+						document.getElementById("moolah-sku").value = entry.moduleData?.sku || "";
+						document.getElementById("moolah-noOfTabs").value = entry.moduleData?.noOfTabs || "";
+						document.getElementById("moolah-address1").value = entry.moduleData?.address1 || "";
+						document.getElementById("moolah-address2").value = entry.moduleData?.address2 || "";
+						document.getElementById("moolah-city").value = entry.moduleData?.city || "";
+						document.getElementById("moolah-state").value = entry.moduleData?.state || "";
+						document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
+						document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
+						if (entry.issue) {
+							window._moolahCurrentIssue = entry.issue;
+							syncMoolahButtonsFromIssueText(entry.issue);
+							updateMoolahIssuePreview();
+						}
+					} else if (prefix === "store") {
+						document.getElementById("store-agent").value = entry.moduleData?.agent || "";
+						document.getElementById("store-email").value = entry.moduleData?.email || "";
+						document.getElementById("store-password").value = entry.moduleData?.password || "";
+						document.getElementById("store-sku").value = entry.moduleData?.sku || "";
+						document.getElementById("store-database").value = entry.moduleData?.database || "";
+						document.getElementById("store-noOfReg").value = entry.moduleData?.noOfReg || "";
+						document.getElementById("store-address1").value = entry.moduleData?.address1 || "";
+						document.getElementById("store-address2").value = entry.moduleData?.address2 || "";
+						document.getElementById("store-city").value = entry.moduleData?.city || "";
+						document.getElementById("store-state").value = entry.moduleData?.state || "";
+						document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
+						document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
+						if (entry.issue) {
+							window._storeCurrentIssue = entry.issue;
+							syncStoreButtonsFromIssueText(entry.issue);
+							updateStoreIssuePreview();
+						}
+					}
+				}
 
 				function populateFormFromData(prefix, draftData) {
 					populateFormFromEntry(prefix, draftData);
@@ -6024,16 +6015,16 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 				}
 
 				window.storeSteps = {
-    form: 'done',
-    creation: 'done',
-    install: 'done',
-    upload: 'pending'
-};
-window.moolahSteps = {
-    create: 'done',
-    install: 'done',
-    assign: 'done'
-};
+					form: "cleared",
+					creation: "cleared",
+					install: "cleared",
+					upload: "cleared",
+				};
+				window.moolahSteps = {
+					create: "cleared",
+					install: "cleared",
+					assign: "cleared",
+				};
 
 				function updateStoreIssuePreview() {
 					const steps = {
