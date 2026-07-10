@@ -1022,50 +1022,72 @@
 				text-transform: none !important;
 			}
 
-			.preview-multiline ol {
-				counter-reset: level1;
-				list-style: none;
-				padding-left: 0;
-			}
+.preview-multiline ol {
+	counter-reset: level1;
+	list-style: none;
+	padding-left: 0;
+}
 
-			.preview-multiline li {
-				counter-increment: level1;
-				margin-left: 0;
-			}
+/* Base list item */
+.preview-multiline li {
+	margin-left: 0;
+	list-style: none;
+}
 
-			.preview-multiline li:not([class*="ql-indent"])::before {
-				content: counter(level1) ". ";
-			}
+/* ===========================
+   ORDERED LISTS
+   =========================== */
 
-			.preview-multiline li.ql-indent-1 {
-				counter-increment: level2;
-				margin-left: 30px;
-			}
+.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"]) {
+	counter-increment: level1;
+}
 
-			.preview-multiline li.ql-indent-1:first-child {
-				counter-reset: level2;
-			}
+.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"])::before {
+	content: counter(level1) ". ";
+}
 
-			.preview-multiline li.ql-indent-1::before {
-				content: counter(level2, upper-alpha) ". ";
-			}
+.preview-multiline li[data-list="ordered"].ql-indent-1 {
+	counter-increment: level2;
+	margin-left: 30px;
+}
 
-			.preview-multiline li.ql-indent-2 {
-				counter-increment: level3;
-				margin-left: 60px;
-			}
+.preview-multiline li[data-list="ordered"].ql-indent-1:first-child {
+	counter-reset: level2;
+}
 
-			.preview-multiline li.ql-indent-2:first-child {
-				counter-reset: level3;
-			}
+.preview-multiline li[data-list="ordered"].ql-indent-1::before {
+	content: counter(level2, upper-alpha) ". ";
+}
 
-			.preview-multiline li.ql-indent-2::before {
-				content: counter(level3, upper-roman) ". ";
-			}
+.preview-multiline li[data-list="ordered"].ql-indent-2 {
+	counter-increment: level3;
+	margin-left: 60px;
+}
 
-			.preview-multiline li {
-				list-style: none;
-			}
+.preview-multiline li[data-list="ordered"].ql-indent-2:first-child {
+	counter-reset: level3;
+}
+
+.preview-multiline li[data-list="ordered"].ql-indent-2::before {
+	content: counter(level3, upper-roman) ". ";
+}
+
+/* ===========================
+   BULLET LISTS
+   =========================== */
+
+.preview-multiline li[data-list="bullet"]::before {
+	content: "• ";
+	font-weight: bold;
+}
+
+.preview-multiline li[data-list="bullet"].ql-indent-1 {
+	margin-left: 30px;
+}
+
+.preview-multiline li[data-list="bullet"].ql-indent-2 {
+	margin-left: 60px;
+}
 
 			.icon-custom {
 				--icon-size: 1.8em;
