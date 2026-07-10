@@ -464,58 +464,15 @@
 				overflow-wrap: break-word;
 			}
 
-			/* Ordered lists – custom numbering with indentation support */
+			.preview-multiline ul,
 			.preview-multiline ol {
-				counter-reset: level1;
-				list-style: none;
+				margin: 8px 0 8px 20px;
 				padding-left: 0;
 			}
-
-			.preview-multiline ol li {
-				counter-increment: level1;
-				margin-left: 0;
-				list-style: none;
-			}
-
-			.preview-multiline ol li:not([class*="ql-indent"])::before {
-				content: counter(level1) ". ";
-			}
-
-			.preview-multiline ol li.ql-indent-1 {
-				counter-increment: level2;
-				margin-left: 30px;
-			}
-
-			.preview-multiline ol li.ql-indent-1:first-child {
-				counter-reset: level2;
-			}
-
-			.preview-multiline ol li.ql-indent-1::before {
-				content: counter(level2, upper-alpha) ". ";
-			}
-
-			.preview-multiline ol li.ql-indent-2 {
-				counter-increment: level3;
-				margin-left: 60px;
-			}
-
-			.preview-multiline ol li.ql-indent-2:first-child {
-				counter-reset: level3;
-			}
-
-			.preview-multiline ol li.ql-indent-2::before {
-				content: counter(level3, upper-roman) ". ";
-			}
-
-			/* Unordered lists – standard bullets */
-			.preview-multiline ul {
-				list-style: disc;
-				padding-left: 20px;
-			}
-
-			.preview-multiline ul li {
-				list-style: disc;
-				margin-left: 0;
+			.preview-multiline li {
+				margin: 4px 0;
+				word-wrap: break-word;
+				overflow-wrap: break-word;
 			}
 
 			.search-section {
@@ -1063,6 +1020,51 @@
 
 			.no-uppercase {
 				text-transform: none !important;
+			}
+
+			.preview-multiline ol {
+				counter-reset: level1;
+				list-style: none;
+				padding-left: 0;
+			}
+
+			.preview-multiline li {
+				counter-increment: level1;
+				margin-left: 0;
+			}
+
+			.preview-multiline li:not([class*="ql-indent"])::before {
+				content: counter(level1) ". ";
+			}
+
+			.preview-multiline li.ql-indent-1 {
+				counter-increment: level2;
+				margin-left: 30px;
+			}
+
+			.preview-multiline li.ql-indent-1:first-child {
+				counter-reset: level2;
+			}
+
+			.preview-multiline li.ql-indent-1::before {
+				content: counter(level2, upper-alpha) ". ";
+			}
+
+			.preview-multiline li.ql-indent-2 {
+				counter-increment: level3;
+				margin-left: 60px;
+			}
+
+			.preview-multiline li.ql-indent-2:first-child {
+				counter-reset: level3;
+			}
+
+			.preview-multiline li.ql-indent-2::before {
+				content: counter(level3, upper-roman) ". ";
+			}
+
+			.preview-multiline li {
+				list-style: none;
 			}
 
 			.icon-custom {
@@ -4941,8 +4943,8 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 
 					const staticSections = `${indent(1)}5. Updates / Notices
 			${indent(2)}The current latest versions:
-			${indent(3)}RetailzPOS: Version Code 233 (Portal 1, 2, 3, 4, 6, 7, 8, 9, 10, 11)
-			${indent(3)}Moolah Points: Version Code 40 (Portal 1, 2, 3, 4, 6, 7, 8, 9, 10, 11)
+			${indent(3)}RetailzPOS: Version Code 232 (Portal 1, 2, 3, 4, 6, 7, 8, 9, 10)
+			${indent(3)}Moolah Points: Version Code 39 (Portal 1, 2, 3, 4, 6, 7, 8, 9, 10)
 
 			${indent(2)}Reminders for Retailz team members:
 			${indent(2)}- Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.
