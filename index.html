@@ -1022,72 +1022,83 @@
 				text-transform: none !important;
 			}
 
-.preview-multiline ol {
-	counter-reset: level1;
-	list-style: none;
-	padding-left: 0;
-}
+			.preview-multiline ol {
+				counter-reset: level1;
+				list-style: none;
+				padding-left: 0;
+			}
 
-/* Base list item */
-.preview-multiline li {
-	margin-left: 0;
-	list-style: none;
-}
+			/* Base list item */
+			.preview-multiline li {
+				margin-left: 0;
+				list-style: none;
+			}
 
-/* ===========================
+			/* ===========================
    ORDERED LISTS
    =========================== */
 
-.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"]) {
-	counter-increment: level1;
-}
+			.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"]) {
+				counter-increment: level1;
+			}
 
-.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"])::before {
-	content: counter(level1) ". ";
-}
+			.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"])::before {
+				content: counter(level1) ". ";
+			}
 
-.preview-multiline li[data-list="ordered"].ql-indent-1 {
-	counter-increment: level2;
-	margin-left: 30px;
-}
+			.preview-multiline li[data-list="ordered"].ql-indent-1 {
+				counter-increment: level2;
+				margin-left: 30px;
+			}
 
-.preview-multiline li[data-list="ordered"].ql-indent-1:first-child {
-	counter-reset: level2;
-}
+			.preview-multiline li[data-list="ordered"].ql-indent-1:first-child {
+				counter-reset: level2;
+			}
 
-.preview-multiline li[data-list="ordered"].ql-indent-1::before {
-	content: counter(level2, upper-alpha) ". ";
-}
+			.preview-multiline li[data-list="ordered"].ql-indent-1::before {
+				content: counter(level2, upper-alpha) ". ";
+			}
 
-.preview-multiline li[data-list="ordered"].ql-indent-2 {
-	counter-increment: level3;
-	margin-left: 60px;
-}
+			.preview-multiline li[data-list="ordered"].ql-indent-2 {
+				counter-increment: level3;
+				margin-left: 60px;
+			}
 
-.preview-multiline li[data-list="ordered"].ql-indent-2:first-child {
-	counter-reset: level3;
-}
+			.preview-multiline li[data-list="ordered"].ql-indent-2:first-child {
+				counter-reset: level3;
+			}
 
-.preview-multiline li[data-list="ordered"].ql-indent-2::before {
-	content: counter(level3, upper-roman) ". ";
-}
+			.preview-multiline li[data-list="ordered"].ql-indent-2::before {
+				content: counter(level3, upper-roman) ". ";
+			}
 
-/* ===========================
+			/* ===========================
    BULLET LISTS
    =========================== */
 
-.preview-multiline li[data-list="bullet"]::before {
-	content: "• ";
-	font-weight: bold;
-}
+			.preview-multiline li[data-list="bullet"]::before {
+				content: "• ";
+				font-weight: bold;
+			}
 
-.preview-multiline li[data-list="bullet"].ql-indent-1 {
-	margin-left: 30px;
-}
+			.preview-multiline li[data-list="bullet"].ql-indent-1 {
+				margin-left: 30px;
+			}
 
-.preview-multiline li[data-list="bullet"].ql-indent-2 {
-	margin-left: 60px;
-}
+			.preview-multiline li[data-list="bullet"].ql-indent-2 {
+				margin-left: 60px;
+			}
+
+			.preview-multiline ul {
+				list-style-type: disc;
+				padding-left: 1.5rem;
+				margin: 0.5rem 0;
+			}
+
+			.preview-multiline ul li {
+				display: list-item;
+				list-style-type: inherit;
+			}
 
 			.icon-custom {
 				--icon-size: 1.8em;
@@ -3341,6 +3352,29 @@
 					return text.trim() === "";
 				}
 
+				function convertQuillLists(html) {
+					const div = document.createElement("div");
+					div.innerHTML = html;
+
+					div.querySelectorAll("ol").forEach((ol) => {
+						const children = [...ol.children];
+
+						if (children.length > 0 && children.every((li) => li.dataset.list === "bullet")) {
+							const ul = document.createElement("ul");
+
+							children.forEach((li) => {
+								li.removeAttribute("data-list");
+								li.className = li.className.replace(/ql-indent-\d+/g, "");
+								ul.appendChild(li);
+							});
+
+							ol.replaceWith(ul);
+						}
+					});
+
+					return div.innerHTML;
+				}
+
 				function ticketUpdatePreview() {
 					document.getElementById("ticket-previewPortal").textContent = document.getElementById("ticket-portal").value.toUpperCase();
 					document.getElementById("ticket-previewStore").textContent = document.getElementById("ticket-store").value.toUpperCase();
@@ -3358,7 +3392,7 @@
 					document.getElementById("ticket-previewNote").innerHTML = formatMultilinePreview(noteRaw);
 
 					const troubleshootingRaw = document.getElementById("ticket-resolution").value;
-					document.getElementById("ticket-previewTroubleshooting").innerHTML = !isHtmlEmpty(troubleshootingRaw) ? troubleshootingRaw : "";
+					document.getElementById("ticket-previewTroubleshooting").innerHTML = !isHtmlEmpty(troubleshootingRaw) ? convertQuillLists(troubleshootingRaw) : "";
 					syncPreviewHeight();
 				}
 
@@ -3374,7 +3408,7 @@
 					document.getElementById("ticket-previewIssue").innerHTML = formatMultilinePreview(entry.issue || "");
 					document.getElementById("ticket-previewNote").innerHTML = formatMultilinePreview(entry.note || "");
 					const troubleshootingContent = !isHtmlEmpty(entry.troubleshooting) ? entry.troubleshooting : "";
-					document.getElementById("ticket-previewTroubleshooting").innerHTML = troubleshootingContent;
+					document.getElementById("ticket-previewTroubleshooting").innerHTML = convertQuillLists(troubleshootingContent);
 					document.getElementById("ticket-previewResolution").innerHTML = formatMultilinePreview(entry.resolution || "");
 
 					syncPreviewHeight();
