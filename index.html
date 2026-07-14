@@ -2914,10 +2914,10 @@
 
 				function saveFormData(prefix) {
 					const fields = {
-						moolah: ["shift", "support", "portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"],
-						store: ["shift", "support", "portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"],
-						ticket: ["shift", "support", "portal", "store", "zip", "contactPerson", "contactNumber", "module", "issue", "escalated", "status", "remarks", "resolution", "note"],
-						ecommerce: ["shift", "support", "portal", "storeName", "zipcode", "contact", "contactNumber", "api"],
+						moolah: ["shift", "portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"],
+						store: ["shift", "portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"],
+						ticket: ["shift", "portal", "store", "zip", "contactPerson", "contactNumber", "module", "issue", "escalated", "status", "remarks", "resolution", "note"],
+						ecommerce: ["shift", "portal", "storeName", "zipcode", "contact", "contactNumber", "api"],
 					};
 					const formData = {};
 					fields[prefix].forEach((id) => {
@@ -2933,6 +2933,7 @@
 						try {
 							const formData = JSON.parse(saved);
 							Object.keys(formData).forEach((id) => {
+								 if (id === "support") return;
 								const el = document.getElementById(`${prefix}-${id}`);
 								if (el && formData[id] !== undefined) {
 									el.value = formData[id];
