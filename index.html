@@ -1985,7 +1985,7 @@
 								<strong>TIMEZONE:</strong>
 								<span id="moolah-preview-timezoneLine"></span>
 							</div>
-						
+
 							<br />
 							<a href="https://www.jotform.com/app/251701516201442/251752680091053" target="_blank">View Jotform</a>
 						</div>
@@ -3031,6 +3031,8 @@
 						document.getElementById("scheduler-portal").value = store.portal;
 						document.getElementById("scheduler-storeName").value = store.storeName;
 						document.getElementById("scheduler-zipcode").value = store.zipCode;
+						// 👇 Trigger the input event to run the timezone autofill listener
+						document.getElementById("scheduler-zipcode").dispatchEvent(new Event("input", { bubbles: true }));
 						schedulerUpdatePreview();
 						saveFormData("scheduler");
 					}
@@ -7238,22 +7240,30 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						}
 					});
 
-					// Scheduler – auto‑fill timezone from ZIP
+					// Scheduler – auto‑fill timezone from ZIP (exact same logic as store/moolah preview)
 					const schedulerZip = document.getElementById("scheduler-zipcode");
-					if (schedulerZip) {
-						schedulerZip.addEventListener("input", function () {
-							const zip = this.value.trim();
+					const schedulerTz = document.getElementById("scheduler-timezone");
+
+					if (schedulerZip && schedulerTz) {
+						function updateSchedulerTimezone() {
+							const zip = schedulerZip.value.trim();
+							let tzLabel = "";
+
 							if (/^\d{1,6}$/.test(zip)) {
-								const tz = getTimeZoneFromZip(zip);
-								if (tz) {
-									const tzInput = document.getElementById("scheduler-timezone");
-									if (tzInput && !tzInput.value) {
-										tzInput.value = getTimeZoneLabel(tz); // ← CHANGE HERE
-										schedulerUpdatePreview();
-									}
+								const tzCode = getTimeZoneFromZip(zip);
+								if (tzCode) {
+									tzLabel = getTimeZoneLabel(tzCode);
 								}
 							}
-						});
+
+							// Always set the timezone field – clears if ZIP is empty or invalid
+							schedulerTz.value = tzLabel;
+							schedulerUpdatePreview(); // update the preview panel
+						}
+
+						// Attach to both input (typing) and change (paste / blur)
+						schedulerZip.addEventListener("input", updateSchedulerTimezone);
+						schedulerZip.addEventListener("change", updateSchedulerTimezone);
 					}
 				}
 
