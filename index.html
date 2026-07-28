@@ -1295,9 +1295,9 @@
 				border-color: var(--accent-color) !important;
 			}
 			.sidebar-card.scheduler-card {
-    border-left-color: #6f42c1 !important;
-    border-bottom-color: #5a32a3 !important;
-}
+				border-left-color: #6f42c1 !important;
+				border-bottom-color: #5a32a3 !important;
+			}
 		</style>
 	</head>
 	<body>
@@ -2082,160 +2082,160 @@
 					</div>
 				</div>
 				<!-- ==================== SCHEDULER TAB ==================== -->
-<div id="tab-scheduler" class="tab-content">
-    <div class="three-panels">
-        <!-- History Panel -->
-        <div class="history-panel">
-            <div class="sidebar-header">
-                <h3><i class="bi bi-calendar-event-fill"></i> SCHEDULER HISTORY</h3>
-            </div>
-            <div id="schedulerHistoryContent" class="history-content"></div>
-        </div>
+				<div id="tab-scheduler" class="tab-content">
+					<div class="three-panels">
+						<!-- History Panel -->
+						<div class="history-panel">
+							<div class="sidebar-header">
+								<h3><i class="bi bi-calendar-event-fill"></i> SCHEDULER HISTORY</h3>
+							</div>
+							<div id="schedulerHistoryContent" class="history-content"></div>
+						</div>
 
-        <!-- Left Panel – Form -->
-        <div class="left-panel">
-            <h3>📅 SCHEDULER FORM</h3>
-            <div class="search-section">
-                <div class="search-header">STORE SEARCH</div>
-                <div class="search-input-wrapper">
-                    <input type="text" id="scheduler-storeSearch" autocomplete="off" placeholder="SEARCH STORE..." />
-                </div>
-                <div id="scheduler-searchResults" class="search-results"></div>
-                <div id="scheduler-loadStatus" class="load-status"></div>
-            </div>
+						<!-- Left Panel – Form -->
+						<div class="left-panel">
+							<h3>📅 SCHEDULER FORM</h3>
+							<div class="search-section">
+								<div class="search-header">STORE SEARCH</div>
+								<div class="search-input-wrapper">
+									<input type="text" id="scheduler-storeSearch" autocomplete="off" placeholder="SEARCH STORE..." />
+								</div>
+								<div id="scheduler-searchResults" class="search-results"></div>
+								<div id="scheduler-loadStatus" class="load-status"></div>
+							</div>
 
-            <table>
-    <!-- Demo/Training Type – Combobox -->
-    <tr>
-        <th>DEMO / TRAINING TYPE</th>
-        <td>
-            <div class="combobox-wrapper">
-                <input type="text" id="scheduler-demoType-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select type" />
-                <input type="hidden" id="scheduler-demoType" />
-                <div id="scheduler-demoType-suggestions" class="combobox-suggestions"></div>
-            </div>
-        </td>
-    </tr>
-    <!-- DATE (synced with ticket) -->
-    <tr>
-        <th>DATE</th>
-        <td><input type="date" id="scheduler-date" readonly /></td>
-    </tr>
-    <!-- SHIFT SCHEDULE (synced with ticket) -->
-    <tr>
-        <th>SHIFT SCHEDULE</th>
-        <td>
-            <select id="scheduler-shift" disabled>
-                <option value="">-- SELECT --</option>
-                <option value="6PM - 5AM">6PM - 5AM</option>
-                <option value="9PM - 6AM">9PM - 6AM</option>
-                <option value="9PM - 8AM">9PM - 8AM</option>
-                <option value="12AM - 11AM">12AM - 11AM</option>
-            </select>
-        </td>
-    </tr>
-    <!-- SUPPORT NAME (synced with ticket) -->
-    <tr>
-        <th>SUPPORT NAME</th>
-        <td><input type="text" id="scheduler-support" readonly /></td>
-    </tr>
-    <!-- PORTAL NUMBER * -->
-    <tr>
-        <th>PORTAL NUMBER *</th>
-        <td><input type="text" id="scheduler-portal" class="required-field" /></td>
-    </tr>
-    <!-- STORE NAME * -->
-    <tr>
-        <th>STORE NAME *</th>
-        <td><input type="text" id="scheduler-storeName" class="required-field" /></td>
-    </tr>
-    <!-- ZIP CODE * -->
-    <tr>
-        <th>ZIP CODE *</th>
-        <td><input type="text" id="scheduler-zipcode" maxlength="6" class="required-field" /></td>
-    </tr>
-    <!-- CONTACT PERSON -->
-    <tr>
-        <th>CONTACT PERSON</th>
-        <td><input type="text" id="scheduler-contact" class="no-uppercase" /></td>
-    </tr>
-    <!-- CONTACT # -->
-    <tr>
-        <th>CONTACT #</th>
-        <td><input type="text" id="scheduler-contactNumber" class="no-uppercase" maxlength="14" /></td>
-    </tr>
-    <!-- EMAIL ADDRESS -->
-    <tr>
-        <th>EMAIL ADDRESS</th>
-        <td><input type="email" id="scheduler-email" class="no-uppercase" /></td>
-    </tr>
-    <!-- SCHEDULED DATE (separate) -->
-    <tr>
-        <th>SCHEDULED DATE</th>
-        <td><input type="date" id="scheduler-scheduleDate" /></td>
-    </tr>
-    <!-- SCHEDULED TIME (separate) -->
-    <tr>
-        <th>SCHEDULED TIME</th>
-        <td><input type="time" id="scheduler-scheduleTime" step="60" /></td>
-    </tr>
-    <!-- TIMEZONE (editable text, auto-filled) -->
-    <tr>
-        <th>TIMEZONE</th>
-        <td><input type="text" id="scheduler-timezone" class="no-uppercase" placeholder="e.g., ET, CT, MT, PT, AK, HI" /></td>
-    </tr>
-    <!-- Current RetailzPOS Customer? -->
-    <tr>
-        <th>RetailzPOS User</th>
-        <td>
-            <label><input type="radio" name="scheduler-customer" value="Yes" /> Yes</label>
-            <label><input type="radio" name="scheduler-customer" value="No" /> No</label>
-        </td>
-    </tr>
-    <!-- TYPE OF BUSINESS -->
-    <tr>
-        <th>TYPE OF BUSINESS</th>
-        <td><input type="text" id="scheduler-businessType" class="no-uppercase" /></td>
-    </tr>
-    <!-- PREFERRED LANGUAGE -->
-    <tr>
-        <th>PREFERRED LANGUAGE</th>
-        <td>
-            <select id="scheduler-language">
-                <option value="">-- SELECT --</option>
-                <option value="English">English</option>
-                <option value="Hindi/Gujarati">Hindi/Gujarati</option>
-            </select>
-        </td>
-    </tr>
-</table>
-            <div class="button-row">
-                <button class="add" onclick="addEntry('scheduler')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
-                <button class="form-clear-btn" onclick="clearFormOnly('scheduler')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
-                <button class="clock" onclick="clock('IN', 'scheduler')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
-                <button class="clock" onclick="clock('OUT', 'scheduler')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
-            </div>
-        </div>
+							<table>
+								<!-- Demo/Training Type – Combobox -->
+								<tr>
+									<th>DEMO / TRAINING TYPE</th>
+									<td>
+										<div class="combobox-wrapper">
+											<input type="text" id="scheduler-demoType-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select type" />
+											<input type="hidden" id="scheduler-demoType" />
+											<div id="scheduler-demoType-suggestions" class="combobox-suggestions"></div>
+										</div>
+									</td>
+								</tr>
+								<!-- DATE (synced with ticket) -->
+								<tr>
+									<th>DATE</th>
+									<td><input type="date" id="scheduler-date" readonly /></td>
+								</tr>
+								<!-- SHIFT SCHEDULE (synced with ticket) -->
+								<tr>
+									<th>SHIFT SCHEDULE</th>
+									<td>
+										<select id="scheduler-shift" disabled>
+											<option value="">-- SELECT --</option>
+											<option value="6PM - 5AM">6PM - 5AM</option>
+											<option value="9PM - 6AM">9PM - 6AM</option>
+											<option value="9PM - 8AM">9PM - 8AM</option>
+											<option value="12AM - 11AM">12AM - 11AM</option>
+										</select>
+									</td>
+								</tr>
+								<!-- SUPPORT NAME (synced with ticket) -->
+								<tr>
+									<th>SUPPORT NAME</th>
+									<td><input type="text" id="scheduler-support" readonly /></td>
+								</tr>
+								<!-- PORTAL NUMBER * -->
+								<tr>
+									<th>PORTAL NUMBER *</th>
+									<td><input type="text" id="scheduler-portal" class="required-field" /></td>
+								</tr>
+								<!-- STORE NAME * -->
+								<tr>
+									<th>STORE NAME *</th>
+									<td><input type="text" id="scheduler-storeName" class="required-field" /></td>
+								</tr>
+								<!-- ZIP CODE * -->
+								<tr>
+									<th>ZIP CODE *</th>
+									<td><input type="text" id="scheduler-zipcode" maxlength="6" class="required-field" /></td>
+								</tr>
+								<!-- CONTACT PERSON -->
+								<tr>
+									<th>CONTACT PERSON</th>
+									<td><input type="text" id="scheduler-contact" class="no-uppercase" /></td>
+								</tr>
+								<!-- CONTACT # -->
+								<tr>
+									<th>CONTACT #</th>
+									<td><input type="text" id="scheduler-contactNumber" class="no-uppercase" maxlength="14" /></td>
+								</tr>
+								<!-- EMAIL ADDRESS -->
+								<tr>
+									<th>EMAIL ADDRESS</th>
+									<td><input type="email" id="scheduler-email" class="no-uppercase" /></td>
+								</tr>
+								<!-- SCHEDULED DATE (separate) -->
+								<tr>
+									<th>SCHEDULED DATE</th>
+									<td><input type="date" id="scheduler-scheduleDate" /></td>
+								</tr>
+								<!-- SCHEDULED TIME (separate) -->
+								<tr>
+									<th>SCHEDULED TIME</th>
+									<td><input type="time" id="scheduler-scheduleTime" step="60" /></td>
+								</tr>
+								<!-- TIMEZONE (editable text, auto-filled) -->
+								<tr>
+									<th>TIMEZONE</th>
+									<td><input type="text" id="scheduler-timezone" class="no-uppercase" placeholder="e.g., ET, CT, MT, PT, AK, HI" /></td>
+								</tr>
+								<!-- Current RetailzPOS Customer? -->
+								<tr>
+									<th>RetailzPOS User</th>
+									<td>
+										<label><input type="radio" name="scheduler-customer" value="Yes" /> Yes</label>
+										<label><input type="radio" name="scheduler-customer" value="No" /> No</label>
+									</td>
+								</tr>
+								<!-- TYPE OF BUSINESS -->
+								<tr>
+									<th>TYPE OF BUSINESS</th>
+									<td><input type="text" id="scheduler-businessType" class="no-uppercase" /></td>
+								</tr>
+								<!-- PREFERRED LANGUAGE -->
+								<tr>
+									<th>PREFERRED LANGUAGE</th>
+									<td>
+										<select id="scheduler-language">
+											<option value="">-- SELECT --</option>
+											<option value="English">English</option>
+											<option value="Hindi/Gujarati">Hindi/Gujarati</option>
+										</select>
+									</td>
+								</tr>
+							</table>
+							<div class="button-row">
+								<button class="add" onclick="addEntry('scheduler')"><i class="bi bi-plus-circle-fill"></i> ADD ENTRY</button>
+								<button class="form-clear-btn" onclick="clearFormOnly('scheduler')"><i class="bi bi-eraser-fill"></i> CLEAR FORM</button>
+								<button class="clock" onclick="clock('IN', 'scheduler')"><i class="bi bi-hourglass-top"></i> CLOCK IN</button>
+								<button class="clock" onclick="clock('OUT', 'scheduler')"><i class="bi bi-hourglass-bottom"></i> CLOCK OUT</button>
+							</div>
+						</div>
 
-        <div class="right-panel" id="scheduler-previewPanel">
-    <h3>🔍 PREVIEW</h3>
-    <div><strong>DEMO/TRAINING:</strong> <span id="scheduler-preview-demoType"></span></div>
-    <div><strong>PORTAL:</strong> <span id="scheduler-preview-portal"></span></div>
-    <div><strong>STORE:</strong> <span id="scheduler-preview-storeName"></span></div>
-    <div><strong>ZIP:</strong> <span id="scheduler-preview-zipcode"></span></div>
-    <div><strong>CONTACT:</strong> <span id="scheduler-preview-contact"></span></div>
-    <div><strong>CONTACT #:</strong> <span id="scheduler-preview-contactNumber"></span></div>
-    <div><strong>EMAIL:</strong> <span id="scheduler-preview-email"></span></div>
-    <br />
-    <div><strong>SCHEDULED DATE:</strong> <span id="scheduler-preview-scheduleDate"></span></div>
-    <div><strong>SCHEDULED TIME:</strong> <span id="scheduler-preview-scheduleTime"></span></div>
-    <div><strong>TIMEZONE:</strong> <span id="scheduler-preview-timezone"></span></div>
-    <div><strong>RETAILZPOS USER:</strong> <span id="scheduler-preview-customer"></span></div>
-    <div><strong>BUSINESS TYPE:</strong> <span id="scheduler-preview-businessType"></span></div>
-    <div><strong>LANGUAGE:</strong> <span id="scheduler-preview-language"></span></div>
-</div>
-    </div>
-</div>
+						<div class="right-panel" id="scheduler-previewPanel">
+							<h3>🔍 PREVIEW</h3>
+							<div><strong>DEMO/TRAINING:</strong> <span id="scheduler-preview-demoType"></span></div>
+							<div><strong>PORTAL:</strong> <span id="scheduler-preview-portal"></span></div>
+							<div><strong>STORE:</strong> <span id="scheduler-preview-storeName"></span></div>
+							<div><strong>ZIP:</strong> <span id="scheduler-preview-zipcode"></span></div>
+							<div><strong>CONTACT:</strong> <span id="scheduler-preview-contact"></span></div>
+							<div><strong>CONTACT #:</strong> <span id="scheduler-preview-contactNumber"></span></div>
+							<div><strong>EMAIL:</strong> <span id="scheduler-preview-email"></span></div>
+							<br />
+							<div><strong>SCHEDULED DATE:</strong> <span id="scheduler-preview-scheduleDate"></span></div>
+							<div><strong>SCHEDULED TIME:</strong> <span id="scheduler-preview-scheduleTime"></span></div>
+							<div><strong>TIMEZONE:</strong> <span id="scheduler-preview-timezone"></span></div>
+							<div><strong>RETAILZPOS USER:</strong> <span id="scheduler-preview-customer"></span></div>
+							<div><strong>BUSINESS TYPE:</strong> <span id="scheduler-preview-businessType"></span></div>
+							<div><strong>LANGUAGE:</strong> <span id="scheduler-preview-language"></span></div>
+						</div>
+					</div>
+				</div>
 				<div class="bulk-bar">
 					<label><input type="checkbox" id="selectAllCheckbox" /> Select All</label>
 					<button id="bulkDeleteBtn" title="Remove selected rows (only from main table)"><i class="bi bi-trash-fill"></i> REMOVE</button>
@@ -2317,17 +2317,7 @@
 		<div id="pwdModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
 
 		<script>
-			const DEMO_TYPE_OPTIONS = [
-    "RetailzPOS Product Demo (Agent/Reseller)",
-    "RetailzPOS Product Demo (Web)",
-    "RetailzPOS Product Demo",
-    "RetailzPOS Training",
-    "Moolah Points Product Demo",
-	"Moolah Points Training",
-    "LottoGuru Product Demo",
-	"LottoGuru Training"
-
-];
+			const DEMO_TYPE_OPTIONS = ["RetailzPOS Product Demo (Agent/Reseller)", "RetailzPOS Product Demo (Web)", "RetailzPOS Product Demo", "RetailzPOS Training", "Moolah Points Product Demo", "Moolah Points Training", "LottoGuru Product Demo", "LottoGuru Training"];
 
 			const PASSWORD_UPDATE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbz_NOXzj_IQChM9QV90sgtyiL43YY9rwSwkQ3g21THcbsrqc5tfYBnCAWI0CCDL0-lb/exec";
 
@@ -3107,11 +3097,11 @@
 						if (el) formData[id] = el.value;
 					});
 					if (prefix === "scheduler") {
-    formData.demoType = document.getElementById("scheduler-demoType").value;
-    formData.customer = document.querySelector('input[name="scheduler-customer"]:checked')?.value || "";
-    formData.timezone = document.getElementById("scheduler-timezone").value;
-    formData.language = document.getElementById("scheduler-language").value;
-}
+						formData.demoType = document.getElementById("scheduler-demoType").value;
+						formData.customer = document.querySelector('input[name="scheduler-customer"]:checked')?.value || "";
+						formData.timezone = document.getElementById("scheduler-timezone").value;
+						formData.language = document.getElementById("scheduler-language").value;
+					}
 
 					localStorage.setItem(`${prefix}FormData`, JSON.stringify(formData));
 				}
@@ -3122,7 +3112,7 @@
 						try {
 							const formData = JSON.parse(saved);
 							Object.keys(formData).forEach((id) => {
-								 if (id === "support") return;
+								if (id === "support") return;
 								const el = document.getElementById(`${prefix}-${id}`);
 								if (el && formData[id] !== undefined) {
 									el.value = formData[id];
@@ -3141,25 +3131,24 @@
 					}
 
 					if (prefix === "scheduler") {
-    const saved = localStorage.getItem(`${prefix}FormData`);
-    if (saved) {
-        try {
-            const formData = JSON.parse(saved);
-            if (formData.demoType) {
-                document.getElementById("scheduler-demoType").value = formData.demoType;
-                document.getElementById("scheduler-demoType-combobox").value = formData.demoType;
-            }
-            if (formData.customer) {
-                const radio = document.querySelector(`input[name="scheduler-customer"][value="${formData.customer}"]`);
-                if (radio) radio.checked = true;
-            }
-            if (formData.timezone) document.getElementById("scheduler-timezone").value = formData.timezone;
-            if (formData.language) document.getElementById("scheduler-language").value = formData.language;
-        } catch (e) {}
-    }
-    schedulerUpdatePreview();
-}
-					
+						const saved = localStorage.getItem(`${prefix}FormData`);
+						if (saved) {
+							try {
+								const formData = JSON.parse(saved);
+								if (formData.demoType) {
+									document.getElementById("scheduler-demoType").value = formData.demoType;
+									document.getElementById("scheduler-demoType-combobox").value = formData.demoType;
+								}
+								if (formData.customer) {
+									const radio = document.querySelector(`input[name="scheduler-customer"][value="${formData.customer}"]`);
+									if (radio) radio.checked = true;
+								}
+								if (formData.timezone) document.getElementById("scheduler-timezone").value = formData.timezone;
+								if (formData.language) document.getElementById("scheduler-language").value = formData.language;
+							} catch (e) {}
+						}
+						schedulerUpdatePreview();
+					}
 
 					if (prefix === "moolah") moolahUpdatePreview();
 					if (prefix === "store") storeUpdatePreview();
@@ -3742,9 +3731,9 @@
 
 				async function addEntry(prefix) {
 					if (prefix === "scheduler") {
-    await addEntryScheduler();
-    return;
-}
+						await addEntryScheduler();
+						return;
+					}
 
 					if (prefix === "ecommerce") {
 						await addEntryEcommerce();
@@ -4198,18 +4187,18 @@
 						if (apiHidden) apiHidden.value = "";
 						ecommerceUpdatePreview();
 					} else if (prefix === "scheduler") {
-    const fields = ["portal", "storeName", "zipcode", "contact", "contactNumber", "email", "scheduleDate", "scheduleTime", "businessType", "timezone"];
-    fields.forEach(id => {
-        const el = document.getElementById(`scheduler-${id}`);
-        if (el) el.value = "";
-    });
-    document.getElementById("scheduler-demoType").value = "";
-    document.getElementById("scheduler-demoType-combobox").value = "";
-    document.querySelectorAll('input[name="scheduler-customer"]').forEach(el => el.checked = false);
-    document.getElementById("scheduler-language").value = "";
-    document.getElementById("scheduler-storeSearch").value = "";
-    document.getElementById("scheduler-searchResults").innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
-}
+						const fields = ["portal", "storeName", "zipcode", "contact", "contactNumber", "email", "scheduleDate", "scheduleTime", "businessType", "timezone"];
+						fields.forEach((id) => {
+							const el = document.getElementById(`scheduler-${id}`);
+							if (el) el.value = "";
+						});
+						document.getElementById("scheduler-demoType").value = "";
+						document.getElementById("scheduler-demoType-combobox").value = "";
+						document.querySelectorAll('input[name="scheduler-customer"]').forEach((el) => (el.checked = false));
+						document.getElementById("scheduler-language").value = "";
+						document.getElementById("scheduler-storeSearch").value = "";
+						document.getElementById("scheduler-searchResults").innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
+					}
 
 					if (prefix === "ticket") ticketUpdatePreview();
 					if (prefix === "store") storeUpdatePreview();
@@ -4600,12 +4589,12 @@
 
 				function renderSidebar() {
 					const containers = [
-    document.getElementById("ticketHistoryContent"),
-    document.getElementById("storeHistoryContent"),
-    document.getElementById("moolahHistoryContent"),
-    document.getElementById("ecommerceHistoryContent"),
-    document.getElementById("schedulerHistoryContent"), // ✅ ADD THIS
-].filter((c) => c);
+						document.getElementById("ticketHistoryContent"),
+						document.getElementById("storeHistoryContent"),
+						document.getElementById("moolahHistoryContent"),
+						document.getElementById("ecommerceHistoryContent"),
+						document.getElementById("schedulerHistoryContent"), // ✅ ADD THIS
+					].filter((c) => c);
 
 					if (containers.length === 0) return;
 
@@ -4679,9 +4668,9 @@
 											issueDisplay = entry.module || "OTHER TASK";
 										}
 										let cardClass = "ticket-card";
-if (entry.source === "store") cardClass = "store-card";
-else if (entry.source === "moolah") cardClass = "moolah-card";
-else if (entry.source === "scheduler") cardClass = "scheduler-card"; // ✅ ADD THIS
+										if (entry.source === "store") cardClass = "store-card";
+										else if (entry.source === "moolah") cardClass = "moolah-card";
+										else if (entry.source === "scheduler") cardClass = "scheduler-card"; // ✅ ADD THIS
 
 										let issueTextColor = "";
 										switch ((entry.status || "").toUpperCase()) {
@@ -5730,17 +5719,17 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 				}
 
 				function autoFillSupportName(supportName) {
-    document.getElementById("ticket-support").value = supportName;
-    document.getElementById("ticket-support").readOnly = true;
-    document.getElementById("store-support").value = supportName;
-    document.getElementById("store-support").readOnly = true;
-    document.getElementById("moolah-support").value = supportName;
-    document.getElementById("moolah-support").readOnly = true;
-    document.getElementById("ecommerce-support").value = supportName;
-    document.getElementById("ecommerce-support").readOnly = true;
-    document.getElementById("scheduler-support").value = supportName;
-    document.getElementById("scheduler-support").readOnly = true;
-}
+					document.getElementById("ticket-support").value = supportName;
+					document.getElementById("ticket-support").readOnly = true;
+					document.getElementById("store-support").value = supportName;
+					document.getElementById("store-support").readOnly = true;
+					document.getElementById("moolah-support").value = supportName;
+					document.getElementById("moolah-support").readOnly = true;
+					document.getElementById("ecommerce-support").value = supportName;
+					document.getElementById("ecommerce-support").readOnly = true;
+					document.getElementById("scheduler-support").value = supportName;
+					document.getElementById("scheduler-support").readOnly = true;
+				}
 
 				function setupLoginListeners() {
 					const loginBtn = document.getElementById("loginBtn");
@@ -6382,166 +6371,166 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 				}
 
 				function schedulerUpdatePreview() {
-    const demoType = document.getElementById("scheduler-demoType").value;
-    const portal = document.getElementById("scheduler-portal").value.trim();
-    const storeName = document.getElementById("scheduler-storeName").value.trim();
-    const zipcode = document.getElementById("scheduler-zipcode").value.trim();
-    const contact = document.getElementById("scheduler-contact").value.trim();
-    const contactNumber = document.getElementById("scheduler-contactNumber").value.trim();
-    const email = document.getElementById("scheduler-email").value.trim();
-    const scheduleDateRaw = document.getElementById("scheduler-scheduleDate").value;
-    const scheduleTimeRaw = document.getElementById("scheduler-scheduleTime").value;
-    const timezone = document.getElementById("scheduler-timezone").value.trim();
-    const customer = document.querySelector('input[name="scheduler-customer"]:checked')?.value || "";
-    const businessType = document.getElementById("scheduler-businessType").value.trim();
-    const language = document.getElementById("scheduler-language").value;
+					const demoType = document.getElementById("scheduler-demoType").value;
+					const portal = document.getElementById("scheduler-portal").value.trim();
+					const storeName = document.getElementById("scheduler-storeName").value.trim();
+					const zipcode = document.getElementById("scheduler-zipcode").value.trim();
+					const contact = document.getElementById("scheduler-contact").value.trim();
+					const contactNumber = document.getElementById("scheduler-contactNumber").value.trim();
+					const email = document.getElementById("scheduler-email").value.trim();
+					const scheduleDateRaw = document.getElementById("scheduler-scheduleDate").value;
+					const scheduleTimeRaw = document.getElementById("scheduler-scheduleTime").value;
+					const timezone = document.getElementById("scheduler-timezone").value.trim();
+					const customer = document.querySelector('input[name="scheduler-customer"]:checked')?.value || "";
+					const businessType = document.getElementById("scheduler-businessType").value.trim();
+					const language = document.getElementById("scheduler-language").value;
 
-    // Format scheduled date: YYYY-MM-DD → MM/DD/YYYY
-    let formattedDate = "";
-    if (scheduleDateRaw) {
-        const parts = scheduleDateRaw.split("-");
-        if (parts.length === 3) {
-            formattedDate = `${parts[1]}/${parts[2]}/${parts[0]}`;
-        } else {
-            formattedDate = scheduleDateRaw;
-        }
-    }
+					// Format scheduled date: YYYY-MM-DD → MM/DD/YYYY
+					let formattedDate = "";
+					if (scheduleDateRaw) {
+						const parts = scheduleDateRaw.split("-");
+						if (parts.length === 3) {
+							formattedDate = `${parts[1]}/${parts[2]}/${parts[0]}`;
+						} else {
+							formattedDate = scheduleDateRaw;
+						}
+					}
 
-    // Format scheduled time: HH:MM (24h) → 12h AM/PM
-    let formattedTime = "";
-    if (scheduleTimeRaw) {
-        const parts = scheduleTimeRaw.split(":");
-        if (parts.length >= 2) {
-            let hours = parseInt(parts[0], 10);
-            const minutes = parts[1];
-            const ampm = hours >= 12 ? "PM" : "AM";
-            hours = hours % 12 || 12; // 0 → 12
-            formattedTime = `${hours}:${minutes} ${ampm}`;
-        } else {
-            formattedTime = scheduleTimeRaw;
-        }
-    }
+					// Format scheduled time: HH:MM (24h) → 12h AM/PM
+					let formattedTime = "";
+					if (scheduleTimeRaw) {
+						const parts = scheduleTimeRaw.split(":");
+						if (parts.length >= 2) {
+							let hours = parseInt(parts[0], 10);
+							const minutes = parts[1];
+							const ampm = hours >= 12 ? "PM" : "AM";
+							hours = hours % 12 || 12; // 0 → 12
+							formattedTime = `${hours}:${minutes} ${ampm}`;
+						} else {
+							formattedTime = scheduleTimeRaw;
+						}
+					}
 
-    document.getElementById("scheduler-preview-demoType").textContent = demoType;
-    document.getElementById("scheduler-preview-portal").textContent = portal;
-    document.getElementById("scheduler-preview-storeName").textContent = storeName;
-    document.getElementById("scheduler-preview-zipcode").textContent = zipcode;
-    document.getElementById("scheduler-preview-contact").textContent = contact;
-    document.getElementById("scheduler-preview-contactNumber").textContent = contactNumber;
-    document.getElementById("scheduler-preview-email").textContent = email;
-    document.getElementById("scheduler-preview-scheduleDate").textContent = formattedDate;
-    document.getElementById("scheduler-preview-scheduleTime").textContent = formattedTime;
-    document.getElementById("scheduler-preview-timezone").textContent = timezone;
-    document.getElementById("scheduler-preview-customer").textContent = customer;
-    document.getElementById("scheduler-preview-businessType").textContent = businessType;
-    document.getElementById("scheduler-preview-language").textContent = language;
+					document.getElementById("scheduler-preview-demoType").textContent = demoType;
+					document.getElementById("scheduler-preview-portal").textContent = portal;
+					document.getElementById("scheduler-preview-storeName").textContent = storeName;
+					document.getElementById("scheduler-preview-zipcode").textContent = zipcode;
+					document.getElementById("scheduler-preview-contact").textContent = contact;
+					document.getElementById("scheduler-preview-contactNumber").textContent = contactNumber;
+					document.getElementById("scheduler-preview-email").textContent = email;
+					document.getElementById("scheduler-preview-scheduleDate").textContent = formattedDate;
+					document.getElementById("scheduler-preview-scheduleTime").textContent = formattedTime;
+					document.getElementById("scheduler-preview-timezone").textContent = timezone;
+					document.getElementById("scheduler-preview-customer").textContent = customer;
+					document.getElementById("scheduler-preview-businessType").textContent = businessType;
+					document.getElementById("scheduler-preview-language").textContent = language;
 
-    syncPreviewHeight();
-}
+					syncPreviewHeight();
+				}
 
-async function addEntryScheduler() {
-    const portalEl = document.getElementById("scheduler-portal");
-    const storeEl = document.getElementById("scheduler-storeName");
-    const zipEl = document.getElementById("scheduler-zipcode");
-    let valid = true;
-    [portalEl, storeEl, zipEl].forEach(el => {
-        el.classList.remove("invalid");
-        if (!el.value.trim()) {
-            el.classList.add("invalid");
-            valid = false;
-        }
-    });
-    if (!valid) {
-        showNotification("Please fill PORTAL, STORE NAME, and ZIP CODE!");
-        return;
-    }
+				async function addEntryScheduler() {
+					const portalEl = document.getElementById("scheduler-portal");
+					const storeEl = document.getElementById("scheduler-storeName");
+					const zipEl = document.getElementById("scheduler-zipcode");
+					let valid = true;
+					[portalEl, storeEl, zipEl].forEach((el) => {
+						el.classList.remove("invalid");
+						if (!el.value.trim()) {
+							el.classList.add("invalid");
+							valid = false;
+						}
+					});
+					if (!valid) {
+						showNotification("Please fill PORTAL, STORE NAME, and ZIP CODE!");
+						return;
+					}
 
-    pushUndo();
+					pushUndo();
 
-    const date = document.getElementById("scheduler-date").value;
-    const formattedDate = date ? new Date(date).toLocaleDateString("en-US") : storeGetFormattedDateMinusOne();
-    const shift = document.getElementById("scheduler-shift").value;
-    const support = document.getElementById("scheduler-support").value.toUpperCase();
-    const portal = portalEl.value.trim();
-    const storeName = storeEl.value.trim();
-    const zipcode = zipEl.value.trim();
-    const contact = document.getElementById("scheduler-contact").value.trim();
-    const contactNumber = document.getElementById("scheduler-contactNumber").value.trim();
-    const email = document.getElementById("scheduler-email").value.trim();
-    const scheduleDate = document.getElementById("scheduler-scheduleDate").value;
-    const scheduleTime = document.getElementById("scheduler-scheduleTime").value;
-    const timezone = document.getElementById("scheduler-timezone").value.trim();
-    const customer = document.querySelector('input[name="scheduler-customer"]:checked')?.value || "";
-    const businessType = document.getElementById("scheduler-businessType").value.trim();
-    const language = document.getElementById("scheduler-language").value;
-    const demoType = document.getElementById("scheduler-demoType").value;
+					const date = document.getElementById("scheduler-date").value;
+					const formattedDate = date ? new Date(date).toLocaleDateString("en-US") : storeGetFormattedDateMinusOne();
+					const shift = document.getElementById("scheduler-shift").value;
+					const support = document.getElementById("scheduler-support").value.toUpperCase();
+					const portal = portalEl.value.trim();
+					const storeName = storeEl.value.trim();
+					const zipcode = zipEl.value.trim();
+					const contact = document.getElementById("scheduler-contact").value.trim();
+					const contactNumber = document.getElementById("scheduler-contactNumber").value.trim();
+					const email = document.getElementById("scheduler-email").value.trim();
+					const scheduleDate = document.getElementById("scheduler-scheduleDate").value;
+					const scheduleTime = document.getElementById("scheduler-scheduleTime").value;
+					const timezone = document.getElementById("scheduler-timezone").value.trim();
+					const customer = document.querySelector('input[name="scheduler-customer"]:checked')?.value || "";
+					const businessType = document.getElementById("scheduler-businessType").value.trim();
+					const language = document.getElementById("scheduler-language").value;
+					const demoType = document.getElementById("scheduler-demoType").value;
 
-    const moduleData = {
-        demoType,
-        scheduleDate,
-        scheduleTime,
-        timezone,
-        customer,
-        businessType,
-        language,
-        email,
-    };
+					const moduleData = {
+						demoType,
+						scheduleDate,
+						scheduleTime,
+						timezone,
+						customer,
+						businessType,
+						language,
+						email,
+					};
 
-    const issueText = demoType || "Scheduler Entry";
+					const issueText = demoType || "Scheduler Entry";
 
-    const newEntry = {
-        id: Date.now(),
-        date: formattedDate,
-        shift,
-        support,
-        portal,
-        store: storeName,
-        zip: zipcode,
-        contact,
-        contactNumber,
-        module: "Scheduler",
-        issue: issueText,
-        note: "",
-        escalated: "",
-        status: "OTHER TASK",
-        remarks: "",
-        troubleshooting: "",
-        resolution: "",
-        moduleData,
-        source: "scheduler",
-        deleted: false,
-        imported: false,
-    };
+					const newEntry = {
+						id: Date.now(),
+						date: formattedDate,
+						shift,
+						support,
+						portal,
+						store: storeName,
+						zip: zipcode,
+						contact,
+						contactNumber,
+						module: "Scheduler",
+						issue: issueText,
+						note: "",
+						escalated: "",
+						status: "OTHER TASK",
+						remarks: "",
+						troubleshooting: "",
+						resolution: "",
+						moduleData,
+						source: "scheduler",
+						deleted: false,
+						imported: false,
+					};
 
-    if (editId) {
-        const index = allEntries.findIndex(e => e.id === editId);
-        if (index !== -1) {
-            allEntries[index] = { ...allEntries[index], ...newEntry, id: editId };
-            showNotification("Scheduler entry updated!");
-            localStorage.removeItem(EDIT_DRAFT_KEY + editId);
-            editId = null;
-            localStorage.removeItem(EDIT_STORAGE_KEY);
-            const addBtn = document.querySelector("#tab-scheduler .add");
-            if (addBtn) {
-                addBtn.textContent = "ADD ENTRY";
-                addBtn.classList.remove("editing");
-            }
-        } else {
-            allEntries.unshift(newEntry);
-            showNotification("Scheduler entry added (edit target missing)!");
-        }
-    } else {
-        allEntries.unshift(newEntry);
-        showNotification("Scheduler entry added!");
-    }
+					if (editId) {
+						const index = allEntries.findIndex((e) => e.id === editId);
+						if (index !== -1) {
+							allEntries[index] = { ...allEntries[index], ...newEntry, id: editId };
+							showNotification("Scheduler entry updated!");
+							localStorage.removeItem(EDIT_DRAFT_KEY + editId);
+							editId = null;
+							localStorage.removeItem(EDIT_STORAGE_KEY);
+							const addBtn = document.querySelector("#tab-scheduler .add");
+							if (addBtn) {
+								addBtn.textContent = "ADD ENTRY";
+								addBtn.classList.remove("editing");
+							}
+						} else {
+							allEntries.unshift(newEntry);
+							showNotification("Scheduler entry added (edit target missing)!");
+						}
+					} else {
+						allEntries.unshift(newEntry);
+						showNotification("Scheduler entry added!");
+					}
 
-    clearFormFields("scheduler");
-    saveAllEntries();
-    updateStatusCounters();
-    renderTable();
-    renderSidebar();
-    syncPreviewHeight();
-}
+					clearFormFields("scheduler");
+					saveAllEntries();
+					updateStatusCounters();
+					renderTable();
+					renderSidebar();
+					syncPreviewHeight();
+				}
 
 				function init() {
 					const loggedInUser = getLoggedInUser();
@@ -6775,27 +6764,27 @@ async function addEntryScheduler() {
 					});
 
 					const schedulerFields = ["portal", "storeName", "zipcode", "contact", "contactNumber", "email", "scheduleDate", "scheduleTime", "businessType", "timezone"];
-schedulerFields.forEach(id => {
-    const el = document.getElementById(`scheduler-${id}`);
-    if (el) {
-        el.addEventListener("input", () => {
-            schedulerUpdatePreview();
-            saveFormData("scheduler");
-        });
-    }
-});
-// Listen for changes on selects and radios
-document.getElementById("scheduler-shift").addEventListener("change", () => {
-    schedulerUpdatePreview();
-    saveFormData("scheduler");
-});
-document.getElementById("scheduler-language").addEventListener("change", schedulerUpdatePreview);
-document.querySelectorAll('input[name="scheduler-customer"]').forEach(el => {
-    el.addEventListener("change", () => {
-        schedulerUpdatePreview();
-        saveFormData("scheduler");
-    });
-});
+					schedulerFields.forEach((id) => {
+						const el = document.getElementById(`scheduler-${id}`);
+						if (el) {
+							el.addEventListener("input", () => {
+								schedulerUpdatePreview();
+								saveFormData("scheduler");
+							});
+						}
+					});
+					// Listen for changes on selects and radios
+					document.getElementById("scheduler-shift").addEventListener("change", () => {
+						schedulerUpdatePreview();
+						saveFormData("scheduler");
+					});
+					document.getElementById("scheduler-language").addEventListener("change", schedulerUpdatePreview);
+					document.querySelectorAll('input[name="scheduler-customer"]').forEach((el) => {
+						el.addEventListener("change", () => {
+							schedulerUpdatePreview();
+							saveFormData("scheduler");
+						});
+					});
 
 					// Apply uppercase conversion only to inputs/textarea that do NOT have the .no-uppercase class
 					document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach((el) => {
@@ -7214,9 +7203,9 @@ document.querySelectorAll('input[name="scheduler-customer"]').forEach(el => {
 					});
 
 					initCombobox("scheduler-demoType-combobox", "scheduler-demoType", DEMO_TYPE_OPTIONS, "scheduler-demoType-suggestions", () => {
-    schedulerUpdatePreview();
-    saveFormData("scheduler");
-});
+						schedulerUpdatePreview();
+						saveFormData("scheduler");
+					});
 
 					const ecommerceFields = ["portal", "storeName", "zipcode", "api"];
 					ecommerceFields.forEach((id) => {
@@ -7230,37 +7219,36 @@ document.querySelectorAll('input[name="scheduler-customer"]').forEach(el => {
 					});
 
 					window.addEventListener("beforeunload", () => {
-    ["ticket", "store", "moolah", "ecommerce", "scheduler"].forEach((prefix) => {
-        saveFormData(prefix);
-    });
-});
+						["ticket", "store", "moolah", "ecommerce", "scheduler"].forEach((prefix) => {
+							saveFormData(prefix);
+						});
+					});
 
 					window.addEventListener("beforeunload", () => {
-    if (editId) {
-        const activeTab = document.querySelector(".tab-content.active").id.replace("tab-", "");
-        attachDraftAutoSave(activeTab, editId);
-    }
-});
+						if (editId) {
+							const activeTab = document.querySelector(".tab-content.active").id.replace("tab-", "");
+							attachDraftAutoSave(activeTab, editId);
+						}
+					});
 
-// Scheduler – auto‑fill timezone from ZIP
-const schedulerZip = document.getElementById("scheduler-zipcode");
-if (schedulerZip) {
-    schedulerZip.addEventListener("input", function() {
-        const zip = this.value.trim();
-        if (/^\d{1,6}$/.test(zip)) {
-            const tz = getTimeZoneFromZip(zip);
-            if (tz) {
-                const tzInput = document.getElementById("scheduler-timezone");
-                if (tzInput && !tzInput.value) {
-                    tzInput.value = getTimeZoneLabel(tz);  // ← CHANGE HERE
-                    schedulerUpdatePreview();
-                }
-            }
-        }
-    });
-}
+					// Scheduler – auto‑fill timezone from ZIP
+					const schedulerZip = document.getElementById("scheduler-zipcode");
+					if (schedulerZip) {
+						schedulerZip.addEventListener("input", function () {
+							const zip = this.value.trim();
+							if (/^\d{1,6}$/.test(zip)) {
+								const tz = getTimeZoneFromZip(zip);
+								if (tz) {
+									const tzInput = document.getElementById("scheduler-timezone");
+									if (tzInput && !tzInput.value) {
+										tzInput.value = getTimeZoneLabel(tz); // ← CHANGE HERE
+										schedulerUpdatePreview();
+									}
+								}
+							}
+						});
+					}
 				}
-
 
 				window.switchTab = switchTab;
 				window.clock = clock;
