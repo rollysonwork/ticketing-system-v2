@@ -4440,13 +4440,13 @@
 
 						populateFormFromEntry(prefix, entry);
 
-						// Immediate preview update for all tabs
+						// Immediate preview update
 						if (prefix === "moolah") {
 							moolahUpdatePreview();
 						} else if (prefix === "store") {
 							storeUpdatePreview();
 						} else if (prefix === "scheduler") {
-							schedulerUpdatePreview();
+							schedulerUpdatePreview(); // first update
 						} else {
 							ticketUpdatePreview();
 							let resolutionText = entry.resolution || "";
@@ -4469,7 +4469,7 @@
 
 						attachDraftAutoSave(prefix, editId);
 
-						// Dispatch input events to update any computed fields (e.g., combobox hidden inputs)
+						// Dispatch input events to update computed fields (combobox, radio, etc.)
 						const allFields = document.querySelectorAll(`#tab-${prefix} input, #tab-${prefix} textarea, #tab-${prefix} select`);
 						allFields.forEach((el) => {
 							if (el.id !== "ticket-issue") {
@@ -4477,37 +4477,22 @@
 							}
 						});
 
-						// For scheduler, also manually trigger the combobox change to ensure hidden field updates
+						// Scheduler-specific: force combobox and radio updates
 						if (prefix === "scheduler") {
 							const demoTypeCombobox = document.getElementById("scheduler-demoType-combobox");
 							if (demoTypeCombobox) {
 								demoTypeCombobox.dispatchEvent(new Event("input", { bubbles: true }));
 							}
-							// Force radio button change event
 							const checkedRadio = document.querySelector('input[name="scheduler-customer"]:checked');
 							if (checkedRadio) {
 								checkedRadio.dispatchEvent(new Event("change", { bubbles: true }));
 							}
-						}
-
-						// Final preview refresh after all events have fired
-						if (prefix === "scheduler") {
-							// Use a short delay to let the DOM settle
-							setTimeout(() => {
-								schedulerUpdatePreview();
-								syncPreviewHeight();
-							}, 50);
-						} else {
-							// For other tabs, just sync preview height
-							setTimeout(syncPreviewHeight, 50);
+							// Second update after events have fired
+							setTimeout(schedulerUpdatePreview, 0);
 						}
 
 						document.querySelectorAll(`#tab-${prefix} textarea`).forEach((ta) => autoGrow(ta));
-						// Force a reflow to ensure the preview panel updates
-						const rightPanel = document.querySelector(`#tab-${prefix} .right-panel`);
-						if (rightPanel) {
-							void rightPanel.offsetHeight; // trigger reflow
-						}
+						syncPreviewHeight();
 					}, 50);
 				}
 
@@ -6565,8 +6550,8 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						zip: zipcode,
 						contact,
 						contactNumber,
-						module: "Scheduler",
-						issue: issueText,
+						module: "Other",
+						issue: demoType || "",
 						note: "",
 						escalated: "",
 						status: "OTHER TASK",
@@ -6736,7 +6721,6 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						ticketUpdatePreview();
 					});
 
-					// Apply contact number formatting for store and moolah
 					function applyContactNumberFormatting(input, prefix) {
 						input.addEventListener("input", function () {
 							let digits = this.value.replace(/\D/g, "");
@@ -6749,9 +6733,14 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 							}
 							this.value = formatted;
 							saveFormData(prefix);
-							if (prefix === "store") storeUpdatePreview();
-							else if (prefix === "moolah") moolahUpdatePreview();
+							// Update preview after a short delay to ensure DOM sync
+							setTimeout(() => {
+								if (prefix === "store") storeUpdatePreview();
+								else if (prefix === "moolah") moolahUpdatePreview();
+								else if (prefix === "scheduler") schedulerUpdatePreview();
+							}, 0);
 						});
+
 						input.addEventListener("blur", function () {
 							let digits = this.value.replace(/\D/g, "");
 							if (digits.length > 0 && digits.length < 10) {
@@ -6759,8 +6748,11 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 								let formatted = `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6, 10)}`;
 								this.value = formatted;
 								saveFormData(prefix);
-								if (prefix === "store") storeUpdatePreview();
-								else if (prefix === "moolah") moolahUpdatePreview();
+								setTimeout(() => {
+									if (prefix === "store") storeUpdatePreview();
+									else if (prefix === "moolah") moolahUpdatePreview();
+									else if (prefix === "scheduler") schedulerUpdatePreview();
+								}, 0);
 							}
 						});
 					}
@@ -6769,6 +6761,8 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					const moolahContactNumber = document.getElementById("moolah-contactNumber");
 					if (storeContactNumber) applyContactNumberFormatting(storeContactNumber, "store");
 					if (moolahContactNumber) applyContactNumberFormatting(moolahContactNumber, "moolah");
+					const schedulerContactNumber = document.getElementById("scheduler-contactNumber");
+					if (schedulerContactNumber) applyContactNumberFormatting(schedulerContactNumber, "scheduler");
 
 					// On blur, pad with leading zeros if needed to make 10 digits
 					document.getElementById("ticket-contactNumber").addEventListener("blur", function () {
