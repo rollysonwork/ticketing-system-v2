@@ -1788,11 +1788,11 @@
 								<tr>
 									<th>SHIFT SCHEDULE</th>
 									<td>
-										<select id="moolah-shift" disabled>                                            <option value="">-- SELECT --</option>
-                                            <option value="9PM - 6AM">9PM - 6AM</option>
-                                            <option value="5AM - 2PM">5AM - 2PM</option>
-                                            <option value="2PM - 11AM">2PM - 11AM</option>
-
+										<select id="moolah-shift" disabled>
+											<option value="">-- SELECT --</option>
+											<option value="9PM - 6AM">9PM - 6AM</option>
+											<option value="5AM - 2PM">5AM - 2PM</option>
+											<option value="2PM - 11AM">2PM - 11AM</option>
 										</select>
 									</td>
 								</tr>
@@ -2017,11 +2017,11 @@
 								<tr>
 									<th>SHIFT SCHEDULE</th>
 									<td>
-										<select id="ecommerce-shift" disabled>                                            <option value="">-- SELECT --</option>
-                                            <option value="9PM - 6AM">9PM - 6AM</option>
-                                            <option value="5AM - 2PM">5AM - 2PM</option>
-                                            <option value="2PM - 11AM">2PM - 11AM</option>
-
+										<select id="ecommerce-shift" disabled>
+											<option value="">-- SELECT --</option>
+											<option value="9PM - 6AM">9PM - 6AM</option>
+											<option value="5AM - 2PM">5AM - 2PM</option>
+											<option value="2PM - 11AM">2PM - 11AM</option>
 										</select>
 									</td>
 								</tr>
@@ -2127,11 +2127,11 @@
 									<th>SHIFT SCHEDULE</th>
 									<td>
 										<select id="scheduler-shift" disabled>
-											<option value="">-- SELECT --</option>                                            <option value="">-- SELECT --</option>
-                                            <option value="9PM - 6AM">9PM - 6AM</option>
-                                            <option value="5AM - 2PM">5AM - 2PM</option>
-                                            <option value="2PM - 11AM">2PM - 11AM</option>
-
+											<option value="">-- SELECT --</option>
+											<option value="">-- SELECT --</option>
+											<option value="9PM - 6AM">9PM - 6AM</option>
+											<option value="5AM - 2PM">5AM - 2PM</option>
+											<option value="2PM - 11AM">2PM - 11AM</option>
 										</select>
 									</td>
 								</tr>
@@ -5773,6 +5773,91 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						if (pendingToggleBtn) pendingToggleBtn.style.display = "";
 					} else {
 						if (pendingToggleBtn) pendingToggleBtn.style.display = "";
+					}
+				}
+
+				// ==========================================
+				// ROLE REFRESH FUNCTIONALITY
+				// Insert this after applyRoleRestrictions() and before init()
+				// ==========================================
+
+				async function refreshUserRole() {
+					const currentUser = getLoggedInUser();
+					if (!currentUser) return;
+
+					const apiKey = getGoogleApiKey();
+					if (!apiKey) return;
+
+					try {
+						const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.GOOGLE_SHEET_ID}/values/${encodeURIComponent(CONFIG.CRED_SHEET_NAME)}?key=${apiKey}`;
+						const response = await fetch(url);
+						if (!response.ok) return;
+						const data = await response.json();
+						if (!data.values || data.values.length < 2) return;
+
+						const email = currentUser.email.toLowerCase();
+						for (let i = 1; i < data.values.length; i++) {
+							const row = data.values[i];
+							const rowEmail = (row[1] || "").trim().toLowerCase();
+							if (rowEmail === email) {
+								const newRole = (row[3] || "").trim().toUpperCase();
+								const newSupport = (row[0] || "").trim();
+
+								let roleChanged = newRole !== currentUser.role;
+								let supportChanged = newSupport !== currentUser.support;
+
+								if (roleChanged || supportChanged) {
+									if (supportChanged) {
+										currentUser.support = newSupport;
+										autoFillSupportName(newSupport);
+									}
+									if (roleChanged) {
+										currentUser.role = newRole;
+										// Re-apply role restrictions
+										applyRoleRestrictions(newRole);
+									}
+
+									setLoggedInUser(currentUser);
+
+									// Update profile display
+									const profileSupport = document.getElementById("profileSupport");
+									const profileRole = document.getElementById("profileRole");
+									if (profileSupport) profileSupport.textContent = currentUser.support;
+									if (profileRole) profileRole.textContent = currentUser.role;
+
+									if (roleChanged) {
+										showNotification(`Role updated to: ${newRole}`);
+									}
+									if (supportChanged) {
+										showNotification(`Support name updated to: ${newSupport}`);
+									}
+								}
+								return;
+							}
+						}
+					} catch (error) {
+						console.warn("Failed to refresh user role:", error);
+					}
+				}
+
+				let roleRefreshInterval = null;
+
+				function startRoleRefresh() {
+					if (roleRefreshInterval) clearInterval(roleRefreshInterval);
+					roleRefreshInterval = setInterval(() => {
+						// Only refresh if not in pending tracker mode
+						if (typeof isPendingTrackerMode !== "undefined" && !isPendingTrackerMode) {
+							refreshUserRole();
+						} else {
+							refreshUserRole();
+						}
+					}, 30000); // Check every 30 seconds
+				}
+
+				function stopRoleRefresh() {
+					if (roleRefreshInterval) {
+						clearInterval(roleRefreshInterval);
+						roleRefreshInterval = null;
 					}
 				}
 
