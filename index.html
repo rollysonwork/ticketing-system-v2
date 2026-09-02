@@ -6939,9 +6939,13 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					});
 
 					// Apply uppercase conversion only to inputs/textarea that do NOT have the .no-uppercase class
+					// EXCLUDE the Quill editor's hidden textarea (ticket-resolution)
 					document.querySelectorAll('input:not([type="date"]):not([type="checkbox"]):not([type="radio"]):not(.no-uppercase), textarea:not(.no-uppercase)').forEach((el) => {
 						// Skip hidden inputs (they cause setSelectionRange errors)
 						if (el.type === "hidden") return;
+
+						// Skip the Quill editor's hidden textarea
+						if (el.id === "ticket-resolution") return;
 
 						el.addEventListener("input", function () {
 							if (!this.value) return;
