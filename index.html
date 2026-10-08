@@ -2491,8 +2491,15 @@
 
 				function getESTDateString() {
 					const now = new Date();
-					const estDate = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
-					return estDate.toISOString().slice(0, 10);
+					// Use Intl.DateTimeFormat with the America/New_York timezone
+					const formatter = new Intl.DateTimeFormat("en-CA", {
+						timeZone: "America/New_York",
+						year: "numeric",
+						month: "2-digit",
+						day: "2-digit",
+					});
+					// en-CA gives YYYY-MM-DD format
+					return formatter.format(now);
 				}
 
 				function isTodayEST(dateStr) {
@@ -2717,12 +2724,13 @@
 				}
 
 				function storeGetFormattedDateMinusOne() {
-					const now = new Date();
-					const estDate = new Date(now.toLocaleString("en-US", { timeZone: "America/New_York" }));
-					const mm = String(estDate.getMonth() + 1).padStart(2, "0");
-					const dd = String(estDate.getDate()).padStart(2, "0");
-					const yyyy = estDate.getFullYear();
-					return `${mm}/${dd}/${yyyy}`;
+					const formatter = new Intl.DateTimeFormat("en-US", {
+						timeZone: "America/New_York",
+						year: "numeric",
+						month: "2-digit",
+						day: "2-digit",
+					});
+					return formatter.format(new Date()); // returns MM/DD/YYYY
 				}
 
 				function toSentenceCase(text) {
