@@ -5042,9 +5042,9 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 				}
 
 				function getShiftReportBaseDate() {
-					const yesterday = new Date();
-					yesterday.setDate(yesterday.getDate() - 1);
-					return yesterday;
+					const todayEST = getESTDateString(); // "YYYY-MM-DD" in America/New_York
+					const [y, m, d] = todayEST.split("-").map(Number);
+					return new Date(y, m - 1, d);
 				}
 
 				function getSelectedRowIds() {
