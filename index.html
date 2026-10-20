@@ -1297,6 +1297,155 @@
 			.sidebar-card.scheduler-card {
 				border-left-color: #6f42c1 !important;
 				border-bottom-color: #5a32a3 !important;
+			} /* ============ DASHBOARD ============ */
+			.dashboard-container {
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-color);
+				border-radius: 20px;
+				padding: 18px 20px;
+				margin-bottom: 24px;
+				box-shadow: var(--card-shadow);
+				transition: var(--transition);
+			}
+
+			.dashboard-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 14px;
+			}
+
+			.dashboard-header h3 {
+				font-size: 0.95rem;
+				font-weight: 700;
+				margin: 0;
+				color: var(--text-primary);
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+			}
+
+			.dashboard-refresh-btn {
+				background: var(--bg-tertiary);
+				border: 1px solid var(--border-color);
+				border-radius: 30px;
+				padding: 6px 14px;
+				font-size: 0.72rem;
+				font-weight: 600;
+				cursor: pointer;
+				color: var(--text-secondary);
+				transition: var(--transition);
+				display: inline-flex;
+				align-items: center;
+				gap: 5px;
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
+			}
+
+			.dashboard-refresh-btn:hover {
+				background: var(--accent-color);
+				color: #fff;
+				border-color: var(--accent-color);
+				transform: translateY(-1px);
+			}
+
+			.dashboard-grid {
+				display: grid;
+				grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
+				gap: 12px;
+			}
+
+			.dashboard-card {
+				background: var(--bg-tertiary);
+				border: 1px solid var(--border-color);
+				border-radius: 14px;
+				padding: 14px 14px 16px;
+				display: flex;
+				flex-direction: column;
+				gap: 6px;
+				position: relative;
+				overflow: hidden;
+				transition: var(--transition);
+			}
+
+			.dashboard-card:hover {
+				transform: translateY(-2px);
+				box-shadow: var(--card-shadow-hover);
+			}
+
+			.dashboard-card::before {
+				content: "";
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				height: 3px;
+			}
+
+			.dashboard-card.card-today::before {
+				background: #3b82f6;
+			}
+			.dashboard-card.card-yesterday::before {
+				background: #8b5cf6;
+			}
+			.dashboard-card.card-tickets::before {
+				background: #0ea5e9;
+			}
+			.dashboard-card.card-resolved::before {
+				background: #10b981;
+			}
+			.dashboard-card.card-pending::before {
+				background: #f59e0b;
+			}
+			.dashboard-card.card-other::before {
+				background: #6b7280;
+			}
+
+			.dashboard-label {
+				font-size: 0.68rem;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				color: var(--text-muted);
+				line-height: 1.25;
+			}
+
+			.dashboard-value {
+				font-size: 1.9rem;
+				font-weight: 700;
+				line-height: 1;
+				color: var(--text-primary);
+			}
+
+			.dashboard-card.card-today .dashboard-value {
+				color: #3b82f6;
+			}
+			.dashboard-card.card-yesterday .dashboard-value {
+				color: #8b5cf6;
+			}
+			.dashboard-card.card-tickets .dashboard-value {
+				color: #0ea5e9;
+			}
+			.dashboard-card.card-resolved .dashboard-value {
+				color: #10b981;
+			}
+			.dashboard-card.card-pending .dashboard-value {
+				color: #f59e0b;
+			}
+			.dashboard-card.card-other .dashboard-value {
+				color: #6b7280;
+			}
+
+			.dashboard-card.loading .dashboard-value {
+				opacity: 0.35;
+			}
+
+			@media (max-width: 900px) {
+				.dashboard-grid {
+					grid-template-columns: repeat(2, 1fr);
+				}
+				.dashboard-value {
+					font-size: 1.5rem;
+				}
 			}
 		</style>
 	</head>
@@ -1334,6 +1483,40 @@
 		</div>
 		<div class="app-container">
 			<div class="main-content">
+				<!-- ==================== DASHBOARD ==================== -->
+				<div class="dashboard-container" id="dashboardContainer" style="display: none">
+					<div class="dashboard-header">
+						<h3>📊 Dashboard</h3>
+						<button class="dashboard-refresh-btn" id="dashboardRefreshBtn" title="Refresh dashboard"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+					</div>
+					<div class="dashboard-grid">
+						<div class="dashboard-card card-today">
+							<div class="dashboard-label">Your Total for Today</div>
+							<div class="dashboard-value" id="dashYourTotalToday">--</div>
+						</div>
+						<div class="dashboard-card card-yesterday">
+							<div class="dashboard-label">Yesterday's Total</div>
+							<div class="dashboard-value" id="dashYesterdayTotal">--</div>
+						</div>
+						<div class="dashboard-card card-tickets">
+							<div class="dashboard-label">Overall Ticket</div>
+							<div class="dashboard-value" id="dashTodaysTicket">--</div>
+						</div>
+						<div class="dashboard-card card-resolved">
+							<div class="dashboard-label">Overall Resolved</div>
+							<div class="dashboard-value" id="dashTotalResolved">--</div>
+						</div>
+						<div class="dashboard-card card-pending">
+							<div class="dashboard-label">Overall Pending</div>
+							<div class="dashboard-value" id="dashTotalPending">--</div>
+						</div>
+						<div class="dashboard-card card-other">
+							<div class="dashboard-label">Overall Other Tasks</div>
+							<div class="dashboard-value" id="dashTotalOtherTasks">--</div>
+						</div>
+					</div>
+				</div>
+				<!-- ==================================================== -->
 				<div class="tab-container">
 					<div class="tab-buttons">
 						<button class="tab-button active" data-tab="ticket" onclick="switchTab('ticket', this)"><i class="icon-custom icon-ticket"></i> TICKET CREATION</button>
@@ -6265,6 +6448,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						renderTable();
 						updateStatusCounters();
 						updateStatusCounters();
+						loadDashboardData();
 					}
 				}
 
@@ -6680,6 +6864,138 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					syncPreviewHeight();
 				}
 
+				// ==================== DASHBOARD ====================
+
+				function normalizeDashboardDate(dateStr) {
+					if (!dateStr) return "";
+					const str = String(dateStr).trim();
+					if (!str) return "";
+
+					// MM/DD/YYYY or M/D/YYYY
+					let m = str.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+					if (m) return `${m[3]}-${m[1].padStart(2, "0")}-${m[2].padStart(2, "0")}`;
+
+					// YYYY-MM-DD
+					m = str.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+					if (m) return `${m[1]}-${m[2].padStart(2, "0")}-${m[3].padStart(2, "0")}`;
+
+					// MM-DD-YYYY
+					m = str.match(/^(\d{1,2})-(\d{1,2})-(\d{4})/);
+					if (m) return `${m[3]}-${m[1].padStart(2, "0")}-${m[2].padStart(2, "0")}`;
+
+					// Fallback
+					const d = new Date(str);
+					if (!isNaN(d.getTime())) {
+						return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+					}
+					return "";
+				}
+
+				function getYesterdayEST() {
+					const todayEST = getESTDateString();
+					const [y, m, d] = todayEST.split("-").map(Number);
+					const yesterday = new Date(y, m - 1, d - 1);
+					return `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, "0")}-${String(yesterday.getDate()).padStart(2, "0")}`;
+				}
+
+				function setDashboardLoading(loading) {
+					document.querySelectorAll(".dashboard-card").forEach((c) => c.classList.toggle("loading", loading));
+				}
+
+				async function loadDashboardData() {
+					const apiKey = getGoogleApiKey();
+					const currentUser = getLoggedInUser();
+					const container = document.getElementById("dashboardContainer");
+					if (!container) return;
+
+					if (!apiKey || !currentUser) {
+						container.style.display = "none";
+						return;
+					}
+					container.style.display = "";
+
+					const userSupport = (currentUser.support || "").trim().toUpperCase();
+					const todayEST = getESTDateString();
+					const yesterdayEST = getYesterdayEST();
+
+					setDashboardLoading(true);
+
+					try {
+						const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.GOOGLE_SHEET_ID}/values/${encodeURIComponent("WORKLOAD TRACKER 2026")}?key=${apiKey}`;
+						const res = await fetch(url);
+						if (!res.ok) throw new Error("HTTP " + res.status);
+						const data = await res.json();
+
+						if (data.values && data.values.length >= 2) {
+							const headers = data.values[0].map((h) =>
+								String(h || "")
+									.trim()
+									.toUpperCase(),
+							);
+							const dateIdx = headers.findIndex((h) => h.includes("DATE"));
+							const supportIdx = headers.findIndex((h) => h.includes("SUPPORT"));
+							const statusIdx = headers.findIndex((h) => h === "STATUS" || h.includes("STATUS"));
+
+							if (dateIdx >= 0 && statusIdx >= 0) {
+								let yourToday = 0,
+									yourYesterday = 0;
+								let todaysTicket = 0,
+									resolved = 0,
+									pending = 0,
+									other = 0;
+
+								for (let i = 1; i < data.values.length; i++) {
+									const row = data.values[i];
+									const rowDate = normalizeDashboardDate(row[dateIdx]);
+									if (rowDate !== todayEST && rowDate !== yesterdayEST) continue;
+
+									const status = String(row[statusIdx] || "")
+										.trim()
+										.toUpperCase();
+									const rowSupport =
+										supportIdx >= 0
+											? String(row[supportIdx] || "")
+													.trim()
+													.toUpperCase()
+											: "";
+									const isMine = supportIdx >= 0 && rowSupport === userSupport;
+
+									// ---------- Overall (team-wide, today only) ----------
+									if (rowDate === todayEST) {
+										todaysTicket++;
+										if (status === "RESOLVED") resolved++;
+										else if (status === "PENDING") pending++;
+										else if (status === "OTHER TASK") other++;
+									}
+
+									// ---------- Your Total (personal, resolved + other task only) ----------
+									const isCountable = status === "RESOLVED" || status === "OTHER TASK";
+									if (isMine && isCountable) {
+										if (rowDate === todayEST) yourToday++;
+										else if (rowDate === yesterdayEST) yourYesterday++;
+									}
+								}
+
+								document.getElementById("dashYourTotalToday").textContent = yourToday;
+								document.getElementById("dashYesterdayTotal").textContent = yourYesterday;
+								document.getElementById("dashTodaysTicket").textContent = todaysTicket;
+								document.getElementById("dashTotalResolved").textContent = resolved;
+								document.getElementById("dashTotalPending").textContent = pending;
+								document.getElementById("dashTotalOtherTasks").textContent = other;
+							} else {
+								["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "--"));
+							}
+						} else {
+							["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0"));
+						}
+					} catch (err) {
+						console.warn("Dashboard WORKLOAD TRACKER fetch failed:", err);
+						["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "--"));
+					}
+
+					setDashboardLoading(false);
+				}
+
 				function init() {
 					const loggedInUser = getLoggedInUser();
 					if (!loggedInUser) {
@@ -6750,6 +7066,13 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					updateStatusCounters();
 					archiveOldEntries();
 					saveAllEntries();
+
+					// Dashboard
+					loadDashboardData();
+					document.getElementById("dashboardRefreshBtn").addEventListener("click", () => {
+						showNotification("Refreshing dashboard...");
+						loadDashboardData();
+					});
 
 					["moolah", "store", "ticket", "ecommerce", "scheduler"].forEach((prefix) => {
 						setupSearchKeyboard(prefix);
