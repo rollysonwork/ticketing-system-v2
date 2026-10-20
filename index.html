@@ -7225,12 +7225,6 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						showNotification("Counters refreshed");
 					});
 
-					const fileInput = document.createElement("input");
-					fileInput.type = "file";
-					fileInput.accept = ".csv";
-					fileInput.style.display = "none";
-					document.body.appendChild(fileInput);
-
 					document.getElementById("shiftReportBtn").addEventListener("click", showShiftReportModal);
 
 					const selectAllBar = document.getElementById("selectAllCheckbox");
