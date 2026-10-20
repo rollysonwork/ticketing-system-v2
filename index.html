@@ -798,17 +798,6 @@
 				color: white;
 				border-color: var(--accent-color);
 			}
-
-			.bulk-bar .export-btn {
-				background: var(--success);
-				color: white;
-				border-color: var(--success);
-			}
-			.bulk-bar .import-btn {
-				background: var(--warning);
-				color: white;
-				border-color: var(--warning);
-			}
 			.bulk-bar .shift-report-btn {
 				background: #b93131;
 				color: white;
@@ -2425,8 +2414,6 @@
 					<label><input type="checkbox" id="selectAllCheckbox" /> Select All</label>
 					<button id="bulkDeleteBtn" title="Remove selected rows (only from main table)"><i class="bi bi-trash-fill"></i> REMOVE</button>
 					<button id="bulkCopyBtn" title="Copy selected rows"><i class="bi bi-copy"></i> COPY</button>
-					<button id="exportCsvBtn" class="export-btn"><i class="bi bi-filetype-csv"></i> EXPORT</button>
-					<button id="importCsvBtn" class="import-btn"><i class="bi bi-file-earmark-arrow-up"></i> IMPORT</button>
 					<button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
 					<button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom-smaller icon-google-sheets"></i> SHOW ALL PENDING</button>
 					<button class="counter-badge status-filter-btn" data-status="RESOLVED" onclick="filterByStatus('RESOLVED')">✅ RESOLVED: <span id="counterResolved">0</span></button>
@@ -5280,148 +5267,88 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						.catch(() => showNotification("Failed to copy"));
 				}
 
-				function exportToCSV() {
-					const visibleEntries = getVisibleEntries();
-
-					const headers = ["DATE", "SHIFT", "SUPPORT", "PORTAL", "STORE", "ZIP", "CONTACT", "CONTACT#", "MODULE", "ISSUE", "ESCALATED", "STATUS", "REMARKS", "RESOLUTION"];
-					const rows = visibleEntries.map((entry) => {
-						// Override contact and contactNumber for store/moolah entries
-						let contact = entry.contact || "";
-						let contactNumber = entry.contactNumber || "";
-						if (entry.source === "store" || entry.source === "moolah") {
-							contact = "SHIPPING TEAM";
-							contactNumber = "(000) 000-0000";
-						}
-						return [entry.date, entry.shift, entry.support, entry.portal, entry.store, entry.zip, contact, contactNumber, entry.module, entry.issue, entry.escalated, entry.status, entry.remarks, entry.resolution].map((field) => escapeCSV(field ?? "")).join(",");
-					});
-
-					const csv = [headers.join(","), ...rows].join("\n");
-					const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8" });
-					const url = URL.createObjectURL(blob);
-					const a = document.createElement("a");
-					a.href = url;
-					a.download = `retailzpos_daily_${new Date().toISOString().slice(0, 10)}.csv`;
-					a.click();
-					URL.revokeObjectURL(url);
-
-					showNotification(`✅ Exported ${visibleEntries.length} entries (only visible in database panel)`);
-				}
-
-				function parseCSV(text) {
-					const rows = [];
-					let row = [];
-					let field = "";
-					let inQuotes = false;
-					for (let i = 0; i < text.length; i++) {
-						const c = text[i];
-						const next = text[i + 1];
-						if (inQuotes) {
-							if (c === '"' && next === '"') {
-								field += '"';
-								i++;
-							} else if (c === '"') {
-								inQuotes = false;
-							} else {
-								field += c;
-							}
-						} else {
-							if (c === '"') {
-								inQuotes = true;
-							} else if (c === ",") {
-								row.push(field);
-								field = "";
-							} else if (c === "\n" || c === "\r") {
-								if (c === "\r" && next === "\n") i++;
-								row.push(field);
-								rows.push(row);
-								row = [];
-								field = "";
-							} else {
-								field += c;
-							}
-						}
+				async function fetchShiftReportData() {
+					const apiKey = getGoogleApiKey();
+					if (!apiKey) {
+						showNotification("❌ Google Sheets API key not set.");
+						return null;
 					}
-					if (field !== "" || inQuotes) row.push(field);
-					if (row.length > 0) rows.push(row);
-					return rows;
+
+					const shift = document.getElementById("ticket-shift").value.trim();
+					if (!shift) {
+						showNotification("⚠️ Please select a SHIFT SCHEDULE in the Ticket form first.");
+						return null;
+					}
+
+					const todayEST = getESTDateString();
+					const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.GOOGLE_SHEET_ID}/values/${encodeURIComponent("WORKLOAD TRACKER 2026")}?key=${apiKey}`;
+
+					showNotification(`Fetching shift report for ${shift}...`);
+
+					try {
+						const response = await fetch(url);
+						if (!response.ok) throw new Error(`HTTP ${response.status}`);
+						const data = await response.json();
+						if (!data.values || data.values.length < 2) return [];
+
+						const headers = data.values[0].map((h) => (h || "").trim().toUpperCase());
+						const findCol = (name) => headers.findIndex((h) => h === name.toUpperCase());
+
+						const dateIdx = findCol("DATE");
+						const shiftIdx = findCol("SHIFT SCHEDULE");
+						const supportIdx = findCol("SUPPORT NAME");
+						const portalIdx = findCol("PORTAL NUMBER");
+						const storeIdx = findCol("STORE NAME");
+						const zipIdx = findCol("ZIP CODE");
+						const contactIdx = findCol("CONTACT PERSON");
+						const contactNumIdx = findCol("CONTACT #");
+						const moduleIdx = findCol("MODULE");
+						const issueIdx = findCol("ISSUE");
+						const escalatedIdx = findCol("ESCALATED PERSON");
+						const statusIdx = findCol("STATUS");
+						const remarksIdx = findCol("REMARKS");
+						const resolutionIdx = findCol("RESOLUTION");
+
+						if (dateIdx === -1 || shiftIdx === -1) {
+							showNotification("Sheet missing DATE or SHIFT SCHEDULE column.");
+							return [];
+						}
+
+						const rows = data.values.slice(1);
+						const filtered = rows.filter((row) => {
+							const rowDate = normalizeDashboardDate(row[dateIdx]);
+							const rowShift = (row[shiftIdx] || "").trim().toUpperCase();
+							return rowDate === todayEST && rowShift === shift.toUpperCase();
+						});
+
+						showNotification(`Loaded ${filtered.length} entries for ${shift}.`);
+
+						return filtered.map((row) => ({
+							date: row[dateIdx] || "",
+							shift: row[shiftIdx] || "",
+							support: supportIdx !== -1 ? row[supportIdx] || "" : "",
+							portal: portalIdx !== -1 ? row[portalIdx] || "" : "",
+							store: storeIdx !== -1 ? row[storeIdx] || "" : "",
+							zip: zipIdx !== -1 ? row[zipIdx] || "" : "",
+							contact: contactIdx !== -1 ? row[contactIdx] || "" : "",
+							contactNumber: contactNumIdx !== -1 ? row[contactNumIdx] || "" : "",
+							module: moduleIdx !== -1 ? row[moduleIdx] || "" : "",
+							issue: issueIdx !== -1 ? row[issueIdx] || "" : "",
+							escalated: escalatedIdx !== -1 ? row[escalatedIdx] || "" : "",
+							status: statusIdx !== -1 ? row[statusIdx] || "" : "",
+							remarks: remarksIdx !== -1 ? row[remarksIdx] || "" : "",
+							resolution: resolutionIdx !== -1 ? row[resolutionIdx] || "" : "",
+						}));
+					} catch (err) {
+						console.error("Failed to load shift report:", err);
+						showNotification(`Error: ${err.message}`);
+						return [];
+					}
 				}
 
-				function importFromCSV(event) {
-					const file = event.target.files[0];
-					if (!file) return;
-					const reader = new FileReader();
-					reader.readAsText(file, "UTF-8");
-					reader.onload = (e) => {
-						const text = e.target.result;
-						const cleanText = text.charCodeAt(0) === 0xfeff ? text.slice(1) : text;
-						const rows = parseCSV(cleanText);
-						if (rows.length === 0) {
-							showNotification("CSV file is empty");
-							return;
-						}
-						const headers = rows[0];
-						const expected = ["DATE", "SHIFT", "SUPPORT", "PORTAL", "STORE", "ZIP", "CONTACT", "CONTACT#", "MODULE", "ISSUE", "ESCALATED", "STATUS", "REMARKS", "RESOLUTION"];
-						if (!expected.every((h, i) => h === headers[i])) {
-							showNotification("CSV headers do not match expected format");
-							return;
-						}
-						const newEntries = [];
-						let skippedEmptyDate = 0;
-						for (let i = 1; i < rows.length; i++) {
-							const values = rows[i];
-							if (values.length < expected.length) continue;
-							const dateValue = values[0] ? values[0].trim() : "";
-							if (!dateValue) {
-								skippedEmptyDate++;
-								continue;
-							}
-							const entry = {
-								id: Date.now() + i + Math.random(),
-								date: values[0],
-								shift: values[1],
-								support: values[2],
-								portal: values[3],
-								store: values[4],
-								zip: values[5],
-								contact: values[6],
-								contactNumber: values[7],
-								module: values[8],
-								issue: values[9],
-								escalated: values[10],
-								status: values[11],
-								remarks: values[12],
-								resolution: values[13],
-								troubleshooting: "",
-								note: "",
-								moduleData: {},
-								source: "ticket",
-								deleted: false,
-								imported: true,
-							};
-							newEntries.push(entry);
-						}
-						if (newEntries.length === 0) {
-							showNotification(skippedEmptyDate ? `No valid entries found (${skippedEmptyDate} rows had empty date)` : "No valid entries found in CSV");
-							return;
-						}
-						pushUndo();
-						allEntries = [...newEntries, ...allEntries];
-						saveAllEntries();
-						renderTable();
-						renderSidebar();
-						let msg = `✅ Imported ${newEntries.length} entries into today's database panel`;
-						if (skippedEmptyDate) msg += `, skipped ${skippedEmptyDate} rows with empty date`;
-						showNotification(msg);
-					};
-					reader.onerror = () => {
-						showNotification("Error reading file");
-					};
-					event.target.value = "";
-				}
-
-				function generateShiftReportPlain() {
+				function generateShiftReportPlain(entries) {
 					const indent = (level) => " ".repeat(level * 5);
-					const visible = getVisibleEntries();
+					const visible = entries || [];
 					const baseDate = getShiftReportBaseDate();
 					const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 					const dateStr = baseDate.toLocaleDateString("en-US");
@@ -5491,8 +5418,8 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					return [dateLine, shiftLine, "", "Good day everyone,", "", "Please find below the shift report for today,", "", `${indent(1)}1. Pending Tickets: ${pendingCount}`, pendingList, "", `${indent(1)}2. Total Calls: ${totalCalls}`, "", "", `${indent(1)}3. Total Other Tasks: ${otherCount}`, otherList, "", `${indent(1)}4. Scheduled Training/Demo (Merchant)`, trainingLine, demoLine, "", staticSections].join("\n");
 				}
 
-				function generateShiftReportHTML() {
-					const visible = getVisibleEntries();
+				function generateShiftReportHTML(entries) {
+					const visible = entries || [];
 					const baseDate = getShiftReportBaseDate();
 					const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 					const dateStr = baseDate.toLocaleDateString("en-US");
@@ -5593,9 +5520,12 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 			    `;
 				}
 
-				function showShiftReportModal() {
-					const plainText = generateShiftReportPlain();
-					const htmlContent = generateShiftReportHTML();
+				async function showShiftReportModal() {
+					const entries = await fetchShiftReportData();
+					if (entries === null) return; // no shift selected or no API key → already notified
+
+					const plainText = generateShiftReportPlain(entries);
+					const htmlContent = generateShiftReportHTML(entries);
 
 					const modal = document.createElement("div");
 					modal.style.position = "fixed";
@@ -5949,14 +5879,10 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 							}
 						});
 
-						document.getElementById("importCsvBtn").style.display = "none";
-						document.getElementById("exportCsvBtn").style.display = "none";
 						document.getElementById("shiftReportBtn").style.display = "none";
 
 						if (pendingToggleBtn) pendingToggleBtn.style.display = "";
 					} else if (role === "LEVEL 2") {
-						document.getElementById("importCsvBtn").style.display = "none";
-						document.getElementById("exportCsvBtn").style.display = "none";
 						document.getElementById("shiftReportBtn").style.display = "none";
 						if (pendingToggleBtn) pendingToggleBtn.style.display = "";
 					} else {
@@ -7294,20 +7220,16 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 
 					document.getElementById("bulkDeleteBtn").addEventListener("click", bulkDelete);
 					document.getElementById("bulkCopyBtn").addEventListener("click", bulkCopy);
-					document.getElementById("exportCsvBtn").addEventListener("click", exportToCSV);
 					document.getElementById("manualRefreshBtn")?.addEventListener("click", () => {
 						updateStatusCounters();
 						showNotification("Counters refreshed");
 					});
 
-					const importBtn = document.getElementById("importCsvBtn");
 					const fileInput = document.createElement("input");
 					fileInput.type = "file";
 					fileInput.accept = ".csv";
 					fileInput.style.display = "none";
-					fileInput.addEventListener("change", importFromCSV);
 					document.body.appendChild(fileInput);
-					importBtn.addEventListener("click", () => fileInput.click());
 
 					document.getElementById("shiftReportBtn").addEventListener("click", showShiftReportModal);
 
