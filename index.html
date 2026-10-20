@@ -1436,6 +1436,112 @@
 					font-size: 1.5rem;
 				}
 			}
+			/* ============ HISTORY SOURCE TOGGLE ============ */
+			.history-source-controls {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+			}
+			.history-source-toggle {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				cursor: pointer;
+				user-select: none;
+				font-size: 0.66rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+				color: var(--text-muted);
+				margin: 0;
+			}
+			.history-source-toggle input {
+				display: none;
+			}
+			.history-source-toggle .toggle-track {
+				width: 34px;
+				height: 18px;
+				background: var(--bg-tertiary);
+				border: 1px solid var(--border-color);
+				border-radius: 20px;
+				position: relative;
+				transition: var(--transition);
+				flex-shrink: 0;
+			}
+			.history-source-toggle .toggle-thumb {
+				position: absolute;
+				top: 2px;
+				left: 2px;
+				width: 12px;
+				height: 12px;
+				background: var(--text-muted);
+				border-radius: 50%;
+				transition: var(--transition);
+			}
+			.history-source-toggle input:checked + .toggle-track {
+				background: var(--accent-color);
+				border-color: var(--accent-color);
+			}
+			.history-source-toggle input:checked + .toggle-track .toggle-thumb {
+				left: 18px;
+				background: #fff;
+			}
+			.history-source-toggle .toggle-label {
+				min-width: 42px;
+				text-align: right;
+				transition: var(--transition);
+			}
+			.history-source-toggle input:checked ~ .toggle-label {
+				color: var(--accent-color);
+			}
+			.history-refresh-btn {
+				background: transparent;
+				border: none;
+				cursor: pointer;
+				padding: 2px 4px;
+				color: var(--text-muted);
+				font-size: 0.9rem;
+				display: none;
+				align-items: center;
+				transition: var(--transition);
+				border-radius: 6px;
+			}
+			.history-refresh-btn:hover {
+				color: var(--accent-color);
+				background: var(--accent-soft);
+				transform: rotate(45deg);
+			}
+			.workload-badge {
+				display: inline-block;
+				padding: 1px 5px;
+				border-radius: 8px;
+				font-size: 8px;
+				font-weight: 700;
+				background: #10b98130;
+				color: #10b981;
+				border: 1px solid #10b98150;
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
+				margin-left: 4px;
+				vertical-align: middle;
+			}
+			.history-loading {
+				padding: 20px;
+				text-align: center;
+				color: var(--text-muted);
+				font-size: 0.8rem;
+			}
+			.history-loading .spinner {
+				display: inline-block;
+				width: 14px;
+				height: 14px;
+				border: 2px solid var(--border-color);
+				border-top-color: var(--accent-color);
+				border-radius: 50%;
+				animation: spin 1s linear infinite;
+				vertical-align: middle;
+				margin-right: 6px;
+			}
 		</style>
 	</head>
 	<body>
@@ -1521,6 +1627,14 @@
 						<div class="history-panel">
 							<div class="sidebar-header">
 								<h3><i class="bi bi-ticket-detailed-fill"></i> TICKET HISTORY</h3>
+								<div class="history-source-controls">
+									<label class="history-source-toggle" title="Toggle between saved entries and WORKLOAD TRACKER 2026">
+										<span class="toggle-label">Saved</span>
+										<input type="checkbox" class="history-source-switch" onchange="handleHistorySourceToggle(this.checked)" />
+										<span class="toggle-track"><span class="toggle-thumb"></span></span>
+									</label>
+									<button type="button" class="history-refresh-btn" title="Refresh from WORKLOAD TRACKER 2026" onclick="refreshWorkloadHistory(event)">🔄</button>
+								</div>
 							</div>
 							<div id="ticketHistoryContent" class="history-content"></div>
 						</div>
@@ -1698,6 +1812,14 @@
 						<div class="history-panel">
 							<div class="sidebar-header">
 								<h3><i class="bi bi-ticket-detailed-fill"></i> TICKET HISTORY</h3>
+								<div class="history-source-controls">
+									<label class="history-source-toggle" title="Toggle between saved entries and WORKLOAD TRACKER 2026">
+										<span class="toggle-label">Saved</span>
+										<input type="checkbox" class="history-source-switch" onchange="handleHistorySourceToggle(this.checked)" />
+										<span class="toggle-track"><span class="toggle-thumb"></span></span>
+									</label>
+									<button type="button" class="history-refresh-btn" title="Refresh from WORKLOAD TRACKER 2026" onclick="refreshWorkloadHistory(event)">🔄</button>
+								</div>
 							</div>
 							<div id="storeHistoryContent" class="history-content"></div>
 						</div>
@@ -1939,6 +2061,14 @@
 						<div class="history-panel">
 							<div class="sidebar-header">
 								<h3><i class="bi bi-ticket-detailed-fill"></i> TICKET HISTORY</h3>
+								<div class="history-source-controls">
+									<label class="history-source-toggle" title="Toggle between saved entries and WORKLOAD TRACKER 2026">
+										<span class="toggle-label">Saved</span>
+										<input type="checkbox" class="history-source-switch" onchange="handleHistorySourceToggle(this.checked)" />
+										<span class="toggle-track"><span class="toggle-thumb"></span></span>
+									</label>
+									<button type="button" class="history-refresh-btn" title="Refresh from WORKLOAD TRACKER 2026" onclick="refreshWorkloadHistory(event)">🔄</button>
+								</div>
 							</div>
 							<div id="moolahHistoryContent" class="history-content"></div>
 						</div>
@@ -2166,6 +2296,14 @@
 						<div class="history-panel">
 							<div class="sidebar-header">
 								<h3><i class="bi bi-ticket-detailed-fill"></i> TICKET HISTORY</h3>
+								<div class="history-source-controls">
+									<label class="history-source-toggle" title="Toggle between saved entries and WORKLOAD TRACKER 2026">
+										<span class="toggle-label">Saved</span>
+										<input type="checkbox" class="history-source-switch" onchange="handleHistorySourceToggle(this.checked)" />
+										<span class="toggle-track"><span class="toggle-thumb"></span></span>
+									</label>
+									<button type="button" class="history-refresh-btn" title="Refresh from WORKLOAD TRACKER 2026" onclick="refreshWorkloadHistory(event)">🔄</button>
+								</div>
 							</div>
 							<div id="ecommerceHistoryContent" class="history-content"></div>
 						</div>
@@ -2618,6 +2756,12 @@
 				const EDIT_DRAFT_KEY = "editingDraft_";
 				let undoStack = [];
 				let redoStack = [];
+
+				let historySourceMode = localStorage.getItem("historySourceMode") || "saved";
+				let workloadHistoryCache = null;
+				let workloadHistoryCacheTime = 0;
+				let workloadRenderInProgress = false;
+				const WORKLOAD_HISTORY_CACHE_TTL = 30000;
 
 				const filteredResults = { moolah: [], store: [], ticket: [], ecommerce: [], scheduler: [] };
 				const selectedIndex = { moolah: -1, store: -1, ticket: -1, ecommerce: -1, scheduler: -1 };
@@ -4820,22 +4964,167 @@
 					});
 				}
 
-				function renderSidebar() {
-					const containers = [
-						document.getElementById("ticketHistoryContent"),
-						document.getElementById("storeHistoryContent"),
-						document.getElementById("moolahHistoryContent"),
-						document.getElementById("ecommerceHistoryContent"),
-						document.getElementById("schedulerHistoryContent"), // ✅ ADD THIS
-					].filter((c) => c);
+				function getHistoryContainers() {
+					return [document.getElementById("ticketHistoryContent"), document.getElementById("storeHistoryContent"), document.getElementById("moolahHistoryContent"), document.getElementById("ecommerceHistoryContent"), document.getElementById("schedulerHistoryContent")].filter((c) => c);
+				}
 
+				function updateHistoryToggleUI() {
+					document.querySelectorAll(".history-source-switch").forEach((sw) => {
+						sw.checked = historySourceMode === "all";
+					});
+					document.querySelectorAll(".history-source-toggle .toggle-label").forEach((label) => {
+						label.textContent = historySourceMode === "all" ? "All" : "Saved";
+					});
+					document.querySelectorAll(".history-refresh-btn").forEach((btn) => {
+						btn.style.display = historySourceMode === "all" ? "inline-flex" : "none";
+					});
+				}
+
+				function handleHistorySourceToggle(isAll) {
+					historySourceMode = isAll ? "all" : "saved";
+					localStorage.setItem("historySourceMode", historySourceMode);
+					updateHistoryToggleUI();
+					if (isAll) {
+						workloadHistoryCache = null;
+						workloadHistoryCacheTime = 0;
+					}
+					renderSidebar();
+				}
+
+				function refreshWorkloadHistory(event) {
+					if (event) {
+						event.preventDefault();
+						event.stopPropagation();
+					}
+					workloadHistoryCache = null;
+					workloadHistoryCacheTime = 0;
+					showNotification("Refreshing WORKLOAD TRACKER 2026...");
+					renderSidebar();
+				}
+
+				async function fetchWorkloadHistoryEntriesFromSheet() {
+					const apiKey = getGoogleApiKey();
+					if (!apiKey) throw new Error("Google Sheets API key not set");
+
+					const currentUser = getLoggedInUser();
+					if (!currentUser) throw new Error("Not logged in");
+
+					const userSupport = (currentUser.support || "").trim().toUpperCase();
+					if (!userSupport) throw new Error("No support name on account");
+
+					const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.GOOGLE_SHEET_ID}/values/${encodeURIComponent("WORKLOAD TRACKER 2026")}?key=${apiKey}`;
+					const response = await fetch(url);
+					if (!response.ok) throw new Error(`HTTP ${response.status}`);
+					const data = await response.json();
+					if (!data.values || data.values.length < 2) return [];
+
+					const headers = data.values[0].map((h) =>
+						String(h || "")
+							.trim()
+							.toUpperCase(),
+					);
+					const findCol = (name) => headers.findIndex((h) => h === name.toUpperCase());
+
+					const dateIdx = findCol("DATE");
+					const shiftIdx = findCol("SHIFT SCHEDULE");
+					const supportIdx = findCol("SUPPORT NAME");
+					const portalIdx = findCol("PORTAL NUMBER");
+					const storeIdx = findCol("STORE NAME");
+					const zipIdx = findCol("ZIP CODE");
+					const contactIdx = findCol("CONTACT PERSON");
+					const contactNumIdx = findCol("CONTACT #");
+					const moduleIdx = findCol("MODULE");
+					const issueIdx = findCol("ISSUE");
+					const escalatedIdx = findCol("ESCALATED PERSON");
+					const statusIdx = findCol("STATUS");
+					const remarksIdx = findCol("REMARKS");
+					const resolutionIdx = findCol("RESOLUTION");
+
+					if (supportIdx === -1) throw new Error("Sheet missing SUPPORT NAME column");
+
+					const rows = data.values.slice(1);
+					return rows
+						.map((row, i) => ({
+							id: `wl_${Date.now()}_${i}_${Math.random().toString(36).substr(2, 6)}`,
+							date: dateIdx !== -1 ? row[dateIdx] || "" : "",
+							shift: shiftIdx !== -1 ? row[shiftIdx] || "" : "",
+							support: supportIdx !== -1 ? row[supportIdx] || "" : "",
+							portal: portalIdx !== -1 ? row[portalIdx] || "" : "",
+							store: storeIdx !== -1 ? row[storeIdx] || "" : "",
+							zip: zipIdx !== -1 ? row[zipIdx] || "" : "",
+							contact: contactIdx !== -1 ? row[contactIdx] || "" : "",
+							contactNumber: contactNumIdx !== -1 ? row[contactNumIdx] || "" : "",
+							module: moduleIdx !== -1 ? row[moduleIdx] || "" : "",
+							issue: issueIdx !== -1 ? row[issueIdx] || "" : "",
+							escalated: escalatedIdx !== -1 ? row[escalatedIdx] || "" : "",
+							status: statusIdx !== -1 ? row[statusIdx] || "" : "",
+							remarks: remarksIdx !== -1 ? row[remarksIdx] || "" : "",
+							resolution: resolutionIdx !== -1 ? row[resolutionIdx] || "" : "",
+							source: "workload",
+							deleted: false,
+							imported: false,
+						}))
+						.filter((e) => {
+							if (!e.date || (!e.store && !e.portal)) return false;
+							return (e.support || "").trim().toUpperCase() === userSupport;
+						});
+				}
+
+				async function getWorkloadHistoryEntries(forceRefresh = false) {
+					if (!forceRefresh && workloadHistoryCache && Date.now() - workloadHistoryCacheTime < WORKLOAD_HISTORY_CACHE_TTL) {
+						return workloadHistoryCache;
+					}
+					const entries = await fetchWorkloadHistoryEntriesFromSheet();
+					workloadHistoryCache = entries;
+					workloadHistoryCacheTime = Date.now();
+					return entries;
+				}
+
+				function findEntryById(id) {
+					let entry = allEntries.find((e) => e.id == id);
+					if (entry) return entry;
+					if (workloadHistoryCache) {
+						entry = workloadHistoryCache.find((e) => e.id == id);
+						if (entry) return entry;
+					}
+					return null;
+				}
+
+				function renderSidebar() {
+					const containers = getHistoryContainers();
 					if (containers.length === 0) return;
 
+					if (historySourceMode === "all") {
+						renderSidebarWorkload(containers);
+					} else {
+						const historyEntries = allEntries.filter((entry) => !entry.imported);
+						renderHistoryCards(containers, historyEntries, false);
+					}
+				}
+
+				async function renderSidebarWorkload(containers) {
+					if (workloadRenderInProgress) return;
+					workloadRenderInProgress = true;
+
+					containers.forEach((c) => {
+						c.innerHTML = '<div class="history-loading"><span class="spinner"></span>Loading WORKLOAD TRACKER 2026...</div>';
+					});
+
+					try {
+						const entries = await getWorkloadHistoryEntries();
+						renderHistoryCards(containers, entries, true);
+					} catch (err) {
+						containers.forEach((c) => {
+							c.innerHTML = `<div style="padding:20px; text-align:center; color:#ef4444; font-size:0.8rem;">❌ ${escapeHtml(err.message)}</div>`;
+						});
+					} finally {
+						workloadRenderInProgress = false;
+					}
+				}
+
+				function renderHistoryCards(containers, entries, isWorkload) {
 					const now = new Date();
 					const currentMonthKey = `${now.toLocaleString("default", { month: "long" })} ${now.getFullYear()}`;
-					const yesterdayFormatted = getYesterdayFormatted();
-
-					const historyEntries = allEntries.filter((entry) => !entry.imported);
 					const todayEST = getESTDateString();
 					const todayFormatted = new Date(todayEST).toLocaleDateString("en-US", {
 						month: "long",
@@ -4844,7 +5133,7 @@
 					});
 
 					const grouped = {};
-					historyEntries.forEach((entry) => {
+					entries.forEach((entry) => {
 						if (!entry.date) return;
 						const parts = entry.date.split("/");
 						if (parts.length !== 3) return;
@@ -4863,11 +5152,7 @@
 						grouped[monthKey][dateKey].push(entry);
 					});
 
-					const sortedMonths = Object.keys(grouped).sort((a, b) => {
-						const dateA = new Date(a);
-						const dateB = new Date(b);
-						return dateB - dateA;
-					});
+					const sortedMonths = Object.keys(grouped).sort((a, b) => new Date(b) - new Date(a));
 
 					let html = "";
 					for (const month of sortedMonths) {
@@ -4877,9 +5162,9 @@
 						const isMonthCollapsed = collapseState.months[month];
 						const monthArrow = isMonthCollapsed ? "▶" : "▼";
 						html += `<div class="sidebar-group">
-			                    <div class="month-header" onclick="toggleMonth('${month.replace(/'/g, "\\'")}')">
-			                        <span class="month-arrow">${monthArrow}</span> ${month}
-			                    </div>`;
+            <div class="month-header" onclick="toggleMonth('${month.replace(/'/g, "\\'")}')">
+                <span class="month-arrow">${monthArrow}</span> ${month}
+            </div>`;
 						if (!isMonthCollapsed) {
 							const dates = grouped[month];
 							const sortedDates = Object.keys(dates).sort((a, b) => new Date(b) - new Date(a));
@@ -4890,9 +5175,9 @@
 								const isDateCollapsed = collapseState.dates[dateKey];
 								const dateArrow = isDateCollapsed ? "▶" : "▼";
 								html += `<div class="date-group">
-			                            <div class="date-header" onclick="toggleDate('${dateKey.replace(/'/g, "\\'")}')">
-			                                <span class="date-arrow">${dateArrow}</span> ${dateKey}
-			                            </div>`;
+                    <div class="date-header" onclick="toggleDate('${dateKey.replace(/'/g, "\\'")}')">
+                        <span class="date-arrow">${dateArrow}</span> ${dateKey}
+                    </div>`;
 								if (!isDateCollapsed) {
 									html += `<div class="date-entries">`;
 									for (const entry of dates[dateKey]) {
@@ -4903,7 +5188,7 @@
 										let cardClass = "ticket-card";
 										if (entry.source === "store") cardClass = "store-card";
 										else if (entry.source === "moolah") cardClass = "moolah-card";
-										else if (entry.source === "scheduler") cardClass = "scheduler-card"; // ✅ ADD THIS
+										else if (entry.source === "scheduler") cardClass = "scheduler-card";
 
 										let issueTextColor = "";
 										switch ((entry.status || "").toUpperCase()) {
@@ -4923,26 +5208,30 @@
 												issueTextColor = "";
 										}
 										const styleIssue = issueTextColor ? `style="color: ${issueTextColor};"` : "";
+										const workloadBadge = isWorkload ? '<span class="workload-badge">WL</span>' : "";
+										const statusLine = isWorkload ? `<div class="preview-item"><strong>Status:</strong> ${escapeHtml(entry.status || "-")}</div>` : "";
 
 										html += `
-			                            <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
-			                                <div class="preview-item issue-item" ${styleIssue}>${escapeHtml(issueDisplay)}</div>
-			                                <div class="preview-item"><strong>Portal:</strong> ${escapeHtml(entry.portal || "-")}</div>
-			                                <div class="preview-item"><strong>Store:</strong> ${escapeHtml(entry.store || "-")}</div>
-			                                <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || "-")}</div>
-			                                <div class="card-actions">
-			                                    <div class="card-actions-row stack-row">
-			                                        <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
-			                                        <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
-			                                    </div>
-			                                    <div class="card-actions-row">
-			                                        <button class="edit-entry stack-btn" data-id="${entry.id}">✏️<br>EDIT</button>
-			                                        <button class="return-entry stack-btn" data-id="${entry.id}">↩️<br>RETURN</button>
-			                                        <button class="delete-entry stack-btn" data-id="${entry.id}">🗑️<br>DELETE</button>
-			                                    </div>
-			                                </div>
-			                            </div>
-			                        `;
+                            <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
+                                <div class="preview-item issue-item" ${styleIssue}>${escapeHtml(issueDisplay)}${workloadBadge}</div>
+                                <div class="preview-item"><strong>Portal:</strong> ${escapeHtml(entry.portal || "-")}</div>
+                                <div class="preview-item"><strong>Store:</strong> ${escapeHtml(entry.store || "-")}</div>
+                                <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || "-")}</div>
+                                ${statusLine}
+                                <div class="card-actions">
+                                    <div class="card-actions-row stack-row">
+                                        <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
+                                        <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
+                                    </div>`;
+										if (!isWorkload) {
+											html += `
+                                    <div class="card-actions-row">
+                                        <button class="edit-entry stack-btn" data-id="${entry.id}">✏️<br>EDIT</button>
+                                        <button class="return-entry stack-btn" data-id="${entry.id}">↩️<br>RETURN</button>
+                                        <button class="delete-entry stack-btn" data-id="${entry.id}">🗑️<br>DELETE</button>
+                                    </div>`;
+										}
+										html += `</div></div>`;
 									}
 									html += `</div>`;
 								}
@@ -4952,8 +5241,8 @@
 						html += `</div>`;
 					}
 
-					if (historyEntries.length === 0) {
-						html = '<div style="padding:20px; text-align:center; color:#64748b;">No entries yet.</div>';
+					if (entries.length === 0) {
+						html = `<div style="padding:20px; text-align:center; color:#64748b;">${isWorkload ? "No entries in WORKLOAD TRACKER 2026." : "No entries yet."}</div>`;
 					}
 
 					containers.forEach((container) => {
@@ -4968,7 +5257,7 @@
 						btn.addEventListener("click", async (e) => {
 							e.stopPropagation();
 							const id = btn.dataset.id;
-							const entry = allEntries.find((e) => e.id == id);
+							const entry = findEntryById(id);
 							if (entry) {
 								// Determine display values for contact and contactNumber
 								let displayContact = entry.contact || "";
@@ -5025,7 +5314,7 @@ ${escapeHtml(entry.note || "").replace(/\n/g, "<br>")}`;
 						btn.addEventListener("click", async (e) => {
 							e.stopPropagation();
 							const id = btn.dataset.id;
-							const entry = allEntries.find((e) => e.id == id);
+							const entry = findEntryById(id);
 							if (entry) {
 								// Determine display values for contact and contactNumber
 								let displayContact = entry.contact || "";
@@ -6939,6 +7228,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					document.querySelector(".bulk-bar").style.display = "";
 
 					applyRoleRestrictions(loggedInUser.role);
+					updateHistoryToggleUI();
 
 					autoFillSupportName(loggedInUser.support);
 					window.currentUser = loggedInUser;
@@ -7657,6 +7947,9 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						schedulerZip.addEventListener("change", updateSchedulerTimezone);
 					}
 				}
+
+				window.handleHistorySourceToggle = handleHistorySourceToggle;
+				window.refreshWorkloadHistory = refreshWorkloadHistory;
 
 				window.switchTab = switchTab;
 				window.clock = clock;
