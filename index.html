@@ -1602,15 +1602,81 @@ body.logged-in.sidebar-collapsed {
 }
 
 .left-sidebar .sidebar-brand {
-    font-size: 0.9rem;
     font-weight: 700;
     color: var(--text-primary);
-    letter-spacing: -0.01em;
     padding-bottom: 12px;
     border-bottom: 1px solid var(--border-color);
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+
+.left-sidebar .sidebar-brand .brand-line1 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.left-sidebar .sidebar-brand .brand-line2 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: -0.01em;
+}
+
+/* ==================== SIDEBAR TABS ==================== */
+.left-sidebar .sidebar-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 12px;
+}
+
+.left-sidebar .sidebar-tabs .tab-button {
+    width: 100%;
+    text-align: left;
+    padding: 9px 12px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
     align-items: center;
     gap: 8px;
+    flex: none;
+}
+
+.left-sidebar .sidebar-tabs .tab-button:hover {
+    background: var(--accent-soft);
+    color: var(--accent-color);
+    transform: none; /* neutralise global translateY(-2px) */
+}
+
+.left-sidebar .sidebar-tabs .tab-button.active {
+    background: var(--accent-color);
+    color: #ffffff;
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.left-sidebar .sidebar-tabs .tab-button i {
+    flex-shrink: 0;
+    filter: brightness(0) saturate(100%);
+    opacity: 0.75;
+}
+
+.left-sidebar .sidebar-tabs .tab-button.active i {
+    filter: brightness(0) invert(1);
+    opacity: 1;
 }
 
 .left-sidebar .sidebar-bottom {
@@ -1738,8 +1804,27 @@ body.logged-in.sidebar-collapsed {
         gap: 8px;
     }
     .left-sidebar .sidebar-top {
-        display: none;
-    }
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.left-sidebar .sidebar-brand {
+    display: none;
+}
+.left-sidebar .sidebar-tabs {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 0;
+    width: 100%;
+}
+.left-sidebar .sidebar-tabs .tab-button {
+    width: auto;
+    flex: 0 0 auto;
+    padding: 6px 10px;
+    font-size: 0.6rem;
+    gap: 4px;
+}
     .left-sidebar .sidebar-bottom {
         flex-direction: row;
         flex-wrap: wrap;
@@ -1863,8 +1948,28 @@ body.sidebar-collapsed .left-sidebar {
 		<button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Hide sidebar">◀</button>
 <aside class="left-sidebar" id="leftSidebar">
     <div class="sidebar-top">
-        <div class="sidebar-brand">🏬 RetailzPOS</div>
+    <div class="sidebar-brand">
+        <div class="brand-line1">🏬 RetailzPOS</div>
+        <div class="brand-line2">Unified Creation System</div>
     </div>
+    <nav class="sidebar-tabs">
+        <button class="tab-button active" data-tab="ticket" onclick="switchTab('ticket', this)">
+            <i class="icon-custom-smaller icon-ticket"></i><span>TICKET CREATION</span>
+        </button>
+        <button class="tab-button" data-tab="store" onclick="switchTab('store', this)">
+            <i class="icon-custom-smaller icon-retailz"></i><span>STORE CREATION</span>
+        </button>
+        <button class="tab-button" data-tab="moolah" onclick="switchTab('moolah', this)">
+            <i class="icon-custom-smaller icon-moolah"></i><span>MOOLAH CREATION</span>
+        </button>
+        <button class="tab-button" data-tab="ecommerce" onclick="switchTab('ecommerce', this)">
+            <i class="bi bi-cart-fill"></i><span>E‑COMMERCE</span>
+        </button>
+        <button class="tab-button" data-tab="scheduler" onclick="switchTab('scheduler', this)">
+            <i class="bi bi-calendar-event-fill"></i><span>SCHEDULER</span>
+        </button>
+    </nav>
+</div>
     <div class="sidebar-bottom">
         <div class="sidebar-profile">
             <div class="profile-details">
@@ -1887,9 +1992,6 @@ body.sidebar-collapsed .left-sidebar {
         <button class="sidebar-action-btn logout" id="logoutBtnProfile"><i class="bi bi-box-arrow-right"></i> Logout</button>
     </div>
 </aside>
-<div style="display: flex; align-items: center; justify-content: center; margin-bottom: 2rem">
-    <h1 style="margin: 0">🏬 RetailzPOS · Unified Creation System</h1>
-</div>
 		<div class="app-container">
 			<div class="main-content">
 				<!-- ==================== DASHBOARD ==================== -->
@@ -1923,16 +2025,6 @@ body.sidebar-collapsed .left-sidebar {
 							<div class="dashboard-label">Overall Other Tasks</div>
 							<div class="dashboard-value" id="dashTotalOtherTasks">--</div>
 						</div>
-					</div>
-				</div>
-				<!-- ==================================================== -->
-				<div class="tab-container">
-					<div class="tab-buttons">
-						<button class="tab-button active" data-tab="ticket" onclick="switchTab('ticket', this)"><i class="icon-custom icon-ticket"></i> TICKET CREATION</button>
-						<button class="tab-button" data-tab="store" onclick="switchTab('store', this)"><i class="icon-custom icon-retailz"></i> STORE CREATION</button>
-						<button class="tab-button" data-tab="moolah" onclick="switchTab('moolah', this)"><i class="icon-custom icon-moolah"></i> MOOLAH CREATION</button>
-						<button class="tab-button" data-tab="ecommerce" onclick="switchTab('ecommerce', this)"><i class="bi bi-cart-fill"></i> E‑COMMERCE</button>
-						<button class="tab-button" data-tab="scheduler" onclick="switchTab('scheduler', this)"><i class="bi bi-calendar-event-fill"></i> SCHEDULER</button>
 					</div>
 				</div>
 
