@@ -336,6 +336,22 @@
 				border-left-color: #bc8f00 !important;
 				border-bottom-color: #9d7900 !important;
 			}
+			.sidebar-card.status-resolved-card {
+				border-left-color: #10b981 !important;
+				border-bottom-color: #0d9668 !important;
+			}
+			.sidebar-card.status-pending-card {
+				border-left-color: #f59e0b !important;
+				border-bottom-color: #d97706 !important;
+			}
+			.sidebar-card.status-other-card {
+				border-left-color: #6b7280 !important;
+				border-bottom-color: #4b5563 !important;
+			}
+			.sidebar-card.status-none-card {
+				border-left-color: var(--text-primary) !important;
+				border-bottom-color: var(--text-primary) !important;
+			}
 
 			.sidebar-card:hover {
 				transform: translateY(-2px);
@@ -361,6 +377,13 @@
 				font-size: 0.85rem;
 				font-weight: 700;
 				color: var(--text-primary);
+			}
+
+			.sidebar-card .preview-item.remarks-item {
+				font-size: 0.8rem; /* issue is 0.85rem, so 0.05rem smaller */
+				font-weight: 700; /* bold, same as issue */
+				color: var(--text-primary);
+				margin-top: -2px; /* tighten spacing under the issue line */
 			}
 
 			.sidebar-card .stack-btn,
@@ -1542,6 +1565,274 @@
 				vertical-align: middle;
 				margin-right: 6px;
 			}
+			/* ==================== LEFT SIDEBAR ==================== */
+.left-sidebar {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 260px;
+    background: var(--bg-secondary);
+    border-right: 1px solid var(--border-color);
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 16px;
+    z-index: 100;
+    box-shadow: var(--card-shadow);
+    transition: var(--transition);
+    overflow-y: auto;
+}
+
+body.logged-in .left-sidebar {
+    display: flex;
+}
+
+body.logged-in {
+    padding-left: 316px;
+}
+body.logged-in.sidebar-collapsed {
+    padding-left: 60px;
+}
+
+.left-sidebar .sidebar-top {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.left-sidebar .sidebar-brand {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.left-sidebar .sidebar-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+}
+
+.left-sidebar .sidebar-profile {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.left-sidebar .profile-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+    flex: 1;
+}
+
+.left-sidebar .profile-details .profile-label {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.62rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.2;
+    margin-bottom: 1px;
+}
+
+.left-sidebar .profile-details .profile-value {
+    color: var(--text-primary);
+    font-weight: 600;
+    font-size: 0.78rem;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+.left-sidebar .profile-details .profile-value.email {
+    font-size: 0.68rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    word-break: break-all;
+}
+
+.left-sidebar .theme-toggle {
+    flex-shrink: 0;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 6px 10px;
+    border-radius: 40px;
+    transition: var(--transition);
+    line-height: 1;
+    height: fit-content;
+    font-family: inherit;
+}
+
+.left-sidebar .theme-toggle:hover {
+    background: var(--accent-soft);
+    transform: scale(1.05);
+}
+
+.left-sidebar .sidebar-action-btn {
+    width: 100%;
+    padding: 9px 12px;
+    border-radius: 40px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 6px;
+    font-family: inherit;
+}
+
+.left-sidebar .sidebar-action-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.left-sidebar .sidebar-action-btn.logout {
+    color: var(--danger);
+    border-color: var(--danger);
+}
+
+.left-sidebar .sidebar-action-btn.logout:hover {
+    background: var(--danger);
+    color: white;
+    border-color: var(--danger);
+}
+
+@media (max-width: 900px) {
+    body.logged-in {
+        padding-left: 16px;
+    }
+    .left-sidebar {
+        position: static;
+        width: 100%;
+        max-height: none;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 12px 16px;
+        margin-bottom: 16px;
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+        gap: 8px;
+    }
+    .left-sidebar .sidebar-top {
+        display: none;
+    }
+    .left-sidebar .sidebar-bottom {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        width: 100%;
+        border-top: none;
+        padding-top: 0;
+        gap: 8px;
+    }
+    .left-sidebar .sidebar-profile {
+        margin-bottom: 0;
+        flex: 1 1 auto;
+        min-width: 220px;
+    }
+    .left-sidebar .profile-details {
+        flex-direction: row;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    .left-sidebar .sidebar-action-btn {
+        width: auto;
+        margin-top: 0;
+        padding: 6px 12px;
+        font-size: 0.65rem;
+    }
+}
+/* ==================== COLLAPSIBLE SIDEBAR ==================== */
+.sidebar-toggle-btn {
+    position: fixed;
+    top: 24px;
+    left: 276px;              /* sits just to the right of the open sidebar */
+    z-index: 10001;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 50%;
+    border: 1px solid var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    cursor: pointer;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    box-shadow: var(--card-shadow);
+    transition: left 0.25s ease, background 0.2s ease, transform 0.2s ease;
+    font-family: inherit;
+}
+
+body.logged-in .sidebar-toggle-btn {
+    display: inline-flex;
+}
+
+.sidebar-toggle-btn:hover {
+    background: var(--accent-soft);
+    transform: scale(1.08);
+}
+body.sidebar-collapsed .sidebar-toggle-btn {
+    left: 16px;
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+    background: var(--accent-color);
+    color: #ffffff;
+    border: 2px solid var(--accent-color);
+    box-shadow: 0 4px 14px rgba(59, 130, 246, 0.45);
+}
+
+/* Slide the sidebar off-screen when collapsed */
+.left-sidebar {
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+body.sidebar-collapsed .left-sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+}
+
+/* On small screens the sidebar is a top bar – no collapse needed */
+@media (max-width: 900px) {
+    body.logged-in,
+    body.logged-in.sidebar-collapsed {
+        padding-left: 16px;
+    }
+    .left-sidebar,
+    body.sidebar-collapsed .left-sidebar {
+        transform: none !important;
+        box-shadow: var(--card-shadow);
+    }
+    .sidebar-toggle-btn {
+        display: none !important;
+    }
+}
 		</style>
 	</head>
 	<body>
@@ -1569,13 +1860,36 @@
 				<div id="keyStatus" style="margin-top: 12px; text-align: center; font-size: 0.8rem; color: var(--text-muted)"></div>
 			</div>
 		</div>
-		<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem">
-			<h1 style="margin: 0">🏬 RetailzPOS · Unified Creation System</h1>
-			<div style="display: flex; gap: 12px">
-				<button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
-				<button class="theme-toggle" id="profileBtn" title="Profile">👤</button>
-			</div>
-		</div>
+		<button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Hide sidebar">◀</button>
+<aside class="left-sidebar" id="leftSidebar">
+    <div class="sidebar-top">
+        <div class="sidebar-brand">🏬 RetailzPOS</div>
+    </div>
+    <div class="sidebar-bottom">
+        <div class="sidebar-profile">
+            <div class="profile-details">
+                <div>
+                    <div class="profile-label">Support</div>
+                    <div class="profile-value" id="sidebarProfileSupport">—</div>
+                </div>
+                <div>
+                    <div class="profile-label">Email</div>
+                    <div class="profile-value email" id="sidebarProfileEmail">—</div>
+                </div>
+                <div>
+                    <div class="profile-label">Role</div>
+                    <div class="profile-value" id="sidebarProfileRole">—</div>
+                </div>
+            </div>
+            <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
+        </div>
+        <button class="sidebar-action-btn" id="changePasswordBtn"><i class="bi bi-key-fill"></i> Change Password</button>
+        <button class="sidebar-action-btn logout" id="logoutBtnProfile"><i class="bi bi-box-arrow-right"></i> Logout</button>
+    </div>
+</aside>
+<div style="display: flex; align-items: center; justify-content: center; margin-bottom: 2rem">
+    <h1 style="margin: 0">🏬 RetailzPOS · Unified Creation System</h1>
+</div>
 		<div class="app-container">
 			<div class="main-content">
 				<!-- ==================== DASHBOARD ==================== -->
@@ -2588,21 +2902,6 @@
 		</div>
 
 		<div id="notification"></div>
-
-		<div id="profileModal" style="display: none; position: fixed; top: 20px; right: 20px; background: var(--bg-secondary); border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.2); border: 1px solid var(--border-color); width: 300px; z-index: 1100; padding: 16px">
-			<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px">
-				<strong>Profile</strong>
-				<button id="closeProfileModal" type="button" style="background: none; border: none; font-size: 1.2rem; cursor: pointer">&times;</button>
-			</div>
-			<div id="profileInfo">
-				<div><strong>Support:</strong> <span id="profileSupport"></span></div>
-				<div><strong>Email:</strong> <span id="profileEmail"></span></div>
-				<div><strong>Role:</strong> <span id="profileRole"></span></div>
-			</div>
-			<hr style="margin: 12px 0; border-color: var(--border-color)" />
-			<button id="changePasswordBtn" class="login-action-btn" type="button" style="width: 100%; margin-bottom: 8px">Change Password</button>
-			<button id="logoutBtnProfile" class="login-action-btn" type="button" style="width: 100%; background: #ef4444">Logout</button>
-		</div>
 
 		<div id="changePwdModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 350px; z-index: 1200; border: 1px solid var(--border-color)">
 			<h3 style="margin-bottom: 16px">Change Password</h3>
@@ -5185,40 +5484,30 @@
 										if (entry.status && entry.status.toUpperCase() === "OTHER TASK") {
 											issueDisplay = entry.module || "OTHER TASK";
 										}
-										let cardClass = "ticket-card";
-										if (entry.source === "store") cardClass = "store-card";
-										else if (entry.source === "moolah") cardClass = "moolah-card";
-										else if (entry.source === "scheduler") cardClass = "scheduler-card";
+										const remarksDisplay = (entry.remarks || "-").toUpperCase();
 
-										let issueTextColor = "";
-										switch ((entry.status || "").toUpperCase()) {
-											case "RESOLVED":
-												issueTextColor = "#11734b";
-												break;
-											case "PENDING":
-												issueTextColor = "#b10202";
-												break;
-											case "OTHER TASK":
-												issueTextColor = "#1a6d9f";
-												break;
-											case "UNSOLVED":
-												issueTextColor = "#3d3d3d";
-												break;
-											default:
-												issueTextColor = "";
+										const statusUpper = (entry.status || "").toUpperCase();
+										let cardClass = "status-none-card";
+										if (statusUpper === "RESOLVED") {
+											cardClass = "status-resolved-card";
+										} else if (statusUpper === "PENDING") {
+											cardClass = "status-pending-card";
+										} else if (statusUpper === "OTHER TASK") {
+											cardClass = "status-other-card";
 										}
-										const styleIssue = issueTextColor ? `style="color: ${issueTextColor};"` : "";
+
 										const workloadBadge = isWorkload ? '<span class="workload-badge">WL</span>' : "";
 										const statusLine = isWorkload ? `<div class="preview-item"><strong>Status:</strong> ${escapeHtml(entry.status || "-")}</div>` : "";
 
 										html += `
-                            <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
-                                <div class="preview-item issue-item" ${styleIssue}>${escapeHtml(issueDisplay)}${workloadBadge}</div>
-                                <div class="preview-item"><strong>Portal:</strong> ${escapeHtml(entry.portal || "-")}</div>
-                                <div class="preview-item"><strong>Store:</strong> ${escapeHtml(entry.store || "-")}</div>
-                                <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || "-")}</div>
-                                ${statusLine}
-                                <div class="card-actions">
+    <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
+        <div class="preview-item issue-item">${escapeHtml(issueDisplay)}${workloadBadge}</div>
+        <div class="preview-item remarks-item">${escapeHtml(remarksDisplay)}</div>
+        <div class="preview-item"><strong>Portal:</strong> ${escapeHtml(entry.portal || "-")}</div>
+        <div class="preview-item"><strong>Store:</strong> ${escapeHtml(entry.store || "-")}</div>
+        <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || "-")}</div>
+        ${statusLine}
+        <div class="card-actions">
                                     <div class="card-actions-row stack-row">
                                         <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
                                         <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
@@ -6222,11 +6511,10 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 
 									setLoggedInUser(currentUser);
 
-									// Update profile display
-									const profileSupport = document.getElementById("profileSupport");
-									const profileRole = document.getElementById("profileRole");
-									if (profileSupport) profileSupport.textContent = currentUser.support;
-									if (profileRole) profileRole.textContent = currentUser.role;
+									const sidebarSupport = document.getElementById("sidebarProfileSupport");
+const sidebarRole = document.getElementById("sidebarProfileRole");
+if (sidebarSupport) sidebarSupport.textContent = currentUser.support;
+if (sidebarRole) sidebarRole.textContent = currentUser.role;
 
 									if (roleChanged) {
 										showNotification(`Role updated to: ${newRole}`);
@@ -7211,21 +7499,43 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					setDashboardLoading(false);
 				}
 
+				function initSidebarToggle() {
+    const toggleBtn = document.getElementById("sidebarToggleBtn");
+    if (!toggleBtn) return;
+
+    const applyState = (collapsed) => {
+        document.body.classList.toggle("sidebar-collapsed", collapsed);
+        toggleBtn.textContent = collapsed ? "▶" : "◀";
+        toggleBtn.title = collapsed ? "Show sidebar" : "Hide sidebar";
+    };
+
+    applyState(localStorage.getItem("sidebarCollapsed") === "true");
+
+    toggleBtn.addEventListener("click", () => {
+        const isCollapsed = document.body.classList.contains("sidebar-collapsed");
+        applyState(!isCollapsed);
+        localStorage.setItem("sidebarCollapsed", (!isCollapsed).toString());
+        setTimeout(syncPreviewHeight, 300); // re-measure panels after slide
+    });
+}
+
 				function init() {
 					const loggedInUser = getLoggedInUser();
 					if (!loggedInUser) {
-						document.getElementById("loginOverlay").style.display = "flex";
-						document.querySelector(".app-container").style.display = "none";
-						document.getElementById("entryTable").style.display = "none";
-						document.querySelector(".bulk-bar").style.display = "none";
-						setupLoginListeners();
-						return;
-					}
+    document.getElementById("loginOverlay").style.display = "flex";
+    document.body.classList.remove("logged-in");
+    document.querySelector(".app-container").style.display = "none";
+    document.getElementById("entryTable").style.display = "none";
+    document.querySelector(".bulk-bar").style.display = "none";
+    setupLoginListeners();
+    return;
+}
 
-					document.getElementById("loginOverlay").style.display = "none";
-					document.querySelector(".app-container").style.display = "";
-					document.getElementById("entryTable").style.display = "";
-					document.querySelector(".bulk-bar").style.display = "";
+document.getElementById("loginOverlay").style.display = "none";
+document.body.classList.add("logged-in");
+document.querySelector(".app-container").style.display = "";
+document.getElementById("entryTable").style.display = "";
+document.querySelector(".bulk-bar").style.display = "";
 
 					applyRoleRestrictions(loggedInUser.role);
 					updateHistoryToggleUI();
@@ -7733,23 +8043,14 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					updateStoreIssuePreview();
 					updateMoolahIssuePreview();
 
-					const profileBtn = document.getElementById("profileBtn");
-					const profileModal = document.getElementById("profileModal");
-					const closeProfile = document.getElementById("closeProfileModal");
 					const changePwdBtn = document.getElementById("changePasswordBtn");
-					const logoutProfileBtn = document.getElementById("logoutBtnProfile");
+const logoutProfileBtn = document.getElementById("logoutBtnProfile");
 
-					function showProfileModal() {
-						document.getElementById("profileSupport").textContent = currentUser.support || "";
-						document.getElementById("profileEmail").textContent = currentUser.email || "";
-						document.getElementById("profileRole").textContent = currentUser.role || "";
-						profileModal.style.display = "block";
-					}
-					profileBtn.addEventListener("click", showProfileModal);
-					closeProfile.addEventListener("click", () => (profileModal.style.display = "none"));
-					window.addEventListener("click", (e) => {
-						if (e.target === profileModal) profileModal.style.display = "none";
-					});
+// Populate sidebar profile info
+document.getElementById("sidebarProfileSupport").textContent = currentUser.support || "—";
+document.getElementById("sidebarProfileEmail").textContent = currentUser.email || "—";
+document.getElementById("sidebarProfileRole").textContent = currentUser.role || "—";
+initSidebarToggle();
 
 					logoutProfileBtn.addEventListener("click", () => {
 						if (confirm("Logout?")) {
