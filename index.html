@@ -13,7 +13,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.min.css" />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha256-2FMn2Zx6PuH5tdBQDRNwrOo60ts5wWPC9R8jK67b3t4=" crossorigin="anonymous" />
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" integrity="sha256-pdY4ejLKO67E0CM2tbPtq1DJ3VGDVVdqAR6j3ZwdiE4=" crossorigin="anonymous" />
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
 		<style>
 			:root {
 				--bg-primary: #f8fafc;
@@ -1945,7 +1945,7 @@
 				<div id="keyStatus" style="margin-top: 12px; text-align: center; font-size: 0.8rem; color: var(--text-muted)"></div>
 			</div>
 		</div>
-		<button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Hide sidebar">◀</button>
+		<button class="sidebar-toggle-btn" id="sidebarToggleBtn" title="Hide sidebar" aria-label="Hide sidebar"><i class="bi bi-layout-sidebar" aria-hidden="true"></i></button>
 		<aside class="left-sidebar" id="leftSidebar">
 			<div class="sidebar-top">
 				<div class="sidebar-brand">
@@ -7522,8 +7522,9 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 
 					const applyState = (collapsed) => {
 						document.body.classList.toggle("sidebar-collapsed", collapsed);
-						toggleBtn.textContent = collapsed ? "▶" : "◀";
+						toggleBtn.querySelector(".bi").className = collapsed ? "bi bi-layout-sidebar-inset" : "bi bi-layout-sidebar";
 						toggleBtn.title = collapsed ? "Show sidebar" : "Hide sidebar";
+						toggleBtn.setAttribute("aria-label", toggleBtn.title);
 					};
 
 					applyState(localStorage.getItem("sidebarCollapsed") === "true");
