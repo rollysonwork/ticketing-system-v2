@@ -1670,11 +1670,14 @@
 
 			.left-sidebar .sidebar-tabs .tab-button i {
 				flex-shrink: 0;
+			}
+
+			.left-sidebar .sidebar-tabs .tab-button i:not(.icon-custom-smaller) {
 				filter: brightness(0) saturate(100%);
 				opacity: 0.75;
 			}
 
-			.left-sidebar .sidebar-tabs .tab-button.active i {
+			.left-sidebar .sidebar-tabs .tab-button.active i:not(.icon-custom-smaller) {
 				filter: brightness(0) invert(1);
 				opacity: 1;
 			}
