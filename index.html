@@ -1729,25 +1729,6 @@ body.logged-in.sidebar-collapsed {
     word-break: break-all;
 }
 
-.left-sidebar .theme-toggle {
-    flex-shrink: 0;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
-    font-size: 1rem;
-    cursor: pointer;
-    padding: 6px 10px;
-    border-radius: 40px;
-    transition: var(--transition);
-    line-height: 1;
-    height: fit-content;
-    font-family: inherit;
-}
-
-.left-sidebar .theme-toggle:hover {
-    background: var(--accent-soft);
-    transform: scale(1.05);
-}
-
 .left-sidebar .sidebar-action-btn {
     width: 100%;
     padding: 9px 12px;
@@ -1785,6 +1766,17 @@ body.logged-in.sidebar-collapsed {
     background: var(--danger);
     color: white;
     border-color: var(--danger);
+}
+
+.left-sidebar .sidebar-input {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 0.72rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+    font-family: inherit;
 }
 
 @media (max-width: 900px) {
@@ -1970,24 +1962,33 @@ body.sidebar-collapsed .left-sidebar {
         </button>
     </nav>
 </div>
-    <div class="sidebar-bottom">
+        <div class="sidebar-bottom">
         <div class="sidebar-profile">
             <div class="profile-details">
                 <div>
-                    <div class="profile-label">Support</div>
-                    <div class="profile-value" id="sidebarProfileSupport">—</div>
+                    <div class="profile-label">Date</div>
+                    <input type="date" id="sidebar-date" class="sidebar-input" />
                 </div>
                 <div>
-                    <div class="profile-label">Email</div>
-                    <div class="profile-value email" id="sidebarProfileEmail">—</div>
+                    <div class="profile-label">Shift Schedule</div>
+                    <select id="sidebar-shift" class="sidebar-input">
+                        <option value="">-- SELECT --</option>
+                        <option value="9PM - 6AM">9PM - 6AM</option>
+                        <option value="5AM - 2PM">5AM - 2PM</option>
+                        <option value="2PM - 11PM">2PM - 11PM</option>
+                    </select>
+                </div>
+                <div>
+                    <div class="profile-label">Support Name</div>
+                    <div class="profile-value" id="sidebarProfileSupport">—</div>
                 </div>
                 <div>
                     <div class="profile-label">Role</div>
                     <div class="profile-value" id="sidebarProfileRole">—</div>
                 </div>
             </div>
-            <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">🌙</button>
         </div>
+        <button class="sidebar-action-btn" id="themeToggle" title="Toggle dark mode"><span id="themeToggleIcon">🌙</span> Change Theme</button>
         <button class="sidebar-action-btn" id="changePasswordBtn"><i class="bi bi-key-fill"></i> Change Password</button>
         <button class="sidebar-action-btn logout" id="logoutBtnProfile"><i class="bi bi-box-arrow-right"></i> Logout</button>
     </div>
@@ -2053,37 +2054,13 @@ body.sidebar-collapsed .left-sidebar {
 								</div>
 								<div id="ticket-searchResults" class="search-results"></div>
 								<div id="ticket-loadStatus" class="load-status"></div>
-							</div>
-							<table>
-								<tr>
-									<th><label for="ticket-date">DATE</label></th>
-									<td>
-										<input name="ticket-date" type="date" id="ticket-date" />
-									</td>
-								</tr>
-								<tr>
-									<th><label for="ticket-shift">SHIFT SCHEDULE</label></th>
-									<td>
-										<div class="dropdown w-100 dropdown-selection-div">
-											<input type="hidden" id="ticket-shift" />
-											<button class="btn btn-secondary dropdown-toggle w-100 text-start button-accented-color" type="button" id="ticket-shift-dropdown-btn" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
-												<span id="ticket-shiftDropdownLabel">Select shift</span>
-											</button>
-											<div class="dropdown-menu p-2 w-100" aria-labelledby="ticket-shift-dropdown-btn" style="max-height: 220px; overflow: auto">
-												<div class="mb-2">
-													<input type="search" id="ticket-shift-search" class="form-control" placeholder="Search shift..." autocomplete="off" />
-												</div>
-												<div id="ticket-shiftDropdownMenu"></div>
-											</div>
-										</div>
-									</td>
-								</tr>
-								<tr>
-									<th><label for="ticket-support">SUPPORT NAME</label></th>
-									<td><input type="text" id="ticket-support" /></td>
-								</tr>
-								<tr>
-									<th><label for="ticket-portal">PORTAL NUMBER *</label></th>
+</div>
+<input type="hidden" id="ticket-date" />
+<input type="hidden" id="ticket-shift" />
+<input type="hidden" id="ticket-support" />
+<table>
+    <tr>
+        <th><label for="ticket-portal">PORTAL NUMBER *</label></th>
 									<td><input type="text" id="ticket-portal" /></td>
 								</tr>
 								<tr>
@@ -2238,31 +2215,15 @@ body.sidebar-collapsed .left-sidebar {
 								</div>
 								<div id="store-searchResults" class="search-results"></div>
 								<div id="store-loadStatus" class="load-status"></div>
-							</div>
-							<table>
-								<tr>
-									<th>DATE</th>
-									<td><input type="date" id="store-date" readonly /></td>
-								</tr>
-								<tr>
-									<th>SHIFT SCHEDULE</th>
-									<td>
-										<select id="store-shift" disabled>
-											<option value="">-- SELECT --</option>
-											<option value="9PM - 6AM">9PM - 6AM</option>
-											<option value="5AM - 2PM">5AM - 2PM</option>
-											<option value="2PM - 11PM">2PM - 11PM</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<th>SUPPORT NAME</th>
-									<td><input type="text" id="store-support" readonly /></td>
-								</tr>
-								<tr>
-									<th>PORTAL NUMBER *</th>
-									<td>
-										<input type="text" id="store-portal" class="required-field" />
+</div>
+<input type="hidden" id="store-date" />
+<input type="hidden" id="store-shift" />
+<input type="hidden" id="store-support" />
+<table>
+    <tr>
+        <th>PORTAL NUMBER *</th>
+        <td>
+            <input type="text" id="store-portal" class="required-field" />
 									</td>
 								</tr>
 								<tr>
@@ -2487,31 +2448,15 @@ body.sidebar-collapsed .left-sidebar {
 								</div>
 								<div id="moolah-searchResults" class="search-results"></div>
 								<div id="moolah-loadStatus" class="load-status"></div>
-							</div>
-							<table>
-								<tr>
-									<th>DATE</th>
-									<td><input type="date" id="moolah-date" readonly /></td>
-								</tr>
-								<tr>
-									<th>SHIFT SCHEDULE</th>
-									<td>
-										<select id="moolah-shift" disabled>
-											<option value="">-- SELECT --</option>
-											<option value="9PM - 6AM">9PM - 6AM</option>
-											<option value="5AM - 2PM">5AM - 2PM</option>
-											<option value="2PM - 11PM">2PM - 11PM</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<th>SUPPORT NAME</th>
-									<td><input type="text" id="moolah-support" readonly /></td>
-								</tr>
-								<tr>
-									<th>PORTAL NUMBER *</th>
-									<td>
-										<input type="text" id="moolah-portal" class="required" />
+</div>
+<input type="hidden" id="moolah-date" />
+<input type="hidden" id="moolah-shift" />
+<input type="hidden" id="moolah-support" />
+<table>
+    <tr>
+        <th>PORTAL NUMBER *</th>
+        <td>
+            <input type="text" id="moolah-portal" class="required" />
 									</td>
 								</tr>
 								<tr>
@@ -2724,30 +2669,14 @@ body.sidebar-collapsed .left-sidebar {
 								</div>
 								<div id="ecommerce-searchResults" class="search-results"></div>
 								<div id="ecommerce-loadStatus" class="load-status"></div>
-							</div>
-							<table>
-								<tr>
-									<th>DATE</th>
-									<td><input type="date" id="ecommerce-date" readonly /></td>
-								</tr>
-								<tr>
-									<th>SHIFT SCHEDULE</th>
-									<td>
-										<select id="ecommerce-shift" disabled>
-											<option value="">-- SELECT --</option>
-											<option value="9PM - 6AM">9PM - 6AM</option>
-											<option value="5AM - 2PM">5AM - 2PM</option>
-											<option value="2PM - 11PM">2PM - 11PM</option>
-										</select>
-									</td>
-								</tr>
-								<tr>
-									<th>SUPPORT NAME</th>
-									<td><input type="text" id="ecommerce-support" readonly /></td>
-								</tr>
-								<tr>
-									<th>PORTAL NUMBER *</th>
-									<td><input type="text" id="ecommerce-portal" class="required-field" /></td>
+</div>
+<input type="hidden" id="ecommerce-date" />
+<input type="hidden" id="ecommerce-shift" />
+<input type="hidden" id="ecommerce-support" />
+<table>
+    <tr>
+        <th>PORTAL NUMBER *</th>
+        <td><input type="text" id="ecommerce-portal" class="required-field" /></td>
 								</tr>
 								<tr>
 									<th>STORE NAME *</th>
@@ -2819,9 +2748,12 @@ body.sidebar-collapsed .left-sidebar {
 								</div>
 								<div id="scheduler-searchResults" class="search-results"></div>
 								<div id="scheduler-loadStatus" class="load-status"></div>
-							</div>
+</div>
+<input type="hidden" id="scheduler-date" />
+<input type="hidden" id="scheduler-shift" />
+<input type="hidden" id="scheduler-support" />
 
-							<table>
+<table>
 								<!-- Demo/Training Type – Combobox -->
 								<tr>
 									<th>DEMO / TRAINING TYPE</th>
@@ -2832,28 +2764,6 @@ body.sidebar-collapsed .left-sidebar {
 											<div id="scheduler-demoType-suggestions" class="combobox-suggestions"></div>
 										</div>
 									</td>
-								</tr>
-								<!-- DATE (synced with ticket) -->
-								<tr>
-									<th>DATE</th>
-									<td><input type="date" id="scheduler-date" readonly /></td>
-								</tr>
-								<!-- SHIFT SCHEDULE (synced with ticket) -->
-								<tr>
-									<th>SHIFT SCHEDULE</th>
-									<td>
-										<select id="scheduler-shift" disabled>
-											<option value="">-- SELECT --</option>
-											<option value="9PM - 6AM">9PM - 6AM</option>
-											<option value="5AM - 2PM">5AM - 2PM</option>
-											<option value="2PM - 11PM">2PM - 11PM</option>
-										</select>
-									</td>
-								</tr>
-								<!-- SUPPORT NAME (synced with ticket) -->
-								<tr>
-									<th>SUPPORT NAME</th>
-									<td><input type="text" id="scheduler-support" readonly /></td>
 								</tr>
 								<!-- PORTAL NUMBER * -->
 								<tr>
@@ -3839,14 +3749,6 @@ body.sidebar-collapsed .left-sidebar {
 						} catch (e) {}
 					}
 
-					if (prefix === "store" || prefix === "moolah" || prefix === "ecommerce") {
-						const shiftHidden = document.getElementById(`${prefix}-shift`);
-						const shiftLabel = document.getElementById(`${prefix}-shiftDropdownLabel`);
-						if (shiftHidden && shiftLabel) {
-							shiftLabel.textContent = shiftHidden.value || "Select shift";
-						}
-					}
-
 					if (prefix === "scheduler") {
 						const saved = localStorage.getItem(`${prefix}FormData`);
 						if (saved) {
@@ -3873,6 +3775,22 @@ body.sidebar-collapsed .left-sidebar {
 					if (prefix === "ecommerce") ecommerceUpdatePreview();
 					if (prefix === "scheduler") schedulerUpdatePreview();
 				}
+
+				function syncSidebarToFormFields() {
+    const date = document.getElementById("sidebar-date").value;
+    const shift = document.getElementById("sidebar-shift").value;
+    ["ticket", "store", "moolah", "ecommerce", "scheduler"].forEach((prefix) => {
+        const dateEl = document.getElementById(`${prefix}-date`);
+        const shiftEl = document.getElementById(`${prefix}-shift`);
+        if (dateEl) dateEl.value = date;
+        if (shiftEl) shiftEl.value = shift;
+    });
+    storeUpdatePreview();
+    moolahUpdatePreview();
+    ecommerceUpdatePreview();
+    schedulerUpdatePreview();
+    ticketUpdatePreview();
+}
 
 				function syncShiftSupportFromTicket() {
 					const ticketShift = document.getElementById("ticket-shift").value;
@@ -4960,6 +4878,14 @@ body.sidebar-collapsed .left-sidebar {
 					document.getElementById(`${prefix}-support`).value = entry.support;
 					document.getElementById(`${prefix}-portal`).value = entry.portal;
 
+					// Keep sidebar in sync with the loaded entry
+const sbDate = document.getElementById("sidebar-date");
+const sbShift = document.getElementById("sidebar-shift");
+const srcDate = document.getElementById(`${prefix}-date`);
+const srcShift = document.getElementById(`${prefix}-shift`);
+if (sbDate && srcDate) sbDate.value = srcDate.value;
+if (sbShift && srcShift) sbShift.value = srcShift.value;
+
 					if (prefix === "scheduler") {
 						document.getElementById(`${prefix}-storeName`).value = entry.store || "";
 						document.getElementById(`${prefix}-zipcode`).value = entry.zip || "";
@@ -5081,11 +5007,12 @@ body.sidebar-collapsed .left-sidebar {
 						if (!editId || editId !== entryId) return;
 						const formData = {};
 						const fields = {
-							moolah: ["shift", "support", "portal", "storeName", "zipcode", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId", "date"],
-							store: ["shift", "support", "portal", "storeName", "zipcode", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId", "date"],
-							ticket: ["shift", "support", "portal", "store", "zip", "contactPerson", "contactNumber", "module", "issue", "escalated", "status", "remarks", "resolution", "note", "date"],
-							ecommerce: ["shift", "support", "portal", "storeName", "zipcode", "api", "date"],
-						};
+    moolah: ["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"],
+    store: ["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"],
+    ticket: ["portal", "store", "zip", "contactPerson", "contactNumber", "module", "issue", "escalated", "status", "remarks", "resolution", "note"],
+    ecommerce: ["portal", "storeName", "zipcode", "contact", "contactNumber", "api"],
+    scheduler: ["portal", "storeName", "zipcode", "contact", "contactNumber", "email", "scheduleDate", "scheduleTime", "businessType"],
+};
 						fields[prefix].forEach((id) => {
 							const el = document.getElementById(`${prefix}-${id}`);
 							if (el) formData[id] = el.value;
@@ -6318,22 +6245,22 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 				}
 
 				function initTheme() {
-					const savedTheme = localStorage.getItem("theme");
-					if (savedTheme === "dark") {
-						document.body.classList.add("dark-mode");
-						document.getElementById("themeToggle").textContent = "☀️";
-					} else {
-						document.body.classList.remove("dark-mode");
-						document.getElementById("themeToggle").textContent = "🌙";
-					}
-				}
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+        document.body.classList.add("dark-mode");
+        document.getElementById("themeToggleIcon").textContent = "☀️";
+    } else {
+        document.body.classList.remove("dark-mode");
+        document.getElementById("themeToggleIcon").textContent = "🌙";
+    }
+}
 
 				function toggleTheme() {
-					const isDark = document.body.classList.toggle("dark-mode");
-					localStorage.setItem("theme", isDark ? "dark" : "light");
-					document.getElementById("themeToggle").textContent = isDark ? "☀️" : "🌙";
-					syncPreviewHeight();
-				}
+    const isDark = document.body.classList.toggle("dark-mode");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
+    document.getElementById("themeToggleIcon").textContent = isDark ? "☀️" : "🌙";
+    syncPreviewHeight();
+}
 
 				function getBootstrapDropdownDefaultLabel(inputId) {
 					if (inputId === "ticket-status") return "Select status";
@@ -7635,11 +7562,12 @@ document.querySelector(".bulk-bar").style.display = "";
 					autoFillSupportName(loggedInUser.support);
 					window.currentUser = loggedInUser;
 
-					const todayEST = getESTDateString(); // returns YYYY-MM-DD in EST
-					document.getElementById("moolah-date").value = todayEST;
-					document.getElementById("store-date").value = todayEST;
-					document.getElementById("ticket-date").value = todayEST;
-					document.getElementById("ecommerce-date").value = todayEST;
+					// Initialize sidebar DATE and SHIFT
+const todayEST = getESTDateString();
+document.getElementById("sidebar-date").value = todayEST;
+const savedShift = localStorage.getItem("sidebarShift") || "";
+document.getElementById("sidebar-shift").value = savedShift;
+syncSidebarToFormFields();
 
 					const savedTab = localStorage.getItem("activeTab") || "ticket";
 					const tabButton = document.querySelector(`.tab-button[data-tab="${savedTab}"]`);
@@ -7656,8 +7584,6 @@ document.querySelector(".bulk-bar").style.display = "";
 					loadFormData("ticket");
 					loadFormData("ecommerce");
 					loadFormData("scheduler");
-
-					syncShiftSupportFromTicket();
 
 					autoFillSupportName(currentUser.support);
 					loadAllEntries();
@@ -7718,7 +7644,6 @@ document.querySelector(".bulk-bar").style.display = "";
 						updateTemplateDropdown();
 					});
 
-					setupBootstrapDropdown("ticket-shift", SHIFT_OPTIONS, "ticket-support");
 					const moduleField = document.getElementById("ticket-module");
 					if (moduleField) {
 						moduleField.addEventListener("change", () => updateTemplateDropdown());
@@ -7828,8 +7753,6 @@ document.querySelector(".bulk-bar").style.display = "";
 					ticketUpdatePreview();
 
 					document.getElementById("ticket-shift").addEventListener("change", () => saveFormData("ticket"));
-
-					document.getElementById("ticket-date").addEventListener("change", syncShiftSupportFromTicket);
 
 					const moolahFields = ["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"];
 					moolahFields.forEach((id) => {
@@ -7941,9 +7864,6 @@ document.querySelector(".bulk-bar").style.display = "";
 					window.addEventListener("resize", syncPreviewHeight);
 
 					window.filterByStatus = filterByStatus;
-
-					document.getElementById("ticket-shift").addEventListener("change", syncShiftSupportFromTicket);
-					document.getElementById("ticket-support").addEventListener("input", syncShiftSupportFromTicket);
 
 					if (!localStorage.getItem("lastClearDate")) {
 						localStorage.setItem("lastClearDate", getESTDateString());
@@ -8140,7 +8060,6 @@ const logoutProfileBtn = document.getElementById("logoutBtnProfile");
 
 // Populate sidebar profile info
 document.getElementById("sidebarProfileSupport").textContent = currentUser.support || "—";
-document.getElementById("sidebarProfileEmail").textContent = currentUser.email || "—";
 document.getElementById("sidebarProfileRole").textContent = currentUser.role || "—";
 initSidebarToggle();
 
@@ -8339,6 +8258,11 @@ initSidebarToggle();
 						schedulerZip.addEventListener("input", updateSchedulerTimezone);
 						schedulerZip.addEventListener("change", updateSchedulerTimezone);
 					}
+					document.getElementById("sidebar-date").addEventListener("change", syncSidebarToFormFields);
+document.getElementById("sidebar-shift").addEventListener("change", () => {
+    localStorage.setItem("sidebarShift", document.getElementById("sidebar-shift").value);
+    syncSidebarToFormFields();
+});
 				}
 
 				window.handleHistorySourceToggle = handleHistorySourceToggle;
