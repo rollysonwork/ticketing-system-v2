@@ -2924,7 +2924,31 @@
 		<script>
 			const DEMO_TYPE_OPTIONS = ["RetailzPOS Product Demo (Agent/Reseller)", "RetailzPOS Product Demo (Web)", "RetailzPOS Product Demo", "RetailzPOS Training", "Moolah Points Product Demo", "Moolah Points Training", "LottoGuru Product Demo", "LottoGuru Training"];
 
-			const PASSWORD_UPDATE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxSiGNZNHYKjGjJ66lS2fkTyg3-xJ1UxyqF6ul3BMpk6duWHNOLc08iiwjW3ddaKL901A/exec";
+const GEMINI_MODELS = [
+  // Fastest
+  "gemini-2.5-flash-lite",
+
+  // Very fast
+  "gemini-3.1-flash-lite-preview",
+  "gemini-2.0-flash-lite",
+
+  // Fast
+  "gemini-2.0-flash",
+  "gemini-3-flash-preview",
+  "gemini-2.5-flash",
+
+  // Medium
+  "gemini-pro-latest",
+
+  // Slower reasoning models
+  "gemini-3-pro-preview",
+  "gemini-3.1-pro-preview",
+
+  // Slowest / highest reasoning
+  "gemini-2.5-pro",
+];
+
+			const PASSWORD_UPDATE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwSICijECLqSWee8GKNvYwqFgYiS_LSD4qjy5vxEG-wi5y5LkCYEBX4_DM4OWzlBCwxtw/exec";
 
 			(function () {
 				"use strict";
@@ -3008,7 +3032,7 @@
 					NOTE2_COL: 16,
 				};
 
-				const PROXY_URL = "https://script.google.com/macros/s/AKfycbxSiGNZNHYKjGjJ66lS2fkTyg3-xJ1UxyqF6ul3BMpk6duWHNOLc08iiwjW3ddaKL901A/exec";
+				const PROXY_URL = "https://script.google.com/macros/s/AKfycbwSICijECLqSWee8GKNvYwqFgYiS_LSD4qjy5vxEG-wi5y5LkCYEBX4_DM4OWzlBCwxtw/exec";
 
 				async function fetchFromProxy(params) {
 					const query = new URLSearchParams(params).toString();
@@ -4237,17 +4261,18 @@
 				}
 
 				async function summarizeText(text) {
-					try {
-						const data = await fetchFromProxy({
-							action: "summarizeText",
-							text: text,
-						});
-						return data.summary;
-					} catch (error) {
-						showNotification(`Summarization failed: ${error.message}`);
-						return null;
-					}
-				}
+  try {
+    const data = await fetchFromProxy({
+      action: "summarizeText",
+      text: text,
+      models: JSON.stringify(GEMINI_MODELS),   // 👈 pass the fallback list
+    });
+    return data.summary;
+  } catch (error) {
+    showNotification(`Summarization failed: ${error.message}`);
+    return null;
+  }
+}
 
 				async function summarizeEntryResolution(entryId) {
 					const entry = allEntries.find((e) => e.id == entryId);
