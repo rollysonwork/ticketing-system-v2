@@ -13,7 +13,7 @@
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.min.css" />
 		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" integrity="sha256-2FMn2Zx6PuH5tdBQDRNwrOo60ts5wWPC9R8jK67b3t4=" crossorigin="anonymous" />
-		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css" />
 		<style>
 			:root {
 				--bg-primary: #f8fafc;
@@ -2005,20 +2005,20 @@
 							<div class="dashboard-value" id="dashYesterdayTotal">--</div>
 						</div>
 						<div class="dashboard-card card-tickets">
-							<div class="dashboard-label">Overall Ticket</div>
+							<div class="dashboard-label">Total Ticket</div>
 							<div class="dashboard-value" id="dashTodaysTicket">--</div>
 						</div>
 						<div class="dashboard-card card-resolved">
-							<div class="dashboard-label">Overall Resolved</div>
+							<div class="dashboard-label">Todays Resolved</div>
 							<div class="dashboard-value" id="dashTotalResolved">--</div>
+						</div>
+						<div class="dashboard-card card-other">
+							<div class="dashboard-label">Todays Other Tasks</div>
+							<div class="dashboard-value" id="dashTotalOtherTasks">--</div>
 						</div>
 						<div class="dashboard-card card-pending">
 							<div class="dashboard-label">Overall Pending</div>
 							<div class="dashboard-value" id="dashTotalPending">--</div>
-						</div>
-						<div class="dashboard-card card-other">
-							<div class="dashboard-label">Overall Other Tasks</div>
-							<div class="dashboard-value" id="dashTotalOtherTasks">--</div>
 						</div>
 					</div>
 				</div>
@@ -3493,6 +3493,7 @@
 						const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, "0")}-${String(dateObj.getDate()).padStart(2, "0")}`;
 						return entryDateStr <= todayEST;
 					});
+
 					let resolved = 0,
 						pending = 0,
 						other = 0;
@@ -3502,6 +3503,12 @@
 						else if (status === "PENDING") pending++;
 						else if (status === "OTHER TASK") other++;
 					});
+
+					// ✅ Include the user's own workload pendings so the counter matches the table
+					if (!isPendingTrackerMode) {
+						pending += myPendingCache.length;
+					}
+
 					document.getElementById("counterResolved").innerText = resolved;
 					document.getElementById("counterPending").innerText = pending;
 					document.getElementById("counterOther").innerText = other;
@@ -5140,12 +5147,22 @@
 				}
 
 				function renderTable() {
-					const visibleEntries = getVisibleEntries(); // uses current status filter
+					if (isPendingTrackerMode) return; // tracker view owns the table when active
+
+					let visibleEntries = getVisibleEntries(); // honours currentStatusFilter
+
+					if (!currentStatusFilter || currentStatusFilter === "PENDING") {
+						visibleEntries = visibleEntries.concat(myPendingCache);
+					}
+
 					const tbody = document.querySelector("#entryTable tbody");
 					tbody.innerHTML = "";
+
 					visibleEntries.forEach((entry) => {
 						const row = document.createElement("tr");
 						row.dataset.id = entry.id;
+
+						const isWorkloadEntry = entry.source === "workload";
 
 						let displayContact = entry.contact;
 						let displayContactNumber = entry.contactNumber;
@@ -5154,45 +5171,43 @@
 							displayContactNumber = "(000) 000-0000";
 						}
 
+						// WL rows: no checkbox (so bulk ops never touch them); show a WL badge instead
+						const checkboxCell = isWorkloadEntry ? '<span class="workload-badge" title="From WORKLOAD TRACKER">WL</span>' : `<input type="checkbox" class="row-checkbox" value="${entry.id}">`;
+
+						// WL rows: copy only (edit/delete/summarize would target `allEntries` and silently fail)
+						const actionsHtml = isWorkloadEntry
+							? `<button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>`
+							: `
+                <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
+                <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
+                <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
+                <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
+            `;
+
 						row.innerHTML = `
-            <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-            <td>${entry.date}</td>
-            <td>${entry.shift}</td>
-            <td>${entry.support}</td>
-            <td>${entry.portal}</td>
-            <td>${entry.store}</td>
-            <td>${entry.zip}</td>
-            <td>${displayContact}</td>                    <!-- overridden -->
-            <td>${displayContactNumber}</td>              <!-- overridden -->
-            <td>${entry.module}</td>
-            <td style="white-space: pre-wrap;">${entry.issue || ""}</td>
-            <td>${entry.escalated}</td>
-            <td>${entry.status}</td>
-            <td style="white-space: pre-wrap;">${entry.remarks || ""}</td>
-            <td style="white-space: pre-wrap;">${entry.resolution || ""}</td>
+            <td>${checkboxCell}</td>
+            <td>${escapeHtml(entry.date || "")}</td>
+            <td>${escapeHtml(entry.shift || "")}</td>
+            <td>${escapeHtml(entry.support || "")}</td>
+            <td>${escapeHtml(entry.portal || "")}</td>
+            <td>${escapeHtml(entry.store || "")}</td>
+            <td>${escapeHtml(entry.zip || "")}</td>
+            <td>${escapeHtml(displayContact || "")}</td>
+            <td>${escapeHtml(displayContactNumber || "")}</td>
+            <td>${escapeHtml(entry.module || "")}</td>
+            <td style="white-space: pre-wrap;">${escapeHtml(entry.issue || "")}</td>
+            <td>${escapeHtml(entry.escalated || "")}</td>
+            <td>${escapeHtml(entry.status || "")}</td>
+            <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks || "")}</td>
+            <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution || "")}</td>
             <td class="action-cell">
-                <div class="action-container">
-                    <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
-                    <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
-                    <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
-                    <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
-                </div>
+                <div class="action-container">${actionsHtml}</div>
             </td>
         `;
 						tbody.appendChild(row);
 					});
 					updateSelectAllCheckboxState();
 					updateStatusCounters();
-				}
-
-				function getYesterdayFormatted() {
-					const yesterday = new Date();
-					yesterday.setDate(yesterday.getDate() - 1);
-					return yesterday.toLocaleDateString("en-US", {
-						month: "long",
-						day: "numeric",
-						year: "numeric",
-					});
 				}
 
 				function getHistoryContainers() {
@@ -6369,6 +6384,11 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					role = role.toUpperCase();
 					const pendingToggleBtn = document.getElementById("pendingTrackerToggleBtn");
 
+					// ✅ Only TL users get the "Show All Pending" button
+					if (pendingToggleBtn) {
+						pendingToggleBtn.style.display = role === "TL" ? "" : "none";
+					}
+
 					if (role === "LEVEL 1") {
 						document.querySelectorAll(".tab-button").forEach((btn) => {
 							const text = btn.textContent.toUpperCase();
@@ -6376,22 +6396,11 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 								btn.style.display = "none";
 							}
 						});
-
 						document.getElementById("shiftReportBtn").style.display = "none";
-
-						if (pendingToggleBtn) pendingToggleBtn.style.display = "";
 					} else if (role === "LEVEL 2") {
 						document.getElementById("shiftReportBtn").style.display = "none";
-						if (pendingToggleBtn) pendingToggleBtn.style.display = "";
-					} else {
-						if (pendingToggleBtn) pendingToggleBtn.style.display = "";
 					}
 				}
-
-				// ==========================================
-				// ROLE REFRESH FUNCTIONALITY
-				// Insert this after applyRoleRestrictions() and before init()
-				// ==========================================
 
 				async function refreshUserRole() {
 					const currentUser = getLoggedInUser();
@@ -6648,17 +6657,41 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					});
 				}
 
+				let myPendingCache = [];
+				let myPendingCacheTime = 0;
+
+				async function refreshMyPendingCache(shouldRender = true) {
+					const oldSig = myPendingCache
+						.map((e) => `${e.portal}|${e.issue}|${e.status}|${e.date}`)
+						.sort()
+						.join(",");
+
+					myPendingCache = await fetchWorkloadSheetData(true, true); // onlyMine, silent
+					myPendingCacheTime = Date.now();
+
+					const newSig = myPendingCache
+						.map((e) => `${e.portal}|${e.issue}|${e.status}|${e.date}`)
+						.sort()
+						.join(",");
+
+					updateStatusCounters();
+
+					if (shouldRender && !isPendingTrackerMode && oldSig !== newSig) {
+						renderTable();
+					}
+				}
+
 				let isPendingTrackerMode = false;
 				let cachedPendingEntries = [];
 
-				async function fetchWorkloadSheetData() {
+				async function fetchWorkloadSheetData(onlyMine = false, silent = false) {
 					try {
 						const data = await fetchFromProxy({
 							action: "getSheetData",
 							sheetName: "WORKLOAD TRACKER 2026",
 						});
 						if (!data.values || data.values.length < 2) {
-							showNotification("No data found in WORKLOAD TRACKER 2026");
+							if (!silent) showNotification("No data found in WORKLOAD TRACKER 2026");
 							return [];
 						}
 
@@ -6681,21 +6714,21 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						const resolutionIdx = findCol("RESOLUTION");
 
 						if (statusIdx === -1 || supportIdx === -1) {
-							showNotification("Sheet missing STATUS or SUPPORT NAME column.");
+							if (!silent) showNotification("Sheet missing STATUS or SUPPORT NAME column.");
 							return [];
 						}
 
 						const rows = data.values.slice(1);
-						const currentUserSupport = (window.currentUser?.support || "").trim();
-						const currentUserRole = (window.currentUser?.role || "").trim().toUpperCase();
-						const isTL = currentUserRole === "TL";
+						const currentUserSupport = (window.currentUser?.support || "").trim().toUpperCase();
 
 						let pendingRows = rows.filter((row) => {
 							const status = (row[statusIdx] || "").trim().toUpperCase();
 							if (status !== "PENDING") return false;
-							if (isTL) return true;
-							const support = (row[supportIdx] || "").trim().toUpperCase();
-							return support === currentUserSupport.toUpperCase();
+							if (onlyMine) {
+								const support = (row[supportIdx] || "").trim().toUpperCase();
+								return support === currentUserSupport;
+							}
+							return true; // TL "show all" → every agent's pending
 						});
 
 						if (dateIdx !== -1) {
@@ -6705,12 +6738,12 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 								if (!dateA && !dateB) return 0;
 								if (!dateA) return 1;
 								if (!dateB) return -1;
-								return dateB - dateA;
+								return dateB - dateA; // newest first
 							});
 						}
 
-						return pendingRows.map((row) => ({
-							id: Date.now() + Math.random(),
+						return pendingRows.map((row, i) => ({
+							id: `wl_${Date.now()}_${i}_${Math.random().toString(36).substr(2, 6)}`,
 							date: dateIdx !== -1 ? row[dateIdx] || "" : "",
 							shift: shiftIdx !== -1 ? row[shiftIdx] || "" : "",
 							support: supportIdx !== -1 ? row[supportIdx] || "" : "",
@@ -6733,7 +6766,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						}));
 					} catch (err) {
 						console.error("Failed to load workload sheet:", err);
-						showNotification(`Error: ${err.message}`);
+						if (!silent) showNotification(`Error: ${err.message}`);
 						return [];
 					}
 				}
@@ -6778,24 +6811,28 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 				}
 
 				async function togglePendingTracker() {
+					const currentUser = getLoggedInUser();
+					if (!currentUser || (currentUser.role || "").toUpperCase() !== "TL") {
+						showNotification("Only TL users can use 'Show All Pending'.");
+						return;
+					}
+
 					isPendingTrackerMode = !isPendingTrackerMode;
 					localStorage.setItem("pendingTrackerMode", isPendingTrackerMode ? "true" : "false");
 					const toggleBtn = document.getElementById("pendingTrackerToggleBtn");
+
 					if (isPendingTrackerMode) {
-						// Show a contextual message for TL users
-						if (window.currentUser?.role === "TL") {
-							showNotification("📋 TL mode: Showing all pending tickets for all agents");
-						} else {
-							showNotification("Loading your pending tickets from WORKLOAD TRACKER 2026...");
-						}
-						const pendingEntries = await fetchWorkloadSheetData();
+						showNotification("📋 TL mode: Showing all pending tickets from all agents");
+						const pendingEntries = await fetchWorkloadSheetData(false, false); // all pendings
 						cachedPendingEntries = pendingEntries;
 						renderPendingTableView(pendingEntries);
+						toggleBtn.classList.add("active");
+						toggleBtn.innerHTML = "🔙 Back to My View";
 					} else {
 						toggleBtn.classList.remove("active");
 						toggleBtn.innerHTML = '<i class="icon-custom-smaller icon-google-sheets"></i> SHOW ALL PENDING';
+						await refreshMyPendingCache(false); // refresh cache silently
 						renderTable();
-						updateStatusCounters();
 						updateStatusCounters();
 						loadDashboardData();
 					}
@@ -7295,8 +7332,6 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 								for (let i = 1; i < data.values.length; i++) {
 									const row = data.values[i];
 									const rowDate = normalizeDashboardDate(row[dateIdx]);
-									if (rowDate !== todayEST && rowDate !== yesterdayEST) continue;
-
 									const status = String(row[statusIdx] || "")
 										.trim()
 										.toUpperCase();
@@ -7308,11 +7343,16 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 											: "";
 									const isMine = supportIdx >= 0 && rowSupport === userSupport;
 
+									// ✅ LITERAL OVERALL PENDING – counted across every row/date in WORKLOAD TRACKER 2026
+									if (status === "PENDING") pending++;
+
+									// Today/Yesterday–only metrics continue to be scoped as before
+									if (rowDate !== todayEST && rowDate !== yesterdayEST) continue;
+
 									if (rowDate === todayEST) {
 										todaysTicket++;
 										if (status === "RESOLVED") resolved++;
-										else if (status === "PENDING") pending++;
-										else if (status === "OTHER TASK") other++;
+										else if (status === "OTHER TASK") other++; // pending already handled above
 									}
 
 									const isCountable = status === "RESOLVED" || status === "OTHER TASK";
@@ -7412,7 +7452,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 
 					autoFillSupportName(currentUser.support);
 					loadAllEntries();
-
+					refreshMyPendingCache(true);
 					// --- Restore edit mode with draft if available ---
 					const storedEditId = localStorage.getItem(EDIT_STORAGE_KEY);
 					if (storedEditId) {
@@ -7960,19 +8000,20 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					});
 
 					const savedMode = localStorage.getItem("pendingTrackerMode");
-					if (savedMode === "true" && currentUser) {
+					const isTL = (currentUser.role || "").toUpperCase() === "TL";
+					if (savedMode === "true" && currentUser && isTL) {
 						isPendingTrackerMode = true;
 						const toggleBtn = document.getElementById("pendingTrackerToggleBtn");
 						if (toggleBtn) {
 							toggleBtn.classList.add("active");
-							toggleBtn.textContent = "🔙 Back to Local DB";
-
-							fetchWorkloadSheetData().then((entries) => {
+							toggleBtn.innerHTML = "🔙 Back to My View";
+							fetchWorkloadSheetData(false, false).then((entries) => {
 								cachedPendingEntries = entries;
 								renderPendingTableView(entries);
 							});
 						}
 					} else {
+						isPendingTrackerMode = false;
 						localStorage.setItem("pendingTrackerMode", "false");
 					}
 					document.getElementById("pendingTrackerToggleBtn").addEventListener("click", togglePendingTracker);
@@ -7998,8 +8039,9 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 
 					function startCounterRefresh() {
 						if (refreshInterval) clearInterval(refreshInterval);
-						refreshInterval = setInterval(() => {
+						refreshInterval = setInterval(async () => {
 							updateStatusCounters();
+							await refreshMyPendingCache(true); // refresh cache, re-render only if changed
 						}, 30000);
 					}
 
