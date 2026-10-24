@@ -2924,29 +2924,29 @@
 		<script>
 			const DEMO_TYPE_OPTIONS = ["RetailzPOS Product Demo (Agent/Reseller)", "RetailzPOS Product Demo (Web)", "RetailzPOS Product Demo", "RetailzPOS Training", "Moolah Points Product Demo", "Moolah Points Training", "LottoGuru Product Demo", "LottoGuru Training"];
 
-const GEMINI_MODELS = [
-  // Fastest
-  "gemini-2.5-flash-lite",
+			const GEMINI_MODELS = [
+				// Fastest
+				"gemini-2.5-flash-lite",
 
-  // Very fast
-  "gemini-3.1-flash-lite-preview",
-  "gemini-2.0-flash-lite",
+				// Very fast
+				"gemini-3.1-flash-lite-preview",
+				"gemini-2.0-flash-lite",
 
-  // Fast
-  "gemini-2.0-flash",
-  "gemini-3-flash-preview",
-  "gemini-2.5-flash",
+				// Fast
+				"gemini-2.0-flash",
+				"gemini-3-flash-preview",
+				"gemini-2.5-flash",
 
-  // Medium
-  "gemini-pro-latest",
+				// Medium
+				"gemini-pro-latest",
 
-  // Slower reasoning models
-  "gemini-3-pro-preview",
-  "gemini-3.1-pro-preview",
+				// Slower reasoning models
+				"gemini-3-pro-preview",
+				"gemini-3.1-pro-preview",
 
-  // Slowest / highest reasoning
-  "gemini-2.5-pro",
-];
+				// Slowest / highest reasoning
+				"gemini-2.5-pro",
+			];
 
 			const PASSWORD_UPDATE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPcizPPjndZAHgWypPmstNtij9MUCS4gSKonFkxTE-C3hfrNvSlwdH2bTHm94RYhWUuw/exec";
 
@@ -4261,18 +4261,18 @@ const GEMINI_MODELS = [
 				}
 
 				async function summarizeText(text) {
-  try {
-    const data = await fetchFromProxy({
-      action: "summarizeText",
-      text: text,
-      models: JSON.stringify(GEMINI_MODELS),   // 👈 pass the fallback list
-    });
-    return data.summary;
-  } catch (error) {
-    showNotification(`Summarization failed: ${error.message}`);
-    return null;
-  }
-}
+					try {
+						const data = await fetchFromProxy({
+							action: "summarizeText",
+							text: text,
+							models: JSON.stringify(GEMINI_MODELS), // 👈 pass the fallback list
+						});
+						return data.summary;
+					} catch (error) {
+						showNotification(`Summarization failed: ${error.message}`);
+						return null;
+					}
+				}
 
 				async function summarizeEntryResolution(entryId) {
 					const entry = allEntries.find((e) => e.id == entryId);
