@@ -1050,126 +1050,126 @@
    - Announcement carousel (.carousel-slide-details)
    ============================================================ */
 
-.preview-multiline ol,
-.kb-entry-content ol,
-.announcement-message ol,
-.carousel-slide-details ol {
-    counter-reset: level1;
-    list-style: none;
-    padding-left: 0;
-}
+			.preview-multiline ol,
+			.kb-entry-content ol,
+			.announcement-message ol,
+			.carousel-slide-details ol {
+				counter-reset: level1;
+				list-style: none;
+				padding-left: 0;
+			}
 
-.preview-multiline li,
-.kb-entry-content li,
-.announcement-message li,
-.carousel-slide-details li {
-    margin-left: 0;
-    list-style: none;
-}
+			.preview-multiline li,
+			.kb-entry-content li,
+			.announcement-message li,
+			.carousel-slide-details li {
+				margin-left: 0;
+				list-style: none;
+			}
 
-/* Ordered list — level 1: 1. 2. 3. */
-.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"]),
-.kb-entry-content li[data-list="ordered"]:not([class*="ql-indent"]),
-.announcement-message li[data-list="ordered"]:not([class*="ql-indent"]),
-.carousel-slide-details li[data-list="ordered"]:not([class*="ql-indent"]) {
-    counter-increment: level1;
-}
+			/* Ordered list — level 1: 1. 2. 3. */
+			.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"]),
+			.kb-entry-content li[data-list="ordered"]:not([class*="ql-indent"]),
+			.announcement-message li[data-list="ordered"]:not([class*="ql-indent"]),
+			.carousel-slide-details li[data-list="ordered"]:not([class*="ql-indent"]) {
+				counter-increment: level1;
+			}
 
-.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"])::before,
-.kb-entry-content li[data-list="ordered"]:not([class*="ql-indent"])::before,
-.announcement-message li[data-list="ordered"]:not([class*="ql-indent"])::before,
-.carousel-slide-details li[data-list="ordered"]:not([class*="ql-indent"])::before {
-    content: counter(level1) ". ";
-}
+			.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"])::before,
+			.kb-entry-content li[data-list="ordered"]:not([class*="ql-indent"])::before,
+			.announcement-message li[data-list="ordered"]:not([class*="ql-indent"])::before,
+			.carousel-slide-details li[data-list="ordered"]:not([class*="ql-indent"])::before {
+				content: counter(level1) ". ";
+			}
 
-/* Ordered list — level 2 (ql-indent-1): A. B. C. */
-.preview-multiline li[data-list="ordered"].ql-indent-1,
-.kb-entry-content li[data-list="ordered"].ql-indent-1,
-.announcement-message li[data-list="ordered"].ql-indent-1,
-.carousel-slide-details li[data-list="ordered"].ql-indent-1 {
-    counter-increment: level2;
-    margin-left: 30px;
-}
+			/* Ordered list — level 2 (ql-indent-1): A. B. C. */
+			.preview-multiline li[data-list="ordered"].ql-indent-1,
+			.kb-entry-content li[data-list="ordered"].ql-indent-1,
+			.announcement-message li[data-list="ordered"].ql-indent-1,
+			.carousel-slide-details li[data-list="ordered"].ql-indent-1 {
+				counter-increment: level2;
+				margin-left: 30px;
+			}
 
-.preview-multiline li[data-list="ordered"].ql-indent-1:first-child,
-.kb-entry-content li[data-list="ordered"].ql-indent-1:first-child,
-.announcement-message li[data-list="ordered"].ql-indent-1:first-child,
-.carousel-slide-details li[data-list="ordered"].ql-indent-1:first-child {
-    counter-reset: level2;
-}
+			.preview-multiline li[data-list="ordered"].ql-indent-1:first-child,
+			.kb-entry-content li[data-list="ordered"].ql-indent-1:first-child,
+			.announcement-message li[data-list="ordered"].ql-indent-1:first-child,
+			.carousel-slide-details li[data-list="ordered"].ql-indent-1:first-child {
+				counter-reset: level2;
+			}
 
-.preview-multiline li[data-list="ordered"].ql-indent-1::before,
-.kb-entry-content li[data-list="ordered"].ql-indent-1::before,
-.announcement-message li[data-list="ordered"].ql-indent-1::before,
-.carousel-slide-details li[data-list="ordered"].ql-indent-1::before {
-    content: counter(level2, upper-alpha) ". ";
-}
+			.preview-multiline li[data-list="ordered"].ql-indent-1::before,
+			.kb-entry-content li[data-list="ordered"].ql-indent-1::before,
+			.announcement-message li[data-list="ordered"].ql-indent-1::before,
+			.carousel-slide-details li[data-list="ordered"].ql-indent-1::before {
+				content: counter(level2, upper-alpha) ". ";
+			}
 
-/* Ordered list — level 3 (ql-indent-2): I. II. III. */
-.preview-multiline li[data-list="ordered"].ql-indent-2,
-.kb-entry-content li[data-list="ordered"].ql-indent-2,
-.announcement-message li[data-list="ordered"].ql-indent-2,
-.carousel-slide-details li[data-list="ordered"].ql-indent-2 {
-    counter-increment: level3;
-    margin-left: 60px;
-}
+			/* Ordered list — level 3 (ql-indent-2): I. II. III. */
+			.preview-multiline li[data-list="ordered"].ql-indent-2,
+			.kb-entry-content li[data-list="ordered"].ql-indent-2,
+			.announcement-message li[data-list="ordered"].ql-indent-2,
+			.carousel-slide-details li[data-list="ordered"].ql-indent-2 {
+				counter-increment: level3;
+				margin-left: 60px;
+			}
 
-.preview-multiline li[data-list="ordered"].ql-indent-2:first-child,
-.kb-entry-content li[data-list="ordered"].ql-indent-2:first-child,
-.announcement-message li[data-list="ordered"].ql-indent-2:first-child,
-.carousel-slide-details li[data-list="ordered"].ql-indent-2:first-child {
-    counter-reset: level3;
-}
+			.preview-multiline li[data-list="ordered"].ql-indent-2:first-child,
+			.kb-entry-content li[data-list="ordered"].ql-indent-2:first-child,
+			.announcement-message li[data-list="ordered"].ql-indent-2:first-child,
+			.carousel-slide-details li[data-list="ordered"].ql-indent-2:first-child {
+				counter-reset: level3;
+			}
 
-.preview-multiline li[data-list="ordered"].ql-indent-2::before,
-.kb-entry-content li[data-list="ordered"].ql-indent-2::before,
-.announcement-message li[data-list="ordered"].ql-indent-2::before,
-.carousel-slide-details li[data-list="ordered"].ql-indent-2::before {
-    content: counter(level3, upper-roman) ". ";
-}
+			.preview-multiline li[data-list="ordered"].ql-indent-2::before,
+			.kb-entry-content li[data-list="ordered"].ql-indent-2::before,
+			.announcement-message li[data-list="ordered"].ql-indent-2::before,
+			.carousel-slide-details li[data-list="ordered"].ql-indent-2::before {
+				content: counter(level3, upper-roman) ". ";
+			}
 
-/* Bullets — level 1 */
-.preview-multiline li[data-list="bullet"]::before,
-.kb-entry-content li[data-list="bullet"]::before,
-.announcement-message li[data-list="bullet"]::before,
-.carousel-slide-details li[data-list="bullet"]::before {
-    content: "• ";
-    font-weight: bold;
-}
+			/* Bullets — level 1 */
+			.preview-multiline li[data-list="bullet"]::before,
+			.kb-entry-content li[data-list="bullet"]::before,
+			.announcement-message li[data-list="bullet"]::before,
+			.carousel-slide-details li[data-list="bullet"]::before {
+				content: "• ";
+				font-weight: bold;
+			}
 
-/* Bullets — level 2 */
-.preview-multiline li[data-list="bullet"].ql-indent-1,
-.kb-entry-content li[data-list="bullet"].ql-indent-1,
-.announcement-message li[data-list="bullet"].ql-indent-1,
-.carousel-slide-details li[data-list="bullet"].ql-indent-1 {
-    margin-left: 30px;
-}
+			/* Bullets — level 2 */
+			.preview-multiline li[data-list="bullet"].ql-indent-1,
+			.kb-entry-content li[data-list="bullet"].ql-indent-1,
+			.announcement-message li[data-list="bullet"].ql-indent-1,
+			.carousel-slide-details li[data-list="bullet"].ql-indent-1 {
+				margin-left: 30px;
+			}
 
-/* Bullets — level 3 */
-.preview-multiline li[data-list="bullet"].ql-indent-2,
-.kb-entry-content li[data-list="bullet"].ql-indent-2,
-.announcement-message li[data-list="bullet"].ql-indent-2,
-.carousel-slide-details li[data-list="bullet"].ql-indent-2 {
-    margin-left: 60px;
-}
+			/* Bullets — level 3 */
+			.preview-multiline li[data-list="bullet"].ql-indent-2,
+			.kb-entry-content li[data-list="bullet"].ql-indent-2,
+			.announcement-message li[data-list="bullet"].ql-indent-2,
+			.carousel-slide-details li[data-list="bullet"].ql-indent-2 {
+				margin-left: 60px;
+			}
 
-/* Converted bullet lists (post-convertQuillLists) */
-.preview-multiline ul,
-.kb-entry-content ul,
-.announcement-message ul,
-.carousel-slide-details ul {
-    list-style-type: disc;
-    padding-left: 1.5rem;
-    margin: 0.5rem 0;
-}
+			/* Converted bullet lists (post-convertQuillLists) */
+			.preview-multiline ul,
+			.kb-entry-content ul,
+			.announcement-message ul,
+			.carousel-slide-details ul {
+				list-style-type: disc;
+				padding-left: 1.5rem;
+				margin: 0.5rem 0;
+			}
 
-.preview-multiline ul li,
-.kb-entry-content ul li,
-.announcement-message ul li,
-.carousel-slide-details ul li {
-    display: list-item;
-    list-style-type: inherit;
-}
+			.preview-multiline ul li,
+			.kb-entry-content ul li,
+			.announcement-message ul li,
+			.carousel-slide-details ul li {
+				display: list-item;
+				list-style-type: inherit;
+			}
 
 			.icon-custom {
 				--icon-size: 1.8em;
@@ -2846,18 +2846,17 @@
 					flex: 1;
 				}
 			}
-/* Rich-content rendering: HTML content should not use pre-wrap */
-.kb-entry-content p,
-.announcement-message p,
-.carousel-slide-details p {
-    margin: 0 0 8px 0;
-}
-.kb-entry-content p:last-child,
-.announcement-message p:last-child,
-.carousel-slide-details p:last-child {
-    margin-bottom: 0;
-}
-
+			/* Rich-content rendering: HTML content should not use pre-wrap */
+			.kb-entry-content p,
+			.announcement-message p,
+			.carousel-slide-details p {
+				margin: 0 0 8px 0;
+			}
+			.kb-entry-content p:last-child,
+			.announcement-message p:last-child,
+			.carousel-slide-details p:last-child {
+				margin-bottom: 0;
+			}
 		</style>
 	</head>
 	<body>
@@ -4146,8 +4145,8 @@
 				const selectedIndex = { moolah: -1, store: -1, ticket: -1, ecommerce: -1, scheduler: -1 };
 
 				let quillEditor = null;
-let announcementQuill = null;
-let kbQuill = null;
+				let announcementQuill = null;
+				let kbQuill = null;
 
 				const collapseState = { months: {}, dates: {} };
 
@@ -4245,64 +4244,64 @@ let kbQuill = null;
 				}
 
 				function renderRichContent(content) {
-    if (!content) return "";
-    const str = String(content);
-    // If it looks like HTML (has any tag), normalize Quill's list structure
-    // (so bullets/numbers render the same as the Troubleshooting preview)
-    // and render as-is. Otherwise treat as plain text: escape + preserve newlines.
-    if (/<[a-z][\s\S]*>/i.test(str)) {
-        return convertQuillLists(str);
-    }
-    return escapeHtml(str).replace(/\n/g, "<br>");
-}
+					if (!content) return "";
+					const str = String(content);
+					// If it looks like HTML (has any tag), normalize Quill's list structure
+					// (so bullets/numbers render the same as the Troubleshooting preview)
+					// and render as-is. Otherwise treat as plain text: escape + preserve newlines.
+					if (/<[a-z][\s\S]*>/i.test(str)) {
+						return convertQuillLists(str);
+					}
+					return escapeHtml(str).replace(/\n/g, "<br>");
+				}
 
-function htmlToPlainText(html) {
-    if (!html) return "";
-    let str = String(html);
+				function htmlToPlainText(html) {
+					if (!html) return "";
+					let str = String(html);
 
-    // Plain text — return as-is
-    if (!/<[a-z][\s\S]*>/i.test(str)) {
-        return str;
-    }
+					// Plain text — return as-is
+					if (!/<[a-z][\s\S]*>/i.test(str)) {
+						return str;
+					}
 
-    // ✅ Normalize Quill's list structure FIRST.
-    // Quill emits <ol><li data-list="bullet"> for bullet lists — this converts
-    // those into real <ul><li> so the branch below treats them as bullets,
-    // not ordered list items.
-    str = convertQuillLists(str);
+					// ✅ Normalize Quill's list structure FIRST.
+					// Quill emits <ol><li data-list="bullet"> for bullet lists — this converts
+					// those into real <ul><li> so the branch below treats them as bullets,
+					// not ordered list items.
+					str = convertQuillLists(str);
 
-    const temp = document.createElement("div");
-    temp.innerHTML = str;
+					const temp = document.createElement("div");
+					temp.innerHTML = str;
 
-    // Unordered lists → "• item"
-    temp.querySelectorAll("ul").forEach((ul) => {
-        ul.querySelectorAll(":scope > li").forEach((li) => {
-            li.insertBefore(document.createTextNode("• "), li.firstChild);
-        });
-    });
+					// Unordered lists → "• item"
+					temp.querySelectorAll("ul").forEach((ul) => {
+						ul.querySelectorAll(":scope > li").forEach((li) => {
+							li.insertBefore(document.createTextNode("• "), li.firstChild);
+						});
+					});
 
-    // Ordered lists → "1. item", "2. item", …
-    temp.querySelectorAll("ol").forEach((ol) => {
-        let n = 1;
-        ol.querySelectorAll(":scope > li").forEach((li) => {
-            li.insertBefore(document.createTextNode(n + ". "), li.firstChild);
-            n++;
-        });
-    });
+					// Ordered lists → "1. item", "2. item", …
+					temp.querySelectorAll("ol").forEach((ol) => {
+						let n = 1;
+						ol.querySelectorAll(":scope > li").forEach((li) => {
+							li.insertBefore(document.createTextNode(n + ". "), li.firstChild);
+							n++;
+						});
+					});
 
-    // <br> → newline
-    temp.querySelectorAll("br").forEach((el) => el.replaceWith("\n"));
+					// <br> → newline
+					temp.querySelectorAll("br").forEach((el) => el.replaceWith("\n"));
 
-    // Block elements → trailing newline
-    temp.querySelectorAll("p, div, li, h1, h2, h3, h4, h5, h6, blockquote, tr").forEach((el) => {
-        el.appendChild(document.createTextNode("\n"));
-    });
+					// Block elements → trailing newline
+					temp.querySelectorAll("p, div, li, h1, h2, h3, h4, h5, h6, blockquote, tr").forEach((el) => {
+						el.appendChild(document.createTextNode("\n"));
+					});
 
-    return (temp.textContent || "")
-        .replace(/[ \t]+\n/g, "\n")
-        .replace(/\n{3,}/g, "\n\n")
-        .trim();
-}
+					return (temp.textContent || "")
+						.replace(/[ \t]+\n/g, "\n")
+						.replace(/\n{3,}/g, "\n\n")
+						.trim();
+				}
 
 				const ZIP_TO_STATE = [
 					{ min: 35000, max: 36999, state: "AL" },
@@ -7790,35 +7789,35 @@ function htmlToPlainText(html) {
 					if (!templateSelect) return;
 
 					templateSelect.addEventListener("change", async (e) => {
-    const steps = e.target.value;
-    if (!steps) return;
+						const steps = e.target.value;
+						if (!steps) return;
 
-    const templateName = templateSelect.options[templateSelect.selectedIndex]?.text || "template";
-    const confirmReplace = confirm(`Replace current troubleshooting steps with "${templateName}"?`);
-    if (!confirmReplace) {
-        templateSelect.value = "";
-        return;
-    }
+						const templateName = templateSelect.options[templateSelect.selectedIndex]?.text || "template";
+						const confirmReplace = confirm(`Replace current troubleshooting steps with "${templateName}"?`);
+						if (!confirmReplace) {
+							templateSelect.value = "";
+							return;
+						}
 
-    if (quillEditor) {
-        // If the template is HTML (from the new RTE), paste as HTML.
-        // If it's plain text (legacy), paste as text.
-        if (/<[a-z][\s\S]*>/i.test(steps)) {
-            quillEditor.clipboard.dangerouslyPasteHTML(steps);
-        } else {
-            const collapsed = steps.replace(/[\r\n]+/g, "\n");
-            const lines = collapsed.split("\n");
-            const nonEmptyLines = lines.filter((line) => line.trim() !== "");
-            const plainText = nonEmptyLines.join("\n");
-            quillEditor.setText(plainText);
-        }
-        const htmlContent = quillEditor.root.innerHTML;
-        document.getElementById("ticket-resolution").value = htmlContent;
-        ticketUpdatePreview();
-        showNotification(`Template "${templateName}" loaded. You can now edit as needed.`);
-    }
-    templateSelect.value = "";
-});
+						if (quillEditor) {
+							// If the template is HTML (from the new RTE), paste as HTML.
+							// If it's plain text (legacy), paste as text.
+							if (/<[a-z][\s\S]*>/i.test(steps)) {
+								quillEditor.clipboard.dangerouslyPasteHTML(steps);
+							} else {
+								const collapsed = steps.replace(/[\r\n]+/g, "\n");
+								const lines = collapsed.split("\n");
+								const nonEmptyLines = lines.filter((line) => line.trim() !== "");
+								const plainText = nonEmptyLines.join("\n");
+								quillEditor.setText(plainText);
+							}
+							const htmlContent = quillEditor.root.innerHTML;
+							document.getElementById("ticket-resolution").value = htmlContent;
+							ticketUpdatePreview();
+							showNotification(`Template "${templateName}" loaded. You can now edit as needed.`);
+						}
+						templateSelect.value = "";
+					});
 				}
 
 				let myPendingCache = [];
@@ -8744,8 +8743,8 @@ function htmlToPlainText(html) {
 					}
 
 					list.innerHTML = visibleAnnouncements
-    .map(
-        (a) => `
+						.map(
+							(a) => `
 <div class="announcement-item">
     <div class="announcement-body">
         ${a.subject ? `<div class="announcement-subject">${escapeHtml(a.subject)}</div>` : ""}
@@ -8760,56 +8759,55 @@ function htmlToPlainText(html) {
         <i class="bi bi-trash3-fill"></i>
     </button>
 </div>`,
-    )
-    .join("");
-	list.querySelectorAll(".announcement-delete-btn").forEach((btn) => {
-    btn.addEventListener("click", () => deleteAnnouncement(btn.dataset.subject, btn.dataset.details, btn.dataset.support));
-});
-
+						)
+						.join("");
+					list.querySelectorAll(".announcement-delete-btn").forEach((btn) => {
+						btn.addEventListener("click", () => deleteAnnouncement(btn.dataset.subject, btn.dataset.details, btn.dataset.support));
+					});
 				}
 
 				async function addAnnouncement() {
-    const subjectInput = document.getElementById("newAnnouncementSubject");
-    const subject = (subjectInput.value || "").trim();
+					const subjectInput = document.getElementById("newAnnouncementSubject");
+					const subject = (subjectInput.value || "").trim();
 
-    // Read from Quill, but treat "<p><br></p>" as empty
-    let details = "";
-    if (announcementQuill) {
-        const html = announcementQuill.root.innerHTML.trim();
-        const plain = announcementQuill.getText().trim();
-        if (plain !== "") {
-            details = html;
-        }
-    } else {
-        details = (document.getElementById("newAnnouncementText").value || "").trim();
-    }
+					// Read from Quill, but treat "<p><br></p>" as empty
+					let details = "";
+					if (announcementQuill) {
+						const html = announcementQuill.root.innerHTML.trim();
+						const plain = announcementQuill.getText().trim();
+						if (plain !== "") {
+							details = html;
+						}
+					} else {
+						details = (document.getElementById("newAnnouncementText").value || "").trim();
+					}
 
-    if (!subject && !details) {
-        showNotification("Please enter a subject or details.");
-        return;
-    }
+					if (!subject && !details) {
+						showNotification("Please enter a subject or details.");
+						return;
+					}
 
-    const currentUser = getLoggedInUser();
-    const support = currentUser ? currentUser.support || "" : "";
+					const currentUser = getLoggedInUser();
+					const support = currentUser ? currentUser.support || "" : "";
 
-    try {
-        await fetchFromProxy({
-            action: "addAnnouncement",
-            subject: subject,
-            details: details,
-            support: support,
-        });
-        showNotification("Announcement posted!");
-        subjectInput.value = "";
-        if (announcementQuill) announcementQuill.root.innerHTML = "";
-        document.getElementById("newAnnouncementText").value = "";
-        closeAnnouncementModal();
-        currentAnnouncementIndex = 0; // jump to newest
-        loadAnnouncements();
-    } catch (err) {
-        showNotification("Failed to post announcement: " + err.message);
-    }
-}
+					try {
+						await fetchFromProxy({
+							action: "addAnnouncement",
+							subject: subject,
+							details: details,
+							support: support,
+						});
+						showNotification("Announcement posted!");
+						subjectInput.value = "";
+						if (announcementQuill) announcementQuill.root.innerHTML = "";
+						document.getElementById("newAnnouncementText").value = "";
+						closeAnnouncementModal();
+						currentAnnouncementIndex = 0; // jump to newest
+						loadAnnouncements();
+					} catch (err) {
+						showNotification("Failed to post announcement: " + err.message);
+					}
+				}
 
 				async function deleteAnnouncement(subject, details, support) {
 					if (!subject && !details && !support) return;
@@ -8842,13 +8840,13 @@ function htmlToPlainText(html) {
 				}
 
 				function openAnnouncementModal() {
-    document.getElementById("newAnnouncementSubject").value = "";
-    document.getElementById("newAnnouncementText").value = "";
-    if (announcementQuill) announcementQuill.root.innerHTML = "";
-    document.getElementById("announcementModal").style.display = "block";
-    document.getElementById("announcementModalBackdrop").style.display = "block";
-    setTimeout(() => document.getElementById("newAnnouncementSubject").focus(), 50);
-}
+					document.getElementById("newAnnouncementSubject").value = "";
+					document.getElementById("newAnnouncementText").value = "";
+					if (announcementQuill) announcementQuill.root.innerHTML = "";
+					document.getElementById("announcementModal").style.display = "block";
+					document.getElementById("announcementModalBackdrop").style.display = "block";
+					setTimeout(() => document.getElementById("newAnnouncementSubject").focus(), 50);
+				}
 
 				function closeAnnouncementModal() {
 					document.getElementById("announcementModal").style.display = "none";
@@ -9088,42 +9086,42 @@ function htmlToPlainText(html) {
 				}
 
 				async function loadTicketingKb() {
-    const data = await fetchFromProxy({ action: "getSheetData", sheetName: TICKETING_KB_SHEET_NAME });
-    const rows = (data.values || []).slice(1);
-    kbTicketingEntries = rows
-        .map((r, i) => ({
-            id: `tk_${i}`,
-            module: (r[0] || "").toString().trim(),
-            title: (r[1] || "").toString().trim(),
-            content: (r[2] || "").toString().trim(),
-            source: "ticketing",
-            rowIndex: i + 2,
-        }))
-        .filter((e) => e.title && e.content);
+					const data = await fetchFromProxy({ action: "getSheetData", sheetName: TICKETING_KB_SHEET_NAME });
+					const rows = (data.values || []).slice(1);
+					kbTicketingEntries = rows
+						.map((r, i) => ({
+							id: `tk_${i}`,
+							module: (r[0] || "").toString().trim(),
+							title: (r[1] || "").toString().trim(),
+							content: (r[2] || "").toString().trim(),
+							source: "ticketing",
+							rowIndex: i + 2,
+						}))
+						.filter((e) => e.title && e.content);
 
-    allTemplates = kbTicketingEntries.map((e) => ({ module: e.module, title: e.title, steps: e.content }));
-    updateTemplateDropdown();
-}
+					allTemplates = kbTicketingEntries.map((e) => ({ module: e.module, title: e.title, steps: e.content }));
+					updateTemplateDropdown();
+				}
 
 				async function loadHrmsKb() {
-    try {
-        const data = await fetchFromProxy({ action: "getSheetData", sheetName: HRMS_KB_SHEET_NAME });
-        const rows = (data.values || []).slice(1);
-        kbHrmsEntries = rows
-            .map((r, i) => ({
-                id: `hr_${i}`,
-                title: (r[0] || "").toString().trim(),
-                content: (r[1] || "").toString().trim(),
-                createdBy: (r[2] || "").toString().trim(),
-                source: "hrms",
-                rowIndex: i + 2,
-            }))
-            .filter((e) => e.title && e.content);
-    } catch (err) {
-        console.warn("HRMS KB sheet missing:", err);
-        kbHrmsEntries = [];
-    }
-}
+					try {
+						const data = await fetchFromProxy({ action: "getSheetData", sheetName: HRMS_KB_SHEET_NAME });
+						const rows = (data.values || []).slice(1);
+						kbHrmsEntries = rows
+							.map((r, i) => ({
+								id: `hr_${i}`,
+								title: (r[0] || "").toString().trim(),
+								content: (r[1] || "").toString().trim(),
+								createdBy: (r[2] || "").toString().trim(),
+								source: "hrms",
+								rowIndex: i + 2,
+							}))
+							.filter((e) => e.title && e.content);
+					} catch (err) {
+						console.warn("HRMS KB sheet missing:", err);
+						kbHrmsEntries = [];
+					}
+				}
 
 				function getActiveKbEntries() {
 					return currentKbType === "ticketing" ? kbTicketingEntries : kbHrmsEntries;
@@ -9138,67 +9136,60 @@ function htmlToPlainText(html) {
 				}
 
 				function populateKbModuleFilter() {
-    const select = document.getElementById("kbModuleFilter");
-    if (!select) return;
+					const select = document.getElementById("kbModuleFilter");
+					if (!select) return;
 
-    // Hide module filter entirely for HRMS
-    select.style.display = currentKbType === "hrms" ? "none" : "";
+					// Hide module filter entirely for HRMS
+					select.style.display = currentKbType === "hrms" ? "none" : "";
 
-    if (currentKbType === "hrms") {
-        select.innerHTML = '<option value="">All Modules</option>';
-        return;
-    }
+					if (currentKbType === "hrms") {
+						select.innerHTML = '<option value="">All Modules</option>';
+						return;
+					}
 
-    const entries = getActiveKbEntries();
-    const modules = [...new Set(entries.map((e) => e.module).filter(Boolean))].sort();
-    const current = select.value;
-    select.innerHTML = '<option value="">All Modules</option>' + modules.map((m) => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join("");
-    if (modules.includes(current)) select.value = current;
-}
+					const entries = getActiveKbEntries();
+					const modules = [...new Set(entries.map((e) => e.module).filter(Boolean))].sort();
+					const current = select.value;
+					select.innerHTML = '<option value="">All Modules</option>' + modules.map((m) => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join("");
+					if (modules.includes(current)) select.value = current;
+				}
 
 				function filterKnowledgeBase() {
 					renderKnowledgeBase();
 				}
 
 				function renderKnowledgeBase() {
-    const list = document.getElementById("kbEntryList");
-    if (!list) return;
+					const list = document.getElementById("kbEntryList");
+					if (!list) return;
 
-    const expandedIds = new Set([...list.querySelectorAll(".kb-entry-card.expanded")].map((c) => c.dataset.kbId));
+					const expandedIds = new Set([...list.querySelectorAll(".kb-entry-card.expanded")].map((c) => c.dataset.kbId));
 
-    const entries = getActiveKbEntries();
-    const search = getKbSearchTerm();
-    const moduleFilter = getKbModuleFilter();
+					const entries = getActiveKbEntries();
+					const search = getKbSearchTerm();
+					const moduleFilter = getKbModuleFilter();
 
-    populateKbModuleFilter();
+					populateKbModuleFilter();
 
-    let filtered = entries;
-    if (search) {
-        filtered = filtered.filter((e) =>
-            (e.title || "").toLowerCase().includes(search) ||
-            (e.content || "").toLowerCase().includes(search) ||
-            (e.module || "").toLowerCase().includes(search)
-        );
-    }
-    if (moduleFilter && currentKbType === "ticketing") {
-        filtered = filtered.filter((e) => e.module === moduleFilter);
-    }
+					let filtered = entries;
+					if (search) {
+						filtered = filtered.filter((e) => (e.title || "").toLowerCase().includes(search) || (e.content || "").toLowerCase().includes(search) || (e.module || "").toLowerCase().includes(search));
+					}
+					if (moduleFilter && currentKbType === "ticketing") {
+						filtered = filtered.filter((e) => e.module === moduleFilter);
+					}
 
-    if (!filtered.length) {
-        list.innerHTML = `<div class="kb-empty">${entries.length === 0 ? `No entries in ${currentKbType === "ticketing" ? "Ticketing" : "HRMS"} knowledge base yet.` : "No entries match your search."}</div>`;
-        return;
-    }
+					if (!filtered.length) {
+						list.innerHTML = `<div class="kb-empty">${entries.length === 0 ? `No entries in ${currentKbType === "ticketing" ? "Ticketing" : "HRMS"} knowledge base yet.` : "No entries match your search."}</div>`;
+						return;
+					}
 
-    list.innerHTML = filtered.map((e) => {
-        const wasExpanded = expandedIds.has(e.id);
-        const moduleBadge = e.source === "ticketing"
-            ? `<span class="kb-entry-module">${escapeHtml(e.module || "GENERAL")}</span>`
-            : "";
-        const createdByMeta = e.source === "hrms" && e.createdBy
-            ? `<span><i class="bi bi-person-fill"></i> ${escapeHtml(e.createdBy)}</span>`
-            : "";
+					list.innerHTML = filtered
+						.map((e) => {
+							const wasExpanded = expandedIds.has(e.id);
+							const moduleBadge = e.source === "ticketing" ? `<span class="kb-entry-module">${escapeHtml(e.module || "GENERAL")}</span>` : "";
+							const createdByMeta = e.source === "hrms" && e.createdBy ? `<span><i class="bi bi-person-fill"></i> ${escapeHtml(e.createdBy)}</span>` : "";
 
-        return `
+							return `
         <div class="kb-entry-card${wasExpanded ? " expanded" : ""}" data-kb-id="${e.id}">
             <div class="kb-entry-header" onclick="toggleKbEntry(this)">
                 <div class="kb-entry-title">${escapeHtml(e.title || "(Untitled)")}</div>
@@ -9215,8 +9206,9 @@ function htmlToPlainText(html) {
                 <button class="kb-delete-btn" onclick="event.stopPropagation(); deleteKbEntry('${e.id}')" title="Delete entry"><i class="bi bi-trash3-fill"></i> Delete</button>
             </div>
         </div>`;
-    }).join("");
-}
+						})
+						.join("");
+				}
 
 				function toggleKbEntry(headerEl) {
 					const card = headerEl.closest(".kb-entry-card");
@@ -9224,67 +9216,67 @@ function htmlToPlainText(html) {
 				}
 
 				function copyKbEntry(id) {
-    const entry = getActiveKbEntries().find((e) => e.id === id);
-    if (!entry) return;
-    const plainContent = htmlToPlainText(entry.content);
-    const text = `${entry.title}\n\n${plainContent}`;
-    navigator.clipboard.writeText(text).then(
-        () => showNotification("Entry copied!"),
-        () => showNotification("Failed to copy"),
-    );
-}
+					const entry = getActiveKbEntries().find((e) => e.id === id);
+					if (!entry) return;
+					const plainContent = htmlToPlainText(entry.content);
+					const text = `${entry.title}\n\n${plainContent}`;
+					navigator.clipboard.writeText(text).then(
+						() => showNotification("Entry copied!"),
+						() => showNotification("Failed to copy"),
+					);
+				}
 
 				let editingKbId = null;
 
 				function openKbEntryModal(id) {
-    editingKbId = id || null;
-    const modal = document.getElementById("kbEntryModal");
-    const backdrop = document.getElementById("kbEntryModalBackdrop");
-    const titleEl = document.getElementById("kbEntryModalTitle");
-    const sourceEl = document.getElementById("kbEntrySource");
-    const moduleRow = document.getElementById("kbEntryModuleRow");
-    const moduleEl = document.getElementById("kbEntryModule");
-    const moduleCombo = document.getElementById("kbEntryModule-combobox");
-    const titleInput = document.getElementById("kbEntryTitle");
-    const contentInput = document.getElementById("kbEntryContent");
-    const errEl = document.getElementById("kbEntryError");
-    errEl.textContent = "";
+					editingKbId = id || null;
+					const modal = document.getElementById("kbEntryModal");
+					const backdrop = document.getElementById("kbEntryModalBackdrop");
+					const titleEl = document.getElementById("kbEntryModalTitle");
+					const sourceEl = document.getElementById("kbEntrySource");
+					const moduleRow = document.getElementById("kbEntryModuleRow");
+					const moduleEl = document.getElementById("kbEntryModule");
+					const moduleCombo = document.getElementById("kbEntryModule-combobox");
+					const titleInput = document.getElementById("kbEntryTitle");
+					const contentInput = document.getElementById("kbEntryContent");
+					const errEl = document.getElementById("kbEntryError");
+					errEl.textContent = "";
 
-    sourceEl.value = currentKbType;
-    const typeLabel = currentKbType === "ticketing" ? "Ticketing" : "HRMS";
+					sourceEl.value = currentKbType;
+					const typeLabel = currentKbType === "ticketing" ? "Ticketing" : "HRMS";
 
-    // ✅ Hide Module row for HRMS
-    if (moduleRow) moduleRow.style.display = currentKbType === "hrms" ? "none" : "";
+					// ✅ Hide Module row for HRMS
+					if (moduleRow) moduleRow.style.display = currentKbType === "hrms" ? "none" : "";
 
-    if (editingKbId) {
-        const entry = getActiveKbEntries().find((e) => e.id === editingKbId);
-        if (!entry) return;
-        titleEl.textContent = `✏️ Edit ${typeLabel} Entry`;
-        moduleEl.value = entry.module || "";
-        if (moduleCombo) moduleCombo.value = entry.module || "";
-        titleInput.value = entry.title || "";
-        contentInput.value = entry.content || "";
-        if (kbQuill) {
-            const rawContent = entry.content || "";
-            if (rawContent && !/<[a-z][\s\S]*>/i.test(rawContent)) {
-                kbQuill.setText(rawContent);
-            } else {
-                kbQuill.root.innerHTML = rawContent;
-            }
-        }
-    } else {
-        titleEl.textContent = `📚 Add ${typeLabel} Entry`;
-        moduleEl.value = "";
-        if (moduleCombo) moduleCombo.value = "";
-        titleInput.value = "";
-        contentInput.value = "";
-        if (kbQuill) kbQuill.root.innerHTML = "";
-    }
+					if (editingKbId) {
+						const entry = getActiveKbEntries().find((e) => e.id === editingKbId);
+						if (!entry) return;
+						titleEl.textContent = `✏️ Edit ${typeLabel} Entry`;
+						moduleEl.value = entry.module || "";
+						if (moduleCombo) moduleCombo.value = entry.module || "";
+						titleInput.value = entry.title || "";
+						contentInput.value = entry.content || "";
+						if (kbQuill) {
+							const rawContent = entry.content || "";
+							if (rawContent && !/<[a-z][\s\S]*>/i.test(rawContent)) {
+								kbQuill.setText(rawContent);
+							} else {
+								kbQuill.root.innerHTML = rawContent;
+							}
+						}
+					} else {
+						titleEl.textContent = `📚 Add ${typeLabel} Entry`;
+						moduleEl.value = "";
+						if (moduleCombo) moduleCombo.value = "";
+						titleInput.value = "";
+						contentInput.value = "";
+						if (kbQuill) kbQuill.root.innerHTML = "";
+					}
 
-    modal.style.display = "block";
-    backdrop.style.display = "block";
-    setTimeout(() => titleInput.focus(), 50);
-}
+					modal.style.display = "block";
+					backdrop.style.display = "block";
+					setTimeout(() => titleInput.focus(), 50);
+				}
 
 				function closeKbEntryModal() {
 					document.getElementById("kbEntryModal").style.display = "none";
@@ -9293,88 +9285,88 @@ function htmlToPlainText(html) {
 				}
 
 				async function saveKbEntry() {
-    const source = document.getElementById("kbEntrySource").value || currentKbType;
-    const sheetName = getKbSheetName(source);
-    const titleInput = document.getElementById("kbEntryTitle");
-    const contentInput = document.getElementById("kbEntryContent");
-    const moduleEl = document.getElementById("kbEntryModule");
-    const errEl = document.getElementById("kbEntryError");
+					const source = document.getElementById("kbEntrySource").value || currentKbType;
+					const sheetName = getKbSheetName(source);
+					const titleInput = document.getElementById("kbEntryTitle");
+					const contentInput = document.getElementById("kbEntryContent");
+					const moduleEl = document.getElementById("kbEntryModule");
+					const errEl = document.getElementById("kbEntryError");
 
-    const title = titleInput.value.trim();
-    let content = contentInput.value.trim();
-    const module = source === "ticketing" ? moduleEl.value.trim() : "";
+					const title = titleInput.value.trim();
+					let content = contentInput.value.trim();
+					const module = source === "ticketing" ? moduleEl.value.trim() : "";
 
-    if (kbQuill && kbQuill.getText().trim() === "") {
-        content = "";
-    }
+					if (kbQuill && kbQuill.getText().trim() === "") {
+						content = "";
+					}
 
-    if (!title || !content) {
-        errEl.textContent = "Title and content are required.";
-        return;
-    }
+					if (!title || !content) {
+						errEl.textContent = "Title and content are required.";
+						return;
+					}
 
-    const saveBtn = document.getElementById("kbEntrySaveBtn");
-    saveBtn.disabled = true;
-    saveBtn.textContent = "Saving...";
+					const saveBtn = document.getElementById("kbEntrySaveBtn");
+					saveBtn.disabled = true;
+					saveBtn.textContent = "Saving...";
 
-    try {
-        if (editingKbId) {
-            // === UPDATE ===
-            const list = source === "ticketing" ? kbTicketingEntries : kbHrmsEntries;
-            const idx = list.findIndex((e) => e.id === editingKbId);
-            if (idx === -1) throw new Error("Entry not found.");
-            const rowIndex = list[idx].rowIndex;
+					try {
+						if (editingKbId) {
+							// === UPDATE ===
+							const list = source === "ticketing" ? kbTicketingEntries : kbHrmsEntries;
+							const idx = list.findIndex((e) => e.id === editingKbId);
+							if (idx === -1) throw new Error("Entry not found.");
+							const rowIndex = list[idx].rowIndex;
 
-            const payload = {
-                action: "updateKnowledgeBaseEntry",
-                sheetName: sheetName,
-                rowIndex: rowIndex,
-                title: title,
-                content: content,
-            };
-            if (source === "ticketing") payload.module = module;
+							const payload = {
+								action: "updateKnowledgeBaseEntry",
+								sheetName: sheetName,
+								rowIndex: rowIndex,
+								title: title,
+								content: content,
+							};
+							if (source === "ticketing") payload.module = module;
 
-            await fetchFromProxy(payload);
+							await fetchFromProxy(payload);
 
-            if (source === "ticketing") {
-                list[idx] = { ...list[idx], module, title, content };
-                allTemplates = kbTicketingEntries.map((e) => ({ module: e.module, title: e.title, steps: e.content }));
-                updateTemplateDropdown();
-            } else {
-                list[idx] = { ...list[idx], title, content };
-            }
+							if (source === "ticketing") {
+								list[idx] = { ...list[idx], module, title, content };
+								allTemplates = kbTicketingEntries.map((e) => ({ module: e.module, title: e.title, steps: e.content }));
+								updateTemplateDropdown();
+							} else {
+								list[idx] = { ...list[idx], title, content };
+							}
 
-            showNotification("Entry updated!");
-        } else {
-            // === ADD ===
-            const currentUser = getLoggedInUser();
-            const payload = {
-                action: "addKnowledgeBaseEntry",
-                sheetName: sheetName,
-                title: title,
-                content: content,
-            };
-            if (source === "ticketing") {
-                payload.module = module;
-            } else {
-                payload.createdBy = currentUser ? currentUser.support || "" : "";
-            }
+							showNotification("Entry updated!");
+						} else {
+							// === ADD ===
+							const currentUser = getLoggedInUser();
+							const payload = {
+								action: "addKnowledgeBaseEntry",
+								sheetName: sheetName,
+								title: title,
+								content: content,
+							};
+							if (source === "ticketing") {
+								payload.module = module;
+							} else {
+								payload.createdBy = currentUser ? currentUser.support || "" : "";
+							}
 
-            await fetchFromProxy(payload);
-            showNotification("Entry added!");
+							await fetchFromProxy(payload);
+							showNotification("Entry added!");
 
-            kbLoaded[source] = false;
-            await loadKnowledgeBase(source);
-        }
-        closeKbEntryModal();
-        renderKnowledgeBase();
-    } catch (err) {
-        errEl.textContent = `Error: ${err.message}`;
-    } finally {
-        saveBtn.disabled = false;
-        saveBtn.textContent = "Save";
-    }
-}
+							kbLoaded[source] = false;
+							await loadKnowledgeBase(source);
+						}
+						closeKbEntryModal();
+						renderKnowledgeBase();
+					} catch (err) {
+						errEl.textContent = `Error: ${err.message}`;
+					} finally {
+						saveBtn.disabled = false;
+						saveBtn.textContent = "Save";
+					}
+				}
 
 				async function deleteKbEntry(id) {
 					const list = getActiveKbEntries();
@@ -9757,6 +9749,7 @@ function htmlToPlainText(html) {
 
 					loadCollapseState();
 
+					// Troubleshooting RTE: matches the Credit Card Remarks Editor toolbar.
 					quillEditor = new Quill("#ticket-resolution-editor", {
 						theme: "snow",
 						modules: {
@@ -9765,28 +9758,30 @@ function htmlToPlainText(html) {
 					});
 
 					// Announcement rich text editor
-announcementQuill = new Quill("#newAnnouncementEditor", {
-    theme: "snow",
-    placeholder: "Details...",
-    modules: {
-        toolbar: [["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["link"], ["clean"]],
-    },
-});
-announcementQuill.on("text-change", () => {
-    document.getElementById("newAnnouncementText").value = announcementQuill.root.innerHTML;
-});
+					// Announcement RTE: use the Team Reminders rich-text toolbar.
+					announcementQuill = new Quill("#newAnnouncementEditor", {
+						theme: "snow",
+						placeholder: "Details...",
+						modules: {
+							toolbar: [[{ header: [1, 2, 3, false] }], ["bold", "italic", "underline", "strike"], [{ color: [] }, { background: [] }], [{ list: "ordered" }, { list: "bullet" }], ["link"]],
+						},
+					});
+					announcementQuill.on("text-change", () => {
+						document.getElementById("newAnnouncementText").value = announcementQuill.root.innerHTML;
+					});
 
-// Knowledge Base content editor
-kbQuill = new Quill("#kbEntryContentEditor", {
-    theme: "snow",
-    placeholder: "Steps...",
-    modules: {
-        toolbar: [["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["clean"]],
-    },
-});
-kbQuill.on("text-change", () => {
-    document.getElementById("kbEntryContent").value = kbQuill.root.innerHTML;
-});
+					// Knowledge Base content editor
+					// Knowledge Base RTE: use the Team Reminders rich-text toolbar.
+					kbQuill = new Quill("#kbEntryContentEditor", {
+						theme: "snow",
+						placeholder: "Steps...",
+						modules: {
+							toolbar: [[{ header: [1, 2, 3, false] }], ["bold", "italic", "underline", "strike"], [{ color: [] }, { background: [] }], [{ list: "ordered" }, { list: "bullet" }], ["link"]],
+						},
+					});
+					kbQuill.on("text-change", () => {
+						document.getElementById("kbEntryContent").value = kbQuill.root.innerHTML;
+					});
 
 					loadTroubleshootingTemplates();
 					initTemplateSelector();
@@ -10206,17 +10201,17 @@ kbQuill.on("text-change", () => {
 				window.summarizeEntryResolution = summarizeEntryResolution;
 
 				window.goToAnnouncement = goToAnnouncement;
-window.prevAnnouncement = prevAnnouncement;
-window.nextAnnouncement = nextAnnouncement;
+				window.prevAnnouncement = prevAnnouncement;
+				window.nextAnnouncement = nextAnnouncement;
 
-window.switchKbType = switchKbType;
-window.filterKnowledgeBase = filterKnowledgeBase;
-window.copyKbEntry = copyKbEntry;
-window.toggleKbEntry = toggleKbEntry;
-window.openKbEntryModal = openKbEntryModal;
-window.closeKbEntryModal = closeKbEntryModal;
-window.saveKbEntry = saveKbEntry;
-window.deleteKbEntry = deleteKbEntry;
+				window.switchKbType = switchKbType;
+				window.filterKnowledgeBase = filterKnowledgeBase;
+				window.copyKbEntry = copyKbEntry;
+				window.toggleKbEntry = toggleKbEntry;
+				window.openKbEntryModal = openKbEntryModal;
+				window.closeKbEntryModal = closeKbEntryModal;
+				window.saveKbEntry = saveKbEntry;
+				window.deleteKbEntry = deleteKbEntry;
 
 				document.addEventListener("DOMContentLoaded", init);
 			})();
@@ -10231,13 +10226,13 @@ window.deleteKbEntry = deleteKbEntry;
 			<input type="hidden" id="kbEntrySource" />
 
 			<div class="kb-form-row" id="kbEntryModuleRow">
-    <label>Module <span style="color: var(--danger)">*</span></label>
-    <div class="combobox-wrapper">
-        <input type="text" id="kbEntryModule-combobox" class="combobox-input" autocomplete="off" placeholder="Select or type module..." />
-        <input type="hidden" id="kbEntryModule" />
-        <div id="kbEntryModule-suggestions" class="combobox-suggestions"></div>
-    </div>
-</div>
+				<label>Module <span style="color: var(--danger)">*</span></label>
+				<div class="combobox-wrapper">
+					<input type="text" id="kbEntryModule-combobox" class="combobox-input" autocomplete="off" placeholder="Select or type module..." />
+					<input type="hidden" id="kbEntryModule" />
+					<div id="kbEntryModule-suggestions" class="combobox-suggestions"></div>
+				</div>
+			</div>
 
 			<div class="kb-form-row">
 				<label>Title <span style="color: var(--danger)">*</span></label>
@@ -10245,10 +10240,10 @@ window.deleteKbEntry = deleteKbEntry;
 			</div>
 
 			<div class="kb-form-row">
-    <label>Content / Steps <span style="color: var(--danger)">*</span></label>
-    <div id="kbEntryContentEditor" style="height: 220px; background: var(--bg-secondary); border-radius: 12px;"></div>
-    <textarea id="kbEntryContent" style="display: none"></textarea>
-</div>
+				<label>Content / Steps <span style="color: var(--danger)">*</span></label>
+				<div id="kbEntryContentEditor" style="height: 220px; background: var(--bg-secondary); border-radius: 12px"></div>
+				<textarea id="kbEntryContent" style="display: none"></textarea>
+			</div>
 
 			<div id="kbEntryError" style="color: var(--danger); margin-bottom: 12px; font-size: 0.85rem"></div>
 
@@ -10259,11 +10254,11 @@ window.deleteKbEntry = deleteKbEntry;
 		</div>
 		<div id="kbEntryModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
 
-		<div id="announcementModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 500px; max-width: 90%; z-index: 1200; border: 1px solid var(--border-color)">
+		<div id="announcementModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
 			<h3 style="margin-bottom: 16px">📢 New Announcement</h3>
 			<input type="text" id="newAnnouncementSubject" class="no-uppercase" placeholder="Subject" style="width: 100%; margin-bottom: 12px" />
-			<div id="newAnnouncementEditor" style="height: 160px; margin-bottom: 12px; background: var(--bg-secondary); border-radius: 12px;"></div>
-<textarea id="newAnnouncementText" style="display: none"></textarea>
+			<div id="newAnnouncementEditor" style="height: 220px; margin-bottom: 12px; background: var(--bg-secondary); border-radius: 12px"></div>
+			<textarea id="newAnnouncementText" style="display: none"></textarea>
 			<div style="display: flex; gap: 8px; justify-content: flex-end">
 				<button id="submitAnnouncementBtn" class="login-action-btn">Post</button>
 				<button id="cancelAnnouncementBtn" class="login-action-btn" style="background: #6b7280">Cancel</button>
