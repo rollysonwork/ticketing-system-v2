@@ -171,6 +171,13 @@
 				animation: fadeIn 0.2s ease;
 			}
 
+			body:has(#tab-dashboard.active) .bulk-bar,
+			body:has(#tab-dashboard.active) #entryTable,
+			body:has(#tab-announcement.active) .bulk-bar,
+			body:has(#tab-announcement.active) #entryTable {
+				display: none;
+			}
+
 			.btn-no-fontsize {
 				font-size: inherit;
 			}
@@ -1315,7 +1322,7 @@
 				border: 1px solid var(--border-color);
 				border-radius: 20px;
 				padding: 18px 20px;
-				margin-bottom: 24px;
+				margin-bottom: 0;
 				box-shadow: var(--card-shadow);
 				transition: var(--transition);
 			}
@@ -1918,6 +1925,503 @@
 					display: none !important;
 				}
 			}
+
+			/* ============ DASHBOARD TAB ============ */
+			.dashboard-page {
+				display: flex;
+				flex-direction: column;
+				gap: 24px;
+				max-width: 1400px;
+				margin: 0 auto;
+			}
+
+			.dashboard-section {
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-color);
+				border-radius: 20px;
+				padding: 20px 24px;
+				box-shadow: var(--card-shadow);
+				transition: var(--transition);
+			}
+
+			.dashboard-section-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				margin-bottom: 16px;
+				padding-bottom: 12px;
+				border-bottom: 1px solid var(--border-color);
+				flex-wrap: wrap;
+				gap: 8px;
+			}
+
+			.dashboard-section-header h3 {
+				font-size: 1rem;
+				font-weight: 700;
+				margin: 0;
+				color: var(--text-primary);
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
+				display: flex;
+				align-items: center;
+				gap: 8px;
+			}
+
+			.dashboard-add-btn {
+				background: var(--accent-color);
+				border: none;
+				color: #fff;
+				padding: 8px 16px;
+				border-radius: 30px;
+				font-size: 0.75rem;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
+				cursor: pointer;
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				transition: var(--transition);
+				font-family: inherit;
+			}
+
+			.dashboard-add-btn:hover {
+				background: var(--accent-hover);
+				transform: translateY(-1px);
+			}
+
+			.announcement-list {
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+				max-height: 420px;
+				overflow-y: auto;
+			}
+
+			.announcement-item {
+				background: var(--bg-tertiary);
+				border: 1px solid var(--border-color);
+				border-left: 4px solid var(--accent-color);
+				border-radius: 12px;
+				padding: 14px 16px;
+				display: flex;
+				justify-content: space-between;
+				gap: 12px;
+				align-items: flex-start;
+			}
+
+			.announcement-body {
+				flex: 1;
+				min-width: 0;
+			}
+
+			.announcement-message {
+				font-size: 0.9rem;
+				color: var(--text-primary);
+				white-space: pre-wrap;
+				word-wrap: break-word;
+				margin-bottom: 8px;
+				line-height: 1.5;
+			}
+
+			.announcement-meta {
+				font-size: 0.7rem;
+				color: var(--text-muted);
+				display: flex;
+				gap: 12px;
+				flex-wrap: wrap;
+			}
+
+			.announcement-delete-btn {
+				background: transparent;
+				border: 1px solid var(--danger);
+				color: var(--danger);
+				width: 32px;
+				height: 32px;
+				border-radius: 50%;
+				cursor: pointer;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				transition: var(--transition);
+				flex-shrink: 0;
+			}
+
+			.announcement-delete-btn:hover {
+				background: var(--danger);
+				color: #fff;
+				transform: scale(1.05);
+			}
+
+			.announcements-empty,
+			.performers-empty {
+				text-align: center;
+				padding: 24px;
+				color: var(--text-muted);
+				font-size: 0.85rem;
+			}
+
+			.announcement-subject {
+				font-size: 0.95rem;
+				font-weight: 700;
+				color: var(--text-primary);
+				margin-bottom: 4px;
+				word-wrap: break-word;
+				overflow-wrap: break-word;
+			}
+
+			.performers-table {
+				width: 100%;
+				border-collapse: collapse;
+				font-size: 0.85rem;
+			}
+
+			.performers-table th {
+				text-align: left;
+				padding: 10px 12px;
+				background: var(--bg-tertiary);
+				color: var(--text-muted);
+				font-weight: 600;
+				font-size: 0.7rem;
+				text-transform: uppercase;
+				letter-spacing: 0.05em;
+				border-bottom: 1px solid var(--border-color);
+			}
+
+			.performers-table td {
+				padding: 12px;
+				border-bottom: 1px solid var(--border-color);
+				color: var(--text-primary);
+			}
+
+			.performers-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.performer-rank {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				width: 28px;
+				height: 28px;
+				border-radius: 50%;
+				font-weight: 700;
+				font-size: 0.8rem;
+				background: var(--bg-tertiary);
+				color: var(--text-secondary);
+			}
+			.performer-rank.rank-1 {
+				background: #fbbf24;
+				color: #000;
+			}
+			.performer-rank.rank-2 {
+				background: #c0c0c0;
+				color: #000;
+			}
+			.performer-rank.rank-3 {
+				background: #cd7f32;
+				color: #fff;
+			}
+
+			.performer-avg {
+				font-weight: 700;
+				color: var(--accent-color);
+				font-size: 1rem;
+			}
+
+			.performer-details {
+				font-size: 0.7rem;
+				color: var(--text-muted);
+			}
+
+			/* ============ ANNOUNCEMENT CAROUSEL ============ */
+			.announcement-page {
+				max-width: 1000px;
+				margin: 0 auto;
+			}
+
+			.announcement-carousel {
+				position: relative;
+				margin-top: 4px;
+			}
+
+			.carousel-viewport {
+				overflow: hidden;
+				border-radius: 12px;
+				background: var(--bg-tertiary);
+				border: 1px solid var(--border-color);
+				border-left: 4px solid var(--accent-color);
+			}
+
+			.carousel-track {
+				display: flex;
+				transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+				will-change: transform;
+			}
+
+			.carousel-slide {
+				flex: 0 0 100%;
+				min-width: 100%;
+				padding: 22px 26px;
+				box-sizing: border-box;
+			}
+
+			.carousel-slide-subject {
+				font-size: 1.05rem;
+				font-weight: 700;
+				color: var(--text-primary);
+				margin-bottom: 8px;
+				word-wrap: break-word;
+				overflow-wrap: break-word;
+				line-height: 1.35;
+			}
+
+			.carousel-slide-details {
+				font-size: 0.92rem;
+				color: var(--text-secondary);
+				white-space: pre-wrap;
+				word-wrap: break-word;
+				overflow-wrap: break-word;
+				line-height: 1.55;
+			}
+
+			.carousel-slide-meta {
+				font-size: 0.72rem;
+				color: var(--text-muted);
+				display: flex;
+				align-items: center;
+				gap: 6px;
+				border-top: 1px solid var(--border-color);
+				padding-top: 10px;
+				margin-top: 14px;
+			}
+
+			.carousel-slide-meta strong {
+				color: var(--accent-color);
+				min-width: auto;
+			}
+
+			.carousel-nav {
+				position: absolute;
+				top: calc(50% - 18px);
+				width: 34px;
+				height: 34px;
+				border-radius: 50%;
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-color);
+				color: var(--text-primary);
+				font-size: 1.15rem;
+				font-weight: 700;
+				cursor: pointer;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				transition: var(--transition);
+				z-index: 10;
+				box-shadow: var(--card-shadow);
+				font-family: inherit;
+				line-height: 1;
+				padding: 0;
+				padding-bottom: 2px;
+			}
+
+			.carousel-nav:hover {
+				background: var(--accent-color);
+				color: #fff;
+				border-color: var(--accent-color);
+				transform: scale(1.08);
+			}
+
+			.carousel-nav.prev {
+				left: -14px;
+			}
+			.carousel-nav.next {
+				right: -14px;
+			}
+
+			.carousel-dots {
+				display: flex;
+				justify-content: center;
+				gap: 6px;
+				margin-top: 14px;
+				flex-wrap: wrap;
+			}
+
+			.carousel-dot {
+				width: 8px;
+				height: 8px;
+				border-radius: 50%;
+				background: var(--border-color);
+				cursor: pointer;
+				border: none;
+				padding: 0;
+				transition: var(--transition);
+			}
+
+			.carousel-dot:hover {
+				background: var(--text-muted);
+			}
+
+			.carousel-dot.active {
+				background: var(--accent-color);
+				width: 22px;
+				border-radius: 4px;
+			}
+
+			.announcement-carousel-empty {
+				padding: 40px 24px;
+				text-align: center;
+				color: var(--text-muted);
+				font-size: 0.88rem;
+				background: var(--bg-tertiary);
+				border-radius: 12px;
+				border: 1px dashed var(--border-color);
+			}
+
+			/* Support line inside tab list items */
+			.announcement-support {
+				font-size: 0.72rem;
+				color: var(--text-muted);
+				display: flex;
+				align-items: center;
+				gap: 5px;
+				margin-top: 8px;
+				padding-top: 8px;
+				border-top: 1px dashed var(--border-color);
+			}
+
+			.announcement-support strong {
+				color: var(--accent-color);
+				min-width: auto;
+			}
+
+			@media (max-width: 900px) {
+				.carousel-nav.prev {
+					left: 4px;
+				}
+				.carousel-nav.next {
+					right: 4px;
+				}
+				.carousel-slide {
+					padding: 18px 20px;
+				}
+			}
+
+			/* ============ SLA ALERT ============ */
+			.sla-count-badge {
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				min-width: 22px;
+				height: 22px;
+				padding: 0 7px;
+				border-radius: 11px;
+				background: var(--danger);
+				color: #fff;
+				font-size: 0.7rem;
+				font-weight: 700;
+				margin-left: 8px;
+				line-height: 1;
+			}
+
+			.sla-alert-list {
+				display: flex;
+				flex-direction: column;
+				gap: 10px;
+				max-height: 420px;
+				overflow-y: auto;
+			}
+
+			.sla-alert-item {
+				background: rgba(239, 68, 68, 0.06);
+				border: 1px solid rgba(239, 68, 68, 0.3);
+				border-left: 4px solid var(--danger);
+				border-radius: 12px;
+				padding: 12px 14px;
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+				gap: 12px;
+			}
+
+			body.dark-mode .sla-alert-item {
+				background: rgba(239, 68, 68, 0.12);
+				border-color: rgba(239, 68, 68, 0.4);
+			}
+
+			.sla-alert-body {
+				flex: 1;
+				min-width: 0;
+			}
+
+			.sla-alert-store {
+				font-weight: 700;
+				font-size: 0.92rem;
+				color: var(--text-primary);
+				margin-bottom: 4px;
+				word-wrap: break-word;
+				overflow-wrap: break-word;
+			}
+
+			.sla-alert-store .sla-portal-tag {
+				color: var(--text-muted);
+				font-weight: 500;
+				font-size: 0.78rem;
+			}
+
+			.sla-alert-issue {
+				font-size: 0.82rem;
+				color: var(--text-secondary);
+				margin-bottom: 6px;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+				overflow-wrap: break-word;
+				line-height: 1.4;
+			}
+
+			.sla-alert-meta {
+				display: flex;
+				gap: 12px;
+				font-size: 0.7rem;
+				color: var(--text-muted);
+				flex-wrap: wrap;
+			}
+
+			.sla-alert-meta span {
+				display: inline-flex;
+				align-items: center;
+				gap: 4px;
+			}
+
+			.sla-days-badge {
+				display: inline-flex;
+				align-items: center;
+				padding: 5px 12px;
+				border-radius: 20px;
+				font-size: 0.72rem;
+				font-weight: 700;
+				white-space: nowrap;
+				flex-shrink: 0;
+				background: var(--danger);
+				color: #fff;
+				text-transform: uppercase;
+				letter-spacing: 0.02em;
+			}
+
+			.sla-days-badge.severe {
+				background: #7f1d1d;
+				box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.3);
+			}
+
+			.sla-empty {
+				text-align: center;
+				padding: 24px;
+				color: var(--text-muted);
+				font-size: 0.85rem;
+				background: rgba(16, 185, 129, 0.08);
+				border: 1px dashed rgba(16, 185, 129, 0.3);
+				border-radius: 12px;
+			}
 		</style>
 	</head>
 	<body>
@@ -1949,11 +2453,13 @@
 					<div class="brand-line2">Unified Creation System</div>
 				</div>
 				<nav class="sidebar-tabs">
-					<button class="tab-button active" data-tab="ticket" onclick="switchTab('ticket', this)"><i class="icon-custom-smaller icon-ticket"></i><span>TICKET CREATION</span></button>
+					<button class="tab-button active" data-tab="dashboard" onclick="switchTab('dashboard', this)"><i class="bi bi-speedometer2"></i><span>DASHBOARD</span></button>
+					<button class="tab-button" data-tab="ticket" onclick="switchTab('ticket', this)"><i class="icon-custom-smaller icon-ticket"></i><span>TICKET CREATION</span></button>
 					<button class="tab-button" data-tab="store" onclick="switchTab('store', this)"><i class="icon-custom-smaller icon-retailz"></i><span>STORE CREATION</span></button>
 					<button class="tab-button" data-tab="moolah" onclick="switchTab('moolah', this)"><i class="icon-custom-smaller icon-moolah"></i><span>MOOLAH CREATION</span></button>
 					<button class="tab-button" data-tab="ecommerce" onclick="switchTab('ecommerce', this)"><i class="bi bi-cart-fill"></i><span>E‑COMMERCE</span></button>
 					<button class="tab-button" data-tab="scheduler" onclick="switchTab('scheduler', this)"><i class="bi bi-calendar-event-fill"></i><span>SCHEDULER</span></button>
+					<button class="tab-button" data-tab="announcement" onclick="switchTab('announcement', this)"><i class="bi bi-megaphone-fill"></i><span>ANNOUNCEMENTS</span></button>
 				</nav>
 			</div>
 			<div class="sidebar-bottom">
@@ -1990,40 +2496,90 @@
 		<div class="app-container">
 			<div class="main-content">
 				<!-- ==================== DASHBOARD ==================== -->
-				<div class="dashboard-container" id="dashboardContainer" style="display: none">
-					<div class="dashboard-header">
-						<h3>📊 Dashboard</h3>
-						<button class="dashboard-refresh-btn" id="dashboardRefreshBtn" title="Refresh dashboard"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
-					</div>
-					<div class="dashboard-grid">
-						<div class="dashboard-card card-today">
-							<div class="dashboard-label">Your Total for Today</div>
-							<div class="dashboard-value" id="dashYourTotalToday">--</div>
+				<!-- ==================== DASHBOARD TAB ==================== -->
+				<div id="tab-dashboard" class="tab-content active">
+					<div class="dashboard-page">
+						<!-- Existing metrics grid -->
+						<div class="dashboard-container" id="dashboardContainer" style="display: none">
+							<div class="dashboard-header">
+								<h3>📊 Dashboard</h3>
+								<button class="dashboard-refresh-btn" id="dashboardRefreshBtn" title="Refresh dashboard"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+							</div>
+							<div class="dashboard-grid">
+								<div class="dashboard-card card-today">
+									<div class="dashboard-label">Your Total for Today</div>
+									<div class="dashboard-value" id="dashYourTotalToday">--</div>
+								</div>
+								<div class="dashboard-card card-yesterday">
+									<div class="dashboard-label">Yesterday's Total</div>
+									<div class="dashboard-value" id="dashYesterdayTotal">--</div>
+								</div>
+								<div class="dashboard-card card-tickets">
+									<div class="dashboard-label">Total Ticket</div>
+									<div class="dashboard-value" id="dashTodaysTicket">--</div>
+								</div>
+								<div class="dashboard-card card-resolved">
+									<div class="dashboard-label">Todays Resolved</div>
+									<div class="dashboard-value" id="dashTotalResolved">--</div>
+								</div>
+								<div class="dashboard-card card-other">
+									<div class="dashboard-label">Todays Other Tasks</div>
+									<div class="dashboard-value" id="dashTotalOtherTasks">--</div>
+								</div>
+								<div class="dashboard-card card-pending">
+									<div class="dashboard-label">Overall Pending</div>
+									<div class="dashboard-value" id="dashTotalPending">--</div>
+								</div>
+							</div>
 						</div>
-						<div class="dashboard-card card-yesterday">
-							<div class="dashboard-label">Yesterday's Total</div>
-							<div class="dashboard-value" id="dashYesterdayTotal">--</div>
+
+						<!-- Announcement Carousel -->
+						<div class="dashboard-section">
+							<div class="dashboard-section-header">
+								<h3>📢 Announcements</h3>
+							</div>
+							<div class="announcement-carousel" id="announcementCarousel">
+								<div class="announcement-carousel-empty">Loading announcements...</div>
+							</div>
 						</div>
-						<div class="dashboard-card card-tickets">
-							<div class="dashboard-label">Total Ticket</div>
-							<div class="dashboard-value" id="dashTodaysTicket">--</div>
+
+						<!-- SLA Alert -->
+						<div class="dashboard-section">
+							<div class="dashboard-section-header">
+								<h3>⚠️ SLA Alert <span class="sla-count-badge" id="slaAlertCount" style="display: none">0</span></h3>
+							</div>
+							<div id="slaAlertContainer">
+								<div class="sla-empty">Loading SLA status...</div>
+							</div>
 						</div>
-						<div class="dashboard-card card-resolved">
-							<div class="dashboard-label">Todays Resolved</div>
-							<div class="dashboard-value" id="dashTotalResolved">--</div>
-						</div>
-						<div class="dashboard-card card-other">
-							<div class="dashboard-label">Todays Other Tasks</div>
-							<div class="dashboard-value" id="dashTotalOtherTasks">--</div>
-						</div>
-						<div class="dashboard-card card-pending">
-							<div class="dashboard-label">Overall Pending</div>
-							<div class="dashboard-value" id="dashTotalPending">--</div>
+
+						<!-- Top 5 performers -->
+						<div class="dashboard-section">
+							<div class="dashboard-section-header">
+								<h3>🏆 Top 5 Performing Support</h3>
+							</div>
+							<div id="topPerformersContainer">
+								<div class="performers-empty">Loading...</div>
+							</div>
 						</div>
 					</div>
 				</div>
 
-				<div id="tab-ticket" class="tab-content active">
+				<div id="tab-announcement" class="tab-content">
+					<div class="announcement-page">
+						<div class="dashboard-section">
+							<div class="dashboard-section-header">
+								<h3>📢 Announcements</h3>
+								<button class="dashboard-add-btn" id="addAnnouncementBtnTab"><i class="bi bi-plus-circle-fill"></i> Add Announcement</button>
+							</div>
+							<div class="announcement-list" id="announcementListTab">
+								<div class="announcements-empty">Loading announcements...</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="tab-ticket" class="tab-content">
 					<div class="three-panels">
 						<div class="history-panel">
 							<div class="sidebar-header">
@@ -3043,6 +3599,49 @@
 					return data;
 				}
 
+				/* ============ WORKLOAD TRACKER SHARED CACHE ============ */
+				let workloadSheetCache = null;
+				let workloadSheetCacheTime = 0;
+				let workloadSheetInflight = null;
+				const WORKLOAD_SHEET_CACHE_TTL = 60000; // 60s — matches the proxy cache
+
+				async function getWorkloadTrackerData(forceRefresh = false) {
+					const now = Date.now();
+
+					// 1. Return cached data if still fresh
+					if (!forceRefresh && workloadSheetCache && now - workloadSheetCacheTime < WORKLOAD_SHEET_CACHE_TTL) {
+						return workloadSheetCache;
+					}
+
+					// 2. Dedupe concurrent calls — all callers share the same promise
+					if (!forceRefresh && workloadSheetInflight) {
+						return workloadSheetInflight;
+					}
+
+					// 3. Fetch fresh
+					workloadSheetInflight = (async () => {
+						try {
+							const data = await fetchFromProxy({
+								action: "getSheetData",
+								sheetName: "WORKLOAD TRACKER 2026",
+							});
+							workloadSheetCache = data;
+							workloadSheetCacheTime = Date.now();
+							return data;
+						} finally {
+							workloadSheetInflight = null;
+						}
+					})();
+
+					return workloadSheetInflight;
+				}
+
+				function invalidateWorkloadTrackerCache() {
+					workloadSheetCache = null;
+					workloadSheetCacheTime = 0;
+					workloadSheetInflight = null;
+				}
+
 				const CLOCK_TIMES = {
 					"9PM - 6AM": ["09:00 PM", "06:00 AM"],
 					"5AM - 2PM": ["05:00 AM", "02:00 PM"],
@@ -3056,7 +3655,7 @@
 				const SHIFT_OPTIONS = ["9PM - 6AM", "5AM - 2PM", "2PM - 11PM"];
 
 				let currentStatusFilter = null;
-				let currentActiveTab = "ticket";
+				let currentActiveTab = "dashboard";
 				let allEntries = [];
 				let storeData = [];
 				let editId = null;
@@ -3600,19 +4199,19 @@
 					filteredResults[prefix].forEach((store, index) => {
 						const statusClass = getStatusClass(store.status);
 						html += `
-			                        <div class="result-item" onclick="selectStore('${prefix}', ${index})" onmouseenter="highlightResult('${prefix}', ${index})">
-			                            <div class="result-info">
-			                                <div class="result-store">
-			                                    ${store.storeName || "?"}
-			                                    <span class="status-badge ${statusClass}">${store.status}</span>
-			                                </div>
-			                                <div class="result-details">
-			                                    <span>📌 PORTAL ${store.portal || "N/A"}</span>
-			                                    <span class="result-zip">📍 ${store.zipCode || "N/A"}</span>
-			                                </div>
-			                            </div>
-			                        </div>
-			                    `;
+						                        <div class="result-item" onclick="selectStore('${prefix}', ${index})" onmouseenter="highlightResult('${prefix}', ${index})">
+						                            <div class="result-info">
+						                                <div class="result-store">
+						                                    ${store.storeName || "?"}
+						                                    <span class="status-badge ${statusClass}">${store.status}</span>
+						                                </div>
+						                                <div class="result-details">
+						                                    <span>📌 PORTAL ${store.portal || "N/A"}</span>
+						                                    <span class="result-zip">📍 ${store.zipCode || "N/A"}</span>
+						                                </div>
+						                            </div>
+						                        </div>
+						                    `;
 					});
 					resultsContainer.innerHTML = html;
 					syncPreviewHeight();
@@ -5203,32 +5802,32 @@
 						const actionsHtml = isWorkloadEntry
 							? `<button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>`
 							: `
-                <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
-                <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
-                <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
-                <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
-            `;
+			                <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
+			                <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
+			                <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
+			                <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
+			            `;
 
 						row.innerHTML = `
-            <td>${checkboxCell}</td>
-            <td>${escapeHtml(entry.date || "")}</td>
-            <td>${escapeHtml(entry.shift || "")}</td>
-            <td>${escapeHtml(entry.support || "")}</td>
-            <td>${escapeHtml(entry.portal || "")}</td>
-            <td>${escapeHtml(entry.store || "")}</td>
-            <td>${escapeHtml(entry.zip || "")}</td>
-            <td>${escapeHtml(displayContact || "")}</td>
-            <td>${escapeHtml(displayContactNumber || "")}</td>
-            <td>${escapeHtml(entry.module || "")}</td>
-            <td style="white-space: pre-wrap;">${escapeHtml(entry.issue || "")}</td>
-            <td>${escapeHtml(entry.escalated || "")}</td>
-            <td>${escapeHtml(entry.status || "")}</td>
-            <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks || "")}</td>
-            <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution || "")}</td>
-            <td class="action-cell">
-                <div class="action-container">${actionsHtml}</div>
-            </td>
-        `;
+			            <td>${checkboxCell}</td>
+			            <td>${escapeHtml(entry.date || "")}</td>
+			            <td>${escapeHtml(entry.shift || "")}</td>
+			            <td>${escapeHtml(entry.support || "")}</td>
+			            <td>${escapeHtml(entry.portal || "")}</td>
+			            <td>${escapeHtml(entry.store || "")}</td>
+			            <td>${escapeHtml(entry.zip || "")}</td>
+			            <td>${escapeHtml(displayContact || "")}</td>
+			            <td>${escapeHtml(displayContactNumber || "")}</td>
+			            <td>${escapeHtml(entry.module || "")}</td>
+			            <td style="white-space: pre-wrap;">${escapeHtml(entry.issue || "")}</td>
+			            <td>${escapeHtml(entry.escalated || "")}</td>
+			            <td>${escapeHtml(entry.status || "")}</td>
+			            <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks || "")}</td>
+			            <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution || "")}</td>
+			            <td class="action-cell">
+			                <div class="action-container">${actionsHtml}</div>
+			            </td>
+			        `;
 						tbody.appendChild(row);
 					});
 					updateSelectAllCheckboxState();
@@ -5269,6 +5868,7 @@
 					}
 					workloadHistoryCache = null;
 					workloadHistoryCacheTime = 0;
+					invalidateWorkloadTrackerCache();
 					showNotification("Refreshing WORKLOAD TRACKER 2026...");
 					renderSidebar();
 				}
@@ -5280,10 +5880,7 @@
 					const userSupport = (currentUser.support || "").trim().toUpperCase();
 					if (!userSupport) throw new Error("No support name on account");
 
-					const data = await fetchFromProxy({
-						action: "getSheetData",
-						sheetName: "WORKLOAD TRACKER 2026",
-					});
+					const data = await getWorkloadTrackerData();
 					if (!data.values || data.values.length < 2) return [];
 
 					const headers = data.values[0].map((h) =>
@@ -5430,9 +6027,9 @@
 						const isMonthCollapsed = collapseState.months[month];
 						const monthArrow = isMonthCollapsed ? "▶" : "▼";
 						html += `<div class="sidebar-group">
-            <div class="month-header" onclick="toggleMonth('${month.replace(/'/g, "\\'")}')">
-                <span class="month-arrow">${monthArrow}</span> ${month}
-            </div>`;
+			            <div class="month-header" onclick="toggleMonth('${month.replace(/'/g, "\\'")}')">
+			                <span class="month-arrow">${monthArrow}</span> ${month}
+			            </div>`;
 						if (!isMonthCollapsed) {
 							const dates = grouped[month];
 							const sortedDates = Object.keys(dates).sort((a, b) => new Date(b) - new Date(a));
@@ -5443,9 +6040,9 @@
 								const isDateCollapsed = collapseState.dates[dateKey];
 								const dateArrow = isDateCollapsed ? "▶" : "▼";
 								html += `<div class="date-group">
-                    <div class="date-header" onclick="toggleDate('${dateKey.replace(/'/g, "\\'")}')">
-                        <span class="date-arrow">${dateArrow}</span> ${dateKey}
-                    </div>`;
+			                    <div class="date-header" onclick="toggleDate('${dateKey.replace(/'/g, "\\'")}')">
+			                        <span class="date-arrow">${dateArrow}</span> ${dateKey}
+			                    </div>`;
 								if (!isDateCollapsed) {
 									html += `<div class="date-entries">`;
 									for (const entry of dates[dateKey]) {
@@ -5469,25 +6066,25 @@
 										const statusLine = isWorkload ? `<div class="preview-item"><strong>Status:</strong> ${escapeHtml(entry.status || "-")}</div>` : "";
 
 										html += `
-    <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
-        <div class="preview-item issue-item">${escapeHtml(issueDisplay)}${workloadBadge}</div>
-        <div class="preview-item remarks-item">${escapeHtml(remarksDisplay)}</div>
-        <div class="preview-item"><strong>Portal:</strong> ${escapeHtml(entry.portal || "-")}</div>
-        <div class="preview-item"><strong>Store:</strong> ${escapeHtml(entry.store || "-")}</div>
-        <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || "-")}</div>
-        ${statusLine}
-        <div class="card-actions">
-                                    <div class="card-actions-row stack-row">
-                                        <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
-                                        <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
-                                    </div>`;
+			    <div class="sidebar-card ${cardClass}" data-id="${entry.id}">
+			        <div class="preview-item issue-item">${escapeHtml(issueDisplay)}${workloadBadge}</div>
+			        <div class="preview-item remarks-item">${escapeHtml(remarksDisplay)}</div>
+			        <div class="preview-item"><strong>Portal:</strong> ${escapeHtml(entry.portal || "-")}</div>
+			        <div class="preview-item"><strong>Store:</strong> ${escapeHtml(entry.store || "-")}</div>
+			        <div class="preview-item"><strong>Zip:</strong> ${escapeHtml(entry.zip || "-")}</div>
+			        ${statusLine}
+			        <div class="card-actions">
+			                                    <div class="card-actions-row stack-row">
+			                                        <button class="copy-store" data-id="${entry.id}">📋 DETAILS</button>
+			                                        <button class="copy-details" data-id="${entry.id}">📋 HRMS</button>
+			                                    </div>`;
 										if (!isWorkload) {
 											html += `
-                                    <div class="card-actions-row">
-                                        <button class="edit-entry stack-btn" data-id="${entry.id}">✏️<br>EDIT</button>
-                                        <button class="return-entry stack-btn" data-id="${entry.id}">↩️<br>RETURN</button>
-                                        <button class="delete-entry stack-btn" data-id="${entry.id}">🗑️<br>DELETE</button>
-                                    </div>`;
+			                                    <div class="card-actions-row">
+			                                        <button class="edit-entry stack-btn" data-id="${entry.id}">✏️<br>EDIT</button>
+			                                        <button class="return-entry stack-btn" data-id="${entry.id}">↩️<br>RETURN</button>
+			                                        <button class="delete-entry stack-btn" data-id="${entry.id}">🗑️<br>DELETE</button>
+			                                    </div>`;
 										}
 										html += `</div></div>`;
 									}
@@ -5526,28 +6123,28 @@
 								}
 
 								const plainText = `PORTAL: ${entry.portal}
-STORE NAME: ${entry.store}
-ZIPCODE: ${entry.zip}
-CALLER NAME: ${displayContact}
-CONTACT NUMBER: ${displayContactNumber}
+			STORE NAME: ${entry.store}
+			ZIPCODE: ${entry.zip}
+			CALLER NAME: ${displayContact}
+			CONTACT NUMBER: ${displayContactNumber}
 
-ISSUE:
-${entry.issue || ""}
+			ISSUE:
+			${entry.issue || ""}
 
-NOTE:
-${entry.note || ""}`;
+			NOTE:
+			${entry.note || ""}`;
 
 								const htmlContent = `<strong>PORTAL: </strong>${escapeHtml(entry.portal)}<br>
-<strong>STORE NAME: </strong>${escapeHtml(entry.store)}<br>
-<strong>ZIPCODE: </strong>${escapeHtml(entry.zip)}<br>
-<strong>CALLER NAME: </strong>${escapeHtml(displayContact)}<br>
-<strong>CONTACT NUMBER: </strong>${escapeHtml(displayContactNumber)}<br>
-<br>
-<strong>ISSUE:</strong><br>
-${escapeHtml(entry.issue || "").replace(/\n/g, "<br>")}<br>
-<br>
-<strong>NOTE:</strong><br>
-${escapeHtml(entry.note || "").replace(/\n/g, "<br>")}`;
+			<strong>STORE NAME: </strong>${escapeHtml(entry.store)}<br>
+			<strong>ZIPCODE: </strong>${escapeHtml(entry.zip)}<br>
+			<strong>CALLER NAME: </strong>${escapeHtml(displayContact)}<br>
+			<strong>CONTACT NUMBER: </strong>${escapeHtml(displayContactNumber)}<br>
+			<br>
+			<strong>ISSUE:</strong><br>
+			${escapeHtml(entry.issue || "").replace(/\n/g, "<br>")}<br>
+			<br>
+			<strong>NOTE:</strong><br>
+			${escapeHtml(entry.note || "").replace(/\n/g, "<br>")}`;
 
 								try {
 									const blobHtml = new Blob([htmlContent], { type: "text/html" });
@@ -5638,26 +6235,26 @@ ${escapeHtml(entry.note || "").replace(/\n/g, "<br>")}`;
 								const formattedResolution = entry.resolution || "";
 
 								const plainText = `📞 CONTACT:
-CALLER NAME: ${displayContact}
-CONTACT NUMBER: ${displayContactNumber}
+			CALLER NAME: ${displayContact}
+			CONTACT NUMBER: ${displayContactNumber}
 
-🔧 TROUBLESHOOTING:
-${troubleshootingPlain}
+			🔧 TROUBLESHOOTING:
+			${troubleshootingPlain}
 
-✅ RESOLUTION:
-${formattedResolution}`;
+			✅ RESOLUTION:
+			${formattedResolution}`;
 
 								const htmlCopy = `
-<strong>📞 CONTACT: </strong><br>
-<strong>CALLER NAME: </strong> ${escapeHtml(displayContact)}<br>
-<strong>CONTACT NUMBER: </strong> ${escapeHtml(displayContactNumber)}<br>
-<br>
-<strong>🔧 TROUBLESHOOTING: </strong><br>
-${troubleshootingHtml || escapeHtml(troubleshootingPlain).replace(/\n/g, "<br>")}
-<br>
-<strong>✅ RESOLUTION: </strong><br>
-${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
-`;
+			<strong>📞 CONTACT: </strong><br>
+			<strong>CALLER NAME: </strong> ${escapeHtml(displayContact)}<br>
+			<strong>CONTACT NUMBER: </strong> ${escapeHtml(displayContactNumber)}<br>
+			<br>
+			<strong>🔧 TROUBLESHOOTING: </strong><br>
+			${troubleshootingHtml || escapeHtml(troubleshootingPlain).replace(/\n/g, "<br>")}
+			<br>
+			<strong>✅ RESOLUTION: </strong><br>
+			${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
+			`;
 								try {
 									const blob = new Blob([htmlCopy], { type: "text/html" });
 									const plainBlob = new Blob([plainText], { type: "text/plain" });
@@ -5825,10 +6422,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					showNotification(`Fetching shift report for ${shift}...`);
 
 					try {
-						const data = await fetchFromProxy({
-							action: "getSheetData",
-							sheetName: "WORKLOAD TRACKER 2026",
-						});
+						const data = await getWorkloadTrackerData();
 						if (!data.values || data.values.length < 2) return [];
 
 						const headers = data.values[0].map((h) => (h || "").trim().toUpperCase());
@@ -5938,22 +6532,22 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					const demoLine = demoEntries.length > 0 ? `${indent(2)}Scheduled Demo: ${demoEntries.map((e) => e.support || "Unknown Support").join(", ")}` : `${indent(2)}No Demo for today`;
 
 					const staticSections = `${indent(1)}5. Updates / Notices
-			${indent(1)}The current latest versions:
-			${indent(2)}RetailzPOS: Version Code 247 (Portal 1, 2, 3, OHIO, 5, 6, 7, 8, 9, X, XI)
-			${indent(2)}Moolah Points: Version Code 42 (Portal 1, 2, 3, OHIO, 5, 6, 7, 8, 9, X, XI)
+						${indent(1)}The current latest versions:
+						${indent(2)}RetailzPOS: Version Code 247 (Portal 1, 2, 3, OHIO, 5, 6, 7, 8, 9, X, XI)
+						${indent(2)}Moolah Points: Version Code 42 (Portal 1, 2, 3, OHIO, 5, 6, 7, 8, 9, X, XI)
 
-			${indent(2)}Reminders for Retailz team members:
-			${indent(2)}- Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.
-			${indent(2)}- Ask seniors assistance for issue that needed to be escalated to the India team
-			${indent(2)}- Observe professional call etiquette at all times when handling calls.
-			${indent(2)}- Follow up on any pending tickets and ensure timely updates.
-			${indent(2)}- Review pending issues and escalations using the newly added features in our existing workload tracker
-			${indent(2)}- Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.
-			${indent(2)}- Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.
+						${indent(2)}Reminders for Retailz team members:
+						${indent(2)}- Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.
+						${indent(2)}- Ask seniors assistance for issue that needed to be escalated to the India team
+						${indent(2)}- Observe professional call etiquette at all times when handling calls.
+						${indent(2)}- Follow up on any pending tickets and ensure timely updates.
+						${indent(2)}- Review pending issues and escalations using the newly added features in our existing workload tracker
+						${indent(2)}- Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.
+						${indent(2)}- Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.
 
-			${indent(1)}6. Training (Retailz Members): No training for today
+						${indent(1)}6. Training (Retailz Members): No training for today
 
-			${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
+						${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`;
 
 					return [dateLine, shiftLine, "", "Good day everyone,", "", "Please find below the shift report for today,", "", `${indent(1)}1. Pending Tickets: ${pendingCount}`, pendingList, "", `${indent(1)}2. Total Calls: ${totalCalls}`, "", "", `${indent(1)}3. Total Other Tasks: ${otherCount}`, otherList, "", `${indent(1)}4. Scheduled Training/Demo (Merchant)`, trainingLine, demoLine, "", staticSections].join("\n");
 				}
@@ -6015,55 +6609,54 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					const demoLine = demoEntries.length > 0 ? `<div style="margin-left:25px;">Scheduled Demo: ${escapeHtml(demoEntries.map((e) => e.support || "Unknown Support").join(", "))}</div>` : `<div style="margin-left:25px;">No Demo for today</div>`;
 
 					const versionHtml = `
-			        <div style="margin-left:25px;">The current latest versions:</div>
-					<div style="margin-left:50px;">RetailzPOS: Version Code 247 (Portal 1, 2, 3, OHIO, 5, 6, 7, 8, 9, X, XI)</div>
-					<div style="margin-left:50px;">Moolah Points: Version Code 42 (Portal 1, 2, 3, OHIO, 5, 6, 7, 8, 9, X, XI)</div>
-			    `;
+						        <div style="margin-left:25px;">The current latest versions:</div>
+								<div style="margin-left:50px;">RetailzPOS: Version Code 247 (Portal 1, 2, 3, OHIO, 5, 6, 7, 8, 9, X, XI)</div>
+								<div style="margin-left:50px;">Moolah Points: Version Code 42 (Portal 1, 2, 3, OHIO, 5, 6, 7, 8, 9, X, XI)</div>
+						    `;
 
 					const remindersItems = ["Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.", "Ask seniors assistance for issue that needed to be escalated to the India team", "Observe professional call etiquette at all times when handling calls.", "Follow up on any pending tickets and ensure timely updates.", "Review pending issues and escalations using the newly added features in our existing workload tracker", "Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.", "Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history."];
 					const remindersListHtml = `<ul style="margin:4px 0 0 25px; padding-left:20px;">` + remindersItems.map((item) => `<li style="margin:0;">${escapeHtml(item)}</li>`).join("") + `</ul>`;
 
 					const staticSections = `
-			        <div><strong>5. Updates / Notices</strong></div>
-			        ${versionHtml}
-			        <div style="margin-top:8px;"></div>
-			        <div style="margin-left:25px;">Reminders for Retailz team members:</div>
-			        ${remindersListHtml}
-			        <div style="margin-top:8px;"><strong>6. Training (Retailz Members):</strong> No training for today</div>
-			        <div style="margin-top:4px;"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</div>
-			    `;
+						        <div><strong>5. Updates / Notices</strong></div>
+						        ${versionHtml}
+						        <div style="margin-top:8px;"></div>
+						        <div style="margin-left:25px;">Reminders for Retailz team members:</div>
+						        ${remindersListHtml}
+						        <div style="margin-top:8px;"><strong>6. Training (Retailz Members):</strong> No training for today</div>
+						        <div style="margin-top:4px;"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</div>
+						    `;
 
 					return `
-			        <div style="font-family: sans-serif; line-height:1.4;">
-			            <div>${escapeHtml(dateLine)}</div>
-			            <div>${escapeHtml(shiftLine)}</div>
-			            <div><br></div>
-			            <div>Good day everyone,</div>
-			            <div><br></div>
-			            <div>Please find below the shift report for today,</div>
-			            <div><br></div>
-			            <div><strong>1. Pending Tickets: ${pendingCount}</strong></div>
-			            ${pendingListHtml}
-			            <div><br></div>
-			            <div><strong>2. Total Calls: ${totalCalls}</strong></div>
-			            <div><br></div>
-			            <div><br></div>
-			            <div><strong>3. Total Other Tasks: ${otherCount}</strong></div>
-			            ${otherListHtml}
-			            <div><br></div>
-			            <div><strong>4. Scheduled Training/Demo (Merchant)</strong></div>
-			            ${trainingLine}
-			            ${demoLine}
-			            <div><br></div>
-			            ${staticSections}
-			        </div>
-			    `;
+						        <div style="font-family: sans-serif; line-height:1.4;">
+						            <div>${escapeHtml(dateLine)}</div>
+						            <div>${escapeHtml(shiftLine)}</div>
+						            <div><br></div>
+						            <div>Good day everyone,</div>
+						            <div><br></div>
+						            <div>Please find below the shift report for today,</div>
+						            <div><br></div>
+						            <div><strong>1. Pending Tickets: ${pendingCount}</strong></div>
+						            ${pendingListHtml}
+						            <div><br></div>
+						            <div><strong>2. Total Calls: ${totalCalls}</strong></div>
+						            <div><br></div>
+						            <div><br></div>
+						            <div><strong>3. Total Other Tasks: ${otherCount}</strong></div>
+						            ${otherListHtml}
+						            <div><br></div>
+						            <div><strong>4. Scheduled Training/Demo (Merchant)</strong></div>
+						            ${trainingLine}
+						            ${demoLine}
+						            <div><br></div>
+						            ${staticSections}
+						        </div>
+						    `;
 				}
 
 				async function showShiftReportModal() {
 					const entries = await fetchShiftReportData();
-					if (entries === null) return; // no shift selected or no API key → already notified
-
+					if (entries === null) return;
 					const plainText = generateShiftReportPlain(entries);
 					const htmlContent = generateShiftReportHTML(entries);
 
@@ -6546,6 +7139,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 								support: user.support,
 								role: user.role,
 							});
+							localStorage.removeItem("activeTab");
 							showNotification(`Welcome, ${user.support}!`);
 							location.reload();
 						} catch (err) {
@@ -6711,10 +7305,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 
 				async function fetchWorkloadSheetData(onlyMine = false, silent = false) {
 					try {
-						const data = await fetchFromProxy({
-							action: "getSheetData",
-							sheetName: "WORKLOAD TRACKER 2026",
-						});
+						const data = await getWorkloadTrackerData();
 						if (!data.values || data.values.length < 2) {
 							if (!silent) showNotification("No data found in WORKLOAD TRACKER 2026");
 							return [];
@@ -6807,29 +7398,29 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						const row = document.createElement("tr");
 						row.dataset.id = entry.id;
 						row.innerHTML = `
-			                  <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-			                  <td>${escapeHtml(entry.date)}</td>
-			                  <td>${escapeHtml(entry.shift)}</td>
-			                  <td>${escapeHtml(entry.support)}</td>
-			                  <td>${escapeHtml(entry.portal)}</td>
-			                  <td>${escapeHtml(entry.store)}</td>
-			                  <td>${escapeHtml(entry.zip)}</td>
-			                  <td>${escapeHtml(entry.contact)}</td>
-			                  <td>${escapeHtml(entry.contactNumber)}</td>
-			                  <td>${escapeHtml(entry.module)}</td>
-			                  <td style="white-space: pre-wrap;">${escapeHtml(entry.issue)}</td>
-			                  <td>${escapeHtml(entry.escalated)}</td>
-			                  <td>${escapeHtml(entry.status)}</td>
-			                  <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks)}</td>
-			                  <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution)}</td>
-			                  <td class="action-cell">
-			                      <div class="action-container">
-			                          <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
-			                          <button class="icon-btn edit-btn disabled" disabled title="Edit not allowed in tracker view"><i class="bi bi-pencil-square"></i></button>
-			                          <button class="icon-btn delete-btn disabled" disabled title="Delete not allowed"><i class="bi bi-trash3-fill"></i></button>
-			                      </div>
-			                  </td>
-			              `;
+						                  <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+						                  <td>${escapeHtml(entry.date)}</td>
+						                  <td>${escapeHtml(entry.shift)}</td>
+						                  <td>${escapeHtml(entry.support)}</td>
+						                  <td>${escapeHtml(entry.portal)}</td>
+						                  <td>${escapeHtml(entry.store)}</td>
+						                  <td>${escapeHtml(entry.zip)}</td>
+						                  <td>${escapeHtml(entry.contact)}</td>
+						                  <td>${escapeHtml(entry.contactNumber)}</td>
+						                  <td>${escapeHtml(entry.module)}</td>
+						                  <td style="white-space: pre-wrap;">${escapeHtml(entry.issue)}</td>
+						                  <td>${escapeHtml(entry.escalated)}</td>
+						                  <td>${escapeHtml(entry.status)}</td>
+						                  <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks)}</td>
+						                  <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution)}</td>
+						                  <td class="action-cell">
+						                      <div class="action-container">
+						                          <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
+						                          <button class="icon-btn edit-btn disabled" disabled title="Edit not allowed in tracker view"><i class="bi bi-pencil-square"></i></button>
+						                          <button class="icon-btn delete-btn disabled" disabled title="Delete not allowed"><i class="bi bi-trash3-fill"></i></button>
+						                      </div>
+						                  </td>
+						              `;
 						tbody.appendChild(row);
 					});
 					updateSelectAllCheckboxState();
@@ -7331,10 +7922,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					setDashboardLoading(true);
 
 					try {
-						const data = await fetchFromProxy({
-							action: "getSheetData",
-							sheetName: "WORKLOAD TRACKER 2026",
-						});
+						const data = await getWorkloadTrackerData();
 
 						if (data.values && data.values.length >= 2) {
 							const headers = data.values[0].map((h) =>
@@ -7354,6 +7942,8 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 									pending = 0,
 									other = 0;
 
+								const supportStats = {};
+
 								for (let i = 1; i < data.values.length; i++) {
 									const row = data.values[i];
 									const rowDate = normalizeDashboardDate(row[dateIdx]);
@@ -7368,7 +7958,18 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 											: "";
 									const isMine = supportIdx >= 0 && rowSupport === userSupport;
 
-									// ✅ LITERAL OVERALL PENDING – counted across every row/date in WORKLOAD TRACKER 2026
+									// Track stats for top performers (all rows, all dates)
+									if (rowSupport && rowDate) {
+										if (!supportStats[rowSupport]) {
+											supportStats[rowSupport] = { dates: new Set(), ticketCount: 0 };
+										}
+										supportStats[rowSupport].dates.add(rowDate);
+										if (status !== "OTHER TASK" && status !== "") {
+											supportStats[rowSupport].ticketCount++;
+										}
+									}
+
+									// ✅ LITERAL OVERALL PENDING – counted across every row/date
 									if (status === "PENDING") pending++;
 
 									// Today/Yesterday–only metrics continue to be scoped as before
@@ -7377,7 +7978,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 									if (rowDate === todayEST) {
 										todaysTicket++;
 										if (status === "RESOLVED") resolved++;
-										else if (status === "OTHER TASK") other++; // pending already handled above
+										else if (status === "OTHER TASK") other++;
 									}
 
 									const isCountable = status === "RESOLVED" || status === "OTHER TASK";
@@ -7387,6 +7988,23 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 									}
 								}
 
+								// Compute top 5 by average tickets/day
+								const performers = Object.entries(supportStats)
+									.map(([support, stats]) => {
+										const days = stats.dates.size;
+										const totalTickets = stats.ticketCount;
+										const avg = days > 0 ? totalTickets / days : 0;
+										return { support, totalTickets, days, avg };
+									})
+									.filter((p) => p.days > 0)
+									.sort((a, b) => b.avg - a.avg)
+									.slice(0, 5);
+
+								renderTopPerformers(performers);
+
+								// ✅ NEW: SLA alerts
+								renderSlaAlerts(computeSlaAlerts(data));
+
 								document.getElementById("dashYourTotalToday").textContent = yourToday;
 								document.getElementById("dashYesterdayTotal").textContent = yourYesterday;
 								document.getElementById("dashTodaysTicket").textContent = todaysTicket;
@@ -7394,17 +8012,467 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 								document.getElementById("dashTotalPending").textContent = pending;
 								document.getElementById("dashTotalOtherTasks").textContent = other;
 							} else {
-								["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "--"));
+								["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0"));
+								renderTopPerformers([]);
+								renderSlaAlerts([]);
 							}
 						} else {
-							["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0"));
-						}
+							// ← ADD THIS LINE
+							["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0")); // ← ADD
+							renderTopPerformers([]);
+							renderSlaAlerts([]); // ← ADD
+						} // ← ADD
 					} catch (err) {
+						// ← unchanged, now correctly closes `try`
 						console.warn("Dashboard WORKLOAD TRACKER fetch failed:", err);
 						["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "--"));
+						renderTopPerformers([]);
+						renderSlaAlerts([]);
 					}
 
 					setDashboardLoading(false);
+				}
+
+				/* ==================== ANNOUNCEMENTS (carousel + tab) ==================== */
+				let allAnnouncementsCache = [];
+				let currentAnnouncementIndex = 0;
+				let announcementAutoSlideTimer = null;
+
+				async function loadAnnouncements() {
+					const carousel = document.getElementById("announcementCarousel");
+					const listTab = document.getElementById("announcementListTab");
+					if (!carousel && !listTab) return;
+
+					try {
+						const data = await fetchFromProxy({ action: "getSheetData", sheetName: "ANNOUNCEMENT" });
+						const rows = (data.values || []).slice(1);
+
+						// Col A = SUBJECT, Col B = DETAILS, Col C = SUPPORT
+						const announcements = rows
+							.map((r) => ({
+								subject: (r[0] || "").toString(),
+								details: (r[1] || "").toString(),
+								support: (r[2] || "").toString(),
+							}))
+							.filter((a) => a.subject.trim() !== "" || a.details.trim() !== "");
+
+						// Newest first
+						announcements.reverse();
+						allAnnouncementsCache = announcements;
+
+						if (currentAnnouncementIndex >= announcements.length) {
+							currentAnnouncementIndex = 0;
+						}
+
+						renderAnnouncementCarousel(announcements);
+						renderAnnouncementTabList(announcements);
+					} catch (err) {
+						const msg = typeof err.message === "string" && err.message !== "[object Object]" ? err.message : "No announcements yet.";
+						if (carousel) carousel.innerHTML = `<div class="announcement-carousel-empty">${escapeHtml(msg)}</div>`;
+						if (listTab) listTab.innerHTML = `<div class="announcements-empty">${escapeHtml(msg)}</div>`;
+					}
+				}
+
+				function renderAnnouncementCarousel(announcements) {
+					const container = document.getElementById("announcementCarousel");
+					if (!container) return;
+
+					if (announcementAutoSlideTimer) {
+						clearInterval(announcementAutoSlideTimer);
+						announcementAutoSlideTimer = null;
+					}
+
+					if (!announcements.length) {
+						container.innerHTML = '<div class="announcement-carousel-empty">No announcements yet.</div>';
+						return;
+					}
+
+					if (currentAnnouncementIndex >= announcements.length) {
+						currentAnnouncementIndex = 0;
+					}
+
+					const slides = announcements
+						.map(
+							(a) => `
+        <div class="carousel-slide">
+            ${a.subject ? `<div class="carousel-slide-subject">${escapeHtml(a.subject)}</div>` : ""}
+            ${a.details ? `<div class="carousel-slide-details">${escapeHtml(a.details)}</div>` : ""}
+            ${a.support ? `<div class="carousel-slide-meta"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
+        </div>`,
+						)
+						.join("");
+
+					const showNav = announcements.length > 1;
+
+					const dots = showNav
+						? `<div class="carousel-dots">${announcements
+								.map(
+									(_, i) => `
+              <button class="carousel-dot ${i === currentAnnouncementIndex ? "active" : ""}" 
+                      data-index="${i}" 
+                      onclick="goToAnnouncement(${i})"></button>`,
+								)
+								.join("")}</div>`
+						: "";
+
+					container.innerHTML = `
+        <div class="carousel-viewport">
+            <div class="carousel-track" id="announcementTrack" style="transform: translateX(-${currentAnnouncementIndex * 100}%)">
+                ${slides}
+            </div>
+        </div>
+        ${showNav ? `<button class="carousel-nav prev" onclick="prevAnnouncement()" title="Previous">‹</button>` : ""}
+        ${showNav ? `<button class="carousel-nav next" onclick="nextAnnouncement()" title="Next">›</button>` : ""}
+        ${dots}
+    `;
+
+					// Pause on hover so users can read longer announcements
+					container.onmouseenter = () => {
+						if (announcementAutoSlideTimer) {
+							clearInterval(announcementAutoSlideTimer);
+							announcementAutoSlideTimer = null;
+						}
+					};
+					container.onmouseleave = () => {
+						startAnnouncementAutoSlide(allAnnouncementsCache.length);
+					};
+
+					startAnnouncementAutoSlide(announcements.length);
+				}
+
+				function startAnnouncementAutoSlide(total) {
+					if (announcementAutoSlideTimer) {
+						clearInterval(announcementAutoSlideTimer);
+						announcementAutoSlideTimer = null;
+					}
+					if (total <= 1) return;
+
+					announcementAutoSlideTimer = setInterval(() => {
+						nextAnnouncement();
+					}, 5000);
+				}
+
+				function goToAnnouncement(index) {
+					const total = allAnnouncementsCache.length;
+					if (!total) return;
+
+					if (index < 0) index = total - 1;
+					if (index >= total) index = 0;
+
+					currentAnnouncementIndex = index;
+
+					const track = document.getElementById("announcementTrack");
+					if (track) {
+						track.style.transform = `translateX(-${index * 100}%)`;
+					}
+
+					document.querySelectorAll(".carousel-dot").forEach((dot, i) => {
+						dot.classList.toggle("active", i === index);
+					});
+
+					// Reset the auto-slide timer after a manual navigation
+					startAnnouncementAutoSlide(total);
+				}
+
+				function nextAnnouncement() {
+					goToAnnouncement(currentAnnouncementIndex + 1);
+				}
+
+				function prevAnnouncement() {
+					goToAnnouncement(currentAnnouncementIndex - 1);
+				}
+
+				function renderAnnouncementTabList(announcements) {
+					const list = document.getElementById("announcementListTab");
+					if (!list) return;
+
+					const currentUser = getLoggedInUser();
+					const isTL = currentUser && (currentUser.role || "").toUpperCase() === "TL";
+					const currentSupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
+
+					// TL users see everything; other users see only their own announcements
+					const visibleAnnouncements = isTL ? announcements : announcements.filter((a) => (a.support || "").trim().toUpperCase() === currentSupport);
+
+					if (!visibleAnnouncements.length) {
+						list.innerHTML = `<div class="announcements-empty">${isTL ? "No announcements yet." : "You haven't posted any announcements yet."}</div>`;
+						return;
+					}
+
+					list.innerHTML = visibleAnnouncements
+						.map(
+							(a) => `
+    <div class="announcement-item">
+        <div class="announcement-body">
+            ${a.subject ? `<div class="announcement-subject">${escapeHtml(a.subject)}</div>` : ""}
+            ${a.details ? `<div class="announcement-message">${escapeHtml(a.details)}</div>` : ""}
+            ${a.support ? `<div class="announcement-support"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
+        </div>
+        <button class="announcement-delete-btn" 
+                data-subject="${escapeHtml(a.subject)}" 
+                data-details="${escapeHtml(a.details)}" 
+                data-support="${escapeHtml(a.support)}"
+                title="Delete announcement">
+            <i class="bi bi-trash3-fill"></i>
+        </button>
+    </div>`,
+						)
+						.join("");
+
+					list.querySelectorAll(".announcement-delete-btn").forEach((btn) => {
+						btn.addEventListener("click", () => deleteAnnouncement(btn.dataset.subject, btn.dataset.details, btn.dataset.support));
+					});
+				}
+
+				async function addAnnouncement() {
+					const subjectInput = document.getElementById("newAnnouncementSubject");
+					const textArea = document.getElementById("newAnnouncementText");
+					const subject = (subjectInput.value || "").trim();
+					const details = (textArea.value || "").trim();
+
+					if (!subject && !details) {
+						showNotification("Please enter a subject or details.");
+						return;
+					}
+
+					const currentUser = getLoggedInUser();
+					const support = currentUser ? currentUser.support || "" : "";
+
+					try {
+						await fetchFromProxy({
+							action: "addAnnouncement",
+							subject: subject,
+							details: details,
+							support: support,
+						});
+						showNotification("Announcement posted!");
+						subjectInput.value = "";
+						textArea.value = "";
+						closeAnnouncementModal();
+						currentAnnouncementIndex = 0; // jump to newest
+						loadAnnouncements();
+					} catch (err) {
+						showNotification("Failed to post announcement: " + err.message);
+					}
+				}
+
+				async function deleteAnnouncement(subject, details, support) {
+					if (!subject && !details && !support) return;
+
+					const currentUser = getLoggedInUser();
+					const isTL = currentUser && (currentUser.role || "").toUpperCase() === "TL";
+					const currentSupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
+
+					// Non‑TL users may only delete their own announcements
+					if (!isTL && (support || "").trim().toUpperCase() !== currentSupport) {
+						showNotification("You can only delete your own announcements.");
+						return;
+					}
+
+					const preview = subject ? `"${subject.slice(0, 50)}${subject.length > 50 ? "..." : ""}"` : "this announcement";
+					if (!confirm(`Delete ${preview}?`)) return;
+
+					try {
+						await fetchFromProxy({
+							action: "deleteAnnouncement",
+							subject: subject || "",
+							details: details || "",
+							support: support || "",
+						});
+						showNotification("Announcement deleted.");
+						loadAnnouncements();
+					} catch (err) {
+						showNotification("Failed to delete announcement: " + err.message);
+					}
+				}
+
+				function openAnnouncementModal() {
+					document.getElementById("newAnnouncementSubject").value = "";
+					document.getElementById("newAnnouncementText").value = "";
+					document.getElementById("announcementModal").style.display = "block";
+					document.getElementById("announcementModalBackdrop").style.display = "block";
+					setTimeout(() => document.getElementById("newAnnouncementSubject").focus(), 50);
+				}
+
+				function closeAnnouncementModal() {
+					document.getElementById("announcementModal").style.display = "none";
+					document.getElementById("announcementModalBackdrop").style.display = "none";
+				}
+
+				/* ==================== SLA ALERT ==================== */
+				const SLA_THRESHOLD_DAYS = 7;
+
+				function computeSlaAlerts(data) {
+					if (!data || !data.values || data.values.length < 2) return [];
+
+					const headers = data.values[0].map((h) =>
+						String(h || "")
+							.trim()
+							.toUpperCase(),
+					);
+					const findCol = (name) => headers.findIndex((h) => h.includes(name.toUpperCase()));
+
+					const dateIdx = findCol("DATE");
+					const statusIdx = findCol("STATUS");
+					const supportIdx = findCol("SUPPORT");
+					const portalIdx = findCol("PORTAL");
+					const storeIdx = headers.findIndex((h) => h.includes("STORE"));
+					const zipIdx = headers.findIndex((h) => h.includes("ZIP"));
+					const issueIdx = findCol("ISSUE");
+					const moduleIdx = findCol("MODULE");
+
+					if (dateIdx < 0 || statusIdx < 0) return [];
+
+					// Use the start of today in EST, to measure days correctly
+					const todayEST = getESTDateString();
+					const today = new Date(todayEST + "T00:00:00");
+
+					// Group PENDING rows by portal + store + zip (same ticket can have
+					// multiple follow-up rows; we want the oldest pending one per ticket).
+					const groups = {};
+
+					for (let i = 1; i < data.values.length; i++) {
+						const row = data.values[i];
+						const status = String(row[statusIdx] || "")
+							.trim()
+							.toUpperCase();
+						if (status !== "PENDING") continue;
+
+						const rowDate = normalizeDashboardDate(row[dateIdx]);
+						if (!rowDate) continue;
+
+						const d = new Date(rowDate + "T00:00:00");
+						if (isNaN(d.getTime())) continue;
+
+						const portal = portalIdx >= 0 ? String(row[portalIdx] || "").trim() : "";
+						const store = storeIdx >= 0 ? String(row[storeIdx] || "").trim() : "";
+						const zip = zipIdx >= 0 ? String(row[zipIdx] || "").trim() : "";
+						const key = `${portal}|${store}|${zip}`;
+
+						if (!groups[key]) {
+							groups[key] = {
+								portal,
+								store,
+								zip,
+								support: supportIdx >= 0 ? String(row[supportIdx] || "").trim() : "",
+								issue: issueIdx >= 0 ? String(row[issueIdx] || "").trim() : "",
+								module: moduleIdx >= 0 ? String(row[moduleIdx] || "").trim() : "",
+								oldestDate: d,
+								entryCount: 1,
+							};
+						} else {
+							groups[key].entryCount++;
+							if (d < groups[key].oldestDate) {
+								groups[key].oldestDate = d;
+								groups[key].support = supportIdx >= 0 ? String(row[supportIdx] || "").trim() : "";
+								groups[key].issue = issueIdx >= 0 ? String(row[issueIdx] || "").trim() : "";
+								groups[key].module = moduleIdx >= 0 ? String(row[moduleIdx] || "").trim() : "";
+							}
+						}
+					}
+
+					// Filter to those >= threshold days old
+					const alerts = [];
+					for (const key in groups) {
+						const g = groups[key];
+						const daysPending = Math.floor((today - g.oldestDate) / (1000 * 60 * 60 * 24));
+						if (daysPending >= SLA_THRESHOLD_DAYS) {
+							alerts.push({
+								portal: g.portal,
+								store: g.store,
+								zip: g.zip,
+								support: g.support,
+								issue: g.issue,
+								module: g.module,
+								daysPending,
+								oldestDate: g.oldestDate,
+								entryCount: g.entryCount,
+							});
+						}
+					}
+
+					// Worst first
+					alerts.sort((a, b) => b.daysPending - a.daysPending);
+					return alerts;
+				}
+
+				function renderSlaAlerts(alerts) {
+					const container = document.getElementById("slaAlertContainer");
+					const countBadge = document.getElementById("slaAlertCount");
+					if (!container) return;
+
+					if (!alerts || alerts.length === 0) {
+						if (countBadge) countBadge.style.display = "none";
+						container.innerHTML = '<div class="sla-empty">✅ No SLA breaches. All pending tickets are within the 7-day window.</div>';
+						return;
+					}
+
+					if (countBadge) {
+						countBadge.textContent = alerts.length;
+						countBadge.style.display = "";
+					}
+
+					container.innerHTML = `<div class="sla-alert-list">${alerts
+						.map((a) => {
+							const days = a.daysPending;
+							const severe = days >= 14;
+							const daysText = days === 1 ? "1 day" : `${days} days`;
+							const issueDisplay = a.issue || a.module || "Pending follow-up";
+							const storeDisplay = a.store ? escapeHtml(a.store) : "Unknown Store";
+							const portalTag = a.portal ? `<span class="sla-portal-tag">· Portal ${escapeHtml(a.portal)}</span>` : "";
+
+							return `
+            <div class="sla-alert-item">
+                <div class="sla-alert-body">
+                    <div class="sla-alert-store">${storeDisplay} ${portalTag}</div>
+                    <div class="sla-alert-issue">${escapeHtml(issueDisplay)}</div>
+                    <div class="sla-alert-meta">
+                        ${a.support ? `<span><i class="bi bi-person-fill"></i> ${escapeHtml(a.support)}</span>` : ""}
+                        ${a.zip ? `<span><i class="bi bi-geo-alt-fill"></i> ${escapeHtml(a.zip)}</span>` : ""}
+                        ${a.entryCount > 1 ? `<span><i class="bi bi-list-ul"></i> ${a.entryCount} entries</span>` : ""}
+                    </div>
+                </div>
+                <div class="sla-days-badge ${severe ? "severe" : ""}">
+                    ${escapeHtml(daysText)}
+                </div>
+            </div>
+        `;
+						})
+						.join("")}</div>`;
+				}
+
+				function renderTopPerformers(performers) {
+					const container = document.getElementById("topPerformersContainer");
+					if (!container) return;
+					if (!performers || performers.length === 0) {
+						container.innerHTML = '<div class="performers-empty">No performance data available.</div>';
+						return;
+					}
+					const rows = performers
+						.map(
+							(p, i) => `
+			        <tr>
+			            <td><span class="performer-rank rank-${i + 1}">${i + 1}</span></td>
+			            <td><strong>${escapeHtml(p.support)}</strong></td>
+			            <td><span class="performer-avg">${p.avg.toFixed(2)}</span> <span class="performer-details">tickets/day</span></td>
+			            <td><span class="performer-details">${p.totalTickets} tickets over ${p.days} day${p.days !== 1 ? "s" : ""}</span></td>
+			        </tr>
+			    `,
+						)
+						.join("");
+
+					container.innerHTML = `
+			        <table class="performers-table">
+			            <thead>
+			                <tr>
+			                    <th>Rank</th>
+			                    <th>Support</th>
+			                    <th>Average</th>
+			                    <th>Details</th>
+			                </tr>
+			            </thead>
+			            <tbody>${rows}</tbody>
+			        </table>
+			    `;
 				}
 
 				function initSidebarToggle() {
@@ -7459,14 +8527,13 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					document.getElementById("sidebar-shift").value = savedShift;
 					syncSidebarToFormFields();
 
-					const savedTab = localStorage.getItem("activeTab") || "ticket";
+					const savedTab = localStorage.getItem("activeTab") || "dashboard";
 					const tabButton = document.querySelector(`.tab-button[data-tab="${savedTab}"]`);
 					if (tabButton) {
 						switchTab(savedTab, tabButton);
 					} else {
-						// fallback to ticket if something goes wrong
-						const defaultBtn = document.querySelector('.tab-button[data-tab="ticket"]');
-						if (defaultBtn) switchTab("ticket", defaultBtn);
+						const defaultBtn = document.querySelector('.tab-button[data-tab="dashboard"]');
+						if (defaultBtn) switchTab("dashboard", defaultBtn);
 					}
 
 					loadFormData("moolah");
@@ -7493,7 +8560,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 						}
 					} else {
 						// Not editing – restore draft for current tab (new entry)
-						const activeTab = currentActiveTab || localStorage.getItem("activeTab") || "ticket";
+						const activeTab = currentActiveTab || localStorage.getItem("activeTab") || "dashboard";
 						loadFormData(activeTab);
 					}
 
@@ -7501,11 +8568,17 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 					archiveOldEntries();
 					saveAllEntries();
 
-					// Dashboard
 					loadDashboardData();
+					loadAnnouncements();
+					document.getElementById("addAnnouncementBtnTab")?.addEventListener("click", openAnnouncementModal);
+					document.getElementById("submitAnnouncementBtn").addEventListener("click", addAnnouncement);
+					document.getElementById("cancelAnnouncementBtn").addEventListener("click", closeAnnouncementModal);
+					document.getElementById("announcementModalBackdrop").addEventListener("click", closeAnnouncementModal);
 					document.getElementById("dashboardRefreshBtn").addEventListener("click", () => {
 						showNotification("Refreshing dashboard...");
+						invalidateWorkloadTrackerCache();
 						loadDashboardData();
+						refreshMyPendingCache(false);
 					});
 
 					["moolah", "store", "ticket", "ecommerce", "scheduler"].forEach((prefix) => {
@@ -7951,6 +9024,7 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 							localStorage.removeItem("moolahFormData");
 							localStorage.removeItem("storeFormData");
 							localStorage.removeItem("ticketFormData");
+							localStorage.removeItem("activeTab");
 							clearLoggedInUser();
 							location.reload();
 						}
@@ -8164,11 +9238,25 @@ ${escapeHtml(formattedResolution).replace(/\n/g, "<br>")}
 				window.highlightResult = highlightResult;
 				window.summarizeEntryResolution = summarizeEntryResolution;
 
+				window.goToAnnouncement = goToAnnouncement;
+				window.prevAnnouncement = prevAnnouncement;
+				window.nextAnnouncement = nextAnnouncement;
+
 				document.addEventListener("DOMContentLoaded", init);
 			})();
 		</script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+		<div id="announcementModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 500px; max-width: 90%; z-index: 1200; border: 1px solid var(--border-color)">
+			<h3 style="margin-bottom: 16px">📢 New Announcement</h3>
+			<input type="text" id="newAnnouncementSubject" class="no-uppercase" placeholder="Subject" style="width: 100%; margin-bottom: 12px" />
+			<textarea id="newAnnouncementText" class="no-uppercase" rows="5" placeholder="Details..." style="width: 100%; margin-bottom: 12px"></textarea>
+			<div style="display: flex; gap: 8px; justify-content: flex-end">
+				<button id="submitAnnouncementBtn" class="login-action-btn">Post</button>
+				<button id="cancelAnnouncementBtn" class="login-action-btn" style="background: #6b7280">Cancel</button>
+			</div>
+		</div>
+		<div id="announcementModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
 	</body>
 </html>
