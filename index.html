@@ -1041,83 +1041,135 @@
 				text-transform: none !important;
 			}
 
-			.preview-multiline ol {
-				counter-reset: level1;
-				list-style: none;
-				padding-left: 0;
-			}
+			/* ============================================================
+   Shared rich-content list rendering
+   Matches bullet + numbering format across:
+   - Troubleshooting preview (.preview-multiline)
+   - Knowledge Base card (.kb-entry-content)
+   - Announcement list (.announcement-message)
+   - Announcement carousel (.carousel-slide-details)
+   ============================================================ */
 
-			/* Base list item */
-			.preview-multiline li {
-				margin-left: 0;
-				list-style: none;
-			}
+.preview-multiline ol,
+.kb-entry-content ol,
+.announcement-message ol,
+.carousel-slide-details ol {
+    counter-reset: level1;
+    list-style: none;
+    padding-left: 0;
+}
 
-			/* ===========================
-   ORDERED LISTS
-   =========================== */
+.preview-multiline li,
+.kb-entry-content li,
+.announcement-message li,
+.carousel-slide-details li {
+    margin-left: 0;
+    list-style: none;
+}
 
-			.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"]) {
-				counter-increment: level1;
-			}
+/* Ordered list — level 1: 1. 2. 3. */
+.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"]),
+.kb-entry-content li[data-list="ordered"]:not([class*="ql-indent"]),
+.announcement-message li[data-list="ordered"]:not([class*="ql-indent"]),
+.carousel-slide-details li[data-list="ordered"]:not([class*="ql-indent"]) {
+    counter-increment: level1;
+}
 
-			.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"])::before {
-				content: counter(level1) ". ";
-			}
+.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"])::before,
+.kb-entry-content li[data-list="ordered"]:not([class*="ql-indent"])::before,
+.announcement-message li[data-list="ordered"]:not([class*="ql-indent"])::before,
+.carousel-slide-details li[data-list="ordered"]:not([class*="ql-indent"])::before {
+    content: counter(level1) ". ";
+}
 
-			.preview-multiline li[data-list="ordered"].ql-indent-1 {
-				counter-increment: level2;
-				margin-left: 30px;
-			}
+/* Ordered list — level 2 (ql-indent-1): A. B. C. */
+.preview-multiline li[data-list="ordered"].ql-indent-1,
+.kb-entry-content li[data-list="ordered"].ql-indent-1,
+.announcement-message li[data-list="ordered"].ql-indent-1,
+.carousel-slide-details li[data-list="ordered"].ql-indent-1 {
+    counter-increment: level2;
+    margin-left: 30px;
+}
 
-			.preview-multiline li[data-list="ordered"].ql-indent-1:first-child {
-				counter-reset: level2;
-			}
+.preview-multiline li[data-list="ordered"].ql-indent-1:first-child,
+.kb-entry-content li[data-list="ordered"].ql-indent-1:first-child,
+.announcement-message li[data-list="ordered"].ql-indent-1:first-child,
+.carousel-slide-details li[data-list="ordered"].ql-indent-1:first-child {
+    counter-reset: level2;
+}
 
-			.preview-multiline li[data-list="ordered"].ql-indent-1::before {
-				content: counter(level2, upper-alpha) ". ";
-			}
+.preview-multiline li[data-list="ordered"].ql-indent-1::before,
+.kb-entry-content li[data-list="ordered"].ql-indent-1::before,
+.announcement-message li[data-list="ordered"].ql-indent-1::before,
+.carousel-slide-details li[data-list="ordered"].ql-indent-1::before {
+    content: counter(level2, upper-alpha) ". ";
+}
 
-			.preview-multiline li[data-list="ordered"].ql-indent-2 {
-				counter-increment: level3;
-				margin-left: 60px;
-			}
+/* Ordered list — level 3 (ql-indent-2): I. II. III. */
+.preview-multiline li[data-list="ordered"].ql-indent-2,
+.kb-entry-content li[data-list="ordered"].ql-indent-2,
+.announcement-message li[data-list="ordered"].ql-indent-2,
+.carousel-slide-details li[data-list="ordered"].ql-indent-2 {
+    counter-increment: level3;
+    margin-left: 60px;
+}
 
-			.preview-multiline li[data-list="ordered"].ql-indent-2:first-child {
-				counter-reset: level3;
-			}
+.preview-multiline li[data-list="ordered"].ql-indent-2:first-child,
+.kb-entry-content li[data-list="ordered"].ql-indent-2:first-child,
+.announcement-message li[data-list="ordered"].ql-indent-2:first-child,
+.carousel-slide-details li[data-list="ordered"].ql-indent-2:first-child {
+    counter-reset: level3;
+}
 
-			.preview-multiline li[data-list="ordered"].ql-indent-2::before {
-				content: counter(level3, upper-roman) ". ";
-			}
+.preview-multiline li[data-list="ordered"].ql-indent-2::before,
+.kb-entry-content li[data-list="ordered"].ql-indent-2::before,
+.announcement-message li[data-list="ordered"].ql-indent-2::before,
+.carousel-slide-details li[data-list="ordered"].ql-indent-2::before {
+    content: counter(level3, upper-roman) ". ";
+}
 
-			/* ===========================
-   BULLET LISTS
-   =========================== */
+/* Bullets — level 1 */
+.preview-multiline li[data-list="bullet"]::before,
+.kb-entry-content li[data-list="bullet"]::before,
+.announcement-message li[data-list="bullet"]::before,
+.carousel-slide-details li[data-list="bullet"]::before {
+    content: "• ";
+    font-weight: bold;
+}
 
-			.preview-multiline li[data-list="bullet"]::before {
-				content: "• ";
-				font-weight: bold;
-			}
+/* Bullets — level 2 */
+.preview-multiline li[data-list="bullet"].ql-indent-1,
+.kb-entry-content li[data-list="bullet"].ql-indent-1,
+.announcement-message li[data-list="bullet"].ql-indent-1,
+.carousel-slide-details li[data-list="bullet"].ql-indent-1 {
+    margin-left: 30px;
+}
 
-			.preview-multiline li[data-list="bullet"].ql-indent-1 {
-				margin-left: 30px;
-			}
+/* Bullets — level 3 */
+.preview-multiline li[data-list="bullet"].ql-indent-2,
+.kb-entry-content li[data-list="bullet"].ql-indent-2,
+.announcement-message li[data-list="bullet"].ql-indent-2,
+.carousel-slide-details li[data-list="bullet"].ql-indent-2 {
+    margin-left: 60px;
+}
 
-			.preview-multiline li[data-list="bullet"].ql-indent-2 {
-				margin-left: 60px;
-			}
+/* Converted bullet lists (post-convertQuillLists) */
+.preview-multiline ul,
+.kb-entry-content ul,
+.announcement-message ul,
+.carousel-slide-details ul {
+    list-style-type: disc;
+    padding-left: 1.5rem;
+    margin: 0.5rem 0;
+}
 
-			.preview-multiline ul {
-				list-style-type: disc;
-				padding-left: 1.5rem;
-				margin: 0.5rem 0;
-			}
-
-			.preview-multiline ul li {
-				display: list-item;
-				list-style-type: inherit;
-			}
+.preview-multiline ul li,
+.kb-entry-content ul li,
+.announcement-message ul li,
+.carousel-slide-details ul li {
+    display: list-item;
+    list-style-type: inherit;
+}
 
 			.icon-custom {
 				--icon-size: 1.8em;
@@ -2179,7 +2231,6 @@
 			.carousel-slide-details {
 				font-size: 0.92rem;
 				color: var(--text-secondary);
-				white-space: pre-wrap;
 				word-wrap: break-word;
 				overflow-wrap: break-word;
 				line-height: 1.55;
@@ -2393,6 +2444,17 @@
 				gap: 4px;
 			}
 
+			.sla-alert-remarks {
+				font-size: 0.85rem;
+				font-weight: 700;
+				color: var(--text-primary);
+				margin-bottom: 4px;
+				white-space: pre-wrap;
+				word-wrap: break-word;
+				overflow-wrap: break-word;
+				line-height: 1.4;
+			}
+
 			.sla-days-badge {
 				display: inline-flex;
 				align-items: center;
@@ -2422,6 +2484,380 @@
 				border: 1px dashed rgba(16, 185, 129, 0.3);
 				border-radius: 12px;
 			}
+
+			/* ==================== KNOWLEDGE BASE ==================== */
+			.knowledgebase-page {
+				max-width: 1100px;
+				margin: 0 auto;
+				display: flex;
+				flex-direction: column;
+				gap: 20px;
+			}
+
+			.kb-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				flex-wrap: wrap;
+				gap: 12px;
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-color);
+				border-radius: 20px;
+				padding: 18px 24px;
+				box-shadow: var(--card-shadow);
+			}
+
+			.kb-header h2 {
+				margin: 0;
+				font-size: 1.3rem;
+				font-weight: 700;
+				color: var(--text-primary);
+			}
+
+			.kb-type-toggle {
+				display: flex;
+				gap: 8px;
+				background: var(--bg-tertiary);
+				border-radius: 40px;
+				padding: 4px;
+				border: 1px solid var(--border-color);
+			}
+
+			.kb-type-btn {
+				padding: 8px 20px;
+				border-radius: 40px;
+				border: none;
+				background: transparent;
+				color: var(--text-secondary);
+				font-weight: 600;
+				font-size: 0.78rem;
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
+				cursor: pointer;
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				transition: var(--transition);
+				font-family: inherit;
+			}
+
+			.kb-type-btn:hover {
+				color: var(--accent-color);
+			}
+
+			.kb-type-btn.active {
+				background: var(--accent-color);
+				color: #fff;
+				box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+			}
+
+			.kb-search-section {
+				display: flex;
+				gap: 12px;
+				flex-wrap: wrap;
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-color);
+				border-radius: 20px;
+				padding: 16px 20px;
+				box-shadow: var(--card-shadow);
+			}
+
+			.kb-search-wrapper {
+				flex: 1;
+				min-width: 240px;
+				position: relative;
+				display: flex;
+				align-items: center;
+			}
+
+			.kb-search-wrapper i {
+				position: absolute;
+				left: 16px;
+				color: var(--text-muted);
+				font-size: 1rem;
+			}
+
+			.kb-search-wrapper input {
+				width: 100%;
+				padding: 10px 16px 10px 42px;
+				border: 1px solid var(--border-color);
+				border-radius: 40px;
+				background: var(--bg-tertiary);
+				color: var(--text-primary);
+				font-size: 14px;
+				font-family: inherit;
+			}
+
+			.kb-search-wrapper input:focus {
+				border-color: var(--accent-color);
+				outline: none;
+				box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+			}
+
+			.kb-filter-wrapper {
+				display: flex;
+				gap: 8px;
+				align-items: center;
+				flex-wrap: wrap;
+			}
+
+			.kb-filter-wrapper select {
+				padding: 10px 16px;
+				border-radius: 40px;
+				border: 1px solid var(--border-color);
+				background: var(--bg-tertiary);
+				color: var(--text-primary);
+				font-size: 14px;
+				font-family: inherit;
+				min-width: 180px;
+			}
+
+			.kb-add-btn {
+				padding: 10px 20px;
+				border-radius: 40px;
+				border: none;
+				background: var(--accent-color);
+				color: #fff;
+				font-weight: 600;
+				font-size: 0.78rem;
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
+				cursor: pointer;
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				transition: var(--transition);
+				font-family: inherit;
+				white-space: nowrap;
+			}
+
+			.kb-add-btn:hover {
+				background: var(--accent-hover);
+				transform: translateY(-1px);
+			}
+
+			.kb-status {
+				text-align: center;
+				color: var(--text-muted);
+				font-size: 0.85rem;
+				padding: 8px;
+			}
+
+			.kb-entry-list {
+				display: flex;
+				flex-direction: column;
+				gap: 12px;
+			}
+
+			.kb-entry-card {
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-color);
+				border-left: 4px solid var(--accent-color);
+				border-radius: 14px;
+				padding: 16px 18px;
+				box-shadow: var(--card-shadow);
+				transition: var(--transition);
+			}
+
+			.kb-entry-card:hover {
+				transform: translateY(-2px);
+				box-shadow: var(--card-shadow-hover);
+			}
+
+			.kb-entry-card.expanded {
+				border-left-color: var(--success);
+			}
+
+			.kb-entry-header {
+				display: flex;
+				justify-content: space-between;
+				align-items: flex-start;
+				gap: 12px;
+				cursor: pointer;
+			}
+
+			.kb-entry-title {
+				font-weight: 700;
+				font-size: 0.98rem;
+				color: var(--text-primary);
+				word-wrap: break-word;
+				overflow-wrap: break-word;
+				flex: 1;
+			}
+
+			.kb-entry-module {
+				display: inline-block;
+				padding: 2px 10px;
+				border-radius: 20px;
+				font-size: 0.65rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
+				background: var(--accent-soft);
+				color: var(--accent-color);
+				border: 1px solid var(--accent-color);
+				white-space: nowrap;
+				flex-shrink: 0;
+			}
+
+			.kb-entry-meta {
+				display: flex;
+				gap: 10px;
+				flex-wrap: wrap;
+				font-size: 0.7rem;
+				color: var(--text-muted);
+				margin-top: 8px;
+			}
+
+			.kb-entry-meta span {
+				display: inline-flex;
+				align-items: center;
+				gap: 4px;
+			}
+
+			.kb-entry-content {
+				margin-top: 14px;
+				padding-top: 14px;
+				border-top: 1px dashed var(--border-color);
+				font-size: 0.88rem;
+				color: var(--text-secondary);
+				word-wrap: break-word;
+				overflow-wrap: break-word;
+				line-height: 1.55;
+				display: none;
+			}
+
+			.kb-entry-card.expanded .kb-entry-content {
+				display: block;
+			}
+
+			.kb-entry-tags {
+				display: flex;
+				gap: 6px;
+				flex-wrap: wrap;
+				margin-top: 10px;
+			}
+
+			.kb-tag {
+				display: inline-block;
+				padding: 2px 8px;
+				border-radius: 12px;
+				font-size: 0.65rem;
+				font-weight: 600;
+				background: var(--bg-tertiary);
+				color: var(--text-muted);
+				border: 1px solid var(--border-color);
+			}
+
+			.kb-entry-actions {
+				display: flex;
+				gap: 6px;
+				margin-top: 12px;
+				justify-content: flex-end;
+				flex-wrap: wrap;
+			}
+
+			.kb-entry-actions button {
+				padding: 5px 12px;
+				border-radius: 20px;
+				border: 1px solid var(--border-color);
+				background: var(--bg-tertiary);
+				color: var(--text-secondary);
+				font-size: 0.68rem;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.02em;
+				cursor: pointer;
+				transition: var(--transition);
+				display: inline-flex;
+				align-items: center;
+				gap: 4px;
+				font-family: inherit;
+			}
+
+			.kb-entry-actions button:hover {
+				background: var(--accent-color);
+				color: #fff;
+				border-color: var(--accent-color);
+			}
+
+			.kb-entry-actions button.kb-delete-btn:hover {
+				background: var(--danger);
+				border-color: var(--danger);
+			}
+
+			.kb-empty {
+				text-align: center;
+				padding: 40px 24px;
+				color: var(--text-muted);
+				font-size: 0.88rem;
+				background: var(--bg-secondary);
+				border: 1px dashed var(--border-color);
+				border-radius: 14px;
+			}
+
+			.kb-form-row {
+				margin-bottom: 14px;
+			}
+
+			.kb-form-row label {
+				display: block;
+				font-size: 0.72rem;
+				font-weight: 600;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+				color: var(--text-muted);
+				margin-bottom: 5px;
+			}
+
+			.kb-form-row input,
+			.kb-form-row textarea,
+			.kb-form-row select {
+				width: 100%;
+				padding: 10px 12px;
+				border: 1px solid var(--border-color);
+				border-radius: 12px;
+				background: var(--bg-tertiary);
+				color: var(--text-primary);
+				font-size: 14px;
+				font-family: inherit;
+			}
+
+			.kb-form-row input:focus,
+			.kb-form-row textarea:focus {
+				border-color: var(--accent-color);
+				outline: none;
+				box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+			}
+
+			@media (max-width: 700px) {
+				.kb-header {
+					flex-direction: column;
+					align-items: stretch;
+				}
+				.kb-type-toggle {
+					justify-content: center;
+				}
+				.kb-filter-wrapper {
+					width: 100%;
+				}
+				.kb-filter-wrapper select,
+				.kb-add-btn {
+					flex: 1;
+				}
+			}
+/* Rich-content rendering: HTML content should not use pre-wrap */
+.kb-entry-content p,
+.announcement-message p,
+.carousel-slide-details p {
+    margin: 0 0 8px 0;
+}
+.kb-entry-content p:last-child,
+.announcement-message p:last-child,
+.carousel-slide-details p:last-child {
+    margin-bottom: 0;
+}
+
 		</style>
 	</head>
 	<body>
@@ -2459,6 +2895,7 @@
 					<button class="tab-button" data-tab="moolah" onclick="switchTab('moolah', this)"><i class="icon-custom-smaller icon-moolah"></i><span>MOOLAH CREATION</span></button>
 					<button class="tab-button" data-tab="ecommerce" onclick="switchTab('ecommerce', this)"><i class="bi bi-cart-fill"></i><span>E‑COMMERCE</span></button>
 					<button class="tab-button" data-tab="scheduler" onclick="switchTab('scheduler', this)"><i class="bi bi-calendar-event-fill"></i><span>SCHEDULER</span></button>
+					<button class="tab-button" data-tab="knowledgebase" onclick="switchTab('knowledgebase', this)"><i class="bi bi-book-fill"></i><span>KNOWLEDGE BASE</span></button>
 					<button class="tab-button" data-tab="announcement" onclick="switchTab('announcement', this)"><i class="bi bi-megaphone-fill"></i><span>ANNOUNCEMENTS</span></button>
 				</nav>
 			</div>
@@ -2561,6 +2998,41 @@
 							<div id="topPerformersContainer">
 								<div class="performers-empty">Loading...</div>
 							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- ==================== KNOWLEDGE BASE TAB ==================== -->
+				<div id="tab-knowledgebase" class="tab-content">
+					<div class="knowledgebase-page">
+						<div class="kb-header">
+							<h2>📚 Knowledge Base</h2>
+							<div class="kb-type-toggle">
+								<button class="kb-type-btn active" data-kb-type="ticketing" onclick="switchKbType('ticketing', this)"><i class="bi bi-ticket-detailed-fill"></i> Ticketing</button>
+								<button class="kb-type-btn" data-kb-type="hrms" onclick="switchKbType('hrms', this)"><i class="bi bi-people-fill"></i> HRMS</button>
+							</div>
+						</div>
+
+						<!-- Search + Filter Bar -->
+						<div class="kb-search-section">
+							<div class="kb-search-wrapper">
+								<i class="bi bi-search"></i>
+								<input type="text" id="kbSearchInput" placeholder="Search knowledge base..." oninput="filterKnowledgeBase()" />
+							</div>
+							<div class="kb-filter-wrapper">
+								<select id="kbModuleFilter" onchange="filterKnowledgeBase()">
+									<option value="">All Modules</option>
+								</select>
+								<button class="kb-add-btn" id="kbAddBtn" onclick="openKbEntryModal()"><i class="bi bi-plus-circle-fill"></i> Add Entry</button>
+							</div>
+						</div>
+
+						<!-- Loading / Status -->
+						<div id="kbStatus" class="kb-status"></div>
+
+						<!-- Entry List -->
+						<div id="kbEntryList" class="kb-entry-list">
+							<div class="kb-empty">Loading knowledge base...</div>
 						</div>
 					</div>
 				</div>
@@ -3578,7 +4050,7 @@
 					GOOGLE_SHEET_ID: "1IDsVjZrWCP0hXRn_EufLNgpOMtYFtV6jVZx9P5rvbcA",
 					SHEET_NAME: "SERVER MANAGEMENT",
 					CRED_SHEET_NAME: "CREDENTIALS",
-					TEMPLATE_SHEET_NAME: "TROUBLESHOOTING TEMPLATES",
+					TEMPLATE_SHEET_NAME: "TICKETING KNOWLEDGE BASE",
 					PORTAL_COL: 0,
 					SKU_COL: 1,
 					STORE_NAME_COL: 2,
@@ -3674,6 +4146,8 @@
 				const selectedIndex = { moolah: -1, store: -1, ticket: -1, ecommerce: -1, scheduler: -1 };
 
 				let quillEditor = null;
+let announcementQuill = null;
+let kbQuill = null;
 
 				const collapseState = { months: {}, dates: {} };
 
@@ -3769,6 +4243,66 @@
 					if (!text) return "";
 					return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 				}
+
+				function renderRichContent(content) {
+    if (!content) return "";
+    const str = String(content);
+    // If it looks like HTML (has any tag), normalize Quill's list structure
+    // (so bullets/numbers render the same as the Troubleshooting preview)
+    // and render as-is. Otherwise treat as plain text: escape + preserve newlines.
+    if (/<[a-z][\s\S]*>/i.test(str)) {
+        return convertQuillLists(str);
+    }
+    return escapeHtml(str).replace(/\n/g, "<br>");
+}
+
+function htmlToPlainText(html) {
+    if (!html) return "";
+    let str = String(html);
+
+    // Plain text — return as-is
+    if (!/<[a-z][\s\S]*>/i.test(str)) {
+        return str;
+    }
+
+    // ✅ Normalize Quill's list structure FIRST.
+    // Quill emits <ol><li data-list="bullet"> for bullet lists — this converts
+    // those into real <ul><li> so the branch below treats them as bullets,
+    // not ordered list items.
+    str = convertQuillLists(str);
+
+    const temp = document.createElement("div");
+    temp.innerHTML = str;
+
+    // Unordered lists → "• item"
+    temp.querySelectorAll("ul").forEach((ul) => {
+        ul.querySelectorAll(":scope > li").forEach((li) => {
+            li.insertBefore(document.createTextNode("• "), li.firstChild);
+        });
+    });
+
+    // Ordered lists → "1. item", "2. item", …
+    temp.querySelectorAll("ol").forEach((ol) => {
+        let n = 1;
+        ol.querySelectorAll(":scope > li").forEach((li) => {
+            li.insertBefore(document.createTextNode(n + ". "), li.firstChild);
+            n++;
+        });
+    });
+
+    // <br> → newline
+    temp.querySelectorAll("br").forEach((el) => el.replaceWith("\n"));
+
+    // Block elements → trailing newline
+    temp.querySelectorAll("p, div, li, h1, h2, h3, h4, h5, h6, blockquote, tr").forEach((el) => {
+        el.appendChild(document.createTextNode("\n"));
+    });
+
+    return (temp.textContent || "")
+        .replace(/[ \t]+\n/g, "\n")
+        .replace(/\n{3,}/g, "\n\n")
+        .trim();
+}
 
 				const ZIP_TO_STATE = [
 					{ min: 35000, max: 36999, state: "AL" },
@@ -4024,6 +4558,12 @@
 					button.classList.add("active");
 					document.querySelectorAll(".tab-content").forEach((content) => content.classList.remove("active"));
 					document.getElementById(`tab-${tabName}`).classList.add("active");
+
+					// ✅ Lazy-load KB only when the tab is actually opened
+					if (tabName === "knowledgebase" && !kbLoaded[currentKbType]) {
+						loadKnowledgeBase(currentKbType);
+					}
+
 					setTimeout(() => {
 						document.querySelectorAll(`#tab-${tabName} textarea`).forEach((textarea) => autoGrow(textarea));
 						syncPreviewHeight();
@@ -7250,30 +7790,35 @@
 					if (!templateSelect) return;
 
 					templateSelect.addEventListener("change", async (e) => {
-						const steps = e.target.value;
-						if (!steps) return;
+    const steps = e.target.value;
+    if (!steps) return;
 
-						const templateName = templateSelect.options[templateSelect.selectedIndex]?.text || "template";
-						const confirmReplace = confirm(`Replace current troubleshooting steps with "${templateName}"?`);
-						if (!confirmReplace) {
-							templateSelect.value = "";
-							return;
-						}
+    const templateName = templateSelect.options[templateSelect.selectedIndex]?.text || "template";
+    const confirmReplace = confirm(`Replace current troubleshooting steps with "${templateName}"?`);
+    if (!confirmReplace) {
+        templateSelect.value = "";
+        return;
+    }
 
-						const collapsed = steps.replace(/[\r\n]+/g, "\n");
-						const lines = collapsed.split("\n");
-						const nonEmptyLines = lines.filter((line) => line.trim() !== "");
-						const plainText = nonEmptyLines.join("\n");
-
-						if (quillEditor) {
-							quillEditor.setText(plainText);
-							const htmlContent = quillEditor.root.innerHTML;
-							document.getElementById("ticket-resolution").value = htmlContent;
-							ticketUpdatePreview();
-							showNotification(`Template "${templateName}" loaded. You can now edit as needed.`);
-						}
-						templateSelect.value = "";
-					});
+    if (quillEditor) {
+        // If the template is HTML (from the new RTE), paste as HTML.
+        // If it's plain text (legacy), paste as text.
+        if (/<[a-z][\s\S]*>/i.test(steps)) {
+            quillEditor.clipboard.dangerouslyPasteHTML(steps);
+        } else {
+            const collapsed = steps.replace(/[\r\n]+/g, "\n");
+            const lines = collapsed.split("\n");
+            const nonEmptyLines = lines.filter((line) => line.trim() !== "");
+            const plainText = nonEmptyLines.join("\n");
+            quillEditor.setText(plainText);
+        }
+        const htmlContent = quillEditor.root.innerHTML;
+        document.getElementById("ticket-resolution").value = htmlContent;
+        ticketUpdatePreview();
+        showNotification(`Template "${templateName}" loaded. You can now edit as needed.`);
+    }
+    templateSelect.value = "";
+});
 				}
 
 				let myPendingCache = [];
@@ -8096,7 +8641,7 @@
 							(a) => `
         <div class="carousel-slide">
             ${a.subject ? `<div class="carousel-slide-subject">${escapeHtml(a.subject)}</div>` : ""}
-            ${a.details ? `<div class="carousel-slide-details">${escapeHtml(a.details)}</div>` : ""}
+            ${a.details ? `<div class="carousel-slide-details">${renderRichContent(a.details)}</div>` : ""}
             ${a.support ? `<div class="carousel-slide-meta"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
         </div>`,
 						)
@@ -8199,61 +8744,72 @@
 					}
 
 					list.innerHTML = visibleAnnouncements
-						.map(
-							(a) => `
-    <div class="announcement-item">
-        <div class="announcement-body">
-            ${a.subject ? `<div class="announcement-subject">${escapeHtml(a.subject)}</div>` : ""}
-            ${a.details ? `<div class="announcement-message">${escapeHtml(a.details)}</div>` : ""}
-            ${a.support ? `<div class="announcement-support"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
-        </div>
-        <button class="announcement-delete-btn" 
-                data-subject="${escapeHtml(a.subject)}" 
-                data-details="${escapeHtml(a.details)}" 
-                data-support="${escapeHtml(a.support)}"
-                title="Delete announcement">
-            <i class="bi bi-trash3-fill"></i>
-        </button>
-    </div>`,
-						)
-						.join("");
+    .map(
+        (a) => `
+<div class="announcement-item">
+    <div class="announcement-body">
+        ${a.subject ? `<div class="announcement-subject">${escapeHtml(a.subject)}</div>` : ""}
+        ${a.details ? `<div class="announcement-message">${renderRichContent(a.details)}</div>` : ""}
+        ${a.support ? `<div class="announcement-support"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
+    </div>
+    <button class="announcement-delete-btn" 
+            data-subject="${escapeHtml(a.subject)}" 
+            data-details="${escapeHtml(a.details)}" 
+            data-support="${escapeHtml(a.support)}"
+            title="Delete announcement">
+        <i class="bi bi-trash3-fill"></i>
+    </button>
+</div>`,
+    )
+    .join("");
+	list.querySelectorAll(".announcement-delete-btn").forEach((btn) => {
+    btn.addEventListener("click", () => deleteAnnouncement(btn.dataset.subject, btn.dataset.details, btn.dataset.support));
+});
 
-					list.querySelectorAll(".announcement-delete-btn").forEach((btn) => {
-						btn.addEventListener("click", () => deleteAnnouncement(btn.dataset.subject, btn.dataset.details, btn.dataset.support));
-					});
 				}
 
 				async function addAnnouncement() {
-					const subjectInput = document.getElementById("newAnnouncementSubject");
-					const textArea = document.getElementById("newAnnouncementText");
-					const subject = (subjectInput.value || "").trim();
-					const details = (textArea.value || "").trim();
+    const subjectInput = document.getElementById("newAnnouncementSubject");
+    const subject = (subjectInput.value || "").trim();
 
-					if (!subject && !details) {
-						showNotification("Please enter a subject or details.");
-						return;
-					}
+    // Read from Quill, but treat "<p><br></p>" as empty
+    let details = "";
+    if (announcementQuill) {
+        const html = announcementQuill.root.innerHTML.trim();
+        const plain = announcementQuill.getText().trim();
+        if (plain !== "") {
+            details = html;
+        }
+    } else {
+        details = (document.getElementById("newAnnouncementText").value || "").trim();
+    }
 
-					const currentUser = getLoggedInUser();
-					const support = currentUser ? currentUser.support || "" : "";
+    if (!subject && !details) {
+        showNotification("Please enter a subject or details.");
+        return;
+    }
 
-					try {
-						await fetchFromProxy({
-							action: "addAnnouncement",
-							subject: subject,
-							details: details,
-							support: support,
-						});
-						showNotification("Announcement posted!");
-						subjectInput.value = "";
-						textArea.value = "";
-						closeAnnouncementModal();
-						currentAnnouncementIndex = 0; // jump to newest
-						loadAnnouncements();
-					} catch (err) {
-						showNotification("Failed to post announcement: " + err.message);
-					}
-				}
+    const currentUser = getLoggedInUser();
+    const support = currentUser ? currentUser.support || "" : "";
+
+    try {
+        await fetchFromProxy({
+            action: "addAnnouncement",
+            subject: subject,
+            details: details,
+            support: support,
+        });
+        showNotification("Announcement posted!");
+        subjectInput.value = "";
+        if (announcementQuill) announcementQuill.root.innerHTML = "";
+        document.getElementById("newAnnouncementText").value = "";
+        closeAnnouncementModal();
+        currentAnnouncementIndex = 0; // jump to newest
+        loadAnnouncements();
+    } catch (err) {
+        showNotification("Failed to post announcement: " + err.message);
+    }
+}
 
 				async function deleteAnnouncement(subject, details, support) {
 					if (!subject && !details && !support) return;
@@ -8286,12 +8842,13 @@
 				}
 
 				function openAnnouncementModal() {
-					document.getElementById("newAnnouncementSubject").value = "";
-					document.getElementById("newAnnouncementText").value = "";
-					document.getElementById("announcementModal").style.display = "block";
-					document.getElementById("announcementModalBackdrop").style.display = "block";
-					setTimeout(() => document.getElementById("newAnnouncementSubject").focus(), 50);
-				}
+    document.getElementById("newAnnouncementSubject").value = "";
+    document.getElementById("newAnnouncementText").value = "";
+    if (announcementQuill) announcementQuill.root.innerHTML = "";
+    document.getElementById("announcementModal").style.display = "block";
+    document.getElementById("announcementModalBackdrop").style.display = "block";
+    setTimeout(() => document.getElementById("newAnnouncementSubject").focus(), 50);
+}
 
 				function closeAnnouncementModal() {
 					document.getElementById("announcementModal").style.display = "none";
@@ -8319,6 +8876,7 @@
 					const zipIdx = headers.findIndex((h) => h.includes("ZIP"));
 					const issueIdx = findCol("ISSUE");
 					const moduleIdx = findCol("MODULE");
+					const remarksIdx = findCol("REMARKS");
 
 					if (dateIdx < 0 || statusIdx < 0) return [];
 
@@ -8356,6 +8914,7 @@
 								support: supportIdx >= 0 ? String(row[supportIdx] || "").trim() : "",
 								issue: issueIdx >= 0 ? String(row[issueIdx] || "").trim() : "",
 								module: moduleIdx >= 0 ? String(row[moduleIdx] || "").trim() : "",
+								remarks: remarksIdx >= 0 ? String(row[remarksIdx] || "").trim() : "",
 								oldestDate: d,
 								entryCount: 1,
 							};
@@ -8366,6 +8925,7 @@
 								groups[key].support = supportIdx >= 0 ? String(row[supportIdx] || "").trim() : "";
 								groups[key].issue = issueIdx >= 0 ? String(row[issueIdx] || "").trim() : "";
 								groups[key].module = moduleIdx >= 0 ? String(row[moduleIdx] || "").trim() : "";
+								groups[key].remarks = remarksIdx >= 0 ? String(row[remarksIdx] || "").trim() : "";
 							}
 						}
 					}
@@ -8383,6 +8943,7 @@
 								support: g.support,
 								issue: g.issue,
 								module: g.module,
+								remarks: g.remarks,
 								daysPending,
 								oldestDate: g.oldestDate,
 								entryCount: g.entryCount,
@@ -8418,24 +8979,26 @@
 							const daysText = days === 1 ? "1 day" : `${days} days`;
 							const issueDisplay = a.issue || a.module || "Pending follow-up";
 							const storeDisplay = a.store ? escapeHtml(a.store) : "Unknown Store";
+							const remarksDisplay = a.remarks && a.remarks.trim() ? escapeHtml(a.remarks) : "—";
+							const zipTag = a.zip ? `<span class="sla-portal-tag">· ${escapeHtml(a.zip)}</span>` : "";
 							const portalTag = a.portal ? `<span class="sla-portal-tag">· Portal ${escapeHtml(a.portal)}</span>` : "";
 
 							return `
-            <div class="sla-alert-item">
-                <div class="sla-alert-body">
-                    <div class="sla-alert-store">${storeDisplay} ${portalTag}</div>
-                    <div class="sla-alert-issue">${escapeHtml(issueDisplay)}</div>
-                    <div class="sla-alert-meta">
-                        ${a.support ? `<span><i class="bi bi-person-fill"></i> ${escapeHtml(a.support)}</span>` : ""}
-                        ${a.zip ? `<span><i class="bi bi-geo-alt-fill"></i> ${escapeHtml(a.zip)}</span>` : ""}
-                        ${a.entryCount > 1 ? `<span><i class="bi bi-list-ul"></i> ${a.entryCount} entries</span>` : ""}
-                    </div>
-                </div>
-                <div class="sla-days-badge ${severe ? "severe" : ""}">
-                    ${escapeHtml(daysText)}
+        <div class="sla-alert-item">
+            <div class="sla-alert-body">
+                <div class="sla-alert-remarks">${remarksDisplay}</div>
+                <div class="sla-alert-store">${storeDisplay} ${zipTag} ${portalTag}</div>
+                <div class="sla-alert-issue">${escapeHtml(issueDisplay)}</div>
+                <div class="sla-alert-meta">
+                    ${a.support ? `<span><i class="bi bi-person-fill"></i> ${escapeHtml(a.support)}</span>` : ""}
+                    ${a.entryCount > 1 ? `<span><i class="bi bi-list-ul"></i> ${a.entryCount} entries</span>` : ""}
                 </div>
             </div>
-        `;
+            <div class="sla-days-badge ${severe ? "severe" : ""}">
+                ${escapeHtml(daysText)}
+            </div>
+        </div>
+    `;
 						})
 						.join("")}</div>`;
 				}
@@ -8473,6 +9036,372 @@
 			            <tbody>${rows}</tbody>
 			        </table>
 			    `;
+				}
+
+				/* ==================== KNOWLEDGE BASE (Full CRUD) ==================== */
+				let currentKbType = localStorage.getItem("kbType") || "ticketing";
+				let kbTicketingEntries = []; // from TROUBLESHOOTING TEMPLATES sheet
+				let kbHrmsEntries = []; // from HRMS KNOWLEDGE BASE sheet
+				let kbLoaded = { ticketing: false, hrms: false };
+
+				const HRMS_KB_SHEET_NAME = "HRMS KNOWLEDGE BASE";
+				const TICKETING_KB_SHEET_NAME = "TICKETING KNOWLEDGE BASE";
+
+				function getKbSheetName(type) {
+					return type === "hrms" ? HRMS_KB_SHEET_NAME : TICKETING_KB_SHEET_NAME;
+				}
+
+				function switchKbType(type, btn) {
+					currentKbType = type;
+					localStorage.setItem("kbType", type);
+					document.querySelectorAll(".kb-type-btn").forEach((b) => b.classList.remove("active"));
+					if (btn) btn.classList.add("active");
+
+					// ✅ Clear search & filter when switching KB type
+					const searchEl = document.getElementById("kbSearchInput");
+					const filterEl = document.getElementById("kbModuleFilter");
+					if (searchEl) searchEl.value = "";
+					if (filterEl) filterEl.value = "";
+
+					renderKnowledgeBase();
+					if (!kbLoaded[type]) {
+						loadKnowledgeBase(type);
+					}
+				}
+
+				async function loadKnowledgeBase(type) {
+					const statusEl = document.getElementById("kbStatus");
+					if (statusEl) statusEl.innerHTML = '<span class="spinner" style="display:inline-block;width:14px;height:14px;border:2px solid var(--border-color);border-top-color:var(--accent-color);border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;margin-right:6px;"></span> Loading...';
+
+					try {
+						if (type === "ticketing") {
+							await loadTicketingKb();
+						} else {
+							await loadHrmsKb();
+						}
+						kbLoaded[type] = true;
+						if (statusEl) statusEl.textContent = "";
+					} catch (err) {
+						if (statusEl) statusEl.innerHTML = `<span style="color: var(--danger)">❌ ${escapeHtml(err.message)}</span>`;
+					}
+					renderKnowledgeBase();
+				}
+
+				async function loadTicketingKb() {
+    const data = await fetchFromProxy({ action: "getSheetData", sheetName: TICKETING_KB_SHEET_NAME });
+    const rows = (data.values || []).slice(1);
+    kbTicketingEntries = rows
+        .map((r, i) => ({
+            id: `tk_${i}`,
+            module: (r[0] || "").toString().trim(),
+            title: (r[1] || "").toString().trim(),
+            content: (r[2] || "").toString().trim(),
+            source: "ticketing",
+            rowIndex: i + 2,
+        }))
+        .filter((e) => e.title && e.content);
+
+    allTemplates = kbTicketingEntries.map((e) => ({ module: e.module, title: e.title, steps: e.content }));
+    updateTemplateDropdown();
+}
+
+				async function loadHrmsKb() {
+    try {
+        const data = await fetchFromProxy({ action: "getSheetData", sheetName: HRMS_KB_SHEET_NAME });
+        const rows = (data.values || []).slice(1);
+        kbHrmsEntries = rows
+            .map((r, i) => ({
+                id: `hr_${i}`,
+                title: (r[0] || "").toString().trim(),
+                content: (r[1] || "").toString().trim(),
+                createdBy: (r[2] || "").toString().trim(),
+                source: "hrms",
+                rowIndex: i + 2,
+            }))
+            .filter((e) => e.title && e.content);
+    } catch (err) {
+        console.warn("HRMS KB sheet missing:", err);
+        kbHrmsEntries = [];
+    }
+}
+
+				function getActiveKbEntries() {
+					return currentKbType === "ticketing" ? kbTicketingEntries : kbHrmsEntries;
+				}
+
+				function getKbSearchTerm() {
+					return (document.getElementById("kbSearchInput")?.value || "").trim().toLowerCase();
+				}
+
+				function getKbModuleFilter() {
+					return (document.getElementById("kbModuleFilter")?.value || "").trim();
+				}
+
+				function populateKbModuleFilter() {
+    const select = document.getElementById("kbModuleFilter");
+    if (!select) return;
+
+    // Hide module filter entirely for HRMS
+    select.style.display = currentKbType === "hrms" ? "none" : "";
+
+    if (currentKbType === "hrms") {
+        select.innerHTML = '<option value="">All Modules</option>';
+        return;
+    }
+
+    const entries = getActiveKbEntries();
+    const modules = [...new Set(entries.map((e) => e.module).filter(Boolean))].sort();
+    const current = select.value;
+    select.innerHTML = '<option value="">All Modules</option>' + modules.map((m) => `<option value="${escapeHtml(m)}">${escapeHtml(m)}</option>`).join("");
+    if (modules.includes(current)) select.value = current;
+}
+
+				function filterKnowledgeBase() {
+					renderKnowledgeBase();
+				}
+
+				function renderKnowledgeBase() {
+    const list = document.getElementById("kbEntryList");
+    if (!list) return;
+
+    const expandedIds = new Set([...list.querySelectorAll(".kb-entry-card.expanded")].map((c) => c.dataset.kbId));
+
+    const entries = getActiveKbEntries();
+    const search = getKbSearchTerm();
+    const moduleFilter = getKbModuleFilter();
+
+    populateKbModuleFilter();
+
+    let filtered = entries;
+    if (search) {
+        filtered = filtered.filter((e) =>
+            (e.title || "").toLowerCase().includes(search) ||
+            (e.content || "").toLowerCase().includes(search) ||
+            (e.module || "").toLowerCase().includes(search)
+        );
+    }
+    if (moduleFilter && currentKbType === "ticketing") {
+        filtered = filtered.filter((e) => e.module === moduleFilter);
+    }
+
+    if (!filtered.length) {
+        list.innerHTML = `<div class="kb-empty">${entries.length === 0 ? `No entries in ${currentKbType === "ticketing" ? "Ticketing" : "HRMS"} knowledge base yet.` : "No entries match your search."}</div>`;
+        return;
+    }
+
+    list.innerHTML = filtered.map((e) => {
+        const wasExpanded = expandedIds.has(e.id);
+        const moduleBadge = e.source === "ticketing"
+            ? `<span class="kb-entry-module">${escapeHtml(e.module || "GENERAL")}</span>`
+            : "";
+        const createdByMeta = e.source === "hrms" && e.createdBy
+            ? `<span><i class="bi bi-person-fill"></i> ${escapeHtml(e.createdBy)}</span>`
+            : "";
+
+        return `
+        <div class="kb-entry-card${wasExpanded ? " expanded" : ""}" data-kb-id="${e.id}">
+            <div class="kb-entry-header" onclick="toggleKbEntry(this)">
+                <div class="kb-entry-title">${escapeHtml(e.title || "(Untitled)")}</div>
+                ${moduleBadge}
+            </div>
+            <div class="kb-entry-meta">
+                <span><i class="bi bi-collection"></i> ${e.source === "ticketing" ? "Ticketing" : "HRMS"}</span>
+                ${createdByMeta}
+            </div>
+            <div class="kb-entry-content">${renderRichContent(e.content || "")}</div>
+            <div class="kb-entry-actions">
+                <button onclick="copyKbEntry('${e.id}')" title="Copy to clipboard"><i class="bi bi-clipboard-fill"></i> Copy</button>
+                <button onclick="event.stopPropagation(); openKbEntryModal('${e.id}')" title="Edit entry"><i class="bi bi-pencil-fill"></i> Edit</button>
+                <button class="kb-delete-btn" onclick="event.stopPropagation(); deleteKbEntry('${e.id}')" title="Delete entry"><i class="bi bi-trash3-fill"></i> Delete</button>
+            </div>
+        </div>`;
+    }).join("");
+}
+
+				function toggleKbEntry(headerEl) {
+					const card = headerEl.closest(".kb-entry-card");
+					if (card) card.classList.toggle("expanded");
+				}
+
+				function copyKbEntry(id) {
+    const entry = getActiveKbEntries().find((e) => e.id === id);
+    if (!entry) return;
+    const plainContent = htmlToPlainText(entry.content);
+    const text = `${entry.title}\n\n${plainContent}`;
+    navigator.clipboard.writeText(text).then(
+        () => showNotification("Entry copied!"),
+        () => showNotification("Failed to copy"),
+    );
+}
+
+				let editingKbId = null;
+
+				function openKbEntryModal(id) {
+    editingKbId = id || null;
+    const modal = document.getElementById("kbEntryModal");
+    const backdrop = document.getElementById("kbEntryModalBackdrop");
+    const titleEl = document.getElementById("kbEntryModalTitle");
+    const sourceEl = document.getElementById("kbEntrySource");
+    const moduleRow = document.getElementById("kbEntryModuleRow");
+    const moduleEl = document.getElementById("kbEntryModule");
+    const moduleCombo = document.getElementById("kbEntryModule-combobox");
+    const titleInput = document.getElementById("kbEntryTitle");
+    const contentInput = document.getElementById("kbEntryContent");
+    const errEl = document.getElementById("kbEntryError");
+    errEl.textContent = "";
+
+    sourceEl.value = currentKbType;
+    const typeLabel = currentKbType === "ticketing" ? "Ticketing" : "HRMS";
+
+    // ✅ Hide Module row for HRMS
+    if (moduleRow) moduleRow.style.display = currentKbType === "hrms" ? "none" : "";
+
+    if (editingKbId) {
+        const entry = getActiveKbEntries().find((e) => e.id === editingKbId);
+        if (!entry) return;
+        titleEl.textContent = `✏️ Edit ${typeLabel} Entry`;
+        moduleEl.value = entry.module || "";
+        if (moduleCombo) moduleCombo.value = entry.module || "";
+        titleInput.value = entry.title || "";
+        contentInput.value = entry.content || "";
+        if (kbQuill) {
+            const rawContent = entry.content || "";
+            if (rawContent && !/<[a-z][\s\S]*>/i.test(rawContent)) {
+                kbQuill.setText(rawContent);
+            } else {
+                kbQuill.root.innerHTML = rawContent;
+            }
+        }
+    } else {
+        titleEl.textContent = `📚 Add ${typeLabel} Entry`;
+        moduleEl.value = "";
+        if (moduleCombo) moduleCombo.value = "";
+        titleInput.value = "";
+        contentInput.value = "";
+        if (kbQuill) kbQuill.root.innerHTML = "";
+    }
+
+    modal.style.display = "block";
+    backdrop.style.display = "block";
+    setTimeout(() => titleInput.focus(), 50);
+}
+
+				function closeKbEntryModal() {
+					document.getElementById("kbEntryModal").style.display = "none";
+					document.getElementById("kbEntryModalBackdrop").style.display = "none";
+					editingKbId = null;
+				}
+
+				async function saveKbEntry() {
+    const source = document.getElementById("kbEntrySource").value || currentKbType;
+    const sheetName = getKbSheetName(source);
+    const titleInput = document.getElementById("kbEntryTitle");
+    const contentInput = document.getElementById("kbEntryContent");
+    const moduleEl = document.getElementById("kbEntryModule");
+    const errEl = document.getElementById("kbEntryError");
+
+    const title = titleInput.value.trim();
+    let content = contentInput.value.trim();
+    const module = source === "ticketing" ? moduleEl.value.trim() : "";
+
+    if (kbQuill && kbQuill.getText().trim() === "") {
+        content = "";
+    }
+
+    if (!title || !content) {
+        errEl.textContent = "Title and content are required.";
+        return;
+    }
+
+    const saveBtn = document.getElementById("kbEntrySaveBtn");
+    saveBtn.disabled = true;
+    saveBtn.textContent = "Saving...";
+
+    try {
+        if (editingKbId) {
+            // === UPDATE ===
+            const list = source === "ticketing" ? kbTicketingEntries : kbHrmsEntries;
+            const idx = list.findIndex((e) => e.id === editingKbId);
+            if (idx === -1) throw new Error("Entry not found.");
+            const rowIndex = list[idx].rowIndex;
+
+            const payload = {
+                action: "updateKnowledgeBaseEntry",
+                sheetName: sheetName,
+                rowIndex: rowIndex,
+                title: title,
+                content: content,
+            };
+            if (source === "ticketing") payload.module = module;
+
+            await fetchFromProxy(payload);
+
+            if (source === "ticketing") {
+                list[idx] = { ...list[idx], module, title, content };
+                allTemplates = kbTicketingEntries.map((e) => ({ module: e.module, title: e.title, steps: e.content }));
+                updateTemplateDropdown();
+            } else {
+                list[idx] = { ...list[idx], title, content };
+            }
+
+            showNotification("Entry updated!");
+        } else {
+            // === ADD ===
+            const currentUser = getLoggedInUser();
+            const payload = {
+                action: "addKnowledgeBaseEntry",
+                sheetName: sheetName,
+                title: title,
+                content: content,
+            };
+            if (source === "ticketing") {
+                payload.module = module;
+            } else {
+                payload.createdBy = currentUser ? currentUser.support || "" : "";
+            }
+
+            await fetchFromProxy(payload);
+            showNotification("Entry added!");
+
+            kbLoaded[source] = false;
+            await loadKnowledgeBase(source);
+        }
+        closeKbEntryModal();
+        renderKnowledgeBase();
+    } catch (err) {
+        errEl.textContent = `Error: ${err.message}`;
+    } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Save";
+    }
+}
+
+				async function deleteKbEntry(id) {
+					const list = getActiveKbEntries();
+					const entry = list.find((e) => e.id === id);
+					if (!entry) return;
+
+					const typeLabel = entry.source === "ticketing" ? "Ticketing" : "HRMS";
+					if (!confirm(`Delete "${entry.title}" from ${typeLabel} knowledge base?\n\nThis cannot be undone.`)) return;
+
+					const sheetName = getKbSheetName(entry.source);
+					try {
+						await fetchFromProxy({
+							action: "deleteKnowledgeBaseEntry",
+							sheetName: sheetName,
+							rowIndex: entry.rowIndex,
+						});
+
+						showNotification("Entry deleted.");
+
+						// ✅ CRITICAL: reload from sheet so all rowIndexes stay accurate.
+						// Deleting a row shifts every row below it up by 1.
+						kbLoaded[entry.source] = false;
+						await loadKnowledgeBase(entry.source);
+						renderKnowledgeBase();
+					} catch (err) {
+						showNotification(`Delete failed: ${err.message}`);
+					}
 				}
 
 				function initSidebarToggle() {
@@ -8834,6 +9763,30 @@
 							toolbar: [["bold", "italic", "underline", "strike"], [{ list: "ordered" }, { list: "bullet" }], ["clean"]],
 						},
 					});
+
+					// Announcement rich text editor
+announcementQuill = new Quill("#newAnnouncementEditor", {
+    theme: "snow",
+    placeholder: "Details...",
+    modules: {
+        toolbar: [["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["link"], ["clean"]],
+    },
+});
+announcementQuill.on("text-change", () => {
+    document.getElementById("newAnnouncementText").value = announcementQuill.root.innerHTML;
+});
+
+// Knowledge Base content editor
+kbQuill = new Quill("#kbEntryContentEditor", {
+    theme: "snow",
+    placeholder: "Steps...",
+    modules: {
+        toolbar: [["bold", "italic", "underline"], [{ list: "ordered" }, { list: "bullet" }], ["clean"]],
+    },
+});
+kbQuill.on("text-change", () => {
+    document.getElementById("kbEntryContent").value = kbQuill.root.innerHTML;
+});
 
 					loadTroubleshootingTemplates();
 					initTemplateSelector();
@@ -9222,6 +10175,20 @@
 						localStorage.setItem("sidebarShift", document.getElementById("sidebar-shift").value);
 						syncSidebarToFormFields();
 					});
+					// Knowledge Base setup
+					const kbSearchInput = document.getElementById("kbSearchInput");
+					if (kbSearchInput) {
+						kbSearchInput.addEventListener("input", filterKnowledgeBase);
+					}
+					document.getElementById("kbEntryModalBackdrop").addEventListener("click", closeKbEntryModal);
+
+					// Sync toggle button active state to match persisted type
+					document.querySelectorAll(".kb-type-btn").forEach((b) => {
+						b.classList.toggle("active", b.dataset.kbType === currentKbType);
+					});
+
+					// Init module combobox for the KB entry modal
+					initCombobox("kbEntryModule-combobox", "kbEntryModule", MODULE_OPTIONS, "kbEntryModule-suggestions", () => {});
 				}
 
 				window.handleHistorySourceToggle = handleHistorySourceToggle;
@@ -9239,8 +10206,17 @@
 				window.summarizeEntryResolution = summarizeEntryResolution;
 
 				window.goToAnnouncement = goToAnnouncement;
-				window.prevAnnouncement = prevAnnouncement;
-				window.nextAnnouncement = nextAnnouncement;
+window.prevAnnouncement = prevAnnouncement;
+window.nextAnnouncement = nextAnnouncement;
+
+window.switchKbType = switchKbType;
+window.filterKnowledgeBase = filterKnowledgeBase;
+window.copyKbEntry = copyKbEntry;
+window.toggleKbEntry = toggleKbEntry;
+window.openKbEntryModal = openKbEntryModal;
+window.closeKbEntryModal = closeKbEntryModal;
+window.saveKbEntry = saveKbEntry;
+window.deleteKbEntry = deleteKbEntry;
 
 				document.addEventListener("DOMContentLoaded", init);
 			})();
@@ -9248,10 +10224,46 @@
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+
+		<!-- Knowledge Base Entry Modal -->
+		<div id="kbEntryModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
+			<h3 id="kbEntryModalTitle" style="margin-bottom: 16px">📚 Add Knowledge Base Entry</h3>
+			<input type="hidden" id="kbEntrySource" />
+
+			<div class="kb-form-row" id="kbEntryModuleRow">
+    <label>Module <span style="color: var(--danger)">*</span></label>
+    <div class="combobox-wrapper">
+        <input type="text" id="kbEntryModule-combobox" class="combobox-input" autocomplete="off" placeholder="Select or type module..." />
+        <input type="hidden" id="kbEntryModule" />
+        <div id="kbEntryModule-suggestions" class="combobox-suggestions"></div>
+    </div>
+</div>
+
+			<div class="kb-form-row">
+				<label>Title <span style="color: var(--danger)">*</span></label>
+				<input type="text" id="kbEntryTitle" class="no-uppercase" placeholder="e.g., Printer Not Responding" />
+			</div>
+
+			<div class="kb-form-row">
+    <label>Content / Steps <span style="color: var(--danger)">*</span></label>
+    <div id="kbEntryContentEditor" style="height: 220px; background: var(--bg-secondary); border-radius: 12px;"></div>
+    <textarea id="kbEntryContent" style="display: none"></textarea>
+</div>
+
+			<div id="kbEntryError" style="color: var(--danger); margin-bottom: 12px; font-size: 0.85rem"></div>
+
+			<div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px">
+				<button id="kbEntrySaveBtn" class="login-action-btn" onclick="saveKbEntry()">Save</button>
+				<button class="login-action-btn" style="background: #6b7280" onclick="closeKbEntryModal()">Cancel</button>
+			</div>
+		</div>
+		<div id="kbEntryModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
+
 		<div id="announcementModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 500px; max-width: 90%; z-index: 1200; border: 1px solid var(--border-color)">
 			<h3 style="margin-bottom: 16px">📢 New Announcement</h3>
 			<input type="text" id="newAnnouncementSubject" class="no-uppercase" placeholder="Subject" style="width: 100%; margin-bottom: 12px" />
-			<textarea id="newAnnouncementText" class="no-uppercase" rows="5" placeholder="Details..." style="width: 100%; margin-bottom: 12px"></textarea>
+			<div id="newAnnouncementEditor" style="height: 160px; margin-bottom: 12px; background: var(--bg-secondary); border-radius: 12px;"></div>
+<textarea id="newAnnouncementText" style="display: none"></textarea>
 			<div style="display: flex; gap: 8px; justify-content: flex-end">
 				<button id="submitAnnouncementBtn" class="login-action-btn">Post</button>
 				<button id="cancelAnnouncementBtn" class="login-action-btn" style="background: #6b7280">Cancel</button>
