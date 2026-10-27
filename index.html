@@ -2966,455 +2966,62 @@
 				color: var(--accent-color);
 			}
 			/* ==================== ANNOUNCEMENT ACKNOWLEDGMENTS ==================== */
-			.announcement-ack-row {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				margin-top: 10px;
-				padding-top: 8px;
-				border-top: 1px dashed var(--border-color);
-				flex-wrap: wrap;
-			}
+.announcement-ack-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border-color);
+    flex-wrap: wrap;
+}
 
-			.ack-btn {
-				background: var(--bg-secondary);
-				border: 1px solid var(--border-color);
-				color: var(--text-secondary);
-				padding: 5px 14px;
-				border-radius: 30px;
-				font-size: 0.72rem;
-				font-weight: 600;
-				text-transform: uppercase;
-				letter-spacing: 0.03em;
-				cursor: pointer;
-				transition: var(--transition);
-				display: inline-flex;
-				align-items: center;
-				gap: 4px;
-				font-family: inherit;
-				line-height: 1;
-			}
+.ack-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: inherit;
+    line-height: 1;
+}
 
-			.ack-btn:hover:not(:disabled) {
-				background: var(--accent-color);
-				color: #fff;
-				border-color: var(--accent-color);
-				transform: translateY(-1px);
-			}
+.ack-btn:hover:not(:disabled) {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+}
 
-			.ack-btn.acked,
-			.ack-btn:disabled {
-				background: rgba(16, 185, 129, 0.12);
-				color: #10b981;
-				border-color: #10b981;
-				cursor: default;
-				opacity: 1;
-			}
+.ack-btn.acked,
+.ack-btn:disabled {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border-color: #10b981;
+    cursor: default;
+    opacity: 1;
+}
 
-			.ack-count {
-				font-size: 0.7rem;
-				color: var(--text-muted);
-				font-weight: 500;
-			}
+.ack-count {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
 
-			.ack-note {
-				font-size: 0.7rem;
-				color: var(--text-muted);
-				font-style: italic;
-			}
-			/* ==================== RESIZABLE PANELS ==================== */
-			.three-panels {
-				position: relative;
-			}
-			.panel-resizer {
-				flex: 0 0 6px;
-				width: 6px;
-				cursor: col-resize;
-				align-self: stretch;
-				background: transparent;
-				position: relative;
-				-webkit-user-select: none;
-				user-select: none;
-				z-index: 5;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-			}
-			.panel-resizer::before {
-				content: "";
-				width: 2px;
-				height: 100%;
-				background: var(--border-color);
-				border-radius: 1px;
-				transition: background 0.15s;
-			}
-			.panel-resizer:hover::before,
-			.panel-resizer.dragging::before {
-				background: var(--accent-color);
-			}
-			@media (max-width: 1400px) {
-				.panel-resizer {
-					display: none;
-				}
-			}
-
-			/* ==================== STICKY TABLE HEADER + FIRST COLUMN ==================== */
-			#entryTable {
-				overflow: visible !important;
-			}
-			.table-wrapper {
-				overflow: auto;
-				max-height: calc(100vh - 140px);
-				border-radius: 16px;
-				border: 1px solid var(--border-color);
-				background: var(--bg-secondary);
-			}
-			#entryTable th {
-				position: sticky;
-				top: 0;
-				z-index: 3;
-				background: var(--bg-tertiary) !important;
-			}
-			#entryTable th:first-child,
-			#entryTable td:first-child {
-				position: sticky;
-				left: 0;
-				z-index: 2;
-				background: var(--bg-secondary);
-			}
-			#entryTable th:first-child {
-				z-index: 4;
-			}
-			#entryTable tbody tr:hover td:first-child {
-				background: var(--bg-tertiary);
-			}
-
-			/* ==================== LOADING SKELETONS ==================== */
-			.skeleton-line {
-				height: 14px;
-				border-radius: 6px;
-				background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--border-color) 50%, var(--bg-tertiary) 75%);
-				background-size: 200% 100%;
-				animation: skeleton-shimmer 1.4s infinite linear;
-				margin-bottom: 8px;
-			}
-			.skeleton-line.short {
-				width: 45%;
-			}
-			.skeleton-line.medium {
-				width: 70%;
-			}
-			@keyframes skeleton-shimmer {
-				0% {
-					background-position: 200% 0;
-				}
-				100% {
-					background-position: -200% 0;
-				}
-			}
-
-			/* ==================== DARK MODE QUILL TOOLBAR ==================== */
-			body.dark-mode .ql-toolbar.ql-snow,
-			body.dark-mode .ql-container.ql-snow {
-				border-color: var(--border-color);
-			}
-			body.dark-mode .ql-snow .ql-stroke {
-				stroke: var(--text-primary);
-			}
-			body.dark-mode .ql-snow .ql-fill,
-			body.dark-mode .ql-snow .ql-stroke.ql-fill {
-				fill: var(--text-primary);
-			}
-			body.dark-mode .ql-snow .ql-picker,
-			body.dark-mode .ql-snow .ql-picker-label,
-			body.dark-mode .ql-snow .ql-picker-item {
-				color: var(--text-primary);
-			}
-			body.dark-mode .ql-snow .ql-picker-options {
-				background: var(--bg-secondary);
-				border-color: var(--border-color);
-			}
-			body.dark-mode .ql-editor.ql-blank::before {
-				color: var(--text-muted);
-			}
-			body.dark-mode .ql-snow .ql-active .ql-stroke {
-				stroke: var(--accent-color);
-			}
-			body.dark-mode .ql-snow .ql-active .ql-fill {
-				fill: var(--accent-color);
-			}
-
-			/* ==================== MOBILE CARD LAYOUT ==================== */
-			@media (max-width: 700px) {
-				.table-wrapper {
-					max-height: none;
-					border: none;
-					overflow: visible;
-				}
-				#entryTable {
-					min-width: 0 !important;
-					width: 100% !important;
-				}
-				#entryTable thead {
-					display: none;
-				}
-				#entryTable,
-				#entryTable tbody,
-				#entryTable tr,
-				#entryTable td {
-					display: block;
-					width: 100%;
-					box-sizing: border-box;
-				}
-				#entryTable tr {
-					margin-bottom: 12px;
-					border: 1px solid var(--border-color);
-					border-radius: 12px;
-					padding: 8px;
-					background: var(--bg-secondary);
-				}
-				#entryTable td {
-					border: none;
-					text-align: left;
-					padding: 6px 4px 6px 110px;
-					position: relative;
-					max-width: none;
-					min-height: 30px;
-				}
-				#entryTable td::before {
-					content: attr(data-label);
-					position: absolute;
-					left: 8px;
-					top: 6px;
-					width: 96px;
-					font-weight: 600;
-					font-size: 0.65rem;
-					color: var(--text-muted);
-					text-transform: uppercase;
-					letter-spacing: 0.02em;
-				}
-				#entryTable td:first-child {
-					padding-left: 4px;
-					background: transparent;
-					position: static;
-				}
-				#entryTable td:first-child::before {
-					display: none;
-				}
-				#entryTable td.action-cell .action-container {
-					flex-direction: row;
-					flex-wrap: wrap;
-					justify-content: flex-start;
-				}
-			}
-
-			/* ==================== EDITING BADGE ==================== */
-			.editing-badge {
-				display: inline-flex;
-				align-items: center;
-				gap: 6px;
-				padding: 3px 10px;
-				border-radius: 30px;
-				background: rgba(245, 158, 11, 0.15);
-				color: #f59e0b;
-				font-size: 0.66rem;
-				font-weight: 700;
-				text-transform: uppercase;
-				letter-spacing: 0.03em;
-				border: 1px solid rgba(245, 158, 11, 0.4);
-				margin-left: 12px;
-				vertical-align: middle;
-				animation: pulse-badge 2s ease-in-out infinite;
-			}
-			.editing-badge button {
-				background: transparent;
-				border: none;
-				color: inherit;
-				cursor: pointer;
-				padding: 0 2px;
-				font-size: 1rem;
-				line-height: 1;
-				font-family: inherit;
-			}
-			.editing-badge button:hover {
-				color: var(--danger);
-			}
-			@keyframes pulse-badge {
-				0%,
-				100% {
-					opacity: 1;
-				}
-				50% {
-					opacity: 0.7;
-				}
-			}
-
-			/* ==================== COLLAPSIBLE FORM SECTIONS ==================== */
-			.collapsible-section-toggle {
-				cursor: pointer;
-				-webkit-user-select: none;
-				user-select: none;
-				padding: 8px 4px;
-				font-size: 0.78rem;
-				font-weight: 700;
-				color: var(--accent-color);
-				text-transform: uppercase;
-				letter-spacing: 0.03em;
-				display: flex;
-				align-items: center;
-				gap: 6px;
-				border-top: 1px dashed var(--border-color);
-				margin-top: 8px;
-			}
-			.collapsible-section-toggle:hover {
-				color: var(--accent-hover);
-			}
-			.collapsible-section-toggle .arrow {
-				transition: transform 0.2s;
-				font-size: 0.7rem;
-				display: inline-block;
-			}
-			.collapsible-section-toggle.collapsed .arrow {
-				transform: rotate(-90deg);
-			}
-			.hidden-row {
-				display: none !important;
-			}
-
-			/* ==================== DASHBOARD CARD CLICKABLE ==================== */
-			.dashboard-card.card-resolved,
-			.dashboard-card.card-pending,
-			.dashboard-card.card-other {
-				cursor: pointer;
-			}
-			.dashboard-card.card-resolved:hover,
-			.dashboard-card.card-pending:hover,
-			.dashboard-card.card-other:hover {
-				transform: translateY(-2px);
-				box-shadow: var(--card-shadow-hover);
-				box-shadow:
-					var(--card-shadow-hover),
-					0 0 0 2px var(--accent-color);
-			}
-
-			/* ==================== COPY-ALL CREDENTIALS BUTTON ==================== */
-			.copy-all-btn {
-				width: 100%;
-				margin-top: 16px;
-				padding: 10px 16px;
-				background: var(--success);
-				color: white;
-				border: 1px solid var(--success);
-				border-radius: 40px;
-				cursor: pointer;
-				font-weight: 600;
-				font-size: 0.76rem;
-				text-transform: uppercase;
-				letter-spacing: 0.03em;
-				display: inline-flex;
-				align-items: center;
-				justify-content: center;
-				gap: 6px;
-				transition: var(--transition);
-				font-family: inherit;
-			}
-			.copy-all-btn:hover {
-				background: #0d9668;
-				border-color: #0d9668;
-				transform: translateY(-1px);
-				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-			}
-						/* ==================== MODULE STAT BARS (Top 10 Modules) ==================== */
-			.module-stat-row {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				margin-bottom: 8px;
-				padding: 4px 0;
-			}
-			.module-stat-rank {
-				width: 24px;
-				height: 24px;
-				border-radius: 50%;
-				background: var(--bg-tertiary);
-				color: var(--text-secondary);
-				font-weight: 700;
-				font-size: 0.72rem;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex-shrink: 0;
-				border: 1px solid var(--border-color);
-			}
-			.module-stat-rank.top-3 {
-				background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-				color: #fff;
-				border-color: transparent;
-			}
-			.module-stat-name {
-				flex: 1 1 150px;
-				min-width: 0;
-				font-weight: 600;
-				font-size: 0.82rem;
-				color: var(--text-primary);
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-			.module-stat-bar-wrap {
-				flex: 1 1 220px;
-				height: 22px;
-				background: var(--bg-tertiary);
-				border-radius: 11px;
-				overflow: hidden;
-				position: relative;
-				border: 1px solid var(--border-color);
-			}
-			.module-stat-bar {
-				height: 100%;
-				background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-				border-radius: 11px 0 0 11px;
-				display: flex;
-				align-items: center;
-				justify-content: flex-end;
-				padding-right: 8px;
-				color: #fff;
-				font-size: 0.68rem;
-				font-weight: 700;
-				min-width: 32px;
-				transition: width 0.5s ease;
-				box-shadow: 0 2px 4px rgba(59, 130, 246, 0.25);
-			}
-			@media (max-width: 700px) {
-				.module-stat-name {
-					flex: 1 1 100%;
-					order: -1;
-				}
-				.module-stat-row {
-					flex-wrap: wrap;
-				}
-			}
-
-			/* ==================== SCROLLABLE CAROUSEL SLIDES ==================== */
-			.carousel-slide {
-				max-height: 600px;
-				min-height: 270px;
-				overflow-y: auto;
-				scrollbar-width: thin;
-			}
-			.carousel-slide::-webkit-scrollbar {
-				width: 8px;
-			}
-			.carousel-slide::-webkit-scrollbar-track {
-				background: transparent;
-			}
-			.carousel-slide::-webkit-scrollbar-thumb {
-				background: var(--border-color);
-				border-radius: 4px;
-			}
-			.carousel-slide::-webkit-scrollbar-thumb:hover {
-				background: var(--text-muted);
-			}
+.ack-note {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
 		</style>
 	</head>
 	<body>
@@ -3547,27 +3154,15 @@
 							</div>
 						</div>
 
-												<!-- Top 5 performers -->
+						<!-- Top 5 performers -->
 						<div class="dashboard-section">
 							<div class="dashboard-section-header">
-								<h3>🏆 Top 5 Performing Support <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">(This Month)</span></h3>
+								<h3>🏆 Top 5 Performing Support</h3>
 							</div>
 							<div id="topPerformersContainer">
 								<div class="performers-empty">Loading...</div>
 							</div>
 						</div>
-
-						<!-- Top 10 Common Issues by Module -->
-						<div class="dashboard-section">
-							<div class="dashboard-section-header">
-								<h3>🔥 Top 10 Common Issues by Module <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">(This Month)</span></h3>
-							</div>
-							<div id="topModulesContainer">
-								<div class="performers-empty">Loading...</div>
-							</div>
-						</div>
-					</div>
-				</div>
 					</div>
 				</div>
 
@@ -3712,13 +3307,13 @@
 									<th>RESOLUTION</th>
 									<td>
 										<div id="ticket-resolution-editor" style="height: 200px"></div>
-										<div class="mt-2" id="ticket-template-container" style="margin-top: 10px">
-    <label for="ticket-template-select" style="font-size: 0.8rem; font-weight: 500">📋 Load Knowledge Base Templates:</label>
-    <select id="ticket-template-select" class="form-select" style="font-size: 0.8rem">
-        <option value="">-- Select a template --</option>
-    </select>
-    <small style="font-size: 0.7rem; color: var(--text-muted)">Selecting a template will replace current troubleshooting steps (you can edit afterwards).</small>
-</div>
+										<div class="mt-2" style="margin-top: 10px">
+											<label for="ticket-template-select" style="font-size: 0.8rem; font-weight: 500">📋 Load Troubleshooting Template:</label>
+											<select id="ticket-template-select" class="form-select" style="font-size: 0.8rem">
+												<option value="">-- Select a template --</option>
+											</select>
+											<small style="font-size: 0.7rem; color: var(--text-muted)">Selecting a template will replace current troubleshooting steps (you can edit afterwards).</small>
+										</div>
 										<textarea id="ticket-resolution" style="display: none"></textarea>
 									</td>
 								</tr>
@@ -4469,7 +4064,7 @@
 					<button class="counter-badge status-filter-btn" data-status="OTHER TASK" onclick="filterByStatus('OTHER TASK')">📋 OTHER TASK: <span id="counterOther">0</span></button>
 				</div>
 
-				<div class="table-wrapper">
+				<div style="overflow-x: auto">
 					<table id="entryTable">
 						<thead>
 							<tr>
@@ -4698,7 +4293,7 @@
 				const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
 				const SHIFT_OPTIONS = ["9PM - 6AM", "5AM - 2PM", "2PM - 11PM"];
 
-				let currentStatusFilter = new Set();
+				let currentStatusFilter = null;
 				let currentActiveTab = "dashboard";
 				let allEntries = [];
 				let storeData = [];
@@ -5171,12 +4766,7 @@
 					};
 
 					Object.values(statusEls).forEach((el) => {
-						if (el)
-							el.innerHTML = `
-							<div class="skeleton-line short"></div>
-							<div class="skeleton-line medium"></div>
-							<div class="skeleton-line"></div>
-						`;
+						if (el) el.innerHTML = '<div class="spinner"></div> Loading stores from Google Sheets...';
 					});
 
 					try {
@@ -5830,8 +5420,6 @@
 					});
 					ecommerceUpdatePreview();
 					saveFormData("ecommerce");
-					markClean("ecommerce");
-					clearEditingBadge();
 					saveAllEntries();
 					updateStatusCounters();
 					renderTable();
@@ -6226,8 +5814,6 @@
 					}
 
 					clearFormFields("ticket");
-					markClean("ticket");
-					clearEditingBadge();
 					saveAllEntries();
 					updateStatusCounters();
 					renderTable();
@@ -6309,6 +5895,7 @@
 					if (editId) {
 						const index = allEntries.findIndex((e) => e.id === editId);
 						if (index !== -1) {
+							// ✅ Edit mode: preserve and update contact/contactNumber from the form
 							allEntries[index] = {
 								...allEntries[index],
 								date: formattedDate,
@@ -6317,8 +5904,8 @@
 								portal: portal,
 								store: storeName,
 								zip: zipcode,
-								contact: contact,
-								contactNumber: contactNumber,
+								contact: contact, // <-- use form value
+								contactNumber: contactNumber, // <-- use form value
 								issue: issueText,
 								moduleData: moduleData,
 								status: "OTHER TASK",
@@ -6327,6 +5914,7 @@
 								imported: false,
 							};
 							showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry updated!`);
+
 							localStorage.removeItem(EDIT_DRAFT_KEY + editId);
 							editId = null;
 							localStorage.removeItem(EDIT_STORAGE_KEY);
@@ -6335,6 +5923,7 @@
 								addBtn.classList.remove("editing");
 							}
 						} else {
+							// Fallback: entry not found – create a new one
 							const newEntry = {
 								id: Date.now(),
 								date: formattedDate,
@@ -6343,8 +5932,8 @@
 								portal: portal,
 								store: storeName,
 								zip: zipcode,
-								contact: contact,
-								contactNumber: contactNumber,
+								contact: contact, // <-- use form value
+								contactNumber: contactNumber, // <-- use form value
 								module: prefix === "store" ? "Store Creation" : "Moolah",
 								issue: issueText,
 								note: "",
@@ -6369,6 +5958,7 @@
 							}
 						}
 					} else {
+						// ✅ New entry: use the form values (not hardcoded)
 						const newEntry = {
 							id: Date.now(),
 							date: formattedDate,
@@ -6377,8 +5967,8 @@
 							portal: portal,
 							store: storeName,
 							zip: zipcode,
-							contact: contact,
-							contactNumber: contactNumber,
+							contact: contact, // <-- use form value
+							contactNumber: contactNumber, // <-- use form value
 							module: prefix === "store" ? "Store Creation" : "Moolah",
 							issue: issueText,
 							note: "",
@@ -6413,8 +6003,6 @@
 						saveFormData("moolah");
 					}
 
-					markClean(prefix);
-					clearEditingBadge();
 					saveAllEntries();
 					updateStatusCounters();
 					renderTable();
@@ -6519,11 +6107,9 @@
 							btn.textContent = "ADD ENTRY";
 							btn.classList.remove("editing");
 						});
-						clearEditingBadge();
 						showNotification("Edit cancelled. Form cleared.");
 					}
 
-					markClean(prefix);
 					clearFormFields(prefix);
 					if (prefix === "ticket") ticketUpdatePreview();
 					if (prefix === "store") storeUpdatePreview();
@@ -6769,7 +6355,6 @@
 							addBtn.textContent = "EDIT ENTRY";
 							addBtn.classList.add("editing");
 						}
-						showEditingBadge(prefix, editId);
 
 						if (entry.imported) {
 							entry.imported = false;
@@ -6810,14 +6395,22 @@
 					const id = row.dataset.id;
 					pushUndo();
 					const entry = allEntries.find((e) => e.id == id);
-					if (editId == id) {
-						editId = null;
-						localStorage.removeItem(EDIT_STORAGE_KEY);
-						document.querySelectorAll(".add").forEach((btn) => {
-							btn.textContent = "ADD ENTRY";
-							btn.classList.remove("editing");
-						});
-						clearEditingBadge();
+					if (entry) {
+						entry.deleted = true;
+						saveAllEntries();
+						renderTable();
+						renderSidebar();
+						showNotification("Entry removed from main table (still in history)");
+
+						// FIX: If this entry was being edited, cancel edit mode
+						if (editId == id) {
+							editId = null;
+							localStorage.removeItem(EDIT_STORAGE_KEY);
+							document.querySelectorAll(".add").forEach((btn) => {
+								btn.textContent = "ADD ENTRY";
+								btn.classList.remove("editing");
+							});
+						}
 					}
 
 					if (editId == id) {
@@ -6893,12 +6486,11 @@
 				}
 
 				function renderTable() {
-					if (isPendingTrackerMode) return;
+					if (isPendingTrackerMode) return; // tracker view owns the table when active
 
-					let visibleEntries = getVisibleEntries();
+					let visibleEntries = getVisibleEntries(); // honours currentStatusFilter
 
-					// Show workload pendings when no filter, or when PENDING is among active filters
-					if (currentStatusFilter.size === 0 || currentStatusFilter.has("PENDING")) {
+					if (!currentStatusFilter || currentStatusFilter === "PENDING") {
 						visibleEntries = visibleEntries.concat(myPendingCache);
 					}
 
@@ -6918,37 +6510,39 @@
 							displayContactNumber = "(000) 000-0000";
 						}
 
-						const checkboxCell = isWorkloadEntry ? '<span class="workload-badge" title="From WORKLOAD TRACKER">WL</span>' : `<input type="checkbox" class="row-checkbox" value="${entry.id}" aria-label="Select row">`;
+						// WL rows: no checkbox (so bulk ops never touch them); show a WL badge instead
+						const checkboxCell = isWorkloadEntry ? '<span class="workload-badge" title="From WORKLOAD TRACKER">WL</span>' : `<input type="checkbox" class="row-checkbox" value="${entry.id}">`;
 
+						// WL rows: copy only (edit/delete/summarize would target `allEntries` and silently fail)
 						const actionsHtml = isWorkloadEntry
-							? `<button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy" aria-label="Copy row"><i class="bi bi-clipboard-fill"></i></button>`
+							? `<button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>`
 							: `
-								<button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy" aria-label="Copy row"><i class="bi bi-clipboard-fill"></i></button>
-								<button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution" aria-label="Summarize resolution"><i class="bi bi-arrow-clockwise"></i></button>
-								<button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit" aria-label="Edit entry"><i class="bi bi-pencil-square"></i></button>
-								<button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove" aria-label="Remove entry"><i class="bi bi-trash3-fill"></i></button>
-							`;
+			                <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
+			                <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
+			                <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
+			                <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
+			            `;
 
 						row.innerHTML = `
-							<td data-label="">${checkboxCell}</td>
-							<td data-label="DATE">${escapeHtml(entry.date || "")}</td>
-							<td data-label="SHIFT">${escapeHtml(entry.shift || "")}</td>
-							<td data-label="SUPPORT">${escapeHtml(entry.support || "")}</td>
-							<td data-label="PORTAL">${escapeHtml(entry.portal || "")}</td>
-							<td data-label="STORE">${escapeHtml(entry.store || "")}</td>
-							<td data-label="ZIP">${escapeHtml(entry.zip || "")}</td>
-							<td data-label="CONTACT">${escapeHtml(displayContact || "")}</td>
-							<td data-label="CONTACT#">${escapeHtml(displayContactNumber || "")}</td>
-							<td data-label="MODULE">${escapeHtml(entry.module || "")}</td>
-							<td data-label="ISSUE" style="white-space: pre-wrap;">${escapeHtml(entry.issue || "")}</td>
-							<td data-label="ESCALATED">${escapeHtml(entry.escalated || "")}</td>
-							<td data-label="STATUS">${escapeHtml(entry.status || "")}</td>
-							<td data-label="REMARKS" style="white-space: pre-wrap;">${escapeHtml(entry.remarks || "")}</td>
-							<td data-label="RESOLUTION" style="white-space: pre-wrap;">${escapeHtml(entry.resolution || "")}</td>
-							<td class="action-cell" data-label="ACTIONS">
-								<div class="action-container">${actionsHtml}</div>
-							</td>
-						`;
+			            <td>${checkboxCell}</td>
+			            <td>${escapeHtml(entry.date || "")}</td>
+			            <td>${escapeHtml(entry.shift || "")}</td>
+			            <td>${escapeHtml(entry.support || "")}</td>
+			            <td>${escapeHtml(entry.portal || "")}</td>
+			            <td>${escapeHtml(entry.store || "")}</td>
+			            <td>${escapeHtml(entry.zip || "")}</td>
+			            <td>${escapeHtml(displayContact || "")}</td>
+			            <td>${escapeHtml(displayContactNumber || "")}</td>
+			            <td>${escapeHtml(entry.module || "")}</td>
+			            <td style="white-space: pre-wrap;">${escapeHtml(entry.issue || "")}</td>
+			            <td>${escapeHtml(entry.escalated || "")}</td>
+			            <td>${escapeHtml(entry.status || "")}</td>
+			            <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks || "")}</td>
+			            <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution || "")}</td>
+			            <td class="action-cell">
+			                <div class="action-container">${actionsHtml}</div>
+			            </td>
+			        `;
 						tbody.appendChild(row);
 					});
 					updateSelectAllCheckboxState();
@@ -7423,8 +7017,6 @@
 				function saveAllEntries() {
 					localStorage.setItem("unifiedEntries", JSON.stringify(allEntries));
 					updateStatusCounters();
-					localStorageCheckCounter++;
-					if (localStorageCheckCounter % 20 === 0) checkLocalStorageSize();
 				}
 
 				function loadAllEntries() {
@@ -7454,22 +7046,28 @@
 						const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, "0")}-${String(dateObj.getDate()).padStart(2, "0")}`;
 						return entryDateStr <= todayEST;
 					});
-					if (currentStatusFilter.size > 0) {
-						entries = entries.filter((entry) => currentStatusFilter.has((entry.status || "").toUpperCase()));
+					if (currentStatusFilter) {
+						entries = entries.filter((entry) => (entry.status || "").toUpperCase() === currentStatusFilter);
 					}
 					return entries;
 				}
 
 				function filterByStatus(status) {
-					if (currentStatusFilter.has(status)) {
-						currentStatusFilter.delete(status);
+					if (currentStatusFilter === status) {
+						// Clear filter
+						currentStatusFilter = null;
 					} else {
-						currentStatusFilter.add(status);
+						currentStatusFilter = status;
 					}
+					// Update active class on buttons
 					document.querySelectorAll(".status-filter-btn").forEach((btn) => {
-						btn.classList.toggle("active", currentStatusFilter.has(btn.dataset.status));
+						if (btn.dataset.status === currentStatusFilter) {
+							btn.classList.add("active");
+						} else {
+							btn.classList.remove("active");
+						}
 					});
-					renderTable();
+					renderTable(); // re-render with filter
 				}
 
 				function getShiftReportBaseDate() {
@@ -7792,9 +7390,6 @@
 					modal.style.maxHeight = "80vh";
 					modal.style.overflowY = "auto";
 					modal.style.border = "1px solid #cdddee";
-					modal.classList.add("shift-report-modal");
-					modal.setAttribute("role", "dialog");
-					modal.setAttribute("aria-modal", "true");
 
 					if (document.body.classList.contains("dark-mode")) {
 						modal.style.backgroundColor = "#2d3748";
@@ -8404,313 +7999,6 @@
 				let myPendingCache = [];
 				let myPendingCacheTime = 0;
 
-				/* ==================== NEW FEATURE STATE ==================== */
-				const formDirty = { ticket: false, store: false, moolah: false, ecommerce: false, scheduler: false };
-				let localStorageCheckCounter = 0;
-
-				function markDirty(prefix) {
-					formDirty[prefix] = true;
-				}
-				function markClean(prefix) {
-					formDirty[prefix] = false;
-				}
-
-				function clearEditingBadge() {
-					document.querySelectorAll(".editing-badge").forEach((b) => b.remove());
-				}
-
-				function showEditingBadge(prefix, entryId) {
-					clearEditingBadge();
-					const leftPanel = document.querySelector(`#tab-${prefix} .left-panel`);
-					if (!leftPanel) return;
-					const heading = leftPanel.querySelector("h3");
-					if (!heading) return;
-					const badge = document.createElement("span");
-					badge.className = "editing-badge";
-					badge.innerHTML = `✏️ Editing #${entryId} <button type="button" title="Cancel edit" aria-label="Cancel edit">✕</button>`;
-					badge.querySelector("button").addEventListener("click", (e) => {
-						e.preventDefault();
-						clearFormOnly(prefix);
-					});
-					heading.appendChild(badge);
-				}
-
-				/* ==================== RESIZABLE PANELS ==================== */
-				function initResizablePanels() {
-					document.querySelectorAll(".three-panels").forEach((container) => {
-						const panels = Array.from(container.children).filter((c) => c.matches(".history-panel, .left-panel, .right-panel"));
-						if (panels.length < 2) return;
-
-						for (let i = 0; i < panels.length - 1; i++) {
-							const resizer = document.createElement("div");
-							resizer.className = "panel-resizer";
-							resizer.setAttribute("aria-hidden", "true");
-							panels[i].after(resizer);
-
-							let startX, startLeftWidth, startRightWidth, leftEl, rightEl;
-
-							resizer.addEventListener("mousedown", (e) => {
-								if (window.innerWidth <= 1400) return;
-								leftEl = panels[i];
-								rightEl = panels[i + 1];
-								startX = e.clientX;
-								startLeftWidth = leftEl.getBoundingClientRect().width;
-								startRightWidth = rightEl.getBoundingClientRect().width;
-								resizer.classList.add("dragging");
-								document.body.style.cursor = "col-resize";
-								document.body.style.userSelect = "none";
-								e.preventDefault();
-
-								const onMove = (e2) => {
-									const delta = e2.clientX - startX;
-									const minWidth = 220;
-									let newLeft = startLeftWidth + delta;
-									let newRight = startRightWidth - delta;
-									if (newLeft < minWidth) {
-										newRight -= minWidth - newLeft;
-										newLeft = minWidth;
-									}
-									if (newRight < minWidth) {
-										newLeft -= minWidth - newRight;
-										newRight = minWidth;
-									}
-									leftEl.style.flex = `0 0 ${newLeft}px`;
-									leftEl.style.minWidth = `${newLeft}px`;
-									rightEl.style.flex = `0 0 ${newRight}px`;
-									rightEl.style.minWidth = `${newRight}px`;
-								};
-								const onUp = () => {
-									resizer.classList.remove("dragging");
-									document.body.style.cursor = "";
-									document.body.style.userSelect = "";
-									document.removeEventListener("mousemove", onMove);
-									document.removeEventListener("mouseup", onUp);
-									syncPreviewHeight();
-								};
-								document.addEventListener("mousemove", onMove);
-								document.addEventListener("mouseup", onUp);
-							});
-						}
-					});
-
-					window.addEventListener("resize", () => {
-						if (window.innerWidth <= 1400) {
-							document.querySelectorAll(".left-panel, .right-panel, .history-panel").forEach((p) => {
-								p.style.flex = "";
-								p.style.minWidth = "";
-							});
-						}
-					});
-				}
-
-				/* ==================== COLLAPSIBLE FORM SECTIONS ==================== */
-				function initAdvancedToggle(prefix, basicFieldIds) {
-					const table = document.querySelector(`#tab-${prefix} .left-panel table`);
-					if (!table) return;
-					const rows = Array.from(table.querySelectorAll("tr"));
-					const advancedRows = [];
-					rows.forEach((row) => {
-						const input = row.querySelector("input, textarea");
-						if (!input) return;
-						if (basicFieldIds.includes(input.id)) return;
-						advancedRows.push(row);
-					});
-					if (advancedRows.length < 3) return; // don't bother for tiny forms
-
-					const first = advancedRows[0];
-					const toggleRow = document.createElement("tr");
-					toggleRow.innerHTML = `<th colspan="2" style="padding: 0; border: none;">
-						<div class="collapsible-section-toggle collapsed" id="${prefix}-advanced-toggle">
-							<span class="arrow">▼</span> Advanced Fields
-						</div>
-					</th>`;
-					first.parentNode.insertBefore(toggleRow, first);
-
-					advancedRows.forEach((r) => r.classList.add(`${prefix}-advanced-row`, "hidden-row"));
-
-					document.getElementById(`${prefix}-advanced-toggle`).addEventListener("click", function () {
-						const collapsed = this.classList.toggle("collapsed");
-						document.querySelectorAll(`.${prefix}-advanced-row`).forEach((r) => {
-							r.classList.toggle("hidden-row", collapsed);
-						});
-					});
-				}
-
-								function initTicketAdvancedToggle() {
-					const escalatedRow = document.getElementById("ticket-escalated")?.closest("tr");
-					const templateContainer = document.getElementById("ticket-template-container");
-					const noteRow = document.getElementById("ticket-note")?.closest("tr");
-					if (!escalatedRow || !templateContainer || !noteRow) return;
-
-					const toggleRow = document.createElement("tr");
-					toggleRow.innerHTML = `<th colspan="2" style="padding: 0; border: none;">
-						<div class="collapsible-section-toggle collapsed" id="ticket-advanced-toggle">
-							<span class="arrow">▼</span> Advanced Fields (Escalated, KB Templates, Note)
-						</div>
-					</th>`;
-					escalatedRow.parentNode.insertBefore(toggleRow, escalatedRow);
-
-					escalatedRow.classList.add("ticket-advanced-row", "hidden-row");
-					templateContainer.classList.add("ticket-advanced-row", "hidden-row");
-					noteRow.classList.add("ticket-advanced-row", "hidden-row");
-
-					document.getElementById("ticket-advanced-toggle").addEventListener("click", function () {
-						const collapsed = this.classList.toggle("collapsed");
-						document.querySelectorAll(".ticket-advanced-row").forEach((r) => {
-							r.classList.toggle("hidden-row", collapsed);
-						});
-					});
-				}
-
-				/* ==================== COPY-ALL CREDENTIALS ==================== */
-				function initCopyAllButtons() {
-					function addBtn(panelId, dataGetter) {
-						const panel = document.getElementById(panelId);
-						if (!panel) return;
-						if (panel.querySelector(".copy-all-btn")) return;
-						const btn = document.createElement("button");
-						btn.type = "button";
-						btn.className = "copy-all-btn";
-						btn.innerHTML = `📋 Copy All Credentials`;
-						btn.addEventListener("click", async () => {
-							const data = dataGetter();
-							if (!data) {
-								showNotification("Nothing to copy — fill the form first.");
-								return;
-							}
-							try {
-								const plainBlob = new Blob([data.plain], { type: "text/plain" });
-								const htmlBlob = new Blob([data.html], { type: "text/html" });
-								await navigator.clipboard.write([new ClipboardItem({ "text/plain": plainBlob, "text/html": htmlBlob })]);
-								showNotification("All credentials copied!");
-							} catch {
-								navigator.clipboard.writeText(data.plain);
-								showNotification("All credentials copied (plain text)");
-							}
-						});
-						panel.appendChild(btn);
-					}
-
-					addBtn("store-previewPanel", () => {
-						const p = (id) => (document.getElementById(id)?.textContent || "").trim();
-						const portal = p("store-preview-portal");
-						const storeName = p("store-preview-storeName");
-						if (!portal && !storeName) return null;
-						const plain = [`STORE: ${storeName}`, `PORTAL: ${portal}`, `ZIP: ${p("store-preview-zipcode")}`, `URL: https://portal${portal}.retailzpos.com/`, `EMAIL: ${p("store-preview-email")}`, `PASSWORD: ${p("store-preview-password")}`, `ACCESS PIN: 1122`, `SKU: ${p("store-preview-sku")}`].join("\n");
-						const html = plain
-							.split("\n")
-							.map((l) => `<div>${escapeHtml(l)}</div>`)
-							.join("");
-						return { plain, html };
-					});
-
-					addBtn("moolah-previewPanel", () => {
-						const p = (id) => (document.getElementById(id)?.textContent || "").trim();
-						const portal = p("moolah-preview-portal");
-						const storeName = p("moolah-preview-storeName");
-						if (!portal && !storeName) return null;
-						const plain = [`STORE: ${storeName}`, `PORTAL: ${portal}`, `ZIP: ${p("moolah-preview-zipcode")}`, `URL: https://portal${portal}.retailzpos.com/`, `EMAIL: ${p("moolah-preview-email")}`, `PASSWORD: ${p("moolah-preview-password")}`, `SKU: ${p("moolah-preview-sku")}`, `TABLETS: ${p("moolah-preview-noOfTabs")}`].join("\n");
-						const html = plain
-							.split("\n")
-							.map((l) => `<div>${escapeHtml(l)}</div>`)
-							.join("");
-						return { plain, html };
-					});
-				}
-
-				/* ==================== FOCUS TRAP ==================== */
-				function initFocusTrap() {
-					document.addEventListener("keydown", (e) => {
-						if (e.key !== "Tab") return;
-						const candidates = [document.getElementById("changePwdModal"), document.getElementById("kbEntryModal"), document.getElementById("announcementModal"), document.querySelector(".shift-report-modal")];
-						let modal = null;
-						for (const m of candidates) {
-							if (m && window.getComputedStyle(m).display !== "none") modal = m;
-						}
-						if (!modal) return;
-						const focusable = modal.querySelectorAll('button:not([disabled]), input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])');
-						if (!focusable.length) return;
-						const first = focusable[0];
-						const last = focusable[focusable.length - 1];
-						if (e.shiftKey && document.activeElement === first) {
-							e.preventDefault();
-							last.focus();
-						} else if (!e.shiftKey && document.activeElement === last) {
-							e.preventDefault();
-							first.focus();
-						}
-					});
-				}
-
-				/* ==================== CTRL+ENTER SUBMIT ==================== */
-				function initKeyboardShortcuts() {
-					document.addEventListener("keydown", (e) => {
-						if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
-							const activeTab = currentActiveTab;
-							if (!["ticket", "store", "moolah", "ecommerce", "scheduler"].includes(activeTab)) return;
-							const panel = document.getElementById(`tab-${activeTab}`);
-							if (!panel || !panel.contains(document.activeElement)) return;
-							e.preventDefault();
-							addEntry(activeTab);
-						}
-					});
-				}
-
-				/* ==================== BEFOREUNLOAD WARN ==================== */
-				function initBeforeUnloadWarn() {
-					window.addEventListener("beforeunload", (e) => {
-						if (Object.values(formDirty).some((v) => v)) {
-							e.preventDefault();
-							e.returnValue = "";
-							return "";
-						}
-					});
-				}
-
-				/* ==================== DASHBOARD CARD CLICK ==================== */
-				function initDashboardCardClicks() {
-					const map = {
-						dashTotalResolved: "RESOLVED",
-						dashTotalPending: "PENDING",
-						dashTotalOtherTasks: "OTHER TASK",
-					};
-					Object.keys(map).forEach((id) => {
-						const card = document.getElementById(id)?.closest(".dashboard-card");
-						if (!card) return;
-						const status = map[id];
-						card.title = `Click to filter table by ${status}`;
-						card.addEventListener("click", () => {
-							switchTab("ticket", document.querySelector('.tab-button[data-tab="ticket"]'));
-							setTimeout(() => {
-								currentStatusFilter.clear();
-								currentStatusFilter.add(status);
-								document.querySelectorAll(".status-filter-btn").forEach((btn) => {
-									btn.classList.toggle("active", currentStatusFilter.has(btn.dataset.status));
-								});
-								renderTable();
-							}, 60);
-						});
-					});
-				}
-
-				/* ==================== LOCAL STORAGE SIZE ==================== */
-				function checkLocalStorageSize() {
-					try {
-						let total = 0;
-						for (let i = 0; i < localStorage.length; i++) {
-							const key = localStorage.key(i);
-							const value = localStorage.getItem(key);
-							total += (key.length + (value ? value.length : 0)) * 2;
-						}
-						const mb = total / (1024 * 1024);
-						if (mb > 4) {
-							showNotification(`⚠️ Local storage is ${mb.toFixed(1)}MB — consider exporting old entries.`);
-						}
-					} catch (e) {
-						/* ignore */
-					}
-				}
-
 				async function refreshMyPendingCache(shouldRender = true) {
 					const oldSig = myPendingCache
 						.map((e) => `${e.portal}|${e.issue}|${e.status}|${e.date}`)
@@ -8823,36 +8111,36 @@
 					const tbody = document.querySelector("#entryTable tbody");
 					tbody.innerHTML = "";
 					if (!entries.length) {
-						tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">✨ No pending tickets found in WORKLOAD TRACKER 2026 ✨</td></tr>`;
+						tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">✨ No pending tickets found for you in WORKLOAD TRACKER 2026 ✨</td></tr>`;
 						return;
 					}
 					entries.forEach((entry) => {
 						const row = document.createElement("tr");
 						row.dataset.id = entry.id;
 						row.innerHTML = `
-							<td data-label=""><input type="checkbox" class="row-checkbox" value="${entry.id}" aria-label="Select row"></td>
-							<td data-label="DATE">${escapeHtml(entry.date)}</td>
-							<td data-label="SHIFT">${escapeHtml(entry.shift)}</td>
-							<td data-label="SUPPORT">${escapeHtml(entry.support)}</td>
-							<td data-label="PORTAL">${escapeHtml(entry.portal)}</td>
-							<td data-label="STORE">${escapeHtml(entry.store)}</td>
-							<td data-label="ZIP">${escapeHtml(entry.zip)}</td>
-							<td data-label="CONTACT">${escapeHtml(entry.contact)}</td>
-							<td data-label="CONTACT#">${escapeHtml(entry.contactNumber)}</td>
-							<td data-label="MODULE">${escapeHtml(entry.module)}</td>
-							<td data-label="ISSUE" style="white-space: pre-wrap;">${escapeHtml(entry.issue)}</td>
-							<td data-label="ESCALATED">${escapeHtml(entry.escalated)}</td>
-							<td data-label="STATUS">${escapeHtml(entry.status)}</td>
-							<td data-label="REMARKS" style="white-space: pre-wrap;">${escapeHtml(entry.remarks)}</td>
-							<td data-label="RESOLUTION" style="white-space: pre-wrap;">${escapeHtml(entry.resolution)}</td>
-							<td class="action-cell" data-label="ACTIONS">
-								<div class="action-container">
-									<button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy" aria-label="Copy row"><i class="bi bi-clipboard-fill"></i></button>
-									<button class="icon-btn edit-btn disabled" disabled title="Edit not allowed in tracker view" aria-label="Edit disabled"><i class="bi bi-pencil-square"></i></button>
-									<button class="icon-btn delete-btn disabled" disabled title="Delete not allowed" aria-label="Delete disabled"><i class="bi bi-trash3-fill"></i></button>
-								</div>
-							</td>
-						`;
+						                  <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
+						                  <td>${escapeHtml(entry.date)}</td>
+						                  <td>${escapeHtml(entry.shift)}</td>
+						                  <td>${escapeHtml(entry.support)}</td>
+						                  <td>${escapeHtml(entry.portal)}</td>
+						                  <td>${escapeHtml(entry.store)}</td>
+						                  <td>${escapeHtml(entry.zip)}</td>
+						                  <td>${escapeHtml(entry.contact)}</td>
+						                  <td>${escapeHtml(entry.contactNumber)}</td>
+						                  <td>${escapeHtml(entry.module)}</td>
+						                  <td style="white-space: pre-wrap;">${escapeHtml(entry.issue)}</td>
+						                  <td>${escapeHtml(entry.escalated)}</td>
+						                  <td>${escapeHtml(entry.status)}</td>
+						                  <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks)}</td>
+						                  <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution)}</td>
+						                  <td class="action-cell">
+						                      <div class="action-container">
+						                          <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
+						                          <button class="icon-btn edit-btn disabled" disabled title="Edit not allowed in tracker view"><i class="bi bi-pencil-square"></i></button>
+						                          <button class="icon-btn delete-btn disabled" disabled title="Delete not allowed"><i class="bi bi-trash3-fill"></i></button>
+						                      </div>
+						                  </td>
+						              `;
 						tbody.appendChild(row);
 					});
 					updateSelectAllCheckboxState();
@@ -9347,8 +8635,6 @@
 					}
 
 					clearFormFields("scheduler");
-					markClean("scheduler");
-					clearEditingBadge();
 					saveAllEntries();
 					updateStatusCounters();
 					renderTable();
@@ -9392,67 +8678,6 @@
 
 				function setDashboardLoading(loading) {
 					document.querySelectorAll(".dashboard-card").forEach((c) => c.classList.toggle("loading", loading));
-				}
-
-								function renderTopModules(data) {
-					const container = document.getElementById("topModulesContainer");
-					if (!container) return;
-
-					if (!data || !data.values || data.values.length < 2) {
-						container.innerHTML = '<div class="performers-empty">No data available.</div>';
-						return;
-					}
-
-					const headers = data.values[0].map((h) => String(h || "").trim().toUpperCase());
-					const dateIdx = headers.findIndex((h) => h.includes("DATE"));
-					const moduleIdx = headers.findIndex((h) => h === "MODULE" || h.includes("MODULE"));
-
-					if (dateIdx < 0 || moduleIdx < 0) {
-						container.innerHTML = '<div class="performers-empty">Module or Date column not found in sheet.</div>';
-						return;
-					}
-
-					const todayEST = getESTDateString();
-					const [year, month] = todayEST.split("-").map(Number);
-					const monthPrefix = `${year}-${String(month).padStart(2, "0")}`;
-
-					const counts = {};
-					for (let i = 1; i < data.values.length; i++) {
-						const row = data.values[i];
-						const rowDate = normalizeDashboardDate(row[dateIdx]);
-						if (!rowDate || !rowDate.startsWith(monthPrefix)) continue;
-						const mod = String(row[moduleIdx] || "").trim().toUpperCase();
-						if (!mod) continue;
-						counts[mod] = (counts[mod] || 0) + 1;
-					}
-
-					const sorted = Object.entries(counts)
-						.sort((a, b) => b[1] - a[1])
-						.slice(0, 10);
-
-					if (!sorted.length) {
-						container.innerHTML = '<div class="performers-empty">No issues recorded this month yet.</div>';
-						return;
-					}
-
-					const maxCount = sorted[0][1];
-					const monthName = new Date(year, month - 1, 1).toLocaleString("default", { month: "long", year: "numeric" });
-
-					container.innerHTML =
-						`<div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 600;">${monthName}</div>` +
-						sorted.map(([mod, count], idx) => {
-							const pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
-							const rankClass = idx < 3 ? "top-3" : "";
-							return `
-								<div class="module-stat-row">
-									<div class="module-stat-rank ${rankClass}">${idx + 1}</div>
-									<div class="module-stat-name" title="${escapeHtml(mod)}">${escapeHtml(mod)}</div>
-									<div class="module-stat-bar-wrap">
-										<div class="module-stat-bar" style="width: ${pct}%;">${count}</div>
-									</div>
-								</div>
-							`;
-						}).join("");
 				}
 
 				async function loadDashboardData() {
@@ -9509,10 +8734,8 @@
 											: "";
 									const isMine = supportIdx >= 0 && rowSupport === userSupport;
 
-																		// Track stats for top performers (current calendar month only — resets on 1st of each month)
-									const [curYear, curMonth] = todayEST.split("-");
-									const monthPrefix = `${curYear}-${curMonth}`;
-									if (rowSupport && rowDate && rowDate.startsWith(monthPrefix)) {
+									// Track stats for top performers (all rows, all dates)
+									if (rowSupport && rowDate) {
 										if (!supportStats[rowSupport]) {
 											supportStats[rowSupport] = { dates: new Set(), ticketCount: 0 };
 										}
@@ -9541,19 +8764,19 @@
 									}
 								}
 
-								// Compute top 5 by total tickets this month
+								// Compute top 5 by average tickets/day
 								const performers = Object.entries(supportStats)
-									.map(([support, stats]) => ({
-										support,
-										totalTickets: stats.ticketCount,
-										days: stats.dates.size,
-									}))
-									.filter((p) => p.totalTickets > 0)
-									.sort((a, b) => b.totalTickets - a.totalTickets)
+									.map(([support, stats]) => {
+										const days = stats.dates.size;
+										const totalTickets = stats.ticketCount;
+										const avg = days > 0 ? totalTickets / days : 0;
+										return { support, totalTickets, days, avg };
+									})
+									.filter((p) => p.days > 0)
+									.sort((a, b) => b.avg - a.avg)
 									.slice(0, 5);
 
 								renderTopPerformers(performers);
-								renderTopModules(data);
 
 								// ✅ NEW: SLA alerts
 								renderSlaAlerts(computeSlaAlerts(data));
@@ -9570,16 +8793,16 @@
 								renderSlaAlerts([]);
 							}
 						} else {
-							["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0"));
+							// ← ADD THIS LINE
+							["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0")); // ← ADD
 							renderTopPerformers([]);
-							renderTopModules([]);
-							renderSlaAlerts([]);
-						}
+							renderSlaAlerts([]); // ← ADD
+						} // ← ADD
 					} catch (err) {
+						// ← unchanged, now correctly closes `try`
 						console.warn("Dashboard WORKLOAD TRACKER fetch failed:", err);
 						["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "--"));
 						renderTopPerformers([]);
-						renderTopModules([]);
 						renderSlaAlerts([]);
 					}
 
@@ -9592,303 +8815,254 @@
 				let announcementAutoSlideTimer = null;
 
 				/* ==================== ANNOUNCEMENT ACKNOWLEDGMENTS ==================== */
-				let announcementAcks = {}; // key -> Set of support names who acknowledged
-				let allAnnouncementUsers = []; // all support names eligible to acknowledge
-				let announcementUsersLoaded = false;
-				let acksLoaded = false;
+let announcementAcks = {};        // key -> Set of support names who acknowledged
+let allAnnouncementUsers = [];    // all support names eligible to acknowledge
+let announcementUsersLoaded = false;
+let acksLoaded = false;
 
-				function getAnnouncementKey(a) {
-					return JSON.stringify([(a.subject || "").trim(), (a.details || "").trim(), (a.support || "").trim()]);
-				}
+function getAnnouncementKey(a) {
+    return JSON.stringify([
+        (a.subject || "").trim(),
+        (a.details || "").trim(),
+        (a.support || "").trim(),
+    ]);
+}
 
-				async function ensureAnnouncementUsersLoaded(force = false) {
-					if (announcementUsersLoaded && !force) return;
-					try {
-						const data = await fetchFromProxy({
-							action: "getSheetData",
-							sheetName: CONFIG.CRED_SHEET_NAME,
-						});
-						if (!data.values || data.values.length < 2) {
-							allAnnouncementUsers = [];
-						} else {
-							const names = new Set();
-							for (let i = 1; i < data.values.length; i++) {
-								const support = (data.values[i][0] || "").trim().toUpperCase();
-								const email = (data.values[i][1] || "").trim();
-								if (support && email) names.add(support);
-							}
-							allAnnouncementUsers = Array.from(names);
-						}
-						announcementUsersLoaded = true;
-					} catch (err) {
-						console.warn("Failed to load users for announcement acks:", err);
-						allAnnouncementUsers = [];
-					}
-				}
+async function ensureAnnouncementUsersLoaded(force = false) {
+    if (announcementUsersLoaded && !force) return;
+    try {
+        const data = await fetchFromProxy({
+            action: "getSheetData",
+            sheetName: CONFIG.CRED_SHEET_NAME,
+        });
+        if (!data.values || data.values.length < 2) {
+            allAnnouncementUsers = [];
+        } else {
+            const names = new Set();
+            for (let i = 1; i < data.values.length; i++) {
+                const support = (data.values[i][0] || "").trim().toUpperCase();
+                const email = (data.values[i][1] || "").trim();
+                if (support && email) names.add(support);
+            }
+            allAnnouncementUsers = Array.from(names);
+        }
+        announcementUsersLoaded = true;
+    } catch (err) {
+        console.warn("Failed to load users for announcement acks:", err);
+        allAnnouncementUsers = [];
+    }
+}
 
-				async function loadAnnouncementAcknowledgments() {
-					try {
-						const data = await fetchFromProxy({
-							action: "getSheetData",
-							sheetName: "ACKNOWLEDGMENTS",
-						});
-						const rows = (data.values || []).slice(1);
-						const map = {};
-						rows.forEach((r) => {
-							const key = (r[0] || "").toString();
-							const support = (r[1] || "").toString().trim().toUpperCase();
-							if (!key || !support) return;
-							if (!map[key]) map[key] = new Set();
-							map[key].add(support);
-						});
-						announcementAcks = map;
-						acksLoaded = true;
-					} catch (err) {
-						announcementAcks = {};
-						acksLoaded = true;
-						console.warn("ACKNOWLEDGMENTS sheet not found yet:", err.message);
-					}
-				}
+async function loadAnnouncementAcknowledgments() {
+    try {
+        const data = await fetchFromProxy({
+            action: "getSheetData",
+            sheetName: "ACKNOWLEDGMENTS",
+        });
+        const rows = (data.values || []).slice(1);
+        const map = {};
+        rows.forEach((r) => {
+            const key = (r[0] || "").toString();
+            const support = (r[1] || "").toString().trim().toUpperCase();
+            if (!key || !support) return;
+            if (!map[key]) map[key] = new Set();
+            map[key].add(support);
+        });
+        announcementAcks = map;
+        acksLoaded = true;
+    } catch (err) {
+        announcementAcks = {};
+        acksLoaded = true;
+        console.warn("ACKNOWLEDGMENTS sheet not found yet:", err.message);
+    }
+}
 
 				async function loadAnnouncements() {
-					const carousel = document.getElementById("announcementCarousel");
-					const listTab = document.getElementById("announcementListTab");
-					if (!carousel && !listTab) return;
+    const carousel = document.getElementById("announcementCarousel");
+    const listTab = document.getElementById("announcementListTab");
+    if (!carousel && !listTab) return;
 
-					try {
-						const [data] = await Promise.all([fetchFromProxy({ action: "getSheetData", sheetName: "ANNOUNCEMENT" }), ensureAnnouncementUsersLoaded(), loadAnnouncementAcknowledgments()]);
+    try {
+        const [data] = await Promise.all([
+            fetchFromProxy({ action: "getSheetData", sheetName: "ANNOUNCEMENT" }),
+            ensureAnnouncementUsersLoaded(),
+            loadAnnouncementAcknowledgments(),
+        ]);
 
-						const rows = (data.values || []).slice(1);
+        const rows = (data.values || []).slice(1);
 
-						// Col A = SUBJECT, Col B = DETAILS, Col C = SUPPORT
-						const announcements = rows
-							.map((r) => ({
-								subject: (r[0] || "").toString(),
-								details: (r[1] || "").toString(),
-								support: (r[2] || "").toString(),
-							}))
-							.filter((a) => a.subject.trim() !== "" || a.details.trim() !== "");
+        // Col A = SUBJECT, Col B = DETAILS, Col C = SUPPORT
+        const announcements = rows
+            .map((r) => ({
+                subject: (r[0] || "").toString(),
+                details: (r[1] || "").toString(),
+                support: (r[2] || "").toString(),
+            }))
+            .filter((a) => a.subject.trim() !== "" || a.details.trim() !== "");
 
-						announcements.reverse();
-						allAnnouncementsCache = announcements;
+        announcements.reverse();
+        allAnnouncementsCache = announcements;
 
-						if (currentAnnouncementIndex >= announcements.length) {
-							currentAnnouncementIndex = 0;
-						}
+        if (currentAnnouncementIndex >= announcements.length) {
+            currentAnnouncementIndex = 0;
+        }
 
-						renderAnnouncementCarousel(announcements);
-						renderAnnouncementTabList(announcements);
-					} catch (err) {
-						const msg = typeof err.message === "string" && err.message !== "[object Object]" ? err.message : "No announcements yet.";
-						if (carousel) carousel.innerHTML = `<div class="announcement-carousel-empty">${escapeHtml(msg)}</div>`;
-						if (listTab) listTab.innerHTML = `<div class="announcements-empty">${escapeHtml(msg)}</div>`;
-					}
-				}
-
-								function startAnnouncementAutoSlide(total) {
-					if (announcementAutoSlideTimer) {
-						clearInterval(announcementAutoSlideTimer);
-						announcementAutoSlideTimer = null;
-					}
-					if (!total || total < 2) return;
-					announcementAutoSlideTimer = setInterval(() => {
-						goToAnnouncement(currentAnnouncementIndex + 1);
-					}, 10000);
-				}
+        renderAnnouncementCarousel(announcements);
+        renderAnnouncementTabList(announcements);
+    } catch (err) {
+        const msg = typeof err.message === "string" && err.message !== "[object Object]"
+            ? err.message : "No announcements yet.";
+        if (carousel) carousel.innerHTML = `<div class="announcement-carousel-empty">${escapeHtml(msg)}</div>`;
+        if (listTab) listTab.innerHTML = `<div class="announcements-empty">${escapeHtml(msg)}</div>`;
+    }
+}
 
 				function renderAnnouncementCarousel(announcements) {
-					const container = document.getElementById("announcementCarousel");
-					if (!container) return;
+    const container = document.getElementById("announcementCarousel");
+    if (!container) return;
 
-					if (announcementAutoSlideTimer) {
-						clearInterval(announcementAutoSlideTimer);
-						announcementAutoSlideTimer = null;
-					}
+    if (announcementAutoSlideTimer) {
+        clearInterval(announcementAutoSlideTimer);
+        announcementAutoSlideTimer = null;
+    }
 
-					if (!announcements.length) {
-						container.innerHTML = '<div class="announcement-carousel-empty">No announcements yet.</div>';
-						return;
-					}
+    if (!announcements.length) {
+        container.innerHTML = '<div class="announcement-carousel-empty">No announcements yet.</div>';
+        return;
+    }
 
-					if (currentAnnouncementIndex >= announcements.length) {
-						currentAnnouncementIndex = 0;
-					}
+    const currentUser = getLoggedInUser();
+    const mySupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
 
-					const currentUser = getLoggedInUser();
-					const mySupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
+    container.innerHTML = `<div class="announcement-list">${announcements
+        .map((a, idx) => {
+            const key = getAnnouncementKey(a);
+            const poster = (a.support || "").trim().toUpperCase();
+            const requiredUsers = allAnnouncementUsers.filter((u) => u !== poster);
+            const acked = announcementAcks[key] || new Set();
+            const ackCount = requiredUsers.filter((u) => acked.has(u)).length;
+            const totalRequired = requiredUsers.length;
+            const iAcked = mySupport && acked.has(mySupport);
+            const amPoster = mySupport && mySupport === poster;
+            const allAcked = totalRequired > 0 && ackCount >= totalRequired;
 
-					const slidesHtml = announcements.map((a, idx) => {
-						const key = getAnnouncementKey(a);
-						const poster = (a.support || "").trim().toUpperCase();
-						const requiredUsers = allAnnouncementUsers.filter((u) => u !== poster);
-						const acked = announcementAcks[key] || new Set();
-						const ackCount = requiredUsers.filter((u) => acked.has(u)).length;
-						const totalRequired = requiredUsers.length;
-						const iAcked = mySupport && acked.has(mySupport);
-						const amPoster = mySupport && mySupport === poster;
-						const allAcked = totalRequired > 0 && ackCount >= totalRequired;
+            let ackControlHtml = "";
+            if (totalRequired === 0) {
+                ackControlHtml = `<span class="ack-note">No acknowledgers required</span>`;
+            } else if (amPoster) {
+                ackControlHtml = `<span class="ack-note">Your announcement · ${ackCount}/${totalRequired} acknowledged</span>`;
+            } else {
+                ackControlHtml = `
+                    <button class="ack-btn ${iAcked ? "acked" : ""}" data-ack-index="${idx}">
+                        ${iAcked ? "✅ Acknowledged" : "👍 Acknowledge"}
+                    </button>
+                    <span class="ack-count">${ackCount}/${totalRequired} acknowledged${allAcked ? " · deleting…" : ""}</span>
+                `;
+            }
 
-						let ackControlHtml = "";
-						if (totalRequired === 0) {
-							ackControlHtml = `<span class="ack-note">No acknowledgers required</span>`;
-						} else if (amPoster) {
-							ackControlHtml = `<span class="ack-note">Your announcement · ${ackCount}/${totalRequired} acknowledged</span>`;
-						} else {
-							ackControlHtml = `
-								<button class="ack-btn ${iAcked ? "acked" : ""}" data-ack-index="${idx}">
-									${iAcked ? "✅ Acknowledged" : "👍 Acknowledge"}
-								</button>
-								<span class="ack-count">${ackCount}/${totalRequired} acknowledged${allAcked ? " · deleting…" : ""}</span>
-							`;
-						}
+            return `
+        <div class="announcement-item">
+            <div class="announcement-body">
+                ${a.subject ? `<div class="announcement-subject">${escapeHtml(a.subject)}</div>` : ""}
+                ${a.details ? `<div class="announcement-message">${renderRichContent(a.details)}</div>` : ""}
+                ${a.support ? `<div class="announcement-support"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
+                <div class="announcement-ack-row">${ackControlHtml}</div>
+            </div>
+        </div>`;
+        })
+        .join("")}</div>`;
 
-						return `
-							<div class="carousel-slide" data-slide-index="${idx}">
-								${a.subject ? `<div class="carousel-slide-subject">${escapeHtml(a.subject)}</div>` : ""}
-								${a.details ? `<div class="carousel-slide-details">${renderRichContent(a.details)}</div>` : ""}
-								${a.support ? `<div class="carousel-slide-meta"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
-								<div class="announcement-ack-row">${ackControlHtml}</div>
-							</div>
-						`;
-					}).join("");
+    container.querySelectorAll(".ack-btn").forEach((btn) => {
+        const idx = parseInt(btn.dataset.ackIndex, 10);
+        const ann = announcements[idx];
+        if (!ann) return;
+        btn.addEventListener("click", () => handleAnnouncementAcknowledge(ann, btn));
+    });
+}
 
-					const dotsHtml = announcements.map((_, i) =>
-						`<button class="carousel-dot ${i === currentAnnouncementIndex ? "active" : ""}" data-dot-index="${i}" aria-label="Go to announcement ${i + 1}"></button>`
-					).join("");
+async function handleAnnouncementAcknowledge(announcement, btnEl) {
+    const currentUser = getLoggedInUser();
+    if (!currentUser) {
+        showNotification("Please log in first.");
+        return;
+    }
+    const mySupport = (currentUser.support || "").trim().toUpperCase();
+    if (!mySupport) {
+        showNotification("Your account has no support name.");
+        return;
+    }
 
-					container.innerHTML = `
-						<div class="carousel-viewport" id="announcementViewport">
-							<div class="carousel-track" id="announcementTrack" style="transform: translateX(-${currentAnnouncementIndex * 100}%)">
-								${slidesHtml}
-							</div>
-						</div>
-						<button class="carousel-nav prev" id="announcementPrevBtn" aria-label="Previous announcement">‹</button>
-						<button class="carousel-nav next" id="announcementNextBtn" aria-label="Next announcement">›</button>
-						<div class="carousel-dots" id="announcementDots">${dotsHtml}</div>
-					`;
+    // If the user list somehow doesn't include this user, try once more
+    if (!allAnnouncementUsers.includes(mySupport)) {
+        await ensureAnnouncementUsersLoaded(true);
+    }
 
-					container.querySelectorAll(".ack-btn").forEach((btn) => {
-						const idx = parseInt(btn.dataset.ackIndex, 10);
-						const ann = announcements[idx];
-						if (!ann) return;
-						btn.addEventListener("click", () => handleAnnouncementAcknowledge(ann, btn));
-					});
+    const key = getAnnouncementKey(announcement);
+    const acked = announcementAcks[key] || new Set();
+    if (acked.has(mySupport)) {
+        showNotification("You already acknowledged this.");
+        return;
+    }
 
-					document.getElementById("announcementPrevBtn")?.addEventListener("click", () => goToAnnouncement(currentAnnouncementIndex - 1));
-					document.getElementById("announcementNextBtn")?.addEventListener("click", () => goToAnnouncement(currentAnnouncementIndex + 1));
+    if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.textContent = "⏳ Saving...";
+    }
 
-					container.querySelectorAll(".carousel-dot").forEach((dot) => {
-						dot.addEventListener("click", () => goToAnnouncement(parseInt(dot.dataset.dotIndex, 10)));
-					});
+    try {
+        await fetchFromProxy({
+            action: "acknowledgeAnnouncement",
+            key: key,
+            support: mySupport,
+            subject: announcement.subject || "",
+            details: announcement.details || "",
+            postedBy: announcement.support || "",
+        });
 
-					const viewport = document.getElementById("announcementViewport");
-					if (viewport) {
-						let touchStartX = 0;
-						let touchEndX = 0;
-						viewport.addEventListener("touchstart", (e) => {
-							touchStartX = e.changedTouches[0].screenX;
-						}, { passive: true });
-						viewport.addEventListener("touchend", (e) => {
-							touchEndX = e.changedTouches[0].screenX;
-							const diff = touchEndX - touchStartX;
-							if (Math.abs(diff) > 50) {
-								if (diff > 0) goToAnnouncement(currentAnnouncementIndex - 1);
-								else goToAnnouncement(currentAnnouncementIndex + 1);
-							}
-						}, { passive: true });
+        if (!announcementAcks[key]) announcementAcks[key] = new Set();
+        announcementAcks[key].add(mySupport);
 
-						viewport.addEventListener("mouseenter", () => {
-							if (announcementAutoSlideTimer) {
-								clearInterval(announcementAutoSlideTimer);
-								announcementAutoSlideTimer = null;
-							}
-						});
-						viewport.addEventListener("mouseleave", () => {
-							startAnnouncementAutoSlide(announcements.length);
-						});
-					}
+        const poster = (announcement.support || "").trim().toUpperCase();
+        const requiredUsers = allAnnouncementUsers.filter((u) => u !== poster);
+        const allAcked = requiredUsers.length > 0 &&
+            requiredUsers.every((u) => announcementAcks[key].has(u));
 
-					startAnnouncementAutoSlide(announcements.length);
-				}
+        if (allAcked) {
+            showNotification("All users acknowledged — removing announcement…");
+            await autoDeleteAcknowledgedAnnouncement(announcement);
+            return; // autoDelete reloads
+        }
 
-				async function handleAnnouncementAcknowledge(announcement, btnEl) {
-					const currentUser = getLoggedInUser();
-					if (!currentUser) {
-						showNotification("Please log in first.");
-						return;
-					}
-					const mySupport = (currentUser.support || "").trim().toUpperCase();
-					if (!mySupport) {
-						showNotification("Your account has no support name.");
-						return;
-					}
+        showNotification("Acknowledged!");
+        renderAnnouncementCarousel(allAnnouncementsCache);
+        renderAnnouncementTabList(allAnnouncementsCache);
+    } catch (err) {
+        showNotification(`Failed to acknowledge: ${err.message}`);
+        if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.textContent = "👍 Acknowledge";
+        }
+    }
+}
 
-					// If the user list somehow doesn't include this user, try once more
-					if (!allAnnouncementUsers.includes(mySupport)) {
-						await ensureAnnouncementUsersLoaded(true);
-					}
+async function autoDeleteAcknowledgedAnnouncement(announcement) {
+    try {
+        await deleteAnnouncementSilent(
+            announcement.subject || "",
+            announcement.details || "",
+            announcement.support || ""
+        );
 
-					const key = getAnnouncementKey(announcement);
-					const acked = announcementAcks[key] || new Set();
-					if (acked.has(mySupport)) {
-						showNotification("You already acknowledged this.");
-						return;
-					}
+        const key = getAnnouncementKey(announcement);
+        delete announcementAcks[key];
 
-					if (btnEl) {
-						btnEl.disabled = true;
-						btnEl.textContent = "⏳ Saving...";
-					}
-
-					try {
-						await fetchFromProxy({
-							action: "acknowledgeAnnouncement",
-							key: key,
-							support: mySupport,
-							subject: announcement.subject || "",
-							details: announcement.details || "",
-							postedBy: announcement.support || "",
-						});
-
-						if (!announcementAcks[key]) announcementAcks[key] = new Set();
-						announcementAcks[key].add(mySupport);
-
-						const poster = (announcement.support || "").trim().toUpperCase();
-						const requiredUsers = allAnnouncementUsers.filter((u) => u !== poster);
-						const allAcked = requiredUsers.length > 0 && requiredUsers.every((u) => announcementAcks[key].has(u));
-
-						if (allAcked) {
-							showNotification("All users acknowledged — removing announcement…");
-							await autoDeleteAcknowledgedAnnouncement(announcement);
-							return; // autoDelete reloads
-						}
-
-						showNotification("Acknowledged!");
-						renderAnnouncementCarousel(allAnnouncementsCache);
-						renderAnnouncementTabList(allAnnouncementsCache);
-					} catch (err) {
-						showNotification(`Failed to acknowledge: ${err.message}`);
-						if (btnEl) {
-							btnEl.disabled = false;
-							btnEl.textContent = "👍 Acknowledge";
-						}
-					}
-				}
-
-				async function autoDeleteAcknowledgedAnnouncement(announcement) {
-					try {
-						await deleteAnnouncementSilent(announcement.subject || "", announcement.details || "", announcement.support || "");
-
-						const key = getAnnouncementKey(announcement);
-						delete announcementAcks[key];
-
-						showNotification("Announcement fully acknowledged and deleted ✅");
-						await loadAnnouncements();
-					} catch (err) {
-						showNotification(`Auto-delete failed: ${err.message}`);
-						renderAnnouncementCarousel(allAnnouncementsCache);
-					}
-				}
+        showNotification("Announcement fully acknowledged and deleted ✅");
+        await loadAnnouncements();
+    } catch (err) {
+        showNotification(`Auto-delete failed: ${err.message}`);
+        renderAnnouncementCarousel(allAnnouncementsCache);
+    }
+}
 
 				function goToAnnouncement(index) {
 					const total = allAnnouncementsCache.length;
@@ -10004,38 +9178,38 @@
 				}
 
 				async function deleteAnnouncementSilent(subject, details, support) {
-					if (!subject && !details && !support) throw new Error("Missing announcement identifiers");
-					await fetchFromProxy({
-						action: "deleteAnnouncement",
-						subject: subject || "",
-						details: details || "",
-						support: support || "",
-					});
-				}
+    if (!subject && !details && !support) throw new Error("Missing announcement identifiers");
+    await fetchFromProxy({
+        action: "deleteAnnouncement",
+        subject: subject || "",
+        details: details || "",
+        support: support || "",
+    });
+}
 
-				async function deleteAnnouncement(subject, details, support) {
-					if (!subject && !details && !support) return;
+async function deleteAnnouncement(subject, details, support) {
+    if (!subject && !details && !support) return;
 
-					const currentUser = getLoggedInUser();
-					const isTL = currentUser && (currentUser.role || "").toUpperCase() === "TL";
-					const currentSupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
+    const currentUser = getLoggedInUser();
+    const isTL = currentUser && (currentUser.role || "").toUpperCase() === "TL";
+    const currentSupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
 
-					if (!isTL && (support || "").trim().toUpperCase() !== currentSupport) {
-						showNotification("You can only delete your own announcements.");
-						return;
-					}
+    if (!isTL && (support || "").trim().toUpperCase() !== currentSupport) {
+        showNotification("You can only delete your own announcements.");
+        return;
+    }
 
-					const preview = subject ? `"${subject.slice(0, 50)}${subject.length > 50 ? "..." : ""}"` : "this announcement";
-					if (!confirm(`Delete ${preview}?`)) return;
+    const preview = subject ? `"${subject.slice(0, 50)}${subject.length > 50 ? "..." : ""}"` : "this announcement";
+    if (!confirm(`Delete ${preview}?`)) return;
 
-					try {
-						await deleteAnnouncementSilent(subject, details, support);
-						showNotification("Announcement deleted.");
-						loadAnnouncements();
-					} catch (err) {
-						showNotification("Failed to delete announcement: " + err.message);
-					}
-				}
+    try {
+        await deleteAnnouncementSilent(subject, details, support);
+        showNotification("Announcement deleted.");
+        loadAnnouncements();
+    } catch (err) {
+        showNotification("Failed to delete announcement: " + err.message);
+    }
+}
 
 				function openAnnouncementModal() {
 					document.getElementById("newAnnouncementSubject").value = "";
@@ -10155,12 +9329,10 @@
 				function renderSlaAlerts(alerts) {
 					const container = document.getElementById("slaAlertContainer");
 					const countBadge = document.getElementById("slaAlertCount");
-					const baseTitle = "RetailzPOS · Unified Creation System";
 					if (!container) return;
 
 					if (!alerts || alerts.length === 0) {
 						if (countBadge) countBadge.style.display = "none";
-						document.title = baseTitle;
 						container.innerHTML = '<div class="sla-empty">✅ No SLA breaches. All pending tickets are within the 7-day window.</div>';
 						return;
 					}
@@ -10169,7 +9341,6 @@
 						countBadge.textContent = alerts.length;
 						countBadge.style.display = "";
 					}
-					document.title = `(${alerts.length}) ${baseTitle}`;
 
 					container.innerHTML = `<div class="sla-alert-list">${alerts
 						.map((a) => {
@@ -10202,7 +9373,7 @@
 						.join("")}</div>`;
 				}
 
-								function renderTopPerformers(performers) {
+				function renderTopPerformers(performers) {
 					const container = document.getElementById("topPerformersContainer");
 					if (!container) return;
 					if (!performers || performers.length === 0) {
@@ -10215,8 +9386,8 @@
 			        <tr>
 			            <td><span class="performer-rank rank-${i + 1}">${i + 1}</span></td>
 			            <td><strong>${escapeHtml(p.support)}</strong></td>
-			            <td><span class="performer-avg">${p.totalTickets}</span> <span class="performer-details">tickets</span></td>
-			            <td><span class="performer-details">Active ${p.days} day${p.days !== 1 ? "s" : ""} this month</span></td>
+			            <td><span class="performer-avg">${p.avg.toFixed(2)}</span> <span class="performer-details">tickets/day</span></td>
+			            <td><span class="performer-details">${p.totalTickets} tickets over ${p.days} day${p.days !== 1 ? "s" : ""}</span></td>
 			        </tr>
 			    `,
 						)
@@ -10228,7 +9399,7 @@
 			                <tr>
 			                    <th>Rank</th>
 			                    <th>Support</th>
-			                    <th>Total (Month)</th>
+			                    <th>Average</th>
 			                    <th>Details</th>
 			                </tr>
 			            </thead>
@@ -10707,13 +9878,6 @@
 						setupSearchKeyboard(prefix);
 					});
 
-					// Mark forms dirty on any user input (for beforeunload warning)
-					["ticket", "store", "moolah", "ecommerce", "scheduler"].forEach((prefix) => {
-						document.querySelectorAll(`#tab-${prefix} input, #tab-${prefix} textarea, #tab-${prefix} select`).forEach((el) => {
-							el.addEventListener("input", () => markDirty(prefix));
-						});
-					});
-
 					setTimeout(loadSheetData, 500);
 
 					document.querySelectorAll("textarea").forEach((ta) => autoGrow(ta));
@@ -11003,8 +10167,6 @@
 						ticketUpdatePreview();
 						saveFormData("ticket");
 					});
-
-					quillEditor.on("text-change", () => markDirty("ticket"));
 
 					function updateStoreIssuePreview() {
 						const steps = {
@@ -11455,18 +10617,6 @@
 
 					// Init module combobox for the KB entry modal
 					initCombobox("kbEntryModule-combobox", "kbEntryModule", MODULE_OPTIONS, "kbEntryModule-suggestions", () => {});
-
-					// ---- UI/UX POLISH + QUICK WINS init ----
-					initResizablePanels();
-					initTicketAdvancedToggle();
-					initAdvancedToggle("store", ["store-portal", "store-storeName", "store-zipcode", "store-contact", "store-contactNumber", "store-email", "store-password", "store-sku", "store-database", "store-noOfReg"]);
-					initAdvancedToggle("moolah", ["moolah-portal", "moolah-storeName", "moolah-zipcode", "moolah-contact", "moolah-contactNumber", "moolah-email", "moolah-password", "moolah-sku", "moolah-noOfTabs"]);
-					initCopyAllButtons();
-					initFocusTrap();
-					initKeyboardShortcuts();
-					initBeforeUnloadWarn();
-					initDashboardCardClicks();
-					checkLocalStorageSize();
 				}
 
 				window.handleHistorySourceToggle = handleHistorySourceToggle;
