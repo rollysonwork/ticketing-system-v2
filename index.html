@@ -171,13 +171,6 @@
 				animation: fadeIn 0.2s ease;
 			}
 
-			body:has(#tab-dashboard.active) .bulk-bar,
-			body:has(#tab-dashboard.active) #entryTable,
-			body:has(#tab-announcement.active) .bulk-bar,
-			body:has(#tab-announcement.active) #entryTable {
-				display: none;
-			}
-
 			.btn-no-fontsize {
 				font-size: inherit;
 			}
@@ -3023,6 +3016,182 @@
     color: var(--text-muted);
     font-style: italic;
 }
+
+/* ============ RANKING LISTS (Top Issues / Top Performers) ============ */
+.ranking-scope-badge {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    padding: 3px 10px;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--accent-color);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-color);
+    border-radius: 20px;
+    vertical-align: middle;
+}
+
+.ranking-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.ranking-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px 16px 12px 18px;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.ranking-item:hover {
+    transform: translateX(4px);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--accent-color);
+}
+
+.ranking-item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+}
+
+.ranking-item.rank-1::before { background: linear-gradient(180deg, #fbbf24, #f59e0b); }
+.ranking-item.rank-2::before { background: linear-gradient(180deg, #d4d4d4, #a3a3a3); }
+.ranking-item.rank-3::before { background: linear-gradient(180deg, #cd7f32, #a05a1e); }
+.ranking-item.rank-other::before { background: var(--border-color); }
+
+.ranking-position {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    font-weight: 700;
+    font-size: 0.8rem;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    border: 1px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+.ranking-item.rank-1 .ranking-position {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #fff;
+    border-color: #f59e0b;
+    box-shadow: 0 2px 8px rgba(251, 191, 36, 0.4);
+}
+.ranking-item.rank-2 .ranking-position {
+    background: linear-gradient(135deg, #d4d4d4, #a3a3a3);
+    color: #fff;
+    border-color: #a3a3a3;
+    box-shadow: 0 2px 8px rgba(163, 163, 163, 0.35);
+}
+.ranking-item.rank-3 .ranking-position {
+    background: linear-gradient(135deg, #cd7f32, #a05a1e);
+    color: #fff;
+    border-color: #a05a1e;
+    box-shadow: 0 2px 8px rgba(205, 127, 50, 0.35);
+}
+
+.ranking-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.ranking-label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    line-height: 1.3;
+}
+
+.ranking-meter {
+    height: 6px;
+    background: var(--border-color);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.ranking-meter-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    min-width: 4px;
+}
+
+.ranking-item.rank-1 .ranking-meter-fill { background: linear-gradient(90deg, #fbbf24, #f59e0b); }
+.ranking-item.rank-2 .ranking-meter-fill { background: linear-gradient(90deg, #d4d4d4, #a3a3a3); }
+.ranking-item.rank-3 .ranking-meter-fill { background: linear-gradient(90deg, #cd7f32, #a05a1e); }
+.ranking-item.rank-other .ranking-meter-fill { background: linear-gradient(90deg, var(--accent-color), #60a5fa); }
+
+.ranking-count {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    flex-shrink: 0;
+    text-align: right;
+    min-width: 60px;
+}
+
+.ranking-count-value {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    line-height: 1;
+}
+
+.ranking-item.rank-1 .ranking-count-value { color: #f59e0b; }
+.ranking-item.rank-2 .ranking-count-value { color: #8a8a8a; }
+.ranking-item.rank-3 .ranking-count-value { color: #a05a1e; }
+
+.ranking-count-label {
+    font-size: 0.62rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+}
+
+@media (max-width: 700px) {
+    .ranking-item {
+        padding: 10px 12px 10px 14px;
+        gap: 10px;
+    }
+    .ranking-position {
+        min-width: 28px;
+        height: 28px;
+        font-size: 0.72rem;
+    }
+    .ranking-label {
+        font-size: 0.82rem;
+    }
+    .ranking-count-value {
+        font-size: 1rem;
+    }
+    .ranking-count {
+        min-width: 46px;
+    }
+}
 		</style>
 	</head>
 	<body>
@@ -3055,6 +3224,9 @@
 				</div>
 				<nav class="sidebar-tabs">
 					<button class="tab-button active" data-tab="dashboard" onclick="switchTab('dashboard', this)"><i class="bi bi-speedometer2"></i><span>DASHBOARD</span></button>
+					<button class="tab-button" data-tab="database" onclick="switchTab('database', this)">
+    <i class="bi bi-database-fill"></i><span>DATABASE</span>
+</button>
 					<button class="tab-button" data-tab="ticket" onclick="switchTab('ticket', this)"><i class="icon-custom-smaller icon-ticket"></i><span>TICKET CREATION</span></button>
 					<button class="tab-button" data-tab="store" onclick="switchTab('store', this)"><i class="icon-custom-smaller icon-retailz"></i><span>STORE CREATION</span></button>
 					<button class="tab-button" data-tab="moolah" onclick="switchTab('moolah', this)"><i class="icon-custom-smaller icon-moolah"></i><span>MOOLAH CREATION</span></button>
@@ -3155,15 +3327,25 @@
 							</div>
 						</div>
 
-						<!-- Top 5 performers -->
-						<div class="dashboard-section">
-							<div class="dashboard-section-header">
-								<h3>🏆 Top 5 Performing Support</h3>
-							</div>
-							<div id="topPerformersContainer">
-								<div class="performers-empty">Loading...</div>
-							</div>
-						</div>
+						<!-- Top 10 Issues (this month) -->
+<div class="dashboard-section">
+    <div class="dashboard-section-header">
+        <h3>🔧 Top 10 Issues <span class="ranking-scope-badge">THIS MONTH</span></h3>
+    </div>
+    <div id="topIssuesContainer">
+        <div class="performers-empty">Loading...</div>
+    </div>
+</div>
+
+<!-- Top 5 performers (this month) -->
+<div class="dashboard-section">
+    <div class="dashboard-section-header">
+        <h3>🏆 Top 5 Performing Support <span class="ranking-scope-badge">THIS MONTH</span></h3>
+    </div>
+    <div id="topPerformersContainer">
+        <div class="performers-empty">Loading...</div>
+    </div>
+</div>
 					</div>
 				</div>
 
@@ -4054,45 +4236,46 @@
 						</div>
 					</div>
 				</div>
-				<div class="bulk-bar">
-					<label><input type="checkbox" id="selectAllCheckbox" /> Select All</label>
-					<button id="bulkDeleteBtn" title="Remove selected rows (only from main table)"><i class="bi bi-trash-fill"></i> REMOVE</button>
-					<button id="bulkCopyBtn" title="Copy selected rows"><i class="bi bi-copy"></i> COPY</button>
-					<button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
-					<button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom-smaller icon-google-sheets"></i> SHOW ALL PENDING</button>
-					<button class="counter-badge status-filter-btn" data-status="RESOLVED" onclick="filterByStatus('RESOLVED')">✅ RESOLVED: <span id="counterResolved">0</span></button>
-					<button class="counter-badge status-filter-btn" data-status="PENDING" onclick="filterByStatus('PENDING')">⏳ PENDING: <span id="counterPending">0</span></button>
-					<button class="counter-badge status-filter-btn" data-status="OTHER TASK" onclick="filterByStatus('OTHER TASK')">📋 OTHER TASK: <span id="counterOther">0</span></button>
-				</div>
+				<!-- ==================== DATABASE TAB ==================== -->
+<div id="tab-database" class="tab-content">
+	<div style="padding: 0 8px;"> 
+    <div class="bulk-bar">
+        <label><input type="checkbox" id="selectAllCheckbox" /> Select All</label>
+        <button id="bulkDeleteBtn" title="Remove selected rows (only from main table)"><i class="bi bi-trash-fill"></i> REMOVE</button>
+        <button id="bulkCopyBtn" title="Copy selected rows"><i class="bi bi-copy"></i> COPY</button>
+        <button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
+        <button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom-smaller icon-google-sheets"></i> SHOW ALL PENDING</button>
+        <button class="counter-badge status-filter-btn" data-status="RESOLVED" onclick="filterByStatus('RESOLVED')">✅ RESOLVED: <span id="counterResolved">0</span></button>
+        <button class="counter-badge status-filter-btn" data-status="PENDING" onclick="filterByStatus('PENDING')">⏳ PENDING: <span id="counterPending">0</span></button>
+        <button class="counter-badge status-filter-btn" data-status="OTHER TASK" onclick="filterByStatus('OTHER TASK')">📋 OTHER TASK: <span id="counterOther">0</span></button>
+    </div>
 
-				<div style="overflow-x: auto">
-					<table id="entryTable">
-						<thead>
-							<tr>
-								<th style="width: 30px"></th>
-								<th>DATE</th>
-								<th>SHIFT</th>
-								<th>SUPPORT</th>
-								<th>PORTAL</th>
-								<th>STORE</th>
-								<th>ZIP</th>
-								<th>CONTACT</th>
-								<th>CONTACT#</th>
-								<th>MODULE</th>
-								<th>ISSUE</th>
-								<th>ESCALATED</th>
-								<th>STATUS</th>
-								<th>REMARKS</th>
-								<th>RESOLUTION</th>
-								<th>ACTIONS</th>
-							</tr>
-						</thead>
-						<tbody></tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-
+    <div class="table-wrapper">
+        <table id="entryTable">
+            <thead>
+                <tr>
+                    <th style="width: 30px"></th>
+                    <th>DATE</th>
+                    <th>SHIFT</th>
+                    <th>SUPPORT</th>
+                    <th>PORTAL</th>
+                    <th>STORE</th>
+                    <th>ZIP</th>
+                    <th>CONTACT</th>
+                    <th>CONTACT#</th>
+                    <th>MODULE</th>
+                    <th>ISSUE</th>
+                    <th>ESCALATED</th>
+                    <th>STATUS</th>
+                    <th>REMARKS</th>
+                    <th>RESOLUTION</th>
+                    <th>ACTIONS</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
 		<div id="notification"></div>
 
 		<div id="changePwdModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 350px; z-index: 1200; border: 1px solid var(--border-color)">
@@ -8754,79 +8937,96 @@
 									.toUpperCase(),
 							);
 							const dateIdx = headers.findIndex((h) => h.includes("DATE"));
-							const supportIdx = headers.findIndex((h) => h.includes("SUPPORT"));
-							const statusIdx = headers.findIndex((h) => h === "STATUS" || h.includes("STATUS"));
+const supportIdx = headers.findIndex((h) => h.includes("SUPPORT"));
+const statusIdx = headers.findIndex((h) => h === "STATUS" || h.includes("STATUS"));
+const moduleIdx = headers.findIndex((h) => h.includes("MODULE"));
 
-							if (dateIdx >= 0 && statusIdx >= 0) {
-								let yourToday = 0,
-									yourYesterday = 0;
-								let todaysTicket = 0,
-									resolved = 0,
-									pending = 0,
-									other = 0;
+if (dateIdx >= 0 && statusIdx >= 0) {
+    let yourToday = 0,
+        yourYesterday = 0;
+    let todaysTicket = 0,
+        resolved = 0,
+        pending = 0,
+        other = 0;
 
-								const supportStats = {};
+    const supportStats = {};
+    const moduleStats = {};
+    const currentMonthPrefix = todayEST.slice(0, 7); // "YYYY-MM"
 
-								for (let i = 1; i < data.values.length; i++) {
-									const row = data.values[i];
-									const rowDate = normalizeDashboardDate(row[dateIdx]);
-									const status = String(row[statusIdx] || "")
-										.trim()
-										.toUpperCase();
-									const rowSupport =
-										supportIdx >= 0
-											? String(row[supportIdx] || "")
-													.trim()
-													.toUpperCase()
-											: "";
-									const isMine = supportIdx >= 0 && rowSupport === userSupport;
+    for (let i = 1; i < data.values.length; i++) {
+        const row = data.values[i];
+        const rowDate = normalizeDashboardDate(row[dateIdx]);
+        const status = String(row[statusIdx] || "")
+            .trim()
+            .toUpperCase();
+        const rowSupport =
+            supportIdx >= 0
+                ? String(row[supportIdx] || "")
+                        .trim()
+                        .toUpperCase()
+                : "";
+        const isMine = supportIdx >= 0 && rowSupport === userSupport;
 
-									// Track stats for top performers (all rows, all dates)
-									if (rowSupport && rowDate) {
-										if (!supportStats[rowSupport]) {
-											supportStats[rowSupport] = { dates: new Set(), ticketCount: 0 };
-										}
-										supportStats[rowSupport].dates.add(rowDate);
-										if (status !== "OTHER TASK" && status !== "") {
-											supportStats[rowSupport].ticketCount++;
-										}
-									}
+        // ── Monthly aggregation (top performers + top issues) ──
+        if (rowDate && rowDate.startsWith(currentMonthPrefix)) {
+            // Performer stats — count support tickets only (exclude OTHER TASK)
+            if (rowSupport) {
+                if (!supportStats[rowSupport]) {
+                    supportStats[rowSupport] = { ticketCount: 0 };
+                }
+                if (status !== "OTHER TASK" && status !== "") {
+                    supportStats[rowSupport].ticketCount++;
+                }
+            }
 
-									// ✅ LITERAL OVERALL PENDING – counted across every row/date
-									if (status === "PENDING") pending++;
+            // Module stats — count every entry that has a module (all statuses)
+            const moduleName = moduleIdx >= 0 ? String(row[moduleIdx] || "").trim() : "";
+            if (moduleName) {
+                moduleStats[moduleName] = (moduleStats[moduleName] || 0) + 1;
+            }
+        }
 
-									// Today/Yesterday–only metrics continue to be scoped as before
-									if (rowDate !== todayEST && rowDate !== yesterdayEST) continue;
+        // ✅ LITERAL OVERALL PENDING – counted across every row/date
+        if (status === "PENDING") pending++;
 
-									if (rowDate === todayEST) {
-										todaysTicket++;
-										if (status === "RESOLVED") resolved++;
-										else if (status === "OTHER TASK") other++;
-									}
+        // Today/Yesterday–only metrics continue to be scoped as before
+        if (rowDate !== todayEST && rowDate !== yesterdayEST) continue;
 
-									const isCountable = status === "RESOLVED" || status === "OTHER TASK";
-									if (isMine && isCountable) {
-										if (rowDate === todayEST) yourToday++;
-										else if (rowDate === yesterdayEST) yourYesterday++;
-									}
-								}
+        if (rowDate === todayEST) {
+            todaysTicket++;
+            if (status === "RESOLVED") resolved++;
+            else if (status === "OTHER TASK") other++;
+        }
 
-								// Compute top 5 by average tickets/day
-								const performers = Object.entries(supportStats)
-									.map(([support, stats]) => {
-										const days = stats.dates.size;
-										const totalTickets = stats.ticketCount;
-										const avg = days > 0 ? totalTickets / days : 0;
-										return { support, totalTickets, days, avg };
-									})
-									.filter((p) => p.days > 0)
-									.sort((a, b) => b.avg - a.avg)
-									.slice(0, 5);
+        const isCountable = status === "RESOLVED" || status === "OTHER TASK";
+        if (isMine && isCountable) {
+            if (rowDate === todayEST) yourToday++;
+            else if (rowDate === yesterdayEST) yourYesterday++;
+        }
+    }
 
-								renderTopPerformers(performers);
+    // ── Top 5 performers — total tickets this month (reset each month) ──
+    const performers = Object.entries(supportStats)
+        .map(([support, stats]) => ({
+            support,
+            totalTickets: stats.ticketCount,
+        }))
+        .filter((p) => p.totalTickets > 0)
+        .sort((a, b) => b.totalTickets - a.totalTickets)
+        .slice(0, 5);
 
-								// ✅ NEW: SLA alerts
-								renderSlaAlerts(computeSlaAlerts(data));
+    renderTopPerformers(performers);
+
+    // ── Top 10 issues — grouped by module, this month (reset each month) ──
+    const topIssues = Object.entries(moduleStats)
+        .map(([module, count]) => ({ module, count }))
+        .sort((a, b) => b.count - a.count)
+        .slice(0, 10);
+
+    renderTopIssues(topIssues);
+
+    // ✅ NEW: SLA alerts
+    renderSlaAlerts(computeSlaAlerts(data));
 
 								document.getElementById("dashYourTotalToday").textContent = yourToday;
 								document.getElementById("dashYesterdayTotal").textContent = yourYesterday;
@@ -8837,12 +9037,14 @@
 							} else {
 								["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0"));
 								renderTopPerformers([]);
+								renderTopIssues([]); 
 								renderSlaAlerts([]);
 							}
 						} else {
 							// ← ADD THIS LINE
 							["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0")); // ← ADD
 							renderTopPerformers([]);
+							renderTopIssues([]);
 							renderSlaAlerts([]); // ← ADD
 						} // ← ADD
 					} catch (err) {
@@ -8850,6 +9052,7 @@
 						console.warn("Dashboard WORKLOAD TRACKER fetch failed:", err);
 						["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "--"));
 						renderTopPerformers([]);
+						renderTopIssues([]); 
 						renderSlaAlerts([]);
 					}
 
@@ -9506,39 +9709,60 @@ async function deleteAnnouncement(subject, details, support) {
 				}
 
 				function renderTopPerformers(performers) {
-					const container = document.getElementById("topPerformersContainer");
-					if (!container) return;
-					if (!performers || performers.length === 0) {
-						container.innerHTML = '<div class="performers-empty">No performance data available.</div>';
-						return;
-					}
-					const rows = performers
-						.map(
-							(p, i) => `
-			        <tr>
-			            <td><span class="performer-rank rank-${i + 1}">${i + 1}</span></td>
-			            <td><strong>${escapeHtml(p.support)}</strong></td>
-			            <td><span class="performer-avg">${p.avg.toFixed(2)}</span> <span class="performer-details">tickets/day</span></td>
-			            <td><span class="performer-details">${p.totalTickets} tickets over ${p.days} day${p.days !== 1 ? "s" : ""}</span></td>
-			        </tr>
-			    `,
-						)
-						.join("");
+    const container = document.getElementById("topPerformersContainer");
+    if (!container) return;
+    if (!performers || performers.length === 0) {
+        container.innerHTML = '<div class="performers-empty">No performance data available for this month.</div>';
+        return;
+    }
+    const maxCount = Math.max(...performers.map((p) => p.totalTickets), 1);
+    container.innerHTML = `<div class="ranking-list">${performers
+        .map((p, i) => {
+            const rankClass = i < 3 ? `rank-${i + 1}` : "rank-other";
+            const pct = Math.max((p.totalTickets / maxCount) * 100, 4);
+            return `
+            <div class="ranking-item ${rankClass}">
+                <div class="ranking-position">${i + 1}</div>
+                <div class="ranking-body">
+                    <div class="ranking-label">${escapeHtml(p.support)}</div>
+                    <div class="ranking-meter"><div class="ranking-meter-fill" style="width: ${pct}%"></div></div>
+                </div>
+                <div class="ranking-count">
+                    <div class="ranking-count-value">${p.totalTickets}</div>
+                    <div class="ranking-count-label">ticket${p.totalTickets !== 1 ? "s" : ""}</div>
+                </div>
+            </div>`;
+        })
+        .join("")}</div>`;
+}
 
-					container.innerHTML = `
-			        <table class="performers-table">
-			            <thead>
-			                <tr>
-			                    <th>Rank</th>
-			                    <th>Support</th>
-			                    <th>Average</th>
-			                    <th>Details</th>
-			                </tr>
-			            </thead>
-			            <tbody>${rows}</tbody>
-			        </table>
-			    `;
-				}
+function renderTopIssues(issues) {
+    const container = document.getElementById("topIssuesContainer");
+    if (!container) return;
+    if (!issues || issues.length === 0) {
+        container.innerHTML = '<div class="performers-empty">No issue data available for this month.</div>';
+        return;
+    }
+    const maxCount = Math.max(...issues.map((x) => x.count), 1);
+    container.innerHTML = `<div class="ranking-list">${issues
+        .map((x, i) => {
+            const rankClass = i < 3 ? `rank-${i + 1}` : "rank-other";
+            const pct = Math.max((x.count / maxCount) * 100, 4);
+            return `
+            <div class="ranking-item ${rankClass}">
+                <div class="ranking-position">${i + 1}</div>
+                <div class="ranking-body">
+                    <div class="ranking-label">${escapeHtml(x.module)}</div>
+                    <div class="ranking-meter"><div class="ranking-meter-fill" style="width: ${pct}%"></div></div>
+                </div>
+                <div class="ranking-count">
+                    <div class="ranking-count-value">${x.count}</div>
+                    <div class="ranking-count-label">ticket${x.count !== 1 ? "s" : ""}</div>
+                </div>
+            </div>`;
+        })
+        .join("")}</div>`;
+}
 
 				/* ==================== KNOWLEDGE BASE (Full CRUD) ==================== */
 				let currentKbType = localStorage.getItem("kbType") || "ticketing";
