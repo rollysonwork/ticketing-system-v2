@@ -2046,7 +2046,10 @@
 				display: flex;
 				flex-direction: column;
 				gap: 12px;
-				max-height: 420px;
+			}
+
+			#dashboardCarouselWrapper {
+				max-height: 80vh;
 				overflow-y: auto;
 			}
 
@@ -8631,57 +8634,19 @@
 						return;
 					}
 
-					if (currentAnnouncementIndex >= announcements.length) {
-						currentAnnouncementIndex = 0;
-					}
-
-					const slides = announcements
+					// Render ALL announcements stacked vertically – the section auto-sizes to fit them
+					container.innerHTML = `<div class="announcement-list">${announcements
 						.map(
 							(a) => `
-        <div class="carousel-slide">
-            ${a.subject ? `<div class="carousel-slide-subject">${escapeHtml(a.subject)}</div>` : ""}
-            ${a.details ? `<div class="carousel-slide-details">${renderRichContent(a.details)}</div>` : ""}
-            ${a.support ? `<div class="carousel-slide-meta"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
+        <div class="announcement-item">
+            <div class="announcement-body">
+                ${a.subject ? `<div class="announcement-subject">${escapeHtml(a.subject)}</div>` : ""}
+                ${a.details ? `<div class="announcement-message">${renderRichContent(a.details)}</div>` : ""}
+                ${a.support ? `<div class="announcement-support"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
+            </div>
         </div>`,
 						)
-						.join("");
-
-					const showNav = announcements.length > 1;
-
-					const dots = showNav
-						? `<div class="carousel-dots">${announcements
-								.map(
-									(_, i) => `
-              <button class="carousel-dot ${i === currentAnnouncementIndex ? "active" : ""}" 
-                      data-index="${i}" 
-                      onclick="goToAnnouncement(${i})"></button>`,
-								)
-								.join("")}</div>`
-						: "";
-
-					container.innerHTML = `
-        <div class="carousel-viewport">
-            <div class="carousel-track" id="announcementTrack" style="transform: translateX(-${currentAnnouncementIndex * 100}%)">
-                ${slides}
-            </div>
-        </div>
-        ${showNav ? `<button class="carousel-nav prev" onclick="prevAnnouncement()" title="Previous">‹</button>` : ""}
-        ${showNav ? `<button class="carousel-nav next" onclick="nextAnnouncement()" title="Next">›</button>` : ""}
-        ${dots}
-    `;
-
-					// Pause on hover so users can read longer announcements
-					container.onmouseenter = () => {
-						if (announcementAutoSlideTimer) {
-							clearInterval(announcementAutoSlideTimer);
-							announcementAutoSlideTimer = null;
-						}
-					};
-					container.onmouseleave = () => {
-						startAnnouncementAutoSlide(allAnnouncementsCache.length);
-					};
-
-					startAnnouncementAutoSlide(announcements.length);
+						.join("")}</div>`;
 				}
 
 				function startAnnouncementAutoSlide(total) {
