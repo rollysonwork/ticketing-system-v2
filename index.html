@@ -2210,6 +2210,7 @@
 
 			.carousel-track {
 				display: flex;
+				align-items: flex-start;
 				transition: transform 0.55s cubic-bezier(0.4, 0, 0.2, 1);
 				will-change: transform;
 			}
@@ -4115,6 +4116,52 @@
 			</div>
 		</div>
 		<div id="pwdModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
+<!-- Knowledge Base Entry Modal -->
+		<div id="kbEntryModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
+			<h3 id="kbEntryModalTitle" style="margin-bottom: 16px">📚 Add Knowledge Base Entry</h3>
+			<input type="hidden" id="kbEntrySource" />
+
+			<div class="kb-form-row" id="kbEntryModuleRow">
+				<label>Module <span style="color: var(--danger)">*</span></label>
+				<div class="combobox-wrapper">
+					<input type="text" id="kbEntryModule-combobox" class="combobox-input" autocomplete="off" placeholder="Select or type module..." />
+					<input type="hidden" id="kbEntryModule" />
+					<div id="kbEntryModule-suggestions" class="combobox-suggestions"></div>
+				</div>
+			</div>
+
+			<div class="kb-form-row">
+				<label>Title <span style="color: var(--danger)">*</span></label>
+				<input type="text" id="kbEntryTitle" class="no-uppercase" placeholder="e.g., Printer Not Responding" />
+			</div>
+
+			<div class="kb-form-row">
+				<label>Content / Steps <span style="color: var(--danger)">*</span></label>
+				<div id="kbEntryContentEditor" style="height: 220px; background: var(--bg-secondary); border-radius: 12px"></div>
+				<textarea id="kbEntryContent" style="display: none"></textarea>
+			</div>
+
+			<div id="kbEntryError" style="color: var(--danger); margin-bottom: 12px; font-size: 0.85rem"></div>
+
+			<div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px">
+				<button id="kbEntrySaveBtn" class="login-action-btn" onclick="saveKbEntry()">Save</button>
+				<button class="login-action-btn" style="background: #6b7280" onclick="closeKbEntryModal()">Cancel</button>
+			</div>
+		</div>
+		<div id="kbEntryModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
+
+		<div id="announcementModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
+			<h3 style="margin-bottom: 16px">📢 New Announcement</h3>
+			<input type="text" id="newAnnouncementSubject" class="no-uppercase" placeholder="Subject" style="width: 100%; margin-bottom: 12px" />
+			<div id="newAnnouncementEditor" style="height: 220px; margin-bottom: 12px; background: var(--bg-secondary); border-radius: 12px"></div>
+			<textarea id="newAnnouncementText" style="display: none"></textarea>
+			<div style="display: flex; gap: 8px; justify-content: flex-end">
+				<button id="submitAnnouncementBtn" class="login-action-btn">Post</button>
+				<button id="cancelAnnouncementBtn" class="login-action-btn" style="background: #6b7280">Cancel</button>
+			</div>
+		</div>
+		<div id="announcementModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
+
 
 		<script>
 			const DEMO_TYPE_OPTIONS = ["RetailzPOS Product Demo (Agent/Reseller)", "RetailzPOS Product Demo (Web)", "RetailzPOS Product Demo", "RetailzPOS Training", "Moolah Points Product Demo", "Moolah Points Training", "LottoGuru Product Demo", "LottoGuru Training"];
@@ -8931,53 +8978,110 @@ async function loadAnnouncementAcknowledgments() {
         return;
     }
 
+    // Clamp index to valid range
+    if (currentAnnouncementIndex >= announcements.length) currentAnnouncementIndex = 0;
+    if (currentAnnouncementIndex < 0) currentAnnouncementIndex = 0;
+
     const currentUser = getLoggedInUser();
     const mySupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
 
-    container.innerHTML = `<div class="announcement-list">${announcements
-        .map((a, idx) => {
-            const key = getAnnouncementKey(a);
-            const poster = (a.support || "").trim().toUpperCase();
-            const requiredUsers = allAnnouncementUsers.filter((u) => u !== poster);
-            const acked = announcementAcks[key] || new Set();
-            const ackCount = requiredUsers.filter((u) => acked.has(u)).length;
-            const totalRequired = requiredUsers.length;
-            const iAcked = mySupport && acked.has(mySupport);
-            const amPoster = mySupport && mySupport === poster;
-            const allAcked = totalRequired > 0 && ackCount >= totalRequired;
+    const slidesHtml = announcements.map((a, idx) => {
+        const key = getAnnouncementKey(a);
+        const poster = (a.support || "").trim().toUpperCase();
+        const requiredUsers = allAnnouncementUsers.filter((u) => u !== poster);
+        const acked = announcementAcks[key] || new Set();
+        const ackCount = requiredUsers.filter((u) => acked.has(u)).length;
+        const totalRequired = requiredUsers.length;
+        const iAcked = mySupport && acked.has(mySupport);
+        const amPoster = mySupport && mySupport === poster;
+        const allAcked = totalRequired > 0 && ackCount >= totalRequired;
 
-            let ackControlHtml = "";
-            if (totalRequired === 0) {
-                ackControlHtml = `<span class="ack-note">No acknowledgers required</span>`;
-            } else if (amPoster) {
-                ackControlHtml = `<span class="ack-note">Your announcement · ${ackCount}/${totalRequired} acknowledged</span>`;
-            } else {
-                ackControlHtml = `
-                    <button class="ack-btn ${iAcked ? "acked" : ""}" data-ack-index="${idx}">
-                        ${iAcked ? "✅ Acknowledged" : "👍 Acknowledge"}
-                    </button>
-                    <span class="ack-count">${ackCount}/${totalRequired} acknowledged${allAcked ? " · deleting…" : ""}</span>
-                `;
-            }
+        let ackControlHtml = "";
+        if (totalRequired === 0) {
+            ackControlHtml = `<span class="ack-note">No acknowledgers required</span>`;
+        } else if (amPoster) {
+            ackControlHtml = `<span class="ack-note">Your announcement · ${ackCount}/${totalRequired} acknowledged</span>`;
+        } else {
+            ackControlHtml = `
+                <button class="ack-btn ${iAcked ? "acked" : ""}" data-ack-index="${idx}">
+                    ${iAcked ? "✅ Acknowledged" : "👍 Acknowledge"}
+                </button>
+                <span class="ack-count">${ackCount}/${totalRequired} acknowledged${allAcked ? " · deleting…" : ""}</span>
+            `;
+        }
 
-            return `
-        <div class="announcement-item">
-            <div class="announcement-body">
-                ${a.subject ? `<div class="announcement-subject">${escapeHtml(a.subject)}</div>` : ""}
-                ${a.details ? `<div class="announcement-message">${renderRichContent(a.details)}</div>` : ""}
-                ${a.support ? `<div class="announcement-support"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
+        return `
+            <div class="carousel-slide" data-slide-index="${idx}">
+                ${a.subject ? `<div class="carousel-slide-subject">${escapeHtml(a.subject)}</div>` : ""}
+                ${a.details ? `<div class="carousel-slide-details">${renderRichContent(a.details)}</div>` : ""}
+                ${a.support ? `<div class="carousel-slide-meta"><span><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></span></div>` : ""}
                 <div class="announcement-ack-row">${ackControlHtml}</div>
-            </div>
-        </div>`;
-        })
-        .join("")}</div>`;
+            </div>`;
+    }).join("");
 
+    const hasMultiple = announcements.length > 1;
+
+    const dotsHtml = hasMultiple
+        ? announcements.map((_, i) =>
+              `<button class="carousel-dot${i === currentAnnouncementIndex ? " active" : ""}" data-dot-index="${i}" aria-label="Go to slide ${i + 1}"></button>`
+          ).join("")
+        : "";
+
+    const navHtml = hasMultiple
+        ? `<button class="carousel-nav prev" aria-label="Previous announcement">&#8249;</button>
+           <button class="carousel-nav next" aria-label="Next announcement">&#8250;</button>`
+        : "";
+
+    container.innerHTML = `
+        <div class="carousel-viewport" id="announcementViewport">
+            <div class="carousel-track" id="announcementTrack" style="transform: translateX(-${currentAnnouncementIndex * 100}%)">
+                ${slidesHtml}
+            </div>
+        </div>
+        ${navHtml}
+        ${hasMultiple ? `<div class="carousel-dots">${dotsHtml}</div>` : ""}
+    `;
+
+    // Wire up ack buttons
     container.querySelectorAll(".ack-btn").forEach((btn) => {
         const idx = parseInt(btn.dataset.ackIndex, 10);
         const ann = announcements[idx];
         if (!ann) return;
         btn.addEventListener("click", () => handleAnnouncementAcknowledge(ann, btn));
     });
+
+    // Wire up nav
+    const prevBtn = container.querySelector(".carousel-nav.prev");
+    const nextBtn = container.querySelector(".carousel-nav.next");
+    if (prevBtn) prevBtn.addEventListener("click", prevAnnouncement);
+    if (nextBtn) nextBtn.addEventListener("click", nextAnnouncement);
+
+    // Wire up dots
+    container.querySelectorAll(".carousel-dot").forEach((dot) => {
+        dot.addEventListener("click", () => goToAnnouncement(parseInt(dot.dataset.dotIndex, 10)));
+    });
+
+    // Pause auto-slide on hover for better UX
+    if (!container.dataset.hoverBound) {
+        container.dataset.hoverBound = "1";
+        container.addEventListener("mouseenter", () => {
+            if (announcementAutoSlideTimer) {
+                clearInterval(announcementAutoSlideTimer);
+                announcementAutoSlideTimer = null;
+            }
+        });
+        container.addEventListener("mouseleave", () => {
+            if (allAnnouncementsCache.length > 1) {
+                startAnnouncementAutoSlide(allAnnouncementsCache.length);
+            }
+        });
+    }
+
+    // Size the viewport to the active slide
+    requestAnimationFrame(updateCarouselHeight);
+
+    // Start auto-slide
+    startAnnouncementAutoSlide(announcements.length);
 }
 
 async function handleAnnouncementAcknowledge(announcement, btnEl) {
@@ -9065,26 +9169,54 @@ async function autoDeleteAcknowledgedAnnouncement(announcement) {
 }
 
 				function goToAnnouncement(index) {
-					const total = allAnnouncementsCache.length;
-					if (!total) return;
+    const total = allAnnouncementsCache.length;
+    if (!total) return;
 
-					if (index < 0) index = total - 1;
-					if (index >= total) index = 0;
+    if (index < 0) index = total - 1;
+    if (index >= total) index = 0;
 
-					currentAnnouncementIndex = index;
+    currentAnnouncementIndex = index;
 
-					const track = document.getElementById("announcementTrack");
-					if (track) {
-						track.style.transform = `translateX(-${index * 100}%)`;
-					}
+    const track = document.getElementById("announcementTrack");
+    if (track) {
+        track.style.transform = `translateX(-${index * 100}%)`;
+    }
 
-					document.querySelectorAll(".carousel-dot").forEach((dot, i) => {
-						dot.classList.toggle("active", i === index);
-					});
+    document.querySelectorAll("#announcementCarousel .carousel-dot").forEach((dot, i) => {
+        dot.classList.toggle("active", i === index);
+    });
 
-					// Reset the auto-slide timer after a manual navigation
-					startAnnouncementAutoSlide(total);
-				}
+    updateCarouselHeight();
+    startAnnouncementAutoSlide(total);
+}
+
+/* Auto-slide every 10 seconds */
+function startAnnouncementAutoSlide(total) {
+    if (announcementAutoSlideTimer) {
+        clearInterval(announcementAutoSlideTimer);
+        announcementAutoSlideTimer = null;
+    }
+    if (!total || total < 2) return; // no need to slide with 0 or 1 announcement
+
+    announcementAutoSlideTimer = setInterval(() => {
+        nextAnnouncement();
+    }, 10000); // 10 seconds
+}
+
+/* Make the viewport exactly as tall as the current slide,
+   so shorter announcements don't inherit the tallest one's height. */
+function updateCarouselHeight() {
+    const viewport = document.getElementById("announcementViewport");
+    const track = document.getElementById("announcementTrack");
+    if (!viewport || !track) return;
+
+    const slides = track.querySelectorAll(".carousel-slide");
+    const active = slides[currentAnnouncementIndex];
+    if (!active) return;
+
+    viewport.style.transition = "height 0.55s cubic-bezier(0.4, 0, 0.2, 1)";
+    viewport.style.height = active.offsetHeight + "px";
+}
 
 				function nextAnnouncement() {
 					goToAnnouncement(currentAnnouncementIndex + 1);
@@ -10653,50 +10785,6 @@ async function deleteAnnouncement(subject, details, support) {
 		<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
 
-		<!-- Knowledge Base Entry Modal -->
-		<div id="kbEntryModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
-			<h3 id="kbEntryModalTitle" style="margin-bottom: 16px">📚 Add Knowledge Base Entry</h3>
-			<input type="hidden" id="kbEntrySource" />
-
-			<div class="kb-form-row" id="kbEntryModuleRow">
-				<label>Module <span style="color: var(--danger)">*</span></label>
-				<div class="combobox-wrapper">
-					<input type="text" id="kbEntryModule-combobox" class="combobox-input" autocomplete="off" placeholder="Select or type module..." />
-					<input type="hidden" id="kbEntryModule" />
-					<div id="kbEntryModule-suggestions" class="combobox-suggestions"></div>
-				</div>
-			</div>
-
-			<div class="kb-form-row">
-				<label>Title <span style="color: var(--danger)">*</span></label>
-				<input type="text" id="kbEntryTitle" class="no-uppercase" placeholder="e.g., Printer Not Responding" />
-			</div>
-
-			<div class="kb-form-row">
-				<label>Content / Steps <span style="color: var(--danger)">*</span></label>
-				<div id="kbEntryContentEditor" style="height: 220px; background: var(--bg-secondary); border-radius: 12px"></div>
-				<textarea id="kbEntryContent" style="display: none"></textarea>
-			</div>
-
-			<div id="kbEntryError" style="color: var(--danger); margin-bottom: 12px; font-size: 0.85rem"></div>
-
-			<div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px">
-				<button id="kbEntrySaveBtn" class="login-action-btn" onclick="saveKbEntry()">Save</button>
-				<button class="login-action-btn" style="background: #6b7280" onclick="closeKbEntryModal()">Cancel</button>
-			</div>
-		</div>
-		<div id="kbEntryModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
-
-		<div id="announcementModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
-			<h3 style="margin-bottom: 16px">📢 New Announcement</h3>
-			<input type="text" id="newAnnouncementSubject" class="no-uppercase" placeholder="Subject" style="width: 100%; margin-bottom: 12px" />
-			<div id="newAnnouncementEditor" style="height: 220px; margin-bottom: 12px; background: var(--bg-secondary); border-radius: 12px"></div>
-			<textarea id="newAnnouncementText" style="display: none"></textarea>
-			<div style="display: flex; gap: 8px; justify-content: flex-end">
-				<button id="submitAnnouncementBtn" class="login-action-btn">Post</button>
-				<button id="cancelAnnouncementBtn" class="login-action-btn" style="background: #6b7280">Cancel</button>
-			</div>
-		</div>
-		<div id="announcementModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
+		
 	</body>
 </html>
