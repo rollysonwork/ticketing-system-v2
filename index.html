@@ -777,25 +777,18 @@
 			}
 
 			.bulk-bar {
-    width: 100%;
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin: 24px 0;
-    padding: 12px 16px;
-    background: var(--bg-secondary);
-    border-radius: 40px;
-    border: 1px solid var(--border-color);
-    /* NEW — floating / sticky */
-    position: sticky;
-    top: 12px;
-    z-index: 60;
-    box-shadow: 0 8px 22px -8px rgba(0, 0, 0, 0.22), var(--card-shadow);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-}
+				width: 100%;
+				display: flex;
+				gap: 12px;
+				align-items: center;
+				justify-content: center;
+				flex-wrap: wrap;
+				margin: 24px 0;
+				padding: 12px 16px;
+				background: var(--bg-secondary);
+				border-radius: 40px;
+				border: 1px solid var(--border-color);
+			}
 
 			.bulk-bar label {
 				display: inline-flex;
@@ -856,84 +849,6 @@
 				background: var(--bg-tertiary);
 				color: var(--text-secondary);
 			}
-
-			/* ============ BULK BAR PAGINATION ============ */
-.pagination-controls {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin-left: auto;
-    padding: 4px 6px;
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
-    border-radius: 30px;
-    flex-wrap: wrap;
-}
-
-.pagination-controls button {
-    padding: 6px 12px;
-    border-radius: 20px;
-    border: 1px solid var(--border-color);
-    background: var(--bg-secondary);
-    color: var(--text-secondary);
-    font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    transition: var(--transition);
-    font-family: inherit;
-    line-height: 1;
-}
-
-.pagination-controls button:hover:not(:disabled) {
-    background: var(--accent-color);
-    color: #fff;
-    border-color: var(--accent-color);
-}
-
-.pagination-controls button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-.pagination-page-numbers {
-    display: inline-flex;
-    gap: 4px;
-    flex-wrap: wrap;
-    align-items: center;
-}
-
-.pagination-page-numbers button {
-    min-width: 30px;
-    justify-content: center;
-    padding: 6px 8px;
-}
-
-.pagination-page-numbers button.active {
-    background: var(--accent-color);
-    color: #fff;
-    border-color: var(--accent-color);
-    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
-}
-
-.pagination-info {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--text-muted);
-    white-space: nowrap;
-    padding: 0 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-}
-
-@media (max-width: 900px) {
-    .pagination-controls { margin-left: 0; width: 100%; justify-content: center; }
-    .pagination-info { width: 100%; text-align: center; }
-}
 
 			#entryTable {
 				width: 100%;
@@ -4325,23 +4240,16 @@
 <div id="tab-database" class="tab-content">
 	<div style="padding: 0 8px;"> 
     <div class="bulk-bar">
-    <label><input type="checkbox" id="selectAllCheckbox" /> Select All</label>
-    <button id="bulkDeleteBtn" title="Remove selected rows (only from main table)"><i class="bi bi-trash-fill"></i> REMOVE</button>
-    <button id="bulkCopyBtn" title="Copy selected rows"><i class="bi bi-copy"></i> COPY</button>
-    <button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
-    <button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom-smaller icon-google-sheets"></i> SHOW ALL PENDING</button>
-    <button class="counter-badge status-filter-btn" data-status="RESOLVED" onclick="filterByStatus('RESOLVED')">✅ RESOLVED: <span id="counterResolved">0</span></button>
-    <button class="counter-badge status-filter-btn" data-status="PENDING" onclick="filterByStatus('PENDING')">⏳ PENDING: <span id="counterPending">0</span></button>
-    <button class="counter-badge status-filter-btn" data-status="OTHER TASK" onclick="filterByStatus('OTHER TASK')">📋 OTHER TASK: <span id="counterOther">0</span></button>
-
-    <!-- NEW: pagination -->
-    <div class="pagination-controls" id="paginationControls">
-        <button id="pagePrevBtn" title="Previous page">‹ Prev</button>
-        <div class="pagination-page-numbers" id="pageNumbers"></div>
-        <button id="pageNextBtn" title="Next page">Next ›</button>
-        <span class="pagination-info" id="paginationInfo">Page 1 of 1</span>
+        <label><input type="checkbox" id="selectAllCheckbox" /> Select All</label>
+        <button id="bulkDeleteBtn" title="Remove selected rows (only from main table)"><i class="bi bi-trash-fill"></i> REMOVE</button>
+        <button id="bulkCopyBtn" title="Copy selected rows"><i class="bi bi-copy"></i> COPY</button>
+        <button id="shiftReportBtn" class="shift-report-btn" title="Generate end‑of‑shift report"><i class="bi bi-file-earmark-bar-graph"></i> SHIFT REPORT</button>
+        <button id="pendingTrackerToggleBtn" class="pending-tracker-toggle"><i class="icon-custom-smaller icon-google-sheets"></i> SHOW ALL PENDING</button>
+        <button class="counter-badge status-filter-btn" data-status="RESOLVED" onclick="filterByStatus('RESOLVED')">✅ RESOLVED: <span id="counterResolved">0</span></button>
+        <button class="counter-badge status-filter-btn" data-status="PENDING" onclick="filterByStatus('PENDING')">⏳ PENDING: <span id="counterPending">0</span></button>
+        <button class="counter-badge status-filter-btn" data-status="OTHER TASK" onclick="filterByStatus('OTHER TASK')">📋 OTHER TASK: <span id="counterOther">0</span></button>
     </div>
-</div>
+
     <div class="table-wrapper">
         <table id="entryTable">
             <thead>
@@ -4616,8 +4524,6 @@
 				const SHIFT_OPTIONS = ["9PM - 6AM", "5AM - 2PM", "2PM - 11PM"];
 
 				let currentStatusFilter = null;
-				const PAGE_SIZE = 10;
-let currentPage = 1;
 				let currentActiveTab = "dashboard";
 				let allEntries = [];
 				let storeData = [];
@@ -6809,96 +6715,21 @@ let currentPage = 1;
 					navigator.clipboard.writeText(values.join("\t")).then(() => showNotification("Row copied!"));
 				}
 
-				function getPaginatedEntries(entries) {
-    const totalPages = Math.max(1, Math.ceil(entries.length / PAGE_SIZE));
-    if (currentPage > totalPages) currentPage = totalPages;
-    if (currentPage < 1) currentPage = 1;
-    const start = (currentPage - 1) * PAGE_SIZE;
-    const end = Math.min(start + PAGE_SIZE, entries.length);
-    return {
-        pageEntries: entries.slice(start, end),
-        totalPages,
-        start,
-        end,
-        total: entries.length,
-    };
-}
-
-function renderPaginationUI(totalPages, start, end, total) {
-    const info = document.getElementById("paginationInfo");
-    const prev = document.getElementById("pagePrevBtn");
-    const next = document.getElementById("pageNextBtn");
-    const numbers = document.getElementById("pageNumbers");
-    if (!info || !prev || !next || !numbers) return;
-
-    if (total === 0) {
-        info.textContent = "No entries";
-    } else {
-        info.textContent = `Page ${currentPage} of ${totalPages} · ${start + 1}–${end} of ${total}`;
-    }
-
-    prev.disabled = currentPage <= 1;
-    next.disabled = currentPage >= totalPages;
-
-    numbers.innerHTML = "";
-    if (totalPages <= 1) return;
-
-    const addBtn = (pageNum) => {
-        const b = document.createElement("button");
-        b.textContent = pageNum;
-        if (pageNum === currentPage) b.classList.add("active");
-        b.addEventListener("click", () => goToPage(pageNum));
-        numbers.appendChild(b);
-    };
-    const addEllipsis = () => {
-        const span = document.createElement("span");
-        span.textContent = "…";
-        span.style.cssText = "padding:0 4px;color:var(--text-muted);font-weight:700;font-size:12px;align-self:center;";
-        numbers.appendChild(span);
-    };
-
-    // Show first, last, current, and neighbors (with ellipses in between)
-    const pagesToShow = new Set([1, totalPages]);
-    for (let p = currentPage - 1; p <= currentPage + 1; p++) {
-        if (p >= 1 && p <= totalPages) pagesToShow.add(p);
-    }
-    const sorted = [...pagesToShow].sort((a, b) => a - b);
-    let last = 0;
-    for (const p of sorted) {
-        if (last && p - last > 1) addEllipsis();
-        addBtn(p);
-        last = p;
-    }
-}
-
-function goToPage(page) {
-    currentPage = page;
-    if (isPendingTrackerMode) {
-        renderPendingTableView(cachedPendingEntries);
-    } else {
-        renderTable();
-    }
-    document.getElementById("entryTable")?.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
 				function renderTable() {
-    if (isPendingTrackerMode) return; // tracker view owns the table when active
+					if (isPendingTrackerMode) return; // tracker view owns the table when active
 
-    let visibleEntries = getVisibleEntries(); // honours currentStatusFilter
+					let visibleEntries = getVisibleEntries(); // honours currentStatusFilter
 
-    if (!currentStatusFilter || currentStatusFilter === "PENDING") {
-        visibleEntries = visibleEntries.concat(myPendingCache);
-    }
+					if (!currentStatusFilter || currentStatusFilter === "PENDING") {
+						visibleEntries = visibleEntries.concat(myPendingCache);
+					}
 
-    const tbody = document.querySelector("#entryTable tbody");
-    tbody.innerHTML = "";
+					const tbody = document.querySelector("#entryTable tbody");
+					tbody.innerHTML = "";
 
-    const page = getPaginatedEntries(visibleEntries);
-    renderPaginationUI(page.totalPages, page.start, page.end, page.total);
-
-    page.pageEntries.forEach((entry) => {
-        const row = document.createElement("tr");
-        row.dataset.id = entry.id;
+					visibleEntries.forEach((entry) => {
+						const row = document.createElement("tr");
+						row.dataset.id = entry.id;
 
 						const isWorkloadEntry = entry.source === "workload";
 
@@ -7466,7 +7297,6 @@ function goToPage(page) {
 							btn.classList.remove("active");
 						}
 					});
-					currentPage = 1;
 					renderTable(); // re-render with filter
 				}
 
@@ -8508,17 +8338,13 @@ function goToPage(page) {
 				}
 
 				function renderPendingTableView(entries) {
-    const tbody = document.querySelector("#entryTable tbody");
-    tbody.innerHTML = "";
-
-    const page = getPaginatedEntries(entries || []);
-    renderPaginationUI(page.totalPages, page.start, page.end, page.total);
-
-    if (!page.total) {
-        tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">✨ No pending tickets found for you in WORKLOAD TRACKER 2026 ✨</td></tr>`;
-        return;
-    }
-    page.pageEntries.forEach((entry) => {
+					const tbody = document.querySelector("#entryTable tbody");
+					tbody.innerHTML = "";
+					if (!entries.length) {
+						tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">✨ No pending tickets found for you in WORKLOAD TRACKER 2026 ✨</td></tr>`;
+						return;
+					}
+					entries.forEach((entry) => {
 						const row = document.createElement("tr");
 						row.dataset.id = entry.id;
 						row.innerHTML = `
@@ -8560,8 +8386,6 @@ function goToPage(page) {
 					isPendingTrackerMode = !isPendingTrackerMode;
 					localStorage.setItem("pendingTrackerMode", isPendingTrackerMode ? "true" : "false");
 					const toggleBtn = document.getElementById("pendingTrackerToggleBtn");
-					
-					currentPage = 1;
 
 					if (isPendingTrackerMode) {
 						showNotification("📋 TL mode: Showing all pending tickets from all agents");
@@ -11135,10 +10959,6 @@ function renderTopIssues(issues) {
 						localStorage.setItem("sidebarShift", document.getElementById("sidebar-shift").value);
 						syncSidebarToFormFields();
 					});
-
-					
-document.getElementById("pagePrevBtn")?.addEventListener("click", () => goToPage(currentPage - 1));
-document.getElementById("pageNextBtn")?.addEventListener("click", () => goToPage(currentPage + 1));
 					// Knowledge Base setup
 					const kbSearchInput = document.getElementById("kbSearchInput");
 					if (kbSearchInput) {
@@ -11153,9 +10973,7 @@ document.getElementById("pageNextBtn")?.addEventListener("click", () => goToPage
 
 					// Init module combobox for the KB entry modal
 					initCombobox("kbEntryModule-combobox", "kbEntryModule", MODULE_OPTIONS, "kbEntryModule-suggestions", () => {});
-				
 				}
-
 
 				window.handleHistorySourceToggle = handleHistorySourceToggle;
 				window.refreshWorkloadHistory = refreshWorkloadHistory;
