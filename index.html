@@ -2860,6 +2860,112 @@
 			.carousel-slide-details p:last-child {
 				margin-bottom: 0;
 			}
+			/* ============ INLINE SCHEDULER CALENDAR ============ */
+			.inline-calendar {
+				background: var(--bg-tertiary);
+				border: 1px solid var(--border-color);
+				border-radius: 14px;
+				padding: 12px;
+				-webkit-user-select: none;
+				user-select: none;
+				width: 100%;
+				max-width: 340px;
+			}
+			.inline-calendar .cal-header {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				gap: 8px;
+				margin-bottom: 10px;
+			}
+			.inline-calendar .cal-title {
+				flex: 1;
+				text-align: center;
+				font-weight: 700;
+				font-size: 0.9rem;
+				color: var(--text-primary);
+			}
+			.inline-calendar .cal-nav {
+				width: 30px;
+				height: 30px;
+				padding: 0;
+				border-radius: 8px;
+				border: 1px solid var(--border-color);
+				background: var(--bg-secondary);
+				color: var(--text-secondary);
+				cursor: pointer;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				font-size: 1.1rem;
+				line-height: 1;
+				font-family: inherit;
+				transition: var(--transition);
+			}
+			.inline-calendar .cal-nav:hover {
+				background: var(--accent-color);
+				color: #fff;
+				border-color: var(--accent-color);
+			}
+			.inline-calendar .cal-grid {
+				display: grid;
+				grid-template-columns: repeat(7, 1fr);
+				gap: 4px;
+			}
+			.inline-calendar .cal-weekday {
+				text-align: center;
+				font-size: 0.65rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.04em;
+				color: var(--text-muted);
+				padding: 4px 0;
+			}
+			.inline-calendar .cal-day {
+				border: 1px solid transparent;
+				background: var(--bg-secondary);
+				color: var(--text-primary);
+				border-radius: 8px;
+				padding: 7px 0;
+				font-size: 0.8rem;
+				font-weight: 500;
+				cursor: pointer;
+				font-family: inherit;
+				transition: var(--transition);
+			}
+			.inline-calendar .cal-day:hover {
+				background: var(--accent-soft);
+				border-color: var(--accent-color);
+				color: var(--accent-color);
+			}
+			.inline-calendar .cal-day.today {
+				border-color: var(--accent-color);
+				color: var(--accent-color);
+				font-weight: 700;
+			}
+			.inline-calendar .cal-day.selected {
+				background: var(--accent-color);
+				border-color: var(--accent-color);
+				color: #fff;
+				font-weight: 700;
+				box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+			}
+			.inline-calendar .cal-day.empty {
+				visibility: hidden;
+				pointer-events: none;
+			}
+			.inline-calendar .cal-selected-label {
+				text-align: center;
+				font-size: 0.72rem;
+				color: var(--text-muted);
+				margin-top: 10px;
+				padding-top: 8px;
+				border-top: 1px dashed var(--border-color);
+			}
+			.inline-calendar .cal-selected-label strong {
+				color: var(--accent-color);
+			}
+
 		</style>
 	</head>
 	<body>
@@ -3819,10 +3925,13 @@
 									<th>EMAIL ADDRESS</th>
 									<td><input type="email" id="scheduler-email" class="no-uppercase" /></td>
 								</tr>
-								<!-- SCHEDULED DATE (separate) -->
+								<!-- SCHEDULED DATE (inline calendar) -->
 								<tr>
 									<th>SCHEDULED DATE</th>
-									<td><input type="date" id="scheduler-scheduleDate" /></td>
+									<td>
+										<div id="scheduler-calendar" class="inline-calendar"></div>
+										<input type="hidden" id="scheduler-scheduleDate" />
+									</td>
 								</tr>
 								<!-- SCHEDULED TIME (separate) -->
 								<tr>
@@ -4893,7 +5002,7 @@
 						} catch (e) {}
 					}
 
-					if (prefix === "scheduler") {
+										if (prefix === "scheduler") {
 						const saved = localStorage.getItem(`${prefix}FormData`);
 						if (saved) {
 							try {
@@ -4911,6 +5020,8 @@
 							} catch (e) {}
 						}
 						schedulerUpdatePreview();
+						schedulerCalView = null;
+						renderSchedulerCalendar();
 					}
 
 					if (prefix === "moolah") moolahUpdatePreview();
@@ -5919,6 +6030,8 @@
 						document.getElementById("scheduler-language").value = "";
 						document.getElementById("scheduler-storeSearch").value = "";
 						document.getElementById("scheduler-searchResults").innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
+						schedulerCalView = null;
+						renderSchedulerCalendar();
 					}
 
 					if (prefix === "ticket") ticketUpdatePreview();
@@ -5998,6 +6111,10 @@
 						const demoType = entry.moduleData?.demoType || "";
 						document.getElementById(`${prefix}-demoType`).value = demoType;
 						document.getElementById(`${prefix}-demoType-combobox`).value = demoType;
+
+						// Sync the inline calendar to the loaded date
+						schedulerCalView = null;
+						renderSchedulerCalendar();
 
 						// IMPORTANT: return early so we don't hit the ticket else block
 						return;
@@ -8309,6 +8426,62 @@
 					syncPreviewHeight();
 				}
 
+								let schedulerCalView = null;
+
+				function renderSchedulerCalendar() {
+					const container = document.getElementById("scheduler-calendar");
+					if (!container) return;
+					const hidden = document.getElementById("scheduler-scheduleDate");
+					const selected = hidden && hidden.value ? String(hidden.value).trim() : "";
+
+					if (!schedulerCalView) {
+						if (/^\d{4}-\d{2}-\d{2}$/.test(selected)) {
+							const p = selected.split("-").map(Number);
+							schedulerCalView = { year: p[0], month: p[1] - 1 };
+						} else {
+							const now = new Date();
+							schedulerCalView = { year: now.getFullYear(), month: now.getMonth() };
+						}
+					}
+
+					const { year, month } = schedulerCalView;
+					const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+					const weekdays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+					const todayStr = getESTDateString();
+
+					const firstDay = new Date(year, month, 1).getDay();
+					const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+					let html = '<div class="cal-header">' + '<button type="button" class="cal-nav" data-dir="prev" aria-label="Previous month">&#8249;</button>' + '<div class="cal-title">' + monthNames[month] + " " + year + "</div>" + '<button type="button" class="cal-nav" data-dir="next" aria-label="Next month">&#8250;</button>' + "</div>" + '<div class="cal-grid">';
+
+					weekdays.forEach(function (d) {
+						html += '<div class="cal-weekday">' + d + "</div>";
+					});
+
+					for (let i = 0; i < firstDay; i++) {
+						html += '<div class="cal-day empty"></div>';
+					}
+
+					for (let day = 1; day <= daysInMonth; day++) {
+						const dateStr = year + "-" + String(month + 1).padStart(2, "0") + "-" + String(day).padStart(2, "0");
+						let cls = "cal-day";
+						if (dateStr === todayStr) cls += " today";
+						if (dateStr === selected) cls += " selected";
+						html += '<button type="button" class="' + cls + '" data-date="' + dateStr + '">' + day + "</button>";
+					}
+
+					html += "</div>";
+
+					if (selected && /^\d{4}-\d{2}-\d{2}$/.test(selected)) {
+						const p = selected.split("-").map(Number);
+						html += '<div class="cal-selected-label">Selected: <strong>' + monthNames[p[1] - 1] + " " + p[2] + ", " + p[0] + "</strong></div>";
+					} else {
+						html += '<div class="cal-selected-label">No date selected</div>';
+					}
+
+					container.innerHTML = html;
+				}
+
 				async function addEntryScheduler() {
 					const portalEl = document.getElementById("scheduler-portal");
 					const storeEl = document.getElementById("scheduler-storeName");
@@ -10124,11 +10297,74 @@
 							schedulerTz.value = tzLabel;
 							schedulerUpdatePreview(); // update the preview panel
 						}
+						
 
 						// Attach to both input (typing) and change (paste / blur)
-						schedulerZip.addEventListener("input", updateSchedulerTimezone);
-						schedulerZip.addEventListener("change", updateSchedulerTimezone);
+											// ==================== INLINE SCHEDULER CALENDAR WIRING ====================
+					const schedulerCalendarEl = document.getElementById("scheduler-calendar");
+					const schedulerDateHidden = document.getElementById("scheduler-scheduleDate");
+
+					if (schedulerCalendarEl) {
+						schedulerCalendarEl.addEventListener("click", (e) => {
+							const navBtn = e.target.closest(".cal-nav");
+							if (navBtn) {
+								if (!schedulerCalView) {
+									const now = new Date();
+									schedulerCalView = { year: now.getFullYear(), month: now.getMonth() };
+								}
+								let { year, month } = schedulerCalView;
+								if (navBtn.dataset.dir === "prev") {
+									month--;
+									if (month < 0) {
+										month = 11;
+										year--;
+									}
+								} else {
+									month++;
+									if (month > 11) {
+										month = 0;
+										year++;
+									}
+								}
+								schedulerCalView = { year, month };
+								renderSchedulerCalendar();
+								return;
+							}
+
+							const dayBtn = e.target.closest(".cal-day[data-date]");
+							if (dayBtn && schedulerDateHidden) {
+								schedulerDateHidden.value = dayBtn.dataset.date;
+								// reuse the existing input pipeline (updates preview + saves to localStorage)
+								schedulerDateHidden.dispatchEvent(new Event("input", { bubbles: true }));
+							}
+						});
+
+						if (schedulerDateHidden) {
+							schedulerDateHidden.addEventListener("input", () => {
+								renderSchedulerCalendar();
+							});
+						}
+
+						renderSchedulerCalendar();
 					}
+					}
+
+					// ==================== SCHEDULER: OPEN CALENDAR ON CLICK ====================
+const schedulerDateInput = document.getElementById("scheduler-scheduleDate");
+if (schedulerDateInput) {
+    schedulerDateInput.addEventListener("click", function () {
+        // showPicker() reliably opens the native calendar on Chromium browsers.
+        // It throws if the picker is already open (e.g. user clicked the
+        // calendar icon), so we swallow that error.
+        if (typeof this.showPicker === "function") {
+            try {
+                this.showPicker();
+            } catch (err) {
+                /* picker already open or not supported — ignore */
+            }
+        }
+    });
+}
 					document.getElementById("sidebar-date").addEventListener("change", syncSidebarToFormFields);
 					document.getElementById("sidebar-shift").addEventListener("change", () => {
 						localStorage.setItem("sidebarShift", document.getElementById("sidebar-shift").value);
