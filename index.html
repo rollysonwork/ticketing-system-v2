@@ -91,77 +91,6 @@
 				padding-bottom: 4px;
 			}
 
-			h1 {
-				text-align: center;
-				font-size: 1.8rem;
-				font-weight: 700;
-				letter-spacing: -0.02em;
-				margin-bottom: 2rem;
-				color: var(--text-primary);
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				gap: 12px;
-				position: relative;
-			}
-
-			.theme-toggle {
-				background: var(--bg-secondary);
-				border: 1px solid var(--border-color);
-				font-size: 1.5rem;
-				cursor: pointer;
-				padding: 8px 12px;
-				border-radius: 40px;
-				transition: var(--transition);
-				line-height: 1;
-			}
-
-			.theme-toggle:hover {
-				background: var(--accent-soft);
-				transform: scale(1.05);
-			}
-
-			.tab-container {
-				margin-bottom: 24px;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				gap: 12px;
-				flex-wrap: wrap;
-			}
-
-			.tab-buttons {
-				display: flex;
-				gap: 8px;
-				flex-wrap: wrap;
-			}
-
-			.tab-button {
-				padding: 10px 24px;
-				background: var(--bg-secondary);
-				border: 1px solid var(--border-color);
-				border-radius: 40px;
-				font-weight: 600;
-				font-size: 14px;
-				cursor: pointer;
-				transition: var(--transition);
-				color: var(--text-secondary);
-				text-transform: uppercase;
-				letter-spacing: 0.01em;
-			}
-
-			.tab-button:hover {
-				background: var(--accent-soft);
-				transform: translateY(-2px);
-			}
-
-			.tab-button.active {
-				background: var(--accent-color);
-				color: white;
-				border-color: var(--accent-color);
-				box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-			}
-
 			.tab-content {
 				display: none;
 			}
@@ -172,16 +101,12 @@
 			}
 
 			body:has(#tab-dashboard.active) .bulk-bar,
-body:has(#tab-dashboard.active) #entryTable,
-body:has(#tab-announcement.active) .bulk-bar,
-body:has(#tab-announcement.active) #entryTable,
-body:has(#tab-knowledgebase.active) .bulk-bar,
-body:has(#tab-knowledgebase.active) #entryTable {
-    display: none;
-}
-
-			.btn-no-fontsize {
-				font-size: inherit;
+			body:has(#tab-dashboard.active) #entryTable,
+			body:has(#tab-announcement.active) .bulk-bar,
+			body:has(#tab-announcement.active) #entryTable,
+			body:has(#tab-knowledgebase.active) .bulk-bar,
+			body:has(#tab-knowledgebase.active) #entryTable {
+				display: none;
 			}
 
 			@keyframes fadeIn {
@@ -194,14 +119,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 					opacity: 1;
 					transform: translateY(0);
 				}
-			}
-
-			.button-accented-color {
-				border: 1px solid var(--border-color);
-				border-radius: 12px;
-				background: var(--bg-secondary);
-				color: var(--text-primary);
-				transition: var(--transition);
 			}
 
 			.three-panels {
@@ -335,21 +252,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				box-shadow: var(--card-shadow);
 			}
 
-			.sidebar-card.ticket-card {
-				border-left-color: #3b82f6 !important;
-				border-bottom-color: #326cc9 !important;
-			}
-
-			.sidebar-card.store-card {
-				border-left-color: #a11b31 !important;
-				border-bottom-color: #801627 !important;
-			}
-
-			.sidebar-card.moolah-card {
-				border-left-color: #bc8f00 !important;
-				border-bottom-color: #9d7900 !important;
-			}
-
 			.sidebar-card.status-resolved-card {
 				border-left-color: #10b981 !important;
 				border-bottom-color: #0d9668 !important;
@@ -398,12 +300,9 @@ body:has(#tab-knowledgebase.active) #entryTable {
 
 			.sidebar-card .preview-item.remarks-item {
 				font-size: 0.8rem;
-				/* issue is 0.85rem, so 0.05rem smaller */
 				font-weight: 700;
-				/* bold, same as issue */
 				color: var(--text-primary);
 				margin-top: -2px;
-				/* tighten spacing under the issue line */
 			}
 
 			.sidebar-card .stack-btn,
@@ -693,12 +592,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				word-break: break-word;
 			}
 
-			.left-panel table td:first-child {
-				width: 38%;
-				font-weight: 500;
-				color: var(--text-secondary);
-			}
-
 			input,
 			select,
 			textarea {
@@ -739,17 +632,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 			.invalid {
 				border-color: var(--danger) !important;
 				background: rgba(239, 68, 68, 0.1);
-			}
-
-			.section-header {
-				font-size: 0.9rem;
-				font-weight: 600;
-				color: var(--accent-color);
-				text-transform: uppercase;
-				letter-spacing: 0.02em;
-				padding: 12px 0 4px 0;
-				border-bottom: 1px dashed var(--border-color);
-				margin-top: 8px;
 			}
 
 			.button-row {
@@ -853,18 +735,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				background: #b93131;
 				color: white;
 				border-color: #b93131;
-			}
-
-			.bulk-bar .sheets-key-btn {
-				background: #8b5cf6;
-				color: white;
-				border-color: #8b5cf6;
-			}
-
-			.bulk-bar .gemini-key-btn {
-				background: #8b5cf6;
-				color: white;
-				border-color: #8b5cf6;
 			}
 
 			.bulk-bar button.counter-badge {
@@ -1057,10 +927,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 					min-width: 120px;
 				}
 
-				h1 {
-					font-size: 1.4rem;
-				}
-
 				.tab-button {
 					padding: 8px 16px;
 					font-size: 12px;
@@ -1079,11 +945,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 
 			/* ============================================================
    Shared rich-content list rendering
-   Matches bullet + numbering format across:
-   - Troubleshooting preview (.preview-multiline)
-   - Knowledge Base card (.kb-entry-content)
-   - Announcement list (.announcement-message)
-   - Announcement carousel (.carousel-slide-details)
    ============================================================ */
 
 			.preview-multiline ol,
@@ -1103,7 +964,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				list-style: none;
 			}
 
-			/* Ordered list — level 1: 1. 2. 3. */
 			.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"]),
 			.kb-entry-content li[data-list="ordered"]:not([class*="ql-indent"]),
 			.announcement-message li[data-list="ordered"]:not([class*="ql-indent"]),
@@ -1118,7 +978,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				content: counter(level1) ". ";
 			}
 
-			/* Ordered list — level 2 (ql-indent-1): A. B. C. */
 			.preview-multiline li[data-list="ordered"].ql-indent-1,
 			.kb-entry-content li[data-list="ordered"].ql-indent-1,
 			.announcement-message li[data-list="ordered"].ql-indent-1,
@@ -1141,7 +1000,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				content: counter(level2, upper-alpha) ". ";
 			}
 
-			/* Ordered list — level 3 (ql-indent-2): I. II. III. */
 			.preview-multiline li[data-list="ordered"].ql-indent-2,
 			.kb-entry-content li[data-list="ordered"].ql-indent-2,
 			.announcement-message li[data-list="ordered"].ql-indent-2,
@@ -1164,7 +1022,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				content: counter(level3, upper-roman) ". ";
 			}
 
-			/* Bullets — level 1 */
 			.preview-multiline li[data-list="bullet"]::before,
 			.kb-entry-content li[data-list="bullet"]::before,
 			.announcement-message li[data-list="bullet"]::before,
@@ -1173,7 +1030,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				font-weight: bold;
 			}
 
-			/* Bullets — level 2 */
 			.preview-multiline li[data-list="bullet"].ql-indent-1,
 			.kb-entry-content li[data-list="bullet"].ql-indent-1,
 			.announcement-message li[data-list="bullet"].ql-indent-1,
@@ -1181,7 +1037,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				margin-left: 30px;
 			}
 
-			/* Bullets — level 3 */
 			.preview-multiline li[data-list="bullet"].ql-indent-2,
 			.kb-entry-content li[data-list="bullet"].ql-indent-2,
 			.announcement-message li[data-list="bullet"].ql-indent-2,
@@ -1189,7 +1044,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				margin-left: 60px;
 			}
 
-			/* Converted bullet lists (post-convertQuillLists) */
 			.preview-multiline ul,
 			.kb-entry-content ul,
 			.announcement-message ul,
@@ -1272,29 +1126,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 			}
 
-			.login-action-btn {
-				transition: var(--transition);
-				cursor: pointer;
-				border: none;
-				border-radius: 40px;
-				font-weight: 600;
-				text-transform: uppercase;
-				display: inline-flex;
-				align-items: center;
-				justify-content: center;
-				gap: 4px;
-				padding: 8px 16px;
-				background: var(--accent-color);
-				color: white;
-				font-size: 0.8rem;
-			}
-
-			.login-action-btn:hover {
-				transform: translateY(-2px);
-				filter: brightness(1.05);
-				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-			}
-
 			#togglePassword {
 				align-self: center;
 				align-content: center;
@@ -1307,7 +1138,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				width: 2em;
 				transition: var(--transition);
 				cursor: pointer;
-
 				border-radius: 10px;
 				font-weight: 600;
 				text-transform: uppercase;
@@ -1329,31 +1159,7 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				align-items: center;
 			}
 
-			.counter-badge.resolved {
-				color: #11734b;
-				border: 1px solid #11734b;
-				background: #152921;
-			}
-
-			.counter-badge.pending {
-				color: #b10202;
-				border: 1px solid #b10202;
-				background: #381c1c;
-			}
-
-			.counter-badge.other {
-				color: #bfe1f6;
-				border: 1px solid #bfe1f6;
-				background: #1b2c36;
-			}
-
 			.bulk-bar .pending-tracker-toggle {
-				background: #b93131;
-				color: white;
-				border-color: #b93131;
-			}
-
-			.pending-tracker-btn {
 				background: #b93131;
 				color: white;
 				border-color: #b93131;
@@ -1363,10 +1169,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				background: #b93131;
 				color: white;
 				border-color: #b93131;
-			}
-
-			.dropdown-selection-div * {
-				font-size: 0.95em;
 			}
 
 			.combobox-wrapper {
@@ -1417,11 +1219,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				background: var(--accent-color) !important;
 				color: white !important;
 				border-color: var(--accent-color) !important;
-			}
-
-			.sidebar-card.scheduler-card {
-				border-left-color: #6f42c1 !important;
-				border-bottom-color: #5a32a3 !important;
 			}
 
 			/* ============ DASHBOARD ============ */
@@ -1801,7 +1598,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				background: var(--accent-soft);
 				color: var(--accent-color);
 				transform: none;
-				/* neutralise global translateY(-2px) */
 			}
 
 			.left-sidebar .sidebar-tabs .tab-button.active {
@@ -2004,7 +1800,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				position: fixed;
 				top: 24px;
 				left: 276px;
-				/* sits just to the right of the open sidebar */
 				z-index: 10001;
 				width: 30px;
 				height: 30px;
@@ -2046,7 +1841,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				box-shadow: 0 4px 14px rgba(59, 130, 246, 0.45);
 			}
 
-			/* Slide the sidebar off-screen when collapsed */
 			.left-sidebar {
 				transition:
 					transform 0.25s ease,
@@ -2058,7 +1852,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				box-shadow: none;
 			}
 
-			/* On small screens the sidebar is a top bar – no collapse needed */
 			@media (max-width: 900px) {
 				body.logged-in,
 				body.logged-in.sidebar-collapsed {
@@ -2290,7 +2083,7 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				color: var(--text-muted);
 			}
 
-			/* ==================== MODULE STAT BARS (Top 10 Modules) ==================== */
+			/* ==================== MODULE STAT BARS ==================== */
 			.module-stat-row {
 				display: flex;
 				align-items: center;
@@ -2298,6 +2091,7 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				margin-bottom: 8px;
 				padding: 4px 0;
 			}
+
 			.module-stat-rank {
 				width: 24px;
 				height: 24px;
@@ -2312,11 +2106,13 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				flex-shrink: 0;
 				border: 1px solid var(--border-color);
 			}
+
 			.module-stat-rank.top-3 {
 				background: linear-gradient(135deg, #8b5cf6, #3b82f6);
 				color: #fff;
 				border-color: transparent;
 			}
+
 			.module-stat-name {
 				flex: 1 1 150px;
 				min-width: 0;
@@ -2327,6 +2123,7 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				overflow: hidden;
 				text-overflow: ellipsis;
 			}
+
 			.module-stat-bar-wrap {
 				flex: 1 1 220px;
 				height: 22px;
@@ -2336,6 +2133,7 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				position: relative;
 				border: 1px solid var(--border-color);
 			}
+
 			.module-stat-bar {
 				height: 100%;
 				background: linear-gradient(90deg, #3b82f6, #8b5cf6);
@@ -2351,11 +2149,13 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				transition: width 0.5s ease;
 				box-shadow: 0 2px 4px rgba(59, 130, 246, 0.25);
 			}
+
 			@media (max-width: 700px) {
 				.module-stat-name {
 					flex: 1 1 100%;
 					order: -1;
 				}
+
 				.module-stat-row {
 					flex-wrap: wrap;
 				}
@@ -2506,7 +2306,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				border: 1px dashed var(--border-color);
 			}
 
-			/* Support line inside tab list items */
 			.announcement-support {
 				font-size: 0.72rem;
 				color: var(--text-muted);
@@ -2730,67 +2529,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 			}
 
-			.kb-search-section {
-				display: flex;
-				gap: 12px;
-				flex-wrap: wrap;
-				background: var(--bg-secondary);
-				border: 1px solid var(--border-color);
-				border-radius: 20px;
-				padding: 16px 20px;
-				box-shadow: var(--card-shadow);
-			}
-
-			.kb-search-wrapper {
-				flex: 1;
-				min-width: 240px;
-				position: relative;
-				display: flex;
-				align-items: center;
-			}
-
-			.kb-search-wrapper i {
-				position: absolute;
-				left: 16px;
-				color: var(--text-muted);
-				font-size: 1rem;
-			}
-
-			.kb-search-wrapper input {
-				width: 100%;
-				padding: 10px 16px 10px 42px;
-				border: 1px solid var(--border-color);
-				border-radius: 40px;
-				background: var(--bg-tertiary);
-				color: var(--text-primary);
-				font-size: 14px;
-				font-family: inherit;
-			}
-
-			.kb-search-wrapper input:focus {
-				border-color: var(--accent-color);
-				outline: none;
-				box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-			}
-
-			.kb-filter-wrapper {
-				display: flex;
-				gap: 8px;
-				align-items: center;
-				flex-wrap: wrap;
-			}
-
-			.kb-filter-wrapper select {
-				padding: 10px 16px;
-				border-radius: 40px;
-				border: 1px solid var(--border-color);
-				background: var(--bg-tertiary);
-				color: var(--text-primary);
-				font-size: 14px;
-				font-family: inherit;
-				min-width: 180px;
-			}
-
 			.kb-add-btn {
 				padding: 10px 20px;
 				border-radius: 40px;
@@ -2910,24 +2648,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				display: block;
 			}
 
-			.kb-entry-tags {
-				display: flex;
-				gap: 6px;
-				flex-wrap: wrap;
-				margin-top: 10px;
-			}
-
-			.kb-tag {
-				display: inline-block;
-				padding: 2px 8px;
-				border-radius: 12px;
-				font-size: 0.65rem;
-				font-weight: 600;
-				background: var(--bg-tertiary);
-				color: var(--text-muted);
-				border: 1px solid var(--border-color);
-			}
-
 			.kb-entry-actions {
 				display: flex;
 				gap: 6px;
@@ -3019,17 +2739,11 @@ body:has(#tab-knowledgebase.active) #entryTable {
 					justify-content: center;
 				}
 
-				.kb-filter-wrapper {
-					width: 100%;
-				}
-
-				.kb-filter-wrapper select,
 				.kb-add-btn {
 					flex: 1;
 				}
 			}
 
-			/* Rich-content rendering: HTML content should not use pre-wrap */
 			.kb-entry-content p,
 			.announcement-message p,
 			.carousel-slide-details p {
@@ -3219,7 +2933,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				font-style: italic;
 			}
 
-			/* Header actions group (holds Ticketing/HRMS toggle + Add Entry) */
 			.kb-header-actions {
 				display: flex;
 				align-items: center;
@@ -3393,8 +3106,6 @@ body:has(#tab-knowledgebase.active) #entryTable {
 								<button class="kb-add-btn" id="kbAddBtn" onclick="openKbEntryModal()"><i class="bi bi-plus-circle-fill"></i> Add Entry</button>
 							</div>
 						</div>
-
-				
 
 						<!-- Loading / Status -->
 						<div id="kbStatus" class="kb-status"></div>
@@ -4109,23 +3820,20 @@ body:has(#tab-knowledgebase.active) #entryTable {
 					</div>
 				</div>
 
-
-<!-- ==================== ANNOUNCEMENTS TAB ==================== -->
-<div id="tab-announcement" class="tab-content">
-    <div class="announcement-page">
-        <div class="dashboard-section">
-            <div class="dashboard-section-header">
-                <h3>📢 Announcements</h3>
-                <button class="dashboard-add-btn" id="addAnnouncementBtnTab">
-                    <i class="bi bi-plus-circle-fill"></i> New Announcement
-                </button>
-            </div>
-            <div id="announcementListTab" class="announcement-list">
-                <div class="announcements-empty">Loading announcements...</div>
-            </div>
-        </div>
-    </div>
-</div>
+				<!-- ==================== ANNOUNCEMENTS TAB ==================== -->
+				<div id="tab-announcement" class="tab-content">
+					<div class="announcement-page">
+						<div class="dashboard-section">
+							<div class="dashboard-section-header">
+								<h3>📢 Announcements</h3>
+								<button class="dashboard-add-btn" id="addAnnouncementBtnTab"><i class="bi bi-plus-circle-fill"></i> New Announcement</button>
+							</div>
+							<div id="announcementListTab" class="announcement-list">
+								<div class="announcements-empty">Loading announcements...</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
 				<!-- ==================== SCHEDULER TAB ==================== -->
 				<div id="tab-scheduler" class="tab-content">
@@ -4489,17 +4197,17 @@ body:has(#tab-knowledgebase.active) #entryTable {
 				const PROXY_URL = "https://script.google.com/macros/s/AKfycbxPcizPPjndZAHgWypPmstNtij9MUCS4gSKonFkxTE-C3hfrNvSlwdH2bTHm94RYhWUuw/exec";
 
 				// ===== Knowledge Base state & sheet names =====
-let currentKbType = localStorage.getItem("kbType") || "ticketing";
-const kbLoaded = { ticketing: false, hrms: false };
-const TICKETING_KB_SHEET_NAME = "TICKETING KNOWLEDGE BASE";
-const HRMS_KB_SHEET_NAME     = "HRMS KNOWLEDGE BASE";
-let kbTicketingEntries = [];
-let kbHrmsEntries = [];
+				let currentKbType = localStorage.getItem("kbType") || "ticketing";
+				const kbLoaded = { ticketing: false, hrms: false };
+				const TICKETING_KB_SHEET_NAME = "TICKETING KNOWLEDGE BASE";
+				const HRMS_KB_SHEET_NAME = "HRMS KNOWLEDGE BASE";
+				let kbTicketingEntries = [];
+				let kbHrmsEntries = [];
 
-function getKbSheetName(source) {
-    return source === "ticketing" ? TICKETING_KB_SHEET_NAME : HRMS_KB_SHEET_NAME;
-}
-// ================================================
+				function getKbSheetName(source) {
+					return source === "ticketing" ? TICKETING_KB_SHEET_NAME : HRMS_KB_SHEET_NAME;
+				}
+				// ================================================
 
 				async function fetchFromProxy(params) {
 					const query = new URLSearchParams(params).toString();
@@ -10936,8 +10644,8 @@ function getKbSheetName(source) {
 						const schedulerCalendarEl = document.getElementById("scheduler-calendar");
 						const schedulerDateHidden = document.getElementById("scheduler-scheduleDate");
 
-						schedulerZip.addEventListener("input",  updateSchedulerTimezone);
-schedulerZip.addEventListener("change", updateSchedulerTimezone);
+						schedulerZip.addEventListener("input", updateSchedulerTimezone);
+						schedulerZip.addEventListener("change", updateSchedulerTimezone);
 
 						if (schedulerCalendarEl) {
 							schedulerCalendarEl.addEventListener("click", (e) => {
