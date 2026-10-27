@@ -2965,6 +2965,63 @@
 			.inline-calendar .cal-selected-label strong {
 				color: var(--accent-color);
 			}
+			/* ==================== ANNOUNCEMENT ACKNOWLEDGMENTS ==================== */
+.announcement-ack-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border-color);
+    flex-wrap: wrap;
+}
+
+.ack-btn {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 5px 14px;
+    border-radius: 30px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-family: inherit;
+    line-height: 1;
+}
+
+.ack-btn:hover:not(:disabled) {
+    background: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.ack-btn.acked,
+.ack-btn:disabled {
+    background: rgba(16, 185, 129, 0.12);
+    color: #10b981;
+    border-color: #10b981;
+    cursor: default;
+    opacity: 1;
+}
+
+.ack-count {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.ack-note {
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    font-style: italic;
+}
 		</style>
 	</head>
 	<body>
@@ -8757,81 +8814,255 @@
 				let currentAnnouncementIndex = 0;
 				let announcementAutoSlideTimer = null;
 
+				/* ==================== ANNOUNCEMENT ACKNOWLEDGMENTS ==================== */
+let announcementAcks = {};        // key -> Set of support names who acknowledged
+let allAnnouncementUsers = [];    // all support names eligible to acknowledge
+let announcementUsersLoaded = false;
+let acksLoaded = false;
+
+function getAnnouncementKey(a) {
+    return JSON.stringify([
+        (a.subject || "").trim(),
+        (a.details || "").trim(),
+        (a.support || "").trim(),
+    ]);
+}
+
+async function ensureAnnouncementUsersLoaded(force = false) {
+    if (announcementUsersLoaded && !force) return;
+    try {
+        const data = await fetchFromProxy({
+            action: "getSheetData",
+            sheetName: CONFIG.CRED_SHEET_NAME,
+        });
+        if (!data.values || data.values.length < 2) {
+            allAnnouncementUsers = [];
+        } else {
+            const names = new Set();
+            for (let i = 1; i < data.values.length; i++) {
+                const support = (data.values[i][0] || "").trim().toUpperCase();
+                const email = (data.values[i][1] || "").trim();
+                if (support && email) names.add(support);
+            }
+            allAnnouncementUsers = Array.from(names);
+        }
+        announcementUsersLoaded = true;
+    } catch (err) {
+        console.warn("Failed to load users for announcement acks:", err);
+        allAnnouncementUsers = [];
+    }
+}
+
+async function loadAnnouncementAcknowledgments() {
+    try {
+        const data = await fetchFromProxy({
+            action: "getSheetData",
+            sheetName: "ACKNOWLEDGMENTS",
+        });
+        const rows = (data.values || []).slice(1);
+        const map = {};
+        rows.forEach((r) => {
+            const key = (r[0] || "").toString();
+            const support = (r[1] || "").toString().trim().toUpperCase();
+            if (!key || !support) return;
+            if (!map[key]) map[key] = new Set();
+            map[key].add(support);
+        });
+        announcementAcks = map;
+        acksLoaded = true;
+    } catch (err) {
+        announcementAcks = {};
+        acksLoaded = true;
+        console.warn("ACKNOWLEDGMENTS sheet not found yet:", err.message);
+    }
+}
+
 				async function loadAnnouncements() {
-					const carousel = document.getElementById("announcementCarousel");
-					const listTab = document.getElementById("announcementListTab");
-					if (!carousel && !listTab) return;
+    const carousel = document.getElementById("announcementCarousel");
+    const listTab = document.getElementById("announcementListTab");
+    if (!carousel && !listTab) return;
 
-					try {
-						const data = await fetchFromProxy({ action: "getSheetData", sheetName: "ANNOUNCEMENT" });
-						const rows = (data.values || []).slice(1);
+    try {
+        const [data] = await Promise.all([
+            fetchFromProxy({ action: "getSheetData", sheetName: "ANNOUNCEMENT" }),
+            ensureAnnouncementUsersLoaded(),
+            loadAnnouncementAcknowledgments(),
+        ]);
 
-						// Col A = SUBJECT, Col B = DETAILS, Col C = SUPPORT
-						const announcements = rows
-							.map((r) => ({
-								subject: (r[0] || "").toString(),
-								details: (r[1] || "").toString(),
-								support: (r[2] || "").toString(),
-							}))
-							.filter((a) => a.subject.trim() !== "" || a.details.trim() !== "");
+        const rows = (data.values || []).slice(1);
 
-						// Newest first
-						announcements.reverse();
-						allAnnouncementsCache = announcements;
+        // Col A = SUBJECT, Col B = DETAILS, Col C = SUPPORT
+        const announcements = rows
+            .map((r) => ({
+                subject: (r[0] || "").toString(),
+                details: (r[1] || "").toString(),
+                support: (r[2] || "").toString(),
+            }))
+            .filter((a) => a.subject.trim() !== "" || a.details.trim() !== "");
 
-						if (currentAnnouncementIndex >= announcements.length) {
-							currentAnnouncementIndex = 0;
-						}
+        announcements.reverse();
+        allAnnouncementsCache = announcements;
 
-						renderAnnouncementCarousel(announcements);
-						renderAnnouncementTabList(announcements);
-					} catch (err) {
-						const msg = typeof err.message === "string" && err.message !== "[object Object]" ? err.message : "No announcements yet.";
-						if (carousel) carousel.innerHTML = `<div class="announcement-carousel-empty">${escapeHtml(msg)}</div>`;
-						if (listTab) listTab.innerHTML = `<div class="announcements-empty">${escapeHtml(msg)}</div>`;
-					}
-				}
+        if (currentAnnouncementIndex >= announcements.length) {
+            currentAnnouncementIndex = 0;
+        }
+
+        renderAnnouncementCarousel(announcements);
+        renderAnnouncementTabList(announcements);
+    } catch (err) {
+        const msg = typeof err.message === "string" && err.message !== "[object Object]"
+            ? err.message : "No announcements yet.";
+        if (carousel) carousel.innerHTML = `<div class="announcement-carousel-empty">${escapeHtml(msg)}</div>`;
+        if (listTab) listTab.innerHTML = `<div class="announcements-empty">${escapeHtml(msg)}</div>`;
+    }
+}
 
 				function renderAnnouncementCarousel(announcements) {
-					const container = document.getElementById("announcementCarousel");
-					if (!container) return;
+    const container = document.getElementById("announcementCarousel");
+    if (!container) return;
 
-					if (announcementAutoSlideTimer) {
-						clearInterval(announcementAutoSlideTimer);
-						announcementAutoSlideTimer = null;
-					}
+    if (announcementAutoSlideTimer) {
+        clearInterval(announcementAutoSlideTimer);
+        announcementAutoSlideTimer = null;
+    }
 
-					if (!announcements.length) {
-						container.innerHTML = '<div class="announcement-carousel-empty">No announcements yet.</div>';
-						return;
-					}
+    if (!announcements.length) {
+        container.innerHTML = '<div class="announcement-carousel-empty">No announcements yet.</div>';
+        return;
+    }
 
-					// Render ALL announcements stacked vertically – the section auto-sizes to fit them
-					container.innerHTML = `<div class="announcement-list">${announcements
-						.map(
-							(a) => `
+    const currentUser = getLoggedInUser();
+    const mySupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
+
+    container.innerHTML = `<div class="announcement-list">${announcements
+        .map((a, idx) => {
+            const key = getAnnouncementKey(a);
+            const poster = (a.support || "").trim().toUpperCase();
+            const requiredUsers = allAnnouncementUsers.filter((u) => u !== poster);
+            const acked = announcementAcks[key] || new Set();
+            const ackCount = requiredUsers.filter((u) => acked.has(u)).length;
+            const totalRequired = requiredUsers.length;
+            const iAcked = mySupport && acked.has(mySupport);
+            const amPoster = mySupport && mySupport === poster;
+            const allAcked = totalRequired > 0 && ackCount >= totalRequired;
+
+            let ackControlHtml = "";
+            if (totalRequired === 0) {
+                ackControlHtml = `<span class="ack-note">No acknowledgers required</span>`;
+            } else if (amPoster) {
+                ackControlHtml = `<span class="ack-note">Your announcement · ${ackCount}/${totalRequired} acknowledged</span>`;
+            } else {
+                ackControlHtml = `
+                    <button class="ack-btn ${iAcked ? "acked" : ""}" data-ack-index="${idx}">
+                        ${iAcked ? "✅ Acknowledged" : "👍 Acknowledge"}
+                    </button>
+                    <span class="ack-count">${ackCount}/${totalRequired} acknowledged${allAcked ? " · deleting…" : ""}</span>
+                `;
+            }
+
+            return `
         <div class="announcement-item">
             <div class="announcement-body">
                 ${a.subject ? `<div class="announcement-subject">${escapeHtml(a.subject)}</div>` : ""}
                 ${a.details ? `<div class="announcement-message">${renderRichContent(a.details)}</div>` : ""}
                 ${a.support ? `<div class="announcement-support"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
+                <div class="announcement-ack-row">${ackControlHtml}</div>
             </div>
-        </div>`,
-						)
-						.join("")}</div>`;
-				}
+        </div>`;
+        })
+        .join("")}</div>`;
 
-				function startAnnouncementAutoSlide(total) {
-					if (announcementAutoSlideTimer) {
-						clearInterval(announcementAutoSlideTimer);
-						announcementAutoSlideTimer = null;
-					}
-					if (total <= 1) return;
+    container.querySelectorAll(".ack-btn").forEach((btn) => {
+        const idx = parseInt(btn.dataset.ackIndex, 10);
+        const ann = announcements[idx];
+        if (!ann) return;
+        btn.addEventListener("click", () => handleAnnouncementAcknowledge(ann, btn));
+    });
+}
 
-					announcementAutoSlideTimer = setInterval(() => {
-						nextAnnouncement();
-					}, 5000);
-				}
+async function handleAnnouncementAcknowledge(announcement, btnEl) {
+    const currentUser = getLoggedInUser();
+    if (!currentUser) {
+        showNotification("Please log in first.");
+        return;
+    }
+    const mySupport = (currentUser.support || "").trim().toUpperCase();
+    if (!mySupport) {
+        showNotification("Your account has no support name.");
+        return;
+    }
+
+    // If the user list somehow doesn't include this user, try once more
+    if (!allAnnouncementUsers.includes(mySupport)) {
+        await ensureAnnouncementUsersLoaded(true);
+    }
+
+    const key = getAnnouncementKey(announcement);
+    const acked = announcementAcks[key] || new Set();
+    if (acked.has(mySupport)) {
+        showNotification("You already acknowledged this.");
+        return;
+    }
+
+    if (btnEl) {
+        btnEl.disabled = true;
+        btnEl.textContent = "⏳ Saving...";
+    }
+
+    try {
+        await fetchFromProxy({
+            action: "acknowledgeAnnouncement",
+            key: key,
+            support: mySupport,
+            subject: announcement.subject || "",
+            details: announcement.details || "",
+            postedBy: announcement.support || "",
+        });
+
+        if (!announcementAcks[key]) announcementAcks[key] = new Set();
+        announcementAcks[key].add(mySupport);
+
+        const poster = (announcement.support || "").trim().toUpperCase();
+        const requiredUsers = allAnnouncementUsers.filter((u) => u !== poster);
+        const allAcked = requiredUsers.length > 0 &&
+            requiredUsers.every((u) => announcementAcks[key].has(u));
+
+        if (allAcked) {
+            showNotification("All users acknowledged — removing announcement…");
+            await autoDeleteAcknowledgedAnnouncement(announcement);
+            return; // autoDelete reloads
+        }
+
+        showNotification("Acknowledged!");
+        renderAnnouncementCarousel(allAnnouncementsCache);
+        renderAnnouncementTabList(allAnnouncementsCache);
+    } catch (err) {
+        showNotification(`Failed to acknowledge: ${err.message}`);
+        if (btnEl) {
+            btnEl.disabled = false;
+            btnEl.textContent = "👍 Acknowledge";
+        }
+    }
+}
+
+async function autoDeleteAcknowledgedAnnouncement(announcement) {
+    try {
+        await deleteAnnouncementSilent(
+            announcement.subject || "",
+            announcement.details || "",
+            announcement.support || ""
+        );
+
+        const key = getAnnouncementKey(announcement);
+        delete announcementAcks[key];
+
+        showNotification("Announcement fully acknowledged and deleted ✅");
+        await loadAnnouncements();
+    } catch (err) {
+        showNotification(`Auto-delete failed: ${err.message}`);
+        renderAnnouncementCarousel(allAnnouncementsCache);
+    }
+}
 
 				function goToAnnouncement(index) {
 					const total = allAnnouncementsCache.length;
@@ -8946,35 +9177,39 @@
 					}
 				}
 
-				async function deleteAnnouncement(subject, details, support) {
-					if (!subject && !details && !support) return;
+				async function deleteAnnouncementSilent(subject, details, support) {
+    if (!subject && !details && !support) throw new Error("Missing announcement identifiers");
+    await fetchFromProxy({
+        action: "deleteAnnouncement",
+        subject: subject || "",
+        details: details || "",
+        support: support || "",
+    });
+}
 
-					const currentUser = getLoggedInUser();
-					const isTL = currentUser && (currentUser.role || "").toUpperCase() === "TL";
-					const currentSupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
+async function deleteAnnouncement(subject, details, support) {
+    if (!subject && !details && !support) return;
 
-					// Non‑TL users may only delete their own announcements
-					if (!isTL && (support || "").trim().toUpperCase() !== currentSupport) {
-						showNotification("You can only delete your own announcements.");
-						return;
-					}
+    const currentUser = getLoggedInUser();
+    const isTL = currentUser && (currentUser.role || "").toUpperCase() === "TL";
+    const currentSupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
 
-					const preview = subject ? `"${subject.slice(0, 50)}${subject.length > 50 ? "..." : ""}"` : "this announcement";
-					if (!confirm(`Delete ${preview}?`)) return;
+    if (!isTL && (support || "").trim().toUpperCase() !== currentSupport) {
+        showNotification("You can only delete your own announcements.");
+        return;
+    }
 
-					try {
-						await fetchFromProxy({
-							action: "deleteAnnouncement",
-							subject: subject || "",
-							details: details || "",
-							support: support || "",
-						});
-						showNotification("Announcement deleted.");
-						loadAnnouncements();
-					} catch (err) {
-						showNotification("Failed to delete announcement: " + err.message);
-					}
-				}
+    const preview = subject ? `"${subject.slice(0, 50)}${subject.length > 50 ? "..." : ""}"` : "this announcement";
+    if (!confirm(`Delete ${preview}?`)) return;
+
+    try {
+        await deleteAnnouncementSilent(subject, details, support);
+        showNotification("Announcement deleted.");
+        loadAnnouncements();
+    } catch (err) {
+        showNotification("Failed to delete announcement: " + err.message);
+    }
+}
 
 				function openAnnouncementModal() {
 					document.getElementById("newAnnouncementSubject").value = "";
