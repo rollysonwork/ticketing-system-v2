@@ -91,6 +91,77 @@
 				padding-bottom: 4px;
 			}
 
+			h1 {
+				text-align: center;
+				font-size: 1.8rem;
+				font-weight: 700;
+				letter-spacing: -0.02em;
+				margin-bottom: 2rem;
+				color: var(--text-primary);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				gap: 12px;
+				position: relative;
+			}
+
+			.theme-toggle {
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-color);
+				font-size: 1.5rem;
+				cursor: pointer;
+				padding: 8px 12px;
+				border-radius: 40px;
+				transition: var(--transition);
+				line-height: 1;
+			}
+
+			.theme-toggle:hover {
+				background: var(--accent-soft);
+				transform: scale(1.05);
+			}
+
+			.tab-container {
+				margin-bottom: 24px;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				gap: 12px;
+				flex-wrap: wrap;
+			}
+
+			.tab-buttons {
+				display: flex;
+				gap: 8px;
+				flex-wrap: wrap;
+			}
+
+			.tab-button {
+				padding: 10px 24px;
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-color);
+				border-radius: 40px;
+				font-weight: 600;
+				font-size: 14px;
+				cursor: pointer;
+				transition: var(--transition);
+				color: var(--text-secondary);
+				text-transform: uppercase;
+				letter-spacing: 0.01em;
+			}
+
+			.tab-button:hover {
+				background: var(--accent-soft);
+				transform: translateY(-2px);
+			}
+
+			.tab-button.active {
+				background: var(--accent-color);
+				color: white;
+				border-color: var(--accent-color);
+				box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+			}
+
 			.tab-content {
 				display: none;
 			}
@@ -103,10 +174,12 @@
 			body:has(#tab-dashboard.active) .bulk-bar,
 			body:has(#tab-dashboard.active) #entryTable,
 			body:has(#tab-announcement.active) .bulk-bar,
-			body:has(#tab-announcement.active) #entryTable,
-			body:has(#tab-knowledgebase.active) .bulk-bar,
-			body:has(#tab-knowledgebase.active) #entryTable {
+			body:has(#tab-announcement.active) #entryTable {
 				display: none;
+			}
+
+			.btn-no-fontsize {
+				font-size: inherit;
 			}
 
 			@keyframes fadeIn {
@@ -114,11 +187,18 @@
 					opacity: 0;
 					transform: translateY(4px);
 				}
-
 				to {
 					opacity: 1;
 					transform: translateY(0);
 				}
+			}
+
+			.button-accented-color {
+				border: 1px solid var(--border-color);
+				border-radius: 12px;
+				background: var(--bg-secondary);
+				color: var(--text-primary);
+				transition: var(--transition);
 			}
 
 			.three-panels {
@@ -251,22 +331,30 @@
 				transition: var(--transition);
 				box-shadow: var(--card-shadow);
 			}
-
+			.sidebar-card.ticket-card {
+				border-left-color: #3b82f6 !important;
+				border-bottom-color: #326cc9 !important;
+			}
+			.sidebar-card.store-card {
+				border-left-color: #a11b31 !important;
+				border-bottom-color: #801627 !important;
+			}
+			.sidebar-card.moolah-card {
+				border-left-color: #bc8f00 !important;
+				border-bottom-color: #9d7900 !important;
+			}
 			.sidebar-card.status-resolved-card {
 				border-left-color: #10b981 !important;
 				border-bottom-color: #0d9668 !important;
 			}
-
 			.sidebar-card.status-pending-card {
 				border-left-color: #f59e0b !important;
 				border-bottom-color: #d97706 !important;
 			}
-
 			.sidebar-card.status-other-card {
 				border-left-color: #6b7280 !important;
 				border-bottom-color: #4b5563 !important;
 			}
-
 			.sidebar-card.status-none-card {
 				border-left-color: var(--text-primary) !important;
 				border-bottom-color: var(--text-primary) !important;
@@ -299,10 +387,10 @@
 			}
 
 			.sidebar-card .preview-item.remarks-item {
-				font-size: 0.8rem;
-				font-weight: 700;
+				font-size: 0.8rem; /* issue is 0.85rem, so 0.05rem smaller */
+				font-weight: 700; /* bold, same as issue */
 				color: var(--text-primary);
-				margin-top: -2px;
+				margin-top: -2px; /* tighten spacing under the issue line */
 			}
 
 			.sidebar-card .stack-btn,
@@ -339,12 +427,10 @@
 				gap: 8px;
 				justify-content: space-between;
 			}
-
 			.card-actions-row.stack-row {
 				flex-direction: column;
 				gap: 6px;
 			}
-
 			.stack-btn {
 				width: 100%;
 				text-align: center;
@@ -360,7 +446,6 @@
 				text-transform: uppercase;
 				letter-spacing: 0.02em;
 			}
-
 			.stack-btn:hover {
 				background: var(--accent-color);
 				color: white;
@@ -414,7 +499,6 @@
 				margin: 8px 0 8px 20px;
 				padding-left: 0;
 			}
-
 			.preview-multiline li {
 				margin: 4px 0;
 				word-wrap: break-word;
@@ -515,19 +599,16 @@
 				color: #10b981;
 				border: 1px solid #10b98140;
 			}
-
 			.status-deleted {
 				background: #ef444420;
 				color: #ef4444;
 				border: 1px solid #ef444440;
 			}
-
 			.status-deactive {
 				background: #f59e0b20;
 				color: #f59e0b;
 				border: 1px solid #f59e0b40;
 			}
-
 			.status-demo {
 				background: #6b728020;
 				color: #6b7280;
@@ -592,6 +673,12 @@
 				word-break: break-word;
 			}
 
+			.left-panel table td:first-child {
+				width: 38%;
+				font-weight: 500;
+				color: var(--text-secondary);
+			}
+
 			input,
 			select,
 			textarea {
@@ -632,6 +719,17 @@
 			.invalid {
 				border-color: var(--danger) !important;
 				background: rgba(239, 68, 68, 0.1);
+			}
+
+			.section-header {
+				font-size: 0.9rem;
+				font-weight: 600;
+				color: var(--accent-color);
+				text-transform: uppercase;
+				letter-spacing: 0.02em;
+				padding: 12px 0 4px 0;
+				border-bottom: 1px dashed var(--border-color);
+				margin-top: 8px;
 			}
 
 			.button-row {
@@ -730,13 +828,21 @@
 				color: white;
 				border-color: var(--accent-color);
 			}
-
 			.bulk-bar .shift-report-btn {
 				background: #b93131;
 				color: white;
 				border-color: #b93131;
 			}
-
+			.bulk-bar .sheets-key-btn {
+				background: #8b5cf6;
+				color: white;
+				border-color: #8b5cf6;
+			}
+			.bulk-bar .gemini-key-btn {
+				background: #8b5cf6;
+				color: white;
+				border-color: #8b5cf6;
+			}
 			.bulk-bar button.counter-badge {
 				padding: 8px 16px;
 				border-radius: 30px;
@@ -828,19 +934,16 @@
 				color: white;
 				border-color: var(--danger);
 			}
-
 			.icon-btn.edit-btn {
 				background: var(--accent-color);
 				color: white;
 				border-color: var(--accent-color);
 			}
-
 			.icon-btn.copy-btn {
 				background: var(--success);
 				color: white;
 				border-color: var(--success);
 			}
-
 			.icon-btn.summarize-row-btn {
 				background: #8b5cf6;
 				color: white;
@@ -876,7 +979,6 @@
 				background: var(--bg-tertiary);
 				border-color: var(--border-color);
 			}
-
 			.ql-container.ql-snow {
 				border-bottom-left-radius: 12px;
 				border-bottom-right-radius: 12px;
@@ -885,18 +987,15 @@
 				max-width: 100%;
 				overflow-x: auto;
 			}
-
 			.ql-editor {
 				min-height: 120px;
 				white-space: pre-wrap;
 				word-wrap: break-word;
 				color: black !important;
 			}
-
 			body.dark-mode .ql-editor {
 				color: white !important;
 			}
-
 			#ticket-resolution-editor .ql-editor {
 				text-transform: none;
 			}
@@ -906,7 +1005,6 @@
 					flex-wrap: wrap;
 					max-width: 100%;
 				}
-
 				.history-panel,
 				.left-panel,
 				.right-panel {
@@ -922,16 +1020,16 @@
 				body {
 					padding: 16px;
 				}
-
 				.button-row button {
 					min-width: 120px;
 				}
-
+				h1 {
+					font-size: 1.4rem;
+				}
 				.tab-button {
 					padding: 8px 16px;
 					font-size: 12px;
 				}
-
 				.history-panel,
 				.left-panel,
 				.right-panel {
@@ -945,6 +1043,11 @@
 
 			/* ============================================================
    Shared rich-content list rendering
+   Matches bullet + numbering format across:
+   - Troubleshooting preview (.preview-multiline)
+   - Knowledge Base card (.kb-entry-content)
+   - Announcement list (.announcement-message)
+   - Announcement carousel (.carousel-slide-details)
    ============================================================ */
 
 			.preview-multiline ol,
@@ -964,6 +1067,7 @@
 				list-style: none;
 			}
 
+			/* Ordered list — level 1: 1. 2. 3. */
 			.preview-multiline li[data-list="ordered"]:not([class*="ql-indent"]),
 			.kb-entry-content li[data-list="ordered"]:not([class*="ql-indent"]),
 			.announcement-message li[data-list="ordered"]:not([class*="ql-indent"]),
@@ -978,6 +1082,7 @@
 				content: counter(level1) ". ";
 			}
 
+			/* Ordered list — level 2 (ql-indent-1): A. B. C. */
 			.preview-multiline li[data-list="ordered"].ql-indent-1,
 			.kb-entry-content li[data-list="ordered"].ql-indent-1,
 			.announcement-message li[data-list="ordered"].ql-indent-1,
@@ -1000,6 +1105,7 @@
 				content: counter(level2, upper-alpha) ". ";
 			}
 
+			/* Ordered list — level 3 (ql-indent-2): I. II. III. */
 			.preview-multiline li[data-list="ordered"].ql-indent-2,
 			.kb-entry-content li[data-list="ordered"].ql-indent-2,
 			.announcement-message li[data-list="ordered"].ql-indent-2,
@@ -1022,6 +1128,7 @@
 				content: counter(level3, upper-roman) ". ";
 			}
 
+			/* Bullets — level 1 */
 			.preview-multiline li[data-list="bullet"]::before,
 			.kb-entry-content li[data-list="bullet"]::before,
 			.announcement-message li[data-list="bullet"]::before,
@@ -1030,6 +1137,7 @@
 				font-weight: bold;
 			}
 
+			/* Bullets — level 2 */
 			.preview-multiline li[data-list="bullet"].ql-indent-1,
 			.kb-entry-content li[data-list="bullet"].ql-indent-1,
 			.announcement-message li[data-list="bullet"].ql-indent-1,
@@ -1037,6 +1145,7 @@
 				margin-left: 30px;
 			}
 
+			/* Bullets — level 3 */
 			.preview-multiline li[data-list="bullet"].ql-indent-2,
 			.kb-entry-content li[data-list="bullet"].ql-indent-2,
 			.announcement-message li[data-list="bullet"].ql-indent-2,
@@ -1044,6 +1153,7 @@
 				margin-left: 60px;
 			}
 
+			/* Converted bullet lists (post-convertQuillLists) */
 			.preview-multiline ul,
 			.kb-entry-content ul,
 			.announcement-message ul,
@@ -1119,7 +1229,28 @@
 				color: white;
 				font-size: 0.8rem;
 			}
+			.login-action-btn:hover {
+				transform: translateY(-2px);
+				filter: brightness(1.05);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			}
 
+			.login-action-btn {
+				transition: var(--transition);
+				cursor: pointer;
+				border: none;
+				border-radius: 40px;
+				font-weight: 600;
+				text-transform: uppercase;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 4px;
+				padding: 8px 16px;
+				background: var(--accent-color);
+				color: white;
+				font-size: 0.8rem;
+			}
 			.login-action-btn:hover {
 				transform: translateY(-2px);
 				filter: brightness(1.05);
@@ -1138,6 +1269,7 @@
 				width: 2em;
 				transition: var(--transition);
 				cursor: pointer;
+
 				border-radius: 10px;
 				font-weight: 600;
 				text-transform: uppercase;
@@ -1147,7 +1279,6 @@
 				gap: 4px;
 				padding: 8px 16px;
 			}
-
 			.counter-badge {
 				font-size: 0.8rem;
 				font-weight: 600;
@@ -1158,28 +1289,46 @@
 				gap: 6px;
 				align-items: center;
 			}
-
+			.counter-badge.resolved {
+				color: #11734b;
+				border: 1px solid #11734b;
+				background: #152921;
+			}
+			.counter-badge.pending {
+				color: #b10202;
+				border: 1px solid #b10202;
+				background: #381c1c;
+			}
+			.counter-badge.other {
+				color: #bfe1f6;
+				border: 1px solid #bfe1f6;
+				background: #1b2c36;
+			}
 			.bulk-bar .pending-tracker-toggle {
 				background: #b93131;
 				color: white;
 				border-color: #b93131;
 			}
-
+			.pending-tracker-btn {
+				background: #b93131;
+				color: white;
+				border-color: #b93131;
+			}
 			.pending-tracker-toggle.active {
 				background: #b93131;
 				color: white;
 				border-color: #b93131;
 			}
-
+			.dropdown-selection-div * {
+				font-size: 0.95em;
+			}
 			.combobox-wrapper {
 				position: relative;
 				width: 100%;
 			}
-
 			.combobox-input {
 				width: 100%;
 			}
-
 			.combobox-suggestions {
 				position: absolute;
 				top: 100%;
@@ -1195,7 +1344,6 @@
 				box-shadow: var(--card-shadow);
 				margin-top: 4px;
 			}
-
 			.combobox-suggestion-item {
 				padding: 8px 12px;
 				cursor: pointer;
@@ -1204,24 +1352,23 @@
 				color: var(--text-primary);
 				border-bottom: 1px solid var(--border-color);
 			}
-
 			.combobox-suggestion-item:last-child {
 				border-bottom: none;
 			}
-
 			.combobox-suggestion-item:hover,
 			.combobox-suggestion-item.selected {
 				background: var(--accent-soft);
 				color: var(--accent-color);
 			}
-
 			.status-filter-btn.active {
 				background: var(--accent-color) !important;
 				color: white !important;
 				border-color: var(--accent-color) !important;
 			}
-
-			/* ============ DASHBOARD ============ */
+			.sidebar-card.scheduler-card {
+				border-left-color: #6f42c1 !important;
+				border-bottom-color: #5a32a3 !important;
+			} /* ============ DASHBOARD ============ */
 			.dashboard-container {
 				background: var(--bg-secondary);
 				border: 1px solid var(--border-color);
@@ -1308,23 +1455,18 @@
 			.dashboard-card.card-today::before {
 				background: #3b82f6;
 			}
-
 			.dashboard-card.card-yesterday::before {
 				background: #8b5cf6;
 			}
-
 			.dashboard-card.card-tickets::before {
 				background: #0ea5e9;
 			}
-
 			.dashboard-card.card-resolved::before {
 				background: #10b981;
 			}
-
 			.dashboard-card.card-pending::before {
 				background: #f59e0b;
 			}
-
 			.dashboard-card.card-other::before {
 				background: #6b7280;
 			}
@@ -1348,23 +1490,18 @@
 			.dashboard-card.card-today .dashboard-value {
 				color: #3b82f6;
 			}
-
 			.dashboard-card.card-yesterday .dashboard-value {
 				color: #8b5cf6;
 			}
-
 			.dashboard-card.card-tickets .dashboard-value {
 				color: #0ea5e9;
 			}
-
 			.dashboard-card.card-resolved .dashboard-value {
 				color: #10b981;
 			}
-
 			.dashboard-card.card-pending .dashboard-value {
 				color: #f59e0b;
 			}
-
 			.dashboard-card.card-other .dashboard-value {
 				color: #6b7280;
 			}
@@ -1377,19 +1514,16 @@
 				.dashboard-grid {
 					grid-template-columns: repeat(2, 1fr);
 				}
-
 				.dashboard-value {
 					font-size: 1.5rem;
 				}
 			}
-
 			/* ============ HISTORY SOURCE TOGGLE ============ */
 			.history-source-controls {
 				display: inline-flex;
 				align-items: center;
 				gap: 6px;
 			}
-
 			.history-source-toggle {
 				display: inline-flex;
 				align-items: center;
@@ -1403,11 +1537,9 @@
 				color: var(--text-muted);
 				margin: 0;
 			}
-
 			.history-source-toggle input {
 				display: none;
 			}
-
 			.history-source-toggle .toggle-track {
 				width: 34px;
 				height: 18px;
@@ -1418,7 +1550,6 @@
 				transition: var(--transition);
 				flex-shrink: 0;
 			}
-
 			.history-source-toggle .toggle-thumb {
 				position: absolute;
 				top: 2px;
@@ -1429,27 +1560,22 @@
 				border-radius: 50%;
 				transition: var(--transition);
 			}
-
 			.history-source-toggle input:checked + .toggle-track {
 				background: var(--accent-color);
 				border-color: var(--accent-color);
 			}
-
 			.history-source-toggle input:checked + .toggle-track .toggle-thumb {
 				left: 18px;
 				background: #fff;
 			}
-
 			.history-source-toggle .toggle-label {
 				min-width: 42px;
 				text-align: right;
 				transition: var(--transition);
 			}
-
 			.history-source-toggle input:checked ~ .toggle-label {
 				color: var(--accent-color);
 			}
-
 			.history-refresh-btn {
 				background: transparent;
 				border: none;
@@ -1462,13 +1588,11 @@
 				transition: var(--transition);
 				border-radius: 6px;
 			}
-
 			.history-refresh-btn:hover {
 				color: var(--accent-color);
 				background: var(--accent-soft);
 				transform: rotate(45deg);
 			}
-
 			.workload-badge {
 				display: inline-block;
 				padding: 1px 5px;
@@ -1483,14 +1607,12 @@
 				margin-left: 4px;
 				vertical-align: middle;
 			}
-
 			.history-loading {
 				padding: 20px;
 				text-align: center;
 				color: var(--text-muted);
 				font-size: 0.8rem;
 			}
-
 			.history-loading .spinner {
 				display: inline-block;
 				width: 14px;
@@ -1502,7 +1624,6 @@
 				vertical-align: middle;
 				margin-right: 6px;
 			}
-
 			/* ==================== LEFT SIDEBAR ==================== */
 			.left-sidebar {
 				display: none;
@@ -1529,7 +1650,6 @@
 			body.logged-in {
 				padding-left: 316px;
 			}
-
 			body.logged-in.sidebar-collapsed {
 				padding-left: 60px;
 			}
@@ -1597,7 +1717,7 @@
 			.left-sidebar .sidebar-tabs .tab-button:hover {
 				background: var(--accent-soft);
 				color: var(--accent-color);
-				transform: none;
+				transform: none; /* neutralise global translateY(-2px) */
 			}
 
 			.left-sidebar .sidebar-tabs .tab-button.active {
@@ -1725,7 +1845,6 @@
 				body.logged-in {
 					padding-left: 16px;
 				}
-
 				.left-sidebar {
 					position: static;
 					width: 100%;
@@ -1738,17 +1857,14 @@
 					border-bottom: 1px solid var(--border-color);
 					gap: 8px;
 				}
-
 				.left-sidebar .sidebar-top {
 					display: flex;
 					flex-direction: column;
 					width: 100%;
 				}
-
 				.left-sidebar .sidebar-brand {
 					display: none;
 				}
-
 				.left-sidebar .sidebar-tabs {
 					flex-direction: row;
 					flex-wrap: wrap;
@@ -1756,7 +1872,6 @@
 					margin-top: 0;
 					width: 100%;
 				}
-
 				.left-sidebar .sidebar-tabs .tab-button {
 					width: auto;
 					flex: 0 0 auto;
@@ -1764,7 +1879,6 @@
 					font-size: 0.6rem;
 					gap: 4px;
 				}
-
 				.left-sidebar .sidebar-bottom {
 					flex-direction: row;
 					flex-wrap: wrap;
@@ -1774,19 +1888,16 @@
 					padding-top: 0;
 					gap: 8px;
 				}
-
 				.left-sidebar .sidebar-profile {
 					margin-bottom: 0;
 					flex: 1 1 auto;
 					min-width: 220px;
 				}
-
 				.left-sidebar .profile-details {
 					flex-direction: row;
 					gap: 12px;
 					flex-wrap: wrap;
 				}
-
 				.left-sidebar .sidebar-action-btn {
 					width: auto;
 					margin-top: 0;
@@ -1794,12 +1905,11 @@
 					font-size: 0.65rem;
 				}
 			}
-
 			/* ==================== COLLAPSIBLE SIDEBAR ==================== */
 			.sidebar-toggle-btn {
 				position: fixed;
 				top: 24px;
-				left: 276px;
+				left: 276px; /* sits just to the right of the open sidebar */
 				z-index: 10001;
 				width: 30px;
 				height: 30px;
@@ -1829,7 +1939,6 @@
 				background: var(--accent-soft);
 				transform: scale(1.08);
 			}
-
 			body.sidebar-collapsed .sidebar-toggle-btn {
 				left: 16px;
 				width: 36px;
@@ -1841,6 +1950,7 @@
 				box-shadow: 0 4px 14px rgba(59, 130, 246, 0.45);
 			}
 
+			/* Slide the sidebar off-screen when collapsed */
 			.left-sidebar {
 				transition:
 					transform 0.25s ease,
@@ -1852,18 +1962,17 @@
 				box-shadow: none;
 			}
 
+			/* On small screens the sidebar is a top bar – no collapse needed */
 			@media (max-width: 900px) {
 				body.logged-in,
 				body.logged-in.sidebar-collapsed {
 					padding-left: 16px;
 				}
-
 				.left-sidebar,
 				body.sidebar-collapsed .left-sidebar {
 					transform: none !important;
 					box-shadow: var(--card-shadow);
 				}
-
 				.sidebar-toggle-btn {
 					display: none !important;
 				}
@@ -2056,17 +2165,14 @@
 				background: var(--bg-tertiary);
 				color: var(--text-secondary);
 			}
-
 			.performer-rank.rank-1 {
 				background: #fbbf24;
 				color: #000;
 			}
-
 			.performer-rank.rank-2 {
 				background: #c0c0c0;
 				color: #000;
 			}
-
 			.performer-rank.rank-3 {
 				background: #cd7f32;
 				color: #fff;
@@ -2081,84 +2187,6 @@
 			.performer-details {
 				font-size: 0.7rem;
 				color: var(--text-muted);
-			}
-
-			/* ==================== MODULE STAT BARS ==================== */
-			.module-stat-row {
-				display: flex;
-				align-items: center;
-				gap: 10px;
-				margin-bottom: 8px;
-				padding: 4px 0;
-			}
-
-			.module-stat-rank {
-				width: 24px;
-				height: 24px;
-				border-radius: 50%;
-				background: var(--bg-tertiary);
-				color: var(--text-secondary);
-				font-weight: 700;
-				font-size: 0.72rem;
-				display: flex;
-				align-items: center;
-				justify-content: center;
-				flex-shrink: 0;
-				border: 1px solid var(--border-color);
-			}
-
-			.module-stat-rank.top-3 {
-				background: linear-gradient(135deg, #8b5cf6, #3b82f6);
-				color: #fff;
-				border-color: transparent;
-			}
-
-			.module-stat-name {
-				flex: 1 1 150px;
-				min-width: 0;
-				font-weight: 600;
-				font-size: 0.82rem;
-				color: var(--text-primary);
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-
-			.module-stat-bar-wrap {
-				flex: 1 1 220px;
-				height: 22px;
-				background: var(--bg-tertiary);
-				border-radius: 11px;
-				overflow: hidden;
-				position: relative;
-				border: 1px solid var(--border-color);
-			}
-
-			.module-stat-bar {
-				height: 100%;
-				background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-				border-radius: 11px 0 0 11px;
-				display: flex;
-				align-items: center;
-				justify-content: flex-end;
-				padding-right: 8px;
-				color: #fff;
-				font-size: 0.68rem;
-				font-weight: 700;
-				min-width: 32px;
-				transition: width 0.5s ease;
-				box-shadow: 0 2px 4px rgba(59, 130, 246, 0.25);
-			}
-
-			@media (max-width: 700px) {
-				.module-stat-name {
-					flex: 1 1 100%;
-					order: -1;
-				}
-
-				.module-stat-row {
-					flex-wrap: wrap;
-				}
 			}
 
 			/* ============ ANNOUNCEMENT CAROUSEL ============ */
@@ -2262,7 +2290,6 @@
 			.carousel-nav.prev {
 				left: -14px;
 			}
-
 			.carousel-nav.next {
 				right: -14px;
 			}
@@ -2306,6 +2333,7 @@
 				border: 1px dashed var(--border-color);
 			}
 
+			/* Support line inside tab list items */
 			.announcement-support {
 				font-size: 0.72rem;
 				color: var(--text-muted);
@@ -2326,11 +2354,9 @@
 				.carousel-nav.prev {
 					left: 4px;
 				}
-
 				.carousel-nav.next {
 					right: 4px;
 				}
-
 				.carousel-slide {
 					padding: 18px 20px;
 				}
@@ -2529,6 +2555,67 @@
 				box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 			}
 
+			.kb-search-section {
+				display: flex;
+				gap: 12px;
+				flex-wrap: wrap;
+				background: var(--bg-secondary);
+				border: 1px solid var(--border-color);
+				border-radius: 20px;
+				padding: 16px 20px;
+				box-shadow: var(--card-shadow);
+			}
+
+			.kb-search-wrapper {
+				flex: 1;
+				min-width: 240px;
+				position: relative;
+				display: flex;
+				align-items: center;
+			}
+
+			.kb-search-wrapper i {
+				position: absolute;
+				left: 16px;
+				color: var(--text-muted);
+				font-size: 1rem;
+			}
+
+			.kb-search-wrapper input {
+				width: 100%;
+				padding: 10px 16px 10px 42px;
+				border: 1px solid var(--border-color);
+				border-radius: 40px;
+				background: var(--bg-tertiary);
+				color: var(--text-primary);
+				font-size: 14px;
+				font-family: inherit;
+			}
+
+			.kb-search-wrapper input:focus {
+				border-color: var(--accent-color);
+				outline: none;
+				box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+			}
+
+			.kb-filter-wrapper {
+				display: flex;
+				gap: 8px;
+				align-items: center;
+				flex-wrap: wrap;
+			}
+
+			.kb-filter-wrapper select {
+				padding: 10px 16px;
+				border-radius: 40px;
+				border: 1px solid var(--border-color);
+				background: var(--bg-tertiary);
+				color: var(--text-primary);
+				font-size: 14px;
+				font-family: inherit;
+				min-width: 180px;
+			}
+
 			.kb-add-btn {
 				padding: 10px 20px;
 				border-radius: 40px;
@@ -2648,6 +2735,24 @@
 				display: block;
 			}
 
+			.kb-entry-tags {
+				display: flex;
+				gap: 6px;
+				flex-wrap: wrap;
+				margin-top: 10px;
+			}
+
+			.kb-tag {
+				display: inline-block;
+				padding: 2px 8px;
+				border-radius: 12px;
+				font-size: 0.65rem;
+				font-weight: 600;
+				background: var(--bg-tertiary);
+				color: var(--text-muted);
+				border: 1px solid var(--border-color);
+			}
+
 			.kb-entry-actions {
 				display: flex;
 				gap: 6px;
@@ -2734,28 +2839,28 @@
 					flex-direction: column;
 					align-items: stretch;
 				}
-
 				.kb-type-toggle {
 					justify-content: center;
 				}
-
+				.kb-filter-wrapper {
+					width: 100%;
+				}
+				.kb-filter-wrapper select,
 				.kb-add-btn {
 					flex: 1;
 				}
 			}
-
+			/* Rich-content rendering: HTML content should not use pre-wrap */
 			.kb-entry-content p,
 			.announcement-message p,
 			.carousel-slide-details p {
 				margin: 0 0 8px 0;
 			}
-
 			.kb-entry-content p:last-child,
 			.announcement-message p:last-child,
 			.carousel-slide-details p:last-child {
 				margin-bottom: 0;
 			}
-
 			/* ============ INLINE SCHEDULER CALENDAR ============ */
 			.inline-calendar {
 				background: var(--bg-tertiary);
@@ -2767,7 +2872,6 @@
 				width: 100%;
 				max-width: 340px;
 			}
-
 			.inline-calendar .cal-header {
 				display: flex;
 				align-items: center;
@@ -2775,7 +2879,6 @@
 				gap: 8px;
 				margin-bottom: 10px;
 			}
-
 			.inline-calendar .cal-title {
 				flex: 1;
 				text-align: center;
@@ -2783,7 +2886,6 @@
 				font-size: 0.9rem;
 				color: var(--text-primary);
 			}
-
 			.inline-calendar .cal-nav {
 				width: 30px;
 				height: 30px;
@@ -2801,19 +2903,16 @@
 				font-family: inherit;
 				transition: var(--transition);
 			}
-
 			.inline-calendar .cal-nav:hover {
 				background: var(--accent-color);
 				color: #fff;
 				border-color: var(--accent-color);
 			}
-
 			.inline-calendar .cal-grid {
 				display: grid;
 				grid-template-columns: repeat(7, 1fr);
 				gap: 4px;
 			}
-
 			.inline-calendar .cal-weekday {
 				text-align: center;
 				font-size: 0.65rem;
@@ -2823,7 +2922,6 @@
 				color: var(--text-muted);
 				padding: 4px 0;
 			}
-
 			.inline-calendar .cal-day {
 				border: 1px solid transparent;
 				background: var(--bg-secondary);
@@ -2836,19 +2934,16 @@
 				font-family: inherit;
 				transition: var(--transition);
 			}
-
 			.inline-calendar .cal-day:hover {
 				background: var(--accent-soft);
 				border-color: var(--accent-color);
 				color: var(--accent-color);
 			}
-
 			.inline-calendar .cal-day.today {
 				border-color: var(--accent-color);
 				color: var(--accent-color);
 				font-weight: 700;
 			}
-
 			.inline-calendar .cal-day.selected {
 				background: var(--accent-color);
 				border-color: var(--accent-color);
@@ -2856,12 +2951,10 @@
 				font-weight: 700;
 				box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
 			}
-
 			.inline-calendar .cal-day.empty {
 				visibility: hidden;
 				pointer-events: none;
 			}
-
 			.inline-calendar .cal-selected-label {
 				text-align: center;
 				font-size: 0.72rem;
@@ -2870,11 +2963,9 @@
 				padding-top: 8px;
 				border-top: 1px dashed var(--border-color);
 			}
-
 			.inline-calendar .cal-selected-label strong {
 				color: var(--accent-color);
 			}
-
 			/* ==================== ANNOUNCEMENT ACKNOWLEDGMENTS ==================== */
 			.announcement-ack-row {
 				display: flex;
@@ -2933,15 +3024,344 @@
 				font-style: italic;
 			}
 
-			.kb-header-actions {
+			/* ==================== STICKY TABLE HEADER + FIRST COLUMN ==================== */
+			#entryTable {
+				overflow: visible !important;
+			}
+			.table-wrapper {
+				overflow: auto;
+				max-height: calc(100vh - 140px);
+				border-radius: 16px;
+				border: 1px solid var(--border-color);
+				background: var(--bg-secondary);
+			}
+			#entryTable th {
+				position: sticky;
+				top: 0;
+				z-index: 3;
+				background: var(--bg-tertiary) !important;
+			}
+			#entryTable th:first-child,
+			#entryTable td:first-child {
+				position: sticky;
+				left: 0;
+				z-index: 2;
+				background: var(--bg-secondary);
+			}
+			#entryTable th:first-child {
+				z-index: 4;
+			}
+			#entryTable tbody tr:hover td:first-child {
+				background: var(--bg-tertiary);
+			}
+
+			/* ==================== LOADING SKELETONS ==================== */
+			.skeleton-line {
+				height: 14px;
+				border-radius: 6px;
+				background: linear-gradient(90deg, var(--bg-tertiary) 25%, var(--border-color) 50%, var(--bg-tertiary) 75%);
+				background-size: 200% 100%;
+				animation: skeleton-shimmer 1.4s infinite linear;
+				margin-bottom: 8px;
+			}
+			.skeleton-line.short {
+				width: 45%;
+			}
+			.skeleton-line.medium {
+				width: 70%;
+			}
+			@keyframes skeleton-shimmer {
+				0% {
+					background-position: 200% 0;
+				}
+				100% {
+					background-position: -200% 0;
+				}
+			}
+
+			/* ==================== DARK MODE QUILL TOOLBAR ==================== */
+			body.dark-mode .ql-toolbar.ql-snow,
+			body.dark-mode .ql-container.ql-snow {
+				border-color: var(--border-color);
+			}
+			body.dark-mode .ql-snow .ql-stroke {
+				stroke: var(--text-primary);
+			}
+			body.dark-mode .ql-snow .ql-fill,
+			body.dark-mode .ql-snow .ql-stroke.ql-fill {
+				fill: var(--text-primary);
+			}
+			body.dark-mode .ql-snow .ql-picker,
+			body.dark-mode .ql-snow .ql-picker-label,
+			body.dark-mode .ql-snow .ql-picker-item {
+				color: var(--text-primary);
+			}
+			body.dark-mode .ql-snow .ql-picker-options {
+				background: var(--bg-secondary);
+				border-color: var(--border-color);
+			}
+			body.dark-mode .ql-editor.ql-blank::before {
+				color: var(--text-muted);
+			}
+			body.dark-mode .ql-snow .ql-active .ql-stroke {
+				stroke: var(--accent-color);
+			}
+			body.dark-mode .ql-snow .ql-active .ql-fill {
+				fill: var(--accent-color);
+			}
+
+			/* ==================== MOBILE CARD LAYOUT ==================== */
+			@media (max-width: 700px) {
+				.table-wrapper {
+					max-height: none;
+					border: none;
+					overflow: visible;
+				}
+				#entryTable {
+					min-width: 0 !important;
+					width: 100% !important;
+				}
+				#entryTable thead {
+					display: none;
+				}
+				#entryTable,
+				#entryTable tbody,
+				#entryTable tr,
+				#entryTable td {
+					display: block;
+					width: 100%;
+					box-sizing: border-box;
+				}
+				#entryTable tr {
+					margin-bottom: 12px;
+					border: 1px solid var(--border-color);
+					border-radius: 12px;
+					padding: 8px;
+					background: var(--bg-secondary);
+				}
+				#entryTable td {
+					border: none;
+					text-align: left;
+					padding: 6px 4px 6px 110px;
+					position: relative;
+					max-width: none;
+					min-height: 30px;
+				}
+				#entryTable td::before {
+					content: attr(data-label);
+					position: absolute;
+					left: 8px;
+					top: 6px;
+					width: 96px;
+					font-weight: 600;
+					font-size: 0.65rem;
+					color: var(--text-muted);
+					text-transform: uppercase;
+					letter-spacing: 0.02em;
+				}
+				#entryTable td:first-child {
+					padding-left: 4px;
+					background: transparent;
+					position: static;
+				}
+				#entryTable td:first-child::before {
+					display: none;
+				}
+				#entryTable td.action-cell .action-container {
+					flex-direction: row;
+					flex-wrap: wrap;
+					justify-content: flex-start;
+				}
+			}
+
+			/* ==================== EDITING BADGE ==================== */
+			.editing-badge {
+				display: inline-flex;
+				align-items: center;
+				gap: 6px;
+				padding: 3px 10px;
+				border-radius: 30px;
+				background: rgba(245, 158, 11, 0.15);
+				color: #f59e0b;
+				font-size: 0.66rem;
+				font-weight: 700;
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
+				border: 1px solid rgba(245, 158, 11, 0.4);
+				margin-left: 12px;
+				vertical-align: middle;
+				animation: pulse-badge 2s ease-in-out infinite;
+			}
+			.editing-badge button {
+				background: transparent;
+				border: none;
+				color: inherit;
+				cursor: pointer;
+				padding: 0 2px;
+				font-size: 1rem;
+				line-height: 1;
+				font-family: inherit;
+			}
+			.editing-badge button:hover {
+				color: var(--danger);
+			}
+			@keyframes pulse-badge {
+				0%,
+				100% {
+					opacity: 1;
+				}
+				50% {
+					opacity: 0.7;
+				}
+			}
+
+			/* ==================== COLLAPSIBLE FORM SECTIONS ==================== */
+			.collapsible-section-toggle {
+				cursor: pointer;
+				-webkit-user-select: none;
+				user-select: none;
+				padding: 8px 4px;
+				font-size: 0.78rem;
+				font-weight: 700;
+				color: var(--accent-color);
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
 				display: flex;
 				align-items: center;
-				gap: 12px;
-				flex-wrap: wrap;
+				gap: 6px;
+				border-top: 1px dashed var(--border-color);
+				margin-top: 8px;
+			}
+			.collapsible-section-toggle:hover {
+				color: var(--accent-hover);
+			}
+			.collapsible-section-toggle .arrow {
+				transition: transform 0.2s;
+				font-size: 0.7rem;
+				display: inline-block;
+			}
+			.collapsible-section-toggle.collapsed .arrow {
+				transform: rotate(-90deg);
+			}
+			.hidden-row {
+				display: none !important;
+			}
+
+			/* ==================== DASHBOARD CARD CLICKABLE ==================== */
+			.dashboard-card.card-resolved,
+			.dashboard-card.card-pending,
+			.dashboard-card.card-other {
+				cursor: pointer;
+			}
+			.dashboard-card.card-resolved:hover,
+			.dashboard-card.card-pending:hover,
+			.dashboard-card.card-other:hover {
+				transform: translateY(-2px);
+				box-shadow: var(--card-shadow-hover);
+				box-shadow:
+					var(--card-shadow-hover),
+					0 0 0 2px var(--accent-color);
+			}
+
+			/* ==================== COPY-ALL CREDENTIALS BUTTON ==================== */
+			.copy-all-btn {
+				width: 100%;
+				margin-top: 16px;
+				padding: 10px 16px;
+				background: var(--success);
+				color: white;
+				border: 1px solid var(--success);
+				border-radius: 40px;
+				cursor: pointer;
+				font-weight: 600;
+				font-size: 0.76rem;
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				gap: 6px;
+				transition: var(--transition);
+				font-family: inherit;
+			}
+			.copy-all-btn:hover {
+				background: #0d9668;
+				border-color: #0d9668;
+				transform: translateY(-1px);
+				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			}
+			/* ==================== MODULE STAT BARS (Top 10 Modules) ==================== */
+			.module-stat-row {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-bottom: 8px;
+				padding: 4px 0;
+			}
+			.module-stat-rank {
+				width: 24px;
+				height: 24px;
+				border-radius: 50%;
+				background: var(--bg-tertiary);
+				color: var(--text-secondary);
+				font-weight: 700;
+				font-size: 0.72rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+				border: 1px solid var(--border-color);
+			}
+			.module-stat-rank.top-3 {
+				background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+				color: #fff;
+				border-color: transparent;
+			}
+			.module-stat-name {
+				flex: 1 1 150px;
+				min-width: 0;
+				font-weight: 600;
+				font-size: 0.82rem;
+				color: var(--text-primary);
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			.module-stat-bar-wrap {
+				flex: 1 1 220px;
+				height: 22px;
+				background: var(--bg-tertiary);
+				border-radius: 11px;
+				overflow: hidden;
+				position: relative;
+				border: 1px solid var(--border-color);
+			}
+			.module-stat-bar {
+				height: 100%;
+				background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+				border-radius: 11px 0 0 11px;
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				padding-right: 8px;
+				color: #fff;
+				font-size: 0.68rem;
+				font-weight: 700;
+				min-width: 32px;
+				transition: width 0.5s ease;
+				box-shadow: 0 2px 4px rgba(59, 130, 246, 0.25);
+			}
+			@media (max-width: 700px) {
+				.module-stat-name {
+					flex: 1 1 100%;
+					order: -1;
+				}
+				.module-stat-row {
+					flex-wrap: wrap;
+				}
 			}
 		</style>
 	</head>
-
 	<body>
 		<div id="loginOverlay" style="display: none; position: fixed; inset: 0; background-image: url(&quot;https://patelprocessing.com/Login-Page-(1920x1080).jpg&quot;); background-size: cover; background-position: center; z-index: 2000; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 16px">
 			<div style="background: var(--bg-secondary); border-radius: 20px; padding: 32px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); max-width: 400px; width: 90%">
@@ -3093,16 +3513,28 @@
 						</div>
 					</div>
 				</div>
+
 				<!-- ==================== KNOWLEDGE BASE TAB ==================== -->
 				<div id="tab-knowledgebase" class="tab-content">
 					<div class="knowledgebase-page">
 						<div class="kb-header">
 							<h2>📚 Knowledge Base</h2>
-							<div class="kb-header-actions">
-								<div class="kb-type-toggle">
-									<button class="kb-type-btn active" data-kb-type="ticketing" onclick="switchKbType('ticketing', this)"><i class="bi bi-ticket-detailed-fill"></i> Ticketing</button>
-									<button class="kb-type-btn" data-kb-type="hrms" onclick="switchKbType('hrms', this)"><i class="bi bi-people-fill"></i> HRMS</button>
-								</div>
+							<div class="kb-type-toggle">
+								<button class="kb-type-btn active" data-kb-type="ticketing" onclick="switchKbType('ticketing', this)"><i class="bi bi-ticket-detailed-fill"></i> Ticketing</button>
+								<button class="kb-type-btn" data-kb-type="hrms" onclick="switchKbType('hrms', this)"><i class="bi bi-people-fill"></i> HRMS</button>
+							</div>
+						</div>
+
+						<!-- Search + Filter Bar -->
+						<div class="kb-search-section">
+							<div class="kb-search-wrapper">
+								<i class="bi bi-search"></i>
+								<input type="text" id="kbSearchInput" placeholder="Search knowledge base..." oninput="filterKnowledgeBase()" />
+							</div>
+							<div class="kb-filter-wrapper">
+								<select id="kbModuleFilter" onchange="filterKnowledgeBase()">
+									<option value="">All Modules</option>
+								</select>
 								<button class="kb-add-btn" id="kbAddBtn" onclick="openKbEntryModal()"><i class="bi bi-plus-circle-fill"></i> Add Entry</button>
 							</div>
 						</div>
@@ -3110,9 +3542,23 @@
 						<!-- Loading / Status -->
 						<div id="kbStatus" class="kb-status"></div>
 
-						<!-- Entry List (VISIBLE) -->
+						<!-- Entry List -->
 						<div id="kbEntryList" class="kb-entry-list">
 							<div class="kb-empty">Loading knowledge base...</div>
+						</div>
+					</div>
+				</div>
+
+				<div id="tab-announcement" class="tab-content">
+					<div class="announcement-page">
+						<div class="dashboard-section">
+							<div class="dashboard-section-header">
+								<h3>📢 Announcements</h3>
+								<button class="dashboard-add-btn" id="addAnnouncementBtnTab"><i class="bi bi-plus-circle-fill"></i> Add Announcement</button>
+							</div>
+							<div class="announcement-list" id="announcementListTab">
+								<div class="announcements-empty">Loading announcements...</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -3209,8 +3655,8 @@
 									<th>RESOLUTION</th>
 									<td>
 										<div id="ticket-resolution-editor" style="height: 200px"></div>
-										<div class="mt-2" style="margin-top: 10px">
-											<label for="ticket-template-select" style="font-size: 0.8rem; font-weight: 500">📋 Select Knowledge Base:</label>
+										<div class="mt-2" id="ticket-template-container" style="margin-top: 10px">
+											<label for="ticket-template-select" style="font-size: 0.8rem; font-weight: 500">📋 Load Knowledge Base Templates:</label>
 											<select id="ticket-template-select" class="form-select" style="font-size: 0.8rem">
 												<option value="">-- Select a template --</option>
 											</select>
@@ -3437,9 +3883,7 @@
 							<div><strong>MOKI ID:</strong><br /><span id="store-preview-mokiId" class="preview-multiline"></span></div>
 							<div><strong>ANYDESK ID:</strong><br /><span id="store-preview-anydeskId" class="preview-multiline"></span></div>
 							<br />
-							<strong>
-								<div id="store-generated-issue"></div>
-							</strong>
+							<strong><div id="store-generated-issue"></div></strong>
 							<br />
 							<br />
 							<div>
@@ -3667,9 +4111,7 @@
 							<div><strong>MOKI ID:</strong><br /><span id="moolah-preview-mokiId" class="preview-multiline"></span></div>
 							<div><strong>ANYDESK ID:</strong><br /><span id="moolah-preview-anydeskId" class="preview-multiline"></span></div>
 							<br />
-							<strong>
-								<div id="moolah-generated-issue"></div>
-							</strong>
+							<strong><div id="moolah-generated-issue"></div></strong>
 							<br />
 							<br />
 							<div class="mb-1">
@@ -3819,22 +4261,6 @@
 						</div>
 					</div>
 				</div>
-
-				<!-- ==================== ANNOUNCEMENTS TAB ==================== -->
-				<div id="tab-announcement" class="tab-content">
-					<div class="announcement-page">
-						<div class="dashboard-section">
-							<div class="dashboard-section-header">
-								<h3>📢 Announcements</h3>
-								<button class="dashboard-add-btn" id="addAnnouncementBtnTab"><i class="bi bi-plus-circle-fill"></i> New Announcement</button>
-							</div>
-							<div id="announcementListTab" class="announcement-list">
-								<div class="announcements-empty">Loading announcements...</div>
-							</div>
-						</div>
-					</div>
-				</div>
-
 				<!-- ==================== SCHEDULER TAB ==================== -->
 				<div id="tab-scheduler" class="tab-content">
 					<div class="three-panels">
@@ -3986,7 +4412,7 @@
 					<button class="counter-badge status-filter-btn" data-status="OTHER TASK" onclick="filterByStatus('OTHER TASK')">📋 OTHER TASK: <span id="counterOther">0</span></button>
 				</div>
 
-				<div style="overflow-x: auto">
+				<div class="table-wrapper">
 					<table id="entryTable">
 						<thead>
 							<tr>
@@ -4037,51 +4463,6 @@
 			</div>
 		</div>
 		<div id="pwdModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
-		<!-- Knowledge Base Entry Modal -->
-		<div id="kbEntryModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
-			<h3 id="kbEntryModalTitle" style="margin-bottom: 16px">📚 Add Knowledge Base Entry</h3>
-			<input type="hidden" id="kbEntrySource" />
-
-			<div class="kb-form-row" id="kbEntryModuleRow">
-				<label>Module <span style="color: var(--danger)">*</span></label>
-				<div class="combobox-wrapper">
-					<input type="text" id="kbEntryModule-combobox" class="combobox-input" autocomplete="off" placeholder="Select or type module..." />
-					<input type="hidden" id="kbEntryModule" />
-					<div id="kbEntryModule-suggestions" class="combobox-suggestions"></div>
-				</div>
-			</div>
-
-			<div class="kb-form-row">
-				<label>Title <span style="color: var(--danger)">*</span></label>
-				<input type="text" id="kbEntryTitle" class="no-uppercase" placeholder="e.g., Printer Not Responding" />
-			</div>
-
-			<div class="kb-form-row">
-				<label>Content / Steps <span style="color: var(--danger)">*</span></label>
-				<div id="kbEntryContentEditor" style="height: 220px; background: var(--bg-secondary); border-radius: 12px"></div>
-				<textarea id="kbEntryContent" style="display: none"></textarea>
-			</div>
-
-			<div id="kbEntryError" style="color: var(--danger); margin-bottom: 12px; font-size: 0.85rem"></div>
-
-			<div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px">
-				<button id="kbEntrySaveBtn" class="login-action-btn" onclick="saveKbEntry()">Save</button>
-				<button class="login-action-btn" style="background: #6b7280" onclick="closeKbEntryModal()">Cancel</button>
-			</div>
-		</div>
-		<div id="kbEntryModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
-
-		<div id="announcementModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
-			<h3 style="margin-bottom: 16px">📢 New Announcement</h3>
-			<input type="text" id="newAnnouncementSubject" class="no-uppercase" placeholder="Subject" style="width: 100%; margin-bottom: 12px" />
-			<div id="newAnnouncementEditor" style="height: 220px; margin-bottom: 12px; background: var(--bg-secondary); border-radius: 12px"></div>
-			<textarea id="newAnnouncementText" style="display: none"></textarea>
-			<div style="display: flex; gap: 8px; justify-content: flex-end">
-				<button id="submitAnnouncementBtn" class="login-action-btn">Post</button>
-				<button id="cancelAnnouncementBtn" class="login-action-btn" style="background: #6b7280">Cancel</button>
-			</div>
-		</div>
-		<div id="announcementModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
 
 		<script>
 			const DEMO_TYPE_OPTIONS = ["RetailzPOS Product Demo (Agent/Reseller)", "RetailzPOS Product Demo (Web)", "RetailzPOS Product Demo", "RetailzPOS Training", "Moolah Points Product Demo", "Moolah Points Training", "LottoGuru Product Demo", "LottoGuru Training"];
@@ -4196,19 +4577,6 @@
 
 				const PROXY_URL = "https://script.google.com/macros/s/AKfycbxPcizPPjndZAHgWypPmstNtij9MUCS4gSKonFkxTE-C3hfrNvSlwdH2bTHm94RYhWUuw/exec";
 
-				// ===== Knowledge Base state & sheet names =====
-				let currentKbType = localStorage.getItem("kbType") || "ticketing";
-				const kbLoaded = { ticketing: false, hrms: false };
-				const TICKETING_KB_SHEET_NAME = "TICKETING KNOWLEDGE BASE";
-				const HRMS_KB_SHEET_NAME = "HRMS KNOWLEDGE BASE";
-				let kbTicketingEntries = [];
-				let kbHrmsEntries = [];
-
-				function getKbSheetName(source) {
-					return source === "ticketing" ? TICKETING_KB_SHEET_NAME : HRMS_KB_SHEET_NAME;
-				}
-				// ================================================
-
 				async function fetchFromProxy(params) {
 					const query = new URLSearchParams(params).toString();
 					const res = await fetch(`${PROXY_URL}?${query}`);
@@ -4273,7 +4641,7 @@
 				const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
 				const SHIFT_OPTIONS = ["9PM - 6AM", "5AM - 2PM", "2PM - 11PM"];
 
-				let currentStatusFilter = null;
+				let currentStatusFilter = new Set();
 				let currentActiveTab = "dashboard";
 				let allEntries = [];
 				let storeData = [];
@@ -4746,7 +5114,12 @@
 					};
 
 					Object.values(statusEls).forEach((el) => {
-						if (el) el.innerHTML = '<div class="spinner"></div> Loading stores from Google Sheets...';
+						if (el)
+							el.innerHTML = `
+							<div class="skeleton-line short"></div>
+							<div class="skeleton-line medium"></div>
+							<div class="skeleton-line"></div>
+						`;
 					});
 
 					try {
@@ -5400,6 +5773,8 @@
 					});
 					ecommerceUpdatePreview();
 					saveFormData("ecommerce");
+					markClean("ecommerce");
+					clearEditingBadge();
 					saveAllEntries();
 					updateStatusCounters();
 					renderTable();
@@ -5794,6 +6169,8 @@
 					}
 
 					clearFormFields("ticket");
+					markClean("ticket");
+					clearEditingBadge();
 					saveAllEntries();
 					updateStatusCounters();
 					renderTable();
@@ -5875,7 +6252,6 @@
 					if (editId) {
 						const index = allEntries.findIndex((e) => e.id === editId);
 						if (index !== -1) {
-							// ✅ Edit mode: preserve and update contact/contactNumber from the form
 							allEntries[index] = {
 								...allEntries[index],
 								date: formattedDate,
@@ -5884,8 +6260,8 @@
 								portal: portal,
 								store: storeName,
 								zip: zipcode,
-								contact: contact, // <-- use form value
-								contactNumber: contactNumber, // <-- use form value
+								contact: contact,
+								contactNumber: contactNumber,
 								issue: issueText,
 								moduleData: moduleData,
 								status: "OTHER TASK",
@@ -5894,7 +6270,6 @@
 								imported: false,
 							};
 							showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry updated!`);
-
 							localStorage.removeItem(EDIT_DRAFT_KEY + editId);
 							editId = null;
 							localStorage.removeItem(EDIT_STORAGE_KEY);
@@ -5903,7 +6278,6 @@
 								addBtn.classList.remove("editing");
 							}
 						} else {
-							// Fallback: entry not found – create a new one
 							const newEntry = {
 								id: Date.now(),
 								date: formattedDate,
@@ -5912,8 +6286,8 @@
 								portal: portal,
 								store: storeName,
 								zip: zipcode,
-								contact: contact, // <-- use form value
-								contactNumber: contactNumber, // <-- use form value
+								contact: contact,
+								contactNumber: contactNumber,
 								module: prefix === "store" ? "Store Creation" : "Moolah",
 								issue: issueText,
 								note: "",
@@ -5938,7 +6312,6 @@
 							}
 						}
 					} else {
-						// ✅ New entry: use the form values (not hardcoded)
 						const newEntry = {
 							id: Date.now(),
 							date: formattedDate,
@@ -5947,8 +6320,8 @@
 							portal: portal,
 							store: storeName,
 							zip: zipcode,
-							contact: contact, // <-- use form value
-							contactNumber: contactNumber, // <-- use form value
+							contact: contact,
+							contactNumber: contactNumber,
 							module: prefix === "store" ? "Store Creation" : "Moolah",
 							issue: issueText,
 							note: "",
@@ -5983,6 +6356,8 @@
 						saveFormData("moolah");
 					}
 
+					markClean(prefix);
+					clearEditingBadge();
 					saveAllEntries();
 					updateStatusCounters();
 					renderTable();
@@ -6087,9 +6462,11 @@
 							btn.textContent = "ADD ENTRY";
 							btn.classList.remove("editing");
 						});
+						clearEditingBadge();
 						showNotification("Edit cancelled. Form cleared.");
 					}
 
+					markClean(prefix);
 					clearFormFields(prefix);
 					if (prefix === "ticket") ticketUpdatePreview();
 					if (prefix === "store") storeUpdatePreview();
@@ -6335,6 +6712,7 @@
 							addBtn.textContent = "EDIT ENTRY";
 							addBtn.classList.add("editing");
 						}
+						showEditingBadge(prefix, editId);
 
 						if (entry.imported) {
 							entry.imported = false;
@@ -6381,8 +6759,6 @@
 						renderTable();
 						renderSidebar();
 						showNotification("Entry removed from main table (still in history)");
-
-						// FIX: If this entry was being edited, cancel edit mode
 						if (editId == id) {
 							editId = null;
 							localStorage.removeItem(EDIT_STORAGE_KEY);
@@ -6390,17 +6766,8 @@
 								btn.textContent = "ADD ENTRY";
 								btn.classList.remove("editing");
 							});
+							clearEditingBadge();
 						}
-					}
-
-					if (editId == id) {
-						editId = null;
-						document.querySelector("#tab-moolah .add").textContent = "ADD ENTRY";
-						document.querySelector("#tab-moolah .add").classList.remove("editing");
-						document.querySelector("#tab-store .add").textContent = "ADD ENTRY";
-						document.querySelector("#tab-store .add").classList.remove("editing");
-						document.querySelector("#tab-ticket .add").textContent = "ADD ENTRY";
-						document.querySelector("#tab-ticket .add").classList.remove("editing");
 					}
 				}
 
@@ -6466,11 +6833,12 @@
 				}
 
 				function renderTable() {
-					if (isPendingTrackerMode) return; // tracker view owns the table when active
+					if (isPendingTrackerMode) return;
 
-					let visibleEntries = getVisibleEntries(); // honours currentStatusFilter
+					let visibleEntries = getVisibleEntries();
 
-					if (!currentStatusFilter || currentStatusFilter === "PENDING") {
+					// Show workload pendings when no filter, or when PENDING is among active filters
+					if (currentStatusFilter.size === 0 || currentStatusFilter.has("PENDING")) {
 						visibleEntries = visibleEntries.concat(myPendingCache);
 					}
 
@@ -6490,39 +6858,37 @@
 							displayContactNumber = "(000) 000-0000";
 						}
 
-						// WL rows: no checkbox (so bulk ops never touch them); show a WL badge instead
-						const checkboxCell = isWorkloadEntry ? '<span class="workload-badge" title="From WORKLOAD TRACKER">WL</span>' : `<input type="checkbox" class="row-checkbox" value="${entry.id}">`;
+						const checkboxCell = isWorkloadEntry ? '<span class="workload-badge" title="From WORKLOAD TRACKER">WL</span>' : `<input type="checkbox" class="row-checkbox" value="${entry.id}" aria-label="Select row">`;
 
-						// WL rows: copy only (edit/delete/summarize would target `allEntries` and silently fail)
 						const actionsHtml = isWorkloadEntry
-							? `<button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>`
+							? `<button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy" aria-label="Copy row"><i class="bi bi-clipboard-fill"></i></button>`
 							: `
-			                <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
-			                <button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution"><i class="bi bi-arrow-clockwise"></i></button>
-			                <button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit"><i class="bi bi-pencil-square"></i></button>
-			                <button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove"><i class="bi bi-trash3-fill"></i></button>
-			            `;
+								<button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy" aria-label="Copy row"><i class="bi bi-clipboard-fill"></i></button>
+								<button class="icon-btn summarize-row-btn" data-id="${entry.id}" onclick="summarizeEntryResolution(${entry.id})" title="Summarize Resolution" aria-label="Summarize resolution"><i class="bi bi-arrow-clockwise"></i></button>
+								<button class="icon-btn edit-btn" onclick="editEntry(this)" title="Edit" aria-label="Edit entry"><i class="bi bi-pencil-square"></i></button>
+								<button class="icon-btn delete-btn" onclick="softDeleteEntry(this)" title="Remove" aria-label="Remove entry"><i class="bi bi-trash3-fill"></i></button>
+							`;
 
 						row.innerHTML = `
-			            <td>${checkboxCell}</td>
-			            <td>${escapeHtml(entry.date || "")}</td>
-			            <td>${escapeHtml(entry.shift || "")}</td>
-			            <td>${escapeHtml(entry.support || "")}</td>
-			            <td>${escapeHtml(entry.portal || "")}</td>
-			            <td>${escapeHtml(entry.store || "")}</td>
-			            <td>${escapeHtml(entry.zip || "")}</td>
-			            <td>${escapeHtml(displayContact || "")}</td>
-			            <td>${escapeHtml(displayContactNumber || "")}</td>
-			            <td>${escapeHtml(entry.module || "")}</td>
-			            <td style="white-space: pre-wrap;">${escapeHtml(entry.issue || "")}</td>
-			            <td>${escapeHtml(entry.escalated || "")}</td>
-			            <td>${escapeHtml(entry.status || "")}</td>
-			            <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks || "")}</td>
-			            <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution || "")}</td>
-			            <td class="action-cell">
-			                <div class="action-container">${actionsHtml}</div>
-			            </td>
-			        `;
+							<td data-label="">${checkboxCell}</td>
+							<td data-label="DATE">${escapeHtml(entry.date || "")}</td>
+							<td data-label="SHIFT">${escapeHtml(entry.shift || "")}</td>
+							<td data-label="SUPPORT">${escapeHtml(entry.support || "")}</td>
+							<td data-label="PORTAL">${escapeHtml(entry.portal || "")}</td>
+							<td data-label="STORE">${escapeHtml(entry.store || "")}</td>
+							<td data-label="ZIP">${escapeHtml(entry.zip || "")}</td>
+							<td data-label="CONTACT">${escapeHtml(displayContact || "")}</td>
+							<td data-label="CONTACT#">${escapeHtml(displayContactNumber || "")}</td>
+							<td data-label="MODULE">${escapeHtml(entry.module || "")}</td>
+							<td data-label="ISSUE" style="white-space: pre-wrap;">${escapeHtml(entry.issue || "")}</td>
+							<td data-label="ESCALATED">${escapeHtml(entry.escalated || "")}</td>
+							<td data-label="STATUS">${escapeHtml(entry.status || "")}</td>
+							<td data-label="REMARKS" style="white-space: pre-wrap;">${escapeHtml(entry.remarks || "")}</td>
+							<td data-label="RESOLUTION" style="white-space: pre-wrap;">${escapeHtml(entry.resolution || "")}</td>
+							<td class="action-cell" data-label="ACTIONS">
+								<div class="action-container">${actionsHtml}</div>
+							</td>
+						`;
 						tbody.appendChild(row);
 					});
 					updateSelectAllCheckboxState();
@@ -6997,6 +7363,8 @@
 				function saveAllEntries() {
 					localStorage.setItem("unifiedEntries", JSON.stringify(allEntries));
 					updateStatusCounters();
+					localStorageCheckCounter++;
+					if (localStorageCheckCounter % 20 === 0) checkLocalStorageSize();
 				}
 
 				function loadAllEntries() {
@@ -7026,28 +7394,22 @@
 						const entryDateStr = `${dateObj.getFullYear()}-${String(dateObj.getMonth() + 1).padStart(2, "0")}-${String(dateObj.getDate()).padStart(2, "0")}`;
 						return entryDateStr <= todayEST;
 					});
-					if (currentStatusFilter) {
-						entries = entries.filter((entry) => (entry.status || "").toUpperCase() === currentStatusFilter);
+					if (currentStatusFilter.size > 0) {
+						entries = entries.filter((entry) => currentStatusFilter.has((entry.status || "").toUpperCase()));
 					}
 					return entries;
 				}
 
 				function filterByStatus(status) {
-					if (currentStatusFilter === status) {
-						// Clear filter
-						currentStatusFilter = null;
+					if (currentStatusFilter.has(status)) {
+						currentStatusFilter.delete(status);
 					} else {
-						currentStatusFilter = status;
+						currentStatusFilter.add(status);
 					}
-					// Update active class on buttons
 					document.querySelectorAll(".status-filter-btn").forEach((btn) => {
-						if (btn.dataset.status === currentStatusFilter) {
-							btn.classList.add("active");
-						} else {
-							btn.classList.remove("active");
-						}
+						btn.classList.toggle("active", currentStatusFilter.has(btn.dataset.status));
 					});
-					renderTable(); // re-render with filter
+					renderTable();
 				}
 
 				function getShiftReportBaseDate() {
@@ -7370,6 +7732,9 @@
 					modal.style.maxHeight = "80vh";
 					modal.style.overflowY = "auto";
 					modal.style.border = "1px solid #cdddee";
+					modal.classList.add("shift-report-modal");
+					modal.setAttribute("role", "dialog");
+					modal.setAttribute("aria-modal", "true");
 
 					if (document.body.classList.contains("dark-mode")) {
 						modal.style.backgroundColor = "#2d3748";
@@ -7979,6 +8344,247 @@
 				let myPendingCache = [];
 				let myPendingCacheTime = 0;
 
+				/* ==================== NEW FEATURE STATE ==================== */
+				const formDirty = { ticket: false, store: false, moolah: false, ecommerce: false, scheduler: false };
+				let localStorageCheckCounter = 0;
+
+				function markDirty(prefix) {
+					formDirty[prefix] = true;
+				}
+				function markClean(prefix) {
+					formDirty[prefix] = false;
+				}
+
+				function clearEditingBadge() {
+					document.querySelectorAll(".editing-badge").forEach((b) => b.remove());
+				}
+
+				function showEditingBadge(prefix, entryId) {
+					clearEditingBadge();
+					const leftPanel = document.querySelector(`#tab-${prefix} .left-panel`);
+					if (!leftPanel) return;
+					const heading = leftPanel.querySelector("h3");
+					if (!heading) return;
+					const badge = document.createElement("span");
+					badge.className = "editing-badge";
+					badge.innerHTML = `✏️ Editing #${entryId} <button type="button" title="Cancel edit" aria-label="Cancel edit">✕</button>`;
+					badge.querySelector("button").addEventListener("click", (e) => {
+						e.preventDefault();
+						clearFormOnly(prefix);
+					});
+					heading.appendChild(badge);
+				}
+
+				/* ==================== RESIZABLE PANELS ==================== */
+
+				/* ==================== COLLAPSIBLE FORM SECTIONS ==================== */
+				function initAdvancedToggle(prefix, basicFieldIds) {
+					const table = document.querySelector(`#tab-${prefix} .left-panel table`);
+					if (!table) return;
+					const rows = Array.from(table.querySelectorAll("tr"));
+					const advancedRows = [];
+					rows.forEach((row) => {
+						const input = row.querySelector("input, textarea");
+						if (!input) return;
+						if (basicFieldIds.includes(input.id)) return;
+						advancedRows.push(row);
+					});
+					if (advancedRows.length < 3) return; // don't bother for tiny forms
+
+					const first = advancedRows[0];
+					const toggleRow = document.createElement("tr");
+					toggleRow.innerHTML = `<th colspan="2" style="padding: 0; border: none;">
+						<div class="collapsible-section-toggle collapsed" id="${prefix}-advanced-toggle">
+							<span class="arrow">▼</span> Advanced Fields
+						</div>
+					</th>`;
+					first.parentNode.insertBefore(toggleRow, first);
+
+					advancedRows.forEach((r) => r.classList.add(`${prefix}-advanced-row`, "hidden-row"));
+
+					document.getElementById(`${prefix}-advanced-toggle`).addEventListener("click", function () {
+						const collapsed = this.classList.toggle("collapsed");
+						document.querySelectorAll(`.${prefix}-advanced-row`).forEach((r) => {
+							r.classList.toggle("hidden-row", collapsed);
+						});
+					});
+				}
+
+				function initTicketAdvancedToggle() {
+					const escalatedRow = document.getElementById("ticket-escalated")?.closest("tr");
+					const templateContainer = document.getElementById("ticket-template-container");
+					const noteRow = document.getElementById("ticket-note")?.closest("tr");
+					if (!escalatedRow || !templateContainer || !noteRow) return;
+
+					const toggleRow = document.createElement("tr");
+					toggleRow.innerHTML = `<th colspan="2" style="padding: 0; border: none;">
+						<div class="collapsible-section-toggle collapsed" id="ticket-advanced-toggle">
+							<span class="arrow">▼</span> Advanced Fields (Escalated, KB Templates, Note)
+						</div>
+					</th>`;
+					escalatedRow.parentNode.insertBefore(toggleRow, escalatedRow);
+
+					escalatedRow.classList.add("ticket-advanced-row", "hidden-row");
+					templateContainer.classList.add("ticket-advanced-row", "hidden-row");
+					noteRow.classList.add("ticket-advanced-row", "hidden-row");
+
+					document.getElementById("ticket-advanced-toggle").addEventListener("click", function () {
+						const collapsed = this.classList.toggle("collapsed");
+						document.querySelectorAll(".ticket-advanced-row").forEach((r) => {
+							r.classList.toggle("hidden-row", collapsed);
+						});
+					});
+				}
+
+				/* ==================== COPY-ALL CREDENTIALS ==================== */
+				function initCopyAllButtons() {
+					function addBtn(panelId, dataGetter) {
+						const panel = document.getElementById(panelId);
+						if (!panel) return;
+						if (panel.querySelector(".copy-all-btn")) return;
+						const btn = document.createElement("button");
+						btn.type = "button";
+						btn.className = "copy-all-btn";
+						btn.innerHTML = `📋 Copy All Credentials`;
+						btn.addEventListener("click", async () => {
+							const data = dataGetter();
+							if (!data) {
+								showNotification("Nothing to copy — fill the form first.");
+								return;
+							}
+							try {
+								const plainBlob = new Blob([data.plain], { type: "text/plain" });
+								const htmlBlob = new Blob([data.html], { type: "text/html" });
+								await navigator.clipboard.write([new ClipboardItem({ "text/plain": plainBlob, "text/html": htmlBlob })]);
+								showNotification("All credentials copied!");
+							} catch {
+								navigator.clipboard.writeText(data.plain);
+								showNotification("All credentials copied (plain text)");
+							}
+						});
+						panel.appendChild(btn);
+					}
+
+					addBtn("store-previewPanel", () => {
+						const p = (id) => (document.getElementById(id)?.textContent || "").trim();
+						const portal = p("store-preview-portal");
+						const storeName = p("store-preview-storeName");
+						if (!portal && !storeName) return null;
+						const plain = [`STORE: ${storeName}`, `PORTAL: ${portal}`, `ZIP: ${p("store-preview-zipcode")}`, `URL: https://portal${portal}.retailzpos.com/`, `EMAIL: ${p("store-preview-email")}`, `PASSWORD: ${p("store-preview-password")}`, `ACCESS PIN: 1122`, `SKU: ${p("store-preview-sku")}`].join("\n");
+						const html = plain
+							.split("\n")
+							.map((l) => `<div>${escapeHtml(l)}</div>`)
+							.join("");
+						return { plain, html };
+					});
+
+					addBtn("moolah-previewPanel", () => {
+						const p = (id) => (document.getElementById(id)?.textContent || "").trim();
+						const portal = p("moolah-preview-portal");
+						const storeName = p("moolah-preview-storeName");
+						if (!portal && !storeName) return null;
+						const plain = [`STORE: ${storeName}`, `PORTAL: ${portal}`, `ZIP: ${p("moolah-preview-zipcode")}`, `URL: https://portal${portal}.retailzpos.com/`, `EMAIL: ${p("moolah-preview-email")}`, `PASSWORD: ${p("moolah-preview-password")}`, `SKU: ${p("moolah-preview-sku")}`, `TABLETS: ${p("moolah-preview-noOfTabs")}`].join("\n");
+						const html = plain
+							.split("\n")
+							.map((l) => `<div>${escapeHtml(l)}</div>`)
+							.join("");
+						return { plain, html };
+					});
+				}
+
+				/* ==================== FOCUS TRAP ==================== */
+				function initFocusTrap() {
+					document.addEventListener("keydown", (e) => {
+						if (e.key !== "Tab") return;
+						const candidates = [document.getElementById("changePwdModal"), document.getElementById("kbEntryModal"), document.getElementById("announcementModal"), document.querySelector(".shift-report-modal")];
+						let modal = null;
+						for (const m of candidates) {
+							if (m && window.getComputedStyle(m).display !== "none") modal = m;
+						}
+						if (!modal) return;
+						const focusable = modal.querySelectorAll('button:not([disabled]), input:not([disabled]):not([type="hidden"]), textarea:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])');
+						if (!focusable.length) return;
+						const first = focusable[0];
+						const last = focusable[focusable.length - 1];
+						if (e.shiftKey && document.activeElement === first) {
+							e.preventDefault();
+							last.focus();
+						} else if (!e.shiftKey && document.activeElement === last) {
+							e.preventDefault();
+							first.focus();
+						}
+					});
+				}
+
+				/* ==================== CTRL+ENTER SUBMIT ==================== */
+				function initKeyboardShortcuts() {
+					document.addEventListener("keydown", (e) => {
+						if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+							const activeTab = currentActiveTab;
+							if (!["ticket", "store", "moolah", "ecommerce", "scheduler"].includes(activeTab)) return;
+							const panel = document.getElementById(`tab-${activeTab}`);
+							if (!panel || !panel.contains(document.activeElement)) return;
+							e.preventDefault();
+							addEntry(activeTab);
+						}
+					});
+				}
+
+				/* ==================== BEFOREUNLOAD WARN ==================== */
+				function initBeforeUnloadWarn() {
+					window.addEventListener("beforeunload", (e) => {
+						if (Object.values(formDirty).some((v) => v)) {
+							e.preventDefault();
+							e.returnValue = "";
+							return "";
+						}
+					});
+				}
+
+				/* ==================== DASHBOARD CARD CLICK ==================== */
+				function initDashboardCardClicks() {
+					const map = {
+						dashTotalResolved: "RESOLVED",
+						dashTotalPending: "PENDING",
+						dashTotalOtherTasks: "OTHER TASK",
+					};
+					Object.keys(map).forEach((id) => {
+						const card = document.getElementById(id)?.closest(".dashboard-card");
+						if (!card) return;
+						const status = map[id];
+						card.title = `Click to filter table by ${status}`;
+						card.addEventListener("click", () => {
+							switchTab("ticket", document.querySelector('.tab-button[data-tab="ticket"]'));
+							setTimeout(() => {
+								currentStatusFilter.clear();
+								currentStatusFilter.add(status);
+								document.querySelectorAll(".status-filter-btn").forEach((btn) => {
+									btn.classList.toggle("active", currentStatusFilter.has(btn.dataset.status));
+								});
+								renderTable();
+							}, 60);
+						});
+					});
+				}
+
+				/* ==================== LOCAL STORAGE SIZE ==================== */
+				function checkLocalStorageSize() {
+					try {
+						let total = 0;
+						for (let i = 0; i < localStorage.length; i++) {
+							const key = localStorage.key(i);
+							const value = localStorage.getItem(key);
+							total += (key.length + (value ? value.length : 0)) * 2;
+						}
+						const mb = total / (1024 * 1024);
+						if (mb > 4) {
+							showNotification(`⚠️ Local storage is ${mb.toFixed(1)}MB — consider exporting old entries.`);
+						}
+					} catch (e) {
+						/* ignore */
+					}
+				}
+
 				async function refreshMyPendingCache(shouldRender = true) {
 					const oldSig = myPendingCache
 						.map((e) => `${e.portal}|${e.issue}|${e.status}|${e.date}`)
@@ -8091,36 +8697,36 @@
 					const tbody = document.querySelector("#entryTable tbody");
 					tbody.innerHTML = "";
 					if (!entries.length) {
-						tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">✨ No pending tickets found for you in WORKLOAD TRACKER 2026 ✨</td></tr>`;
+						tbody.innerHTML = `<tr><td colspan="16" style="text-align:center;">✨ No pending tickets found in WORKLOAD TRACKER 2026 ✨</td></tr>`;
 						return;
 					}
 					entries.forEach((entry) => {
 						const row = document.createElement("tr");
 						row.dataset.id = entry.id;
 						row.innerHTML = `
-						                  <td><input type="checkbox" class="row-checkbox" value="${entry.id}"></td>
-						                  <td>${escapeHtml(entry.date)}</td>
-						                  <td>${escapeHtml(entry.shift)}</td>
-						                  <td>${escapeHtml(entry.support)}</td>
-						                  <td>${escapeHtml(entry.portal)}</td>
-						                  <td>${escapeHtml(entry.store)}</td>
-						                  <td>${escapeHtml(entry.zip)}</td>
-						                  <td>${escapeHtml(entry.contact)}</td>
-						                  <td>${escapeHtml(entry.contactNumber)}</td>
-						                  <td>${escapeHtml(entry.module)}</td>
-						                  <td style="white-space: pre-wrap;">${escapeHtml(entry.issue)}</td>
-						                  <td>${escapeHtml(entry.escalated)}</td>
-						                  <td>${escapeHtml(entry.status)}</td>
-						                  <td style="white-space: pre-wrap;">${escapeHtml(entry.remarks)}</td>
-						                  <td style="white-space: pre-wrap;">${escapeHtml(entry.resolution)}</td>
-						                  <td class="action-cell">
-						                      <div class="action-container">
-						                          <button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy"><i class="bi bi-clipboard-fill"></i></button>
-						                          <button class="icon-btn edit-btn disabled" disabled title="Edit not allowed in tracker view"><i class="bi bi-pencil-square"></i></button>
-						                          <button class="icon-btn delete-btn disabled" disabled title="Delete not allowed"><i class="bi bi-trash3-fill"></i></button>
-						                      </div>
-						                  </td>
-						              `;
+							<td data-label=""><input type="checkbox" class="row-checkbox" value="${entry.id}" aria-label="Select row"></td>
+							<td data-label="DATE">${escapeHtml(entry.date)}</td>
+							<td data-label="SHIFT">${escapeHtml(entry.shift)}</td>
+							<td data-label="SUPPORT">${escapeHtml(entry.support)}</td>
+							<td data-label="PORTAL">${escapeHtml(entry.portal)}</td>
+							<td data-label="STORE">${escapeHtml(entry.store)}</td>
+							<td data-label="ZIP">${escapeHtml(entry.zip)}</td>
+							<td data-label="CONTACT">${escapeHtml(entry.contact)}</td>
+							<td data-label="CONTACT#">${escapeHtml(entry.contactNumber)}</td>
+							<td data-label="MODULE">${escapeHtml(entry.module)}</td>
+							<td data-label="ISSUE" style="white-space: pre-wrap;">${escapeHtml(entry.issue)}</td>
+							<td data-label="ESCALATED">${escapeHtml(entry.escalated)}</td>
+							<td data-label="STATUS">${escapeHtml(entry.status)}</td>
+							<td data-label="REMARKS" style="white-space: pre-wrap;">${escapeHtml(entry.remarks)}</td>
+							<td data-label="RESOLUTION" style="white-space: pre-wrap;">${escapeHtml(entry.resolution)}</td>
+							<td class="action-cell" data-label="ACTIONS">
+								<div class="action-container">
+									<button class="icon-btn copy-btn" onclick="copyRow(this)" title="Copy" aria-label="Copy row"><i class="bi bi-clipboard-fill"></i></button>
+									<button class="icon-btn edit-btn disabled" disabled title="Edit not allowed in tracker view" aria-label="Edit disabled"><i class="bi bi-pencil-square"></i></button>
+									<button class="icon-btn delete-btn disabled" disabled title="Delete not allowed" aria-label="Delete disabled"><i class="bi bi-trash3-fill"></i></button>
+								</div>
+							</td>
+						`;
 						tbody.appendChild(row);
 					});
 					updateSelectAllCheckboxState();
@@ -8615,6 +9221,8 @@
 					}
 
 					clearFormFields("scheduler");
+					markClean("scheduler");
+					clearEditingBadge();
 					saveAllEntries();
 					updateStatusCounters();
 					renderTable();
@@ -8658,6 +9266,75 @@
 
 				function setDashboardLoading(loading) {
 					document.querySelectorAll(".dashboard-card").forEach((c) => c.classList.toggle("loading", loading));
+				}
+
+				function renderTopModules(data) {
+					const container = document.getElementById("topModulesContainer");
+					if (!container) return;
+
+					if (!data || !data.values || data.values.length < 2) {
+						container.innerHTML = '<div class="performers-empty">No data available.</div>';
+						return;
+					}
+
+					const headers = data.values[0].map((h) =>
+						String(h || "")
+							.trim()
+							.toUpperCase(),
+					);
+					const dateIdx = headers.findIndex((h) => h.includes("DATE"));
+					const moduleIdx = headers.findIndex((h) => h === "MODULE" || h.includes("MODULE"));
+
+					if (dateIdx < 0 || moduleIdx < 0) {
+						container.innerHTML = '<div class="performers-empty">Module or Date column not found in sheet.</div>';
+						return;
+					}
+
+					const todayEST = getESTDateString();
+					const [year, month] = todayEST.split("-").map(Number);
+					const monthPrefix = `${year}-${String(month).padStart(2, "0")}`;
+
+					const counts = {};
+					for (let i = 1; i < data.values.length; i++) {
+						const row = data.values[i];
+						const rowDate = normalizeDashboardDate(row[dateIdx]);
+						if (!rowDate || !rowDate.startsWith(monthPrefix)) continue;
+						const mod = String(row[moduleIdx] || "")
+							.trim()
+							.toUpperCase();
+						if (!mod) continue;
+						counts[mod] = (counts[mod] || 0) + 1;
+					}
+
+					const sorted = Object.entries(counts)
+						.sort((a, b) => b[1] - a[1])
+						.slice(0, 10);
+
+					if (!sorted.length) {
+						container.innerHTML = '<div class="performers-empty">No issues recorded this month yet.</div>';
+						return;
+					}
+
+					const maxCount = sorted[0][1];
+					const monthName = new Date(year, month - 1, 1).toLocaleString("default", { month: "long", year: "numeric" });
+
+					container.innerHTML =
+						`<div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 600;">${monthName}</div>` +
+						sorted
+							.map(([mod, count], idx) => {
+								const pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
+								const rankClass = idx < 3 ? "top-3" : "";
+								return `
+								<div class="module-stat-row">
+									<div class="module-stat-rank ${rankClass}">${idx + 1}</div>
+									<div class="module-stat-name" title="${escapeHtml(mod)}">${escapeHtml(mod)}</div>
+									<div class="module-stat-bar-wrap">
+										<div class="module-stat-bar" style="width: ${pct}%;">${count}</div>
+									</div>
+								</div>
+							`;
+							})
+							.join("");
 				}
 
 				async function loadDashboardData() {
@@ -8890,6 +9567,32 @@
 					}
 				}
 
+				/* Make the viewport exactly as tall as the current slide,
+   so shorter announcements don't inherit the tallest one's height. */
+				function updateCarouselHeight() {
+					const viewport = document.getElementById("announcementViewport");
+					const track = document.getElementById("announcementTrack");
+					if (!viewport || !track) return;
+
+					const slides = track.querySelectorAll(".carousel-slide");
+					const active = slides[currentAnnouncementIndex];
+					if (!active) return;
+
+					viewport.style.transition = "height 0.55s cubic-bezier(0.4, 0, 0.2, 1)";
+					viewport.style.height = active.offsetHeight + "px";
+				}
+
+				function startAnnouncementAutoSlide(total) {
+					if (announcementAutoSlideTimer) {
+						clearInterval(announcementAutoSlideTimer);
+						announcementAutoSlideTimer = null;
+					}
+					if (!total || total < 2) return;
+					announcementAutoSlideTimer = setInterval(() => {
+						goToAnnouncement(currentAnnouncementIndex + 1);
+					}, 10000);
+				}
+
 				function renderAnnouncementCarousel(announcements) {
 					const container = document.getElementById("announcementCarousel");
 					if (!container) return;
@@ -8904,9 +9607,9 @@
 						return;
 					}
 
-					// Clamp index to valid range
-					if (currentAnnouncementIndex >= announcements.length) currentAnnouncementIndex = 0;
-					if (currentAnnouncementIndex < 0) currentAnnouncementIndex = 0;
+					if (currentAnnouncementIndex >= announcements.length) {
+						currentAnnouncementIndex = 0;
+					}
 
 					const currentUser = getLoggedInUser();
 					const mySupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
@@ -8930,43 +9633,37 @@
 								ackControlHtml = `<span class="ack-note">Your announcement · ${ackCount}/${totalRequired} acknowledged</span>`;
 							} else {
 								ackControlHtml = `
-                <button class="ack-btn ${iAcked ? "acked" : ""}" data-ack-index="${idx}">
-                    ${iAcked ? "✅ Acknowledged" : "👍 Acknowledge"}
-                </button>
-                <span class="ack-count">${ackCount}/${totalRequired} acknowledged${allAcked ? " · deleting…" : ""}</span>
-            `;
+								<button class="ack-btn ${iAcked ? "acked" : ""}" data-ack-index="${idx}">
+									${iAcked ? "✅ Acknowledged" : "👍 Acknowledge"}
+								</button>
+								<span class="ack-count">${ackCount}/${totalRequired} acknowledged${allAcked ? " · deleting…" : ""}</span>
+							`;
 							}
 
 							return `
-            <div class="carousel-slide" data-slide-index="${idx}">
-                ${a.subject ? `<div class="carousel-slide-subject">${escapeHtml(a.subject)}</div>` : ""}
-                ${a.details ? `<div class="carousel-slide-details">${renderRichContent(a.details)}</div>` : ""}
-                ${a.support ? `<div class="carousel-slide-meta"><span><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></span></div>` : ""}
-                <div class="announcement-ack-row">${ackControlHtml}</div>
-            </div>`;
+							<div class="carousel-slide" data-slide-index="${idx}">
+								${a.subject ? `<div class="carousel-slide-subject">${escapeHtml(a.subject)}</div>` : ""}
+								${a.details ? `<div class="carousel-slide-details">${renderRichContent(a.details)}</div>` : ""}
+								${a.support ? `<div class="carousel-slide-meta"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
+								<div class="announcement-ack-row">${ackControlHtml}</div>
+							</div>
+						`;
 						})
 						.join("");
 
-					const hasMultiple = announcements.length > 1;
-
-					const dotsHtml = hasMultiple ? announcements.map((_, i) => `<button class="carousel-dot${i === currentAnnouncementIndex ? " active" : ""}" data-dot-index="${i}" aria-label="Go to slide ${i + 1}"></button>`).join("") : "";
-
-					const navHtml = hasMultiple
-						? `<button class="carousel-nav prev" aria-label="Previous announcement">&#8249;</button>
-           <button class="carousel-nav next" aria-label="Next announcement">&#8250;</button>`
-						: "";
+					const dotsHtml = announcements.map((_, i) => `<button class="carousel-dot ${i === currentAnnouncementIndex ? "active" : ""}" data-dot-index="${i}" aria-label="Go to announcement ${i + 1}"></button>`).join("");
 
 					container.innerHTML = `
-        <div class="carousel-viewport" id="announcementViewport">
-            <div class="carousel-track" id="announcementTrack" style="transform: translateX(-${currentAnnouncementIndex * 100}%)">
-                ${slidesHtml}
-            </div>
-        </div>
-        ${navHtml}
-        ${hasMultiple ? `<div class="carousel-dots">${dotsHtml}</div>` : ""}
-    `;
+						<div class="carousel-viewport" id="announcementViewport">
+							<div class="carousel-track" id="announcementTrack" style="transform: translateX(-${currentAnnouncementIndex * 100}%)">
+								${slidesHtml}
+							</div>
+						</div>
+						<button class="carousel-nav prev" id="announcementPrevBtn" aria-label="Previous announcement">‹</button>
+						<button class="carousel-nav next" id="announcementNextBtn" aria-label="Next announcement">›</button>
+						<div class="carousel-dots" id="announcementDots">${dotsHtml}</div>
+					`;
 
-					// Wire up ack buttons
 					container.querySelectorAll(".ack-btn").forEach((btn) => {
 						const idx = parseInt(btn.dataset.ackIndex, 10);
 						const ann = announcements[idx];
@@ -8974,37 +9671,49 @@
 						btn.addEventListener("click", () => handleAnnouncementAcknowledge(ann, btn));
 					});
 
-					// Wire up nav
-					const prevBtn = container.querySelector(".carousel-nav.prev");
-					const nextBtn = container.querySelector(".carousel-nav.next");
-					if (prevBtn) prevBtn.addEventListener("click", prevAnnouncement);
-					if (nextBtn) nextBtn.addEventListener("click", nextAnnouncement);
+					document.getElementById("announcementPrevBtn")?.addEventListener("click", () => goToAnnouncement(currentAnnouncementIndex - 1));
+					document.getElementById("announcementNextBtn")?.addEventListener("click", () => goToAnnouncement(currentAnnouncementIndex + 1));
 
-					// Wire up dots
 					container.querySelectorAll(".carousel-dot").forEach((dot) => {
 						dot.addEventListener("click", () => goToAnnouncement(parseInt(dot.dataset.dotIndex, 10)));
 					});
 
-					// Pause auto-slide on hover for better UX
-					if (!container.dataset.hoverBound) {
-						container.dataset.hoverBound = "1";
-						container.addEventListener("mouseenter", () => {
+					const viewport = document.getElementById("announcementViewport");
+					if (viewport) {
+						let touchStartX = 0;
+						let touchEndX = 0;
+						viewport.addEventListener(
+							"touchstart",
+							(e) => {
+								touchStartX = e.changedTouches[0].screenX;
+							},
+							{ passive: true },
+						);
+						viewport.addEventListener(
+							"touchend",
+							(e) => {
+								touchEndX = e.changedTouches[0].screenX;
+								const diff = touchEndX - touchStartX;
+								if (Math.abs(diff) > 50) {
+									if (diff > 0) goToAnnouncement(currentAnnouncementIndex - 1);
+									else goToAnnouncement(currentAnnouncementIndex + 1);
+								}
+							},
+							{ passive: true },
+						);
+
+						viewport.addEventListener("mouseenter", () => {
 							if (announcementAutoSlideTimer) {
 								clearInterval(announcementAutoSlideTimer);
 								announcementAutoSlideTimer = null;
 							}
 						});
-						container.addEventListener("mouseleave", () => {
-							if (allAnnouncementsCache.length > 1) {
-								startAnnouncementAutoSlide(allAnnouncementsCache.length);
-							}
+						viewport.addEventListener("mouseleave", () => {
+							startAnnouncementAutoSlide(announcements.length);
 						});
 					}
 
-					// Size the viewport to the active slide
 					requestAnimationFrame(updateCarouselHeight);
-
-					// Start auto-slide
 					startAnnouncementAutoSlide(announcements.length);
 				}
 
@@ -9101,40 +9810,13 @@
 						track.style.transform = `translateX(-${index * 100}%)`;
 					}
 
-					document.querySelectorAll("#announcementCarousel .carousel-dot").forEach((dot, i) => {
+					document.querySelectorAll(".carousel-dot").forEach((dot, i) => {
 						dot.classList.toggle("active", i === index);
 					});
 
 					updateCarouselHeight();
+					// Reset the auto-slide timer after a manual navigation
 					startAnnouncementAutoSlide(total);
-				}
-
-				/* Auto-slide every 10 seconds */
-				function startAnnouncementAutoSlide(total) {
-					if (announcementAutoSlideTimer) {
-						clearInterval(announcementAutoSlideTimer);
-						announcementAutoSlideTimer = null;
-					}
-					if (!total || total < 2) return; // no need to slide with 0 or 1 announcement
-
-					announcementAutoSlideTimer = setInterval(() => {
-						nextAnnouncement();
-					}, 10000); // 10 seconds
-				}
-
-				/* Make the viewport exactly as tall as the current slide,
-   so shorter announcements don't inherit the tallest one's height. */
-				function updateCarouselHeight() {
-					const viewport = document.getElementById("announcementViewport");
-					const track = document.getElementById("announcementTrack");
-					if (!viewport || !track) return;
-
-					const slides = track.querySelectorAll(".carousel-slide");
-					const active = slides[currentAnnouncementIndex];
-					if (!active) return;
-
-					viewport.style.transition = "height 0.55s cubic-bezier(0.4, 0, 0.2, 1)";
-					viewport.style.height = active.offsetHeight + "px";
 				}
 
 				function nextAnnouncement() {
@@ -9380,10 +10062,12 @@
 				function renderSlaAlerts(alerts) {
 					const container = document.getElementById("slaAlertContainer");
 					const countBadge = document.getElementById("slaAlertCount");
+					const baseTitle = "RetailzPOS · Unified Creation System";
 					if (!container) return;
 
 					if (!alerts || alerts.length === 0) {
 						if (countBadge) countBadge.style.display = "none";
+						document.title = baseTitle;
 						container.innerHTML = '<div class="sla-empty">✅ No SLA breaches. All pending tickets are within the 7-day window.</div>';
 						return;
 					}
@@ -9392,6 +10076,7 @@
 						countBadge.textContent = alerts.length;
 						countBadge.style.display = "";
 					}
+					document.title = `(${alerts.length}) ${baseTitle}`;
 
 					container.innerHTML = `<div class="sla-alert-list">${alerts
 						.map((a) => {
@@ -9424,75 +10109,6 @@
 						.join("")}</div>`;
 				}
 
-				function renderTopModules(data) {
-					const container = document.getElementById("topModulesContainer");
-					if (!container) return;
-
-					if (!data || !data.values || data.values.length < 2) {
-						container.innerHTML = '<div class="performers-empty">No data available.</div>';
-						return;
-					}
-
-					const headers = data.values[0].map((h) =>
-						String(h || "")
-							.trim()
-							.toUpperCase(),
-					);
-					const dateIdx = headers.findIndex((h) => h.includes("DATE"));
-					const moduleIdx = headers.findIndex((h) => h === "MODULE" || h.includes("MODULE"));
-
-					if (dateIdx < 0 || moduleIdx < 0) {
-						container.innerHTML = '<div class="performers-empty">Module or Date column not found in sheet.</div>';
-						return;
-					}
-
-					const todayEST = getESTDateString();
-					const [year, month] = todayEST.split("-").map(Number);
-					const monthPrefix = `${year}-${String(month).padStart(2, "0")}`;
-
-					const counts = {};
-					for (let i = 1; i < data.values.length; i++) {
-						const row = data.values[i];
-						const rowDate = normalizeDashboardDate(row[dateIdx]);
-						if (!rowDate || !rowDate.startsWith(monthPrefix)) continue;
-						const mod = String(row[moduleIdx] || "")
-							.trim()
-							.toUpperCase();
-						if (!mod) continue;
-						counts[mod] = (counts[mod] || 0) + 1;
-					}
-
-					const sorted = Object.entries(counts)
-						.sort((a, b) => b[1] - a[1])
-						.slice(0, 10);
-
-					if (!sorted.length) {
-						container.innerHTML = '<div class="performers-empty">No issues recorded this month yet.</div>';
-						return;
-					}
-
-					const maxCount = sorted[0][1];
-					const monthName = new Date(year, month - 1, 1).toLocaleString("default", { month: "long", year: "numeric" });
-
-					container.innerHTML =
-						`<div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 600;">${monthName}</div>` +
-						sorted
-							.map(([mod, count], idx) => {
-								const pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
-								const rankClass = idx < 3 ? "top-3" : "";
-								return `
-                <div class="module-stat-row">
-                    <div class="module-stat-rank ${rankClass}">${idx + 1}</div>
-                    <div class="module-stat-name" title="${escapeHtml(mod)}">${escapeHtml(mod)}</div>
-                    <div class="module-stat-bar-wrap">
-                        <div class="module-stat-bar" style="width: ${pct}%;">${count}</div>
-                    </div>
-                </div>
-            `;
-							})
-							.join("");
-				}
-
 				function renderTopPerformers(performers) {
 					const container = document.getElementById("topPerformersContainer");
 					if (!container) return;
@@ -9503,29 +10119,42 @@
 					const rows = performers
 						.map(
 							(p, i) => `
-        <tr>
-            <td><span class="performer-rank rank-${i + 1}">${i + 1}</span></td>
-            <td><strong>${escapeHtml(p.support)}</strong></td>
-            <td><span class="performer-avg">${p.totalTickets}</span> <span class="performer-details">tickets</span></td>
-            <td><span class="performer-details">Active ${p.days} day${p.days !== 1 ? "s" : ""} this month</span></td>
-        </tr>
-    `,
+			        <tr>
+			            <td><span class="performer-rank rank-${i + 1}">${i + 1}</span></td>
+			            <td><strong>${escapeHtml(p.support)}</strong></td>
+			            <td><span class="performer-avg">${p.totalTickets}</span> <span class="performer-details">tickets</span></td>
+			            <td><span class="performer-details">Active ${p.days} day${p.days !== 1 ? "s" : ""} this month</span></td>
+			        </tr>
+			    `,
 						)
 						.join("");
 
 					container.innerHTML = `
-        <table class="performers-table">
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Support</th>
-                    <th>Total (Month)</th>
-                    <th>Details</th>
-                </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-        </table>
-    `;
+			        <table class="performers-table">
+			            <thead>
+			                <tr>
+			                    <th>Rank</th>
+			                    <th>Support</th>
+			                    <th>Total (Month)</th>
+			                    <th>Details</th>
+			                </tr>
+			            </thead>
+			            <tbody>${rows}</tbody>
+			        </table>
+			    `;
+				}
+
+				/* ==================== KNOWLEDGE BASE (Full CRUD) ==================== */
+				let currentKbType = localStorage.getItem("kbType") || "ticketing";
+				let kbTicketingEntries = []; // from TROUBLESHOOTING TEMPLATES sheet
+				let kbHrmsEntries = []; // from HRMS KNOWLEDGE BASE sheet
+				let kbLoaded = { ticketing: false, hrms: false };
+
+				const HRMS_KB_SHEET_NAME = "HRMS KNOWLEDGE BASE";
+				const TICKETING_KB_SHEET_NAME = "TICKETING KNOWLEDGE BASE";
+
+				function getKbSheetName(type) {
+					return type === "hrms" ? HRMS_KB_SHEET_NAME : TICKETING_KB_SHEET_NAME;
 				}
 
 				function switchKbType(type, btn) {
@@ -9985,6 +10614,13 @@
 						setupSearchKeyboard(prefix);
 					});
 
+					// Mark forms dirty on any user input (for beforeunload warning)
+					["ticket", "store", "moolah", "ecommerce", "scheduler"].forEach((prefix) => {
+						document.querySelectorAll(`#tab-${prefix} input, #tab-${prefix} textarea, #tab-${prefix} select`).forEach((el) => {
+							el.addEventListener("input", () => markDirty(prefix));
+						});
+					});
+
 					setTimeout(loadSheetData, 500);
 
 					document.querySelectorAll("textarea").forEach((ta) => autoGrow(ta));
@@ -10274,6 +10910,8 @@
 						ticketUpdatePreview();
 						saveFormData("ticket");
 					});
+
+					quillEditor.on("text-change", () => markDirty("ticket"));
 
 					function updateStoreIssuePreview() {
 						const steps = {
@@ -10644,9 +11282,6 @@
 						const schedulerCalendarEl = document.getElementById("scheduler-calendar");
 						const schedulerDateHidden = document.getElementById("scheduler-scheduleDate");
 
-						schedulerZip.addEventListener("input", updateSchedulerTimezone);
-						schedulerZip.addEventListener("change", updateSchedulerTimezone);
-
 						if (schedulerCalendarEl) {
 							schedulerCalendarEl.addEventListener("click", (e) => {
 								const navBtn = e.target.closest(".cal-nav");
@@ -10727,6 +11362,16 @@
 
 					// Init module combobox for the KB entry modal
 					initCombobox("kbEntryModule-combobox", "kbEntryModule", MODULE_OPTIONS, "kbEntryModule-suggestions", () => {});
+
+					initTicketAdvancedToggle();
+					initAdvancedToggle("store", ["store-portal", "store-storeName", "store-zipcode", "store-contact", "store-contactNumber", "store-email", "store-password", "store-sku", "store-database", "store-noOfReg"]);
+					initAdvancedToggle("moolah", ["moolah-portal", "moolah-storeName", "moolah-zipcode", "moolah-contact", "moolah-contactNumber", "moolah-email", "moolah-password", "moolah-sku", "moolah-noOfTabs"]);
+					initCopyAllButtons();
+					initFocusTrap();
+					initKeyboardShortcuts();
+					initBeforeUnloadWarn();
+					initDashboardCardClicks();
+					checkLocalStorageSize();
 				}
 
 				window.handleHistorySourceToggle = handleHistorySourceToggle;
@@ -10762,5 +11407,51 @@
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+
+		<!-- Knowledge Base Entry Modal -->
+		<div id="kbEntryModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
+			<h3 id="kbEntryModalTitle" style="margin-bottom: 16px">📚 Add Knowledge Base Entry</h3>
+			<input type="hidden" id="kbEntrySource" />
+
+			<div class="kb-form-row" id="kbEntryModuleRow">
+				<label>Module <span style="color: var(--danger)">*</span></label>
+				<div class="combobox-wrapper">
+					<input type="text" id="kbEntryModule-combobox" class="combobox-input" autocomplete="off" placeholder="Select or type module..." />
+					<input type="hidden" id="kbEntryModule" />
+					<div id="kbEntryModule-suggestions" class="combobox-suggestions"></div>
+				</div>
+			</div>
+
+			<div class="kb-form-row">
+				<label>Title <span style="color: var(--danger)">*</span></label>
+				<input type="text" id="kbEntryTitle" class="no-uppercase" placeholder="e.g., Printer Not Responding" />
+			</div>
+
+			<div class="kb-form-row">
+				<label>Content / Steps <span style="color: var(--danger)">*</span></label>
+				<div id="kbEntryContentEditor" style="height: 220px; background: var(--bg-secondary); border-radius: 12px"></div>
+				<textarea id="kbEntryContent" style="display: none"></textarea>
+			</div>
+
+			<div id="kbEntryError" style="color: var(--danger); margin-bottom: 12px; font-size: 0.85rem"></div>
+
+			<div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px">
+				<button id="kbEntrySaveBtn" class="login-action-btn" onclick="saveKbEntry()">Save</button>
+				<button class="login-action-btn" style="background: #6b7280" onclick="closeKbEntryModal()">Cancel</button>
+			</div>
+		</div>
+		<div id="kbEntryModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
+
+		<div id="announcementModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
+			<h3 style="margin-bottom: 16px">📢 New Announcement</h3>
+			<input type="text" id="newAnnouncementSubject" class="no-uppercase" placeholder="Subject" style="width: 100%; margin-bottom: 12px" />
+			<div id="newAnnouncementEditor" style="height: 220px; margin-bottom: 12px; background: var(--bg-secondary); border-radius: 12px"></div>
+			<textarea id="newAnnouncementText" style="display: none"></textarea>
+			<div style="display: flex; gap: 8px; justify-content: flex-end">
+				<button id="submitAnnouncementBtn" class="login-action-btn">Post</button>
+				<button id="cancelAnnouncementBtn" class="login-action-btn" style="background: #6b7280">Cancel</button>
+			</div>
+		</div>
+		<div id="announcementModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
 	</body>
 </html>
