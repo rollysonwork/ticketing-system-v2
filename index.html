@@ -3324,6 +3324,97 @@
 				transform: translateY(-1px);
 				box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 			}
+						/* ==================== MODULE STAT BARS (Top 10 Modules) ==================== */
+			.module-stat-row {
+				display: flex;
+				align-items: center;
+				gap: 10px;
+				margin-bottom: 8px;
+				padding: 4px 0;
+			}
+			.module-stat-rank {
+				width: 24px;
+				height: 24px;
+				border-radius: 50%;
+				background: var(--bg-tertiary);
+				color: var(--text-secondary);
+				font-weight: 700;
+				font-size: 0.72rem;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-shrink: 0;
+				border: 1px solid var(--border-color);
+			}
+			.module-stat-rank.top-3 {
+				background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+				color: #fff;
+				border-color: transparent;
+			}
+			.module-stat-name {
+				flex: 1 1 150px;
+				min-width: 0;
+				font-weight: 600;
+				font-size: 0.82rem;
+				color: var(--text-primary);
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			.module-stat-bar-wrap {
+				flex: 1 1 220px;
+				height: 22px;
+				background: var(--bg-tertiary);
+				border-radius: 11px;
+				overflow: hidden;
+				position: relative;
+				border: 1px solid var(--border-color);
+			}
+			.module-stat-bar {
+				height: 100%;
+				background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+				border-radius: 11px 0 0 11px;
+				display: flex;
+				align-items: center;
+				justify-content: flex-end;
+				padding-right: 8px;
+				color: #fff;
+				font-size: 0.68rem;
+				font-weight: 700;
+				min-width: 32px;
+				transition: width 0.5s ease;
+				box-shadow: 0 2px 4px rgba(59, 130, 246, 0.25);
+			}
+			@media (max-width: 700px) {
+				.module-stat-name {
+					flex: 1 1 100%;
+					order: -1;
+				}
+				.module-stat-row {
+					flex-wrap: wrap;
+				}
+			}
+
+			/* ==================== SCROLLABLE CAROUSEL SLIDES ==================== */
+			.carousel-slide {
+				max-height: 600px;
+				min-height: 270px;
+				overflow-y: auto;
+				scrollbar-width: thin;
+			}
+			.carousel-slide::-webkit-scrollbar {
+				width: 8px;
+			}
+			.carousel-slide::-webkit-scrollbar-track {
+				background: transparent;
+			}
+			.carousel-slide::-webkit-scrollbar-thumb {
+				background: var(--border-color);
+				border-radius: 4px;
+			}
+			.carousel-slide::-webkit-scrollbar-thumb:hover {
+				background: var(--text-muted);
+			}
 		</style>
 	</head>
 	<body>
@@ -3456,15 +3547,27 @@
 							</div>
 						</div>
 
-						<!-- Top 5 performers -->
+												<!-- Top 5 performers -->
 						<div class="dashboard-section">
 							<div class="dashboard-section-header">
-								<h3>🏆 Top 5 Performing Support</h3>
+								<h3>🏆 Top 5 Performing Support <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">(This Month)</span></h3>
 							</div>
 							<div id="topPerformersContainer">
 								<div class="performers-empty">Loading...</div>
 							</div>
 						</div>
+
+						<!-- Top 10 Common Issues by Module -->
+						<div class="dashboard-section">
+							<div class="dashboard-section-header">
+								<h3>🔥 Top 10 Common Issues by Module <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500;">(This Month)</span></h3>
+							</div>
+							<div id="topModulesContainer">
+								<div class="performers-empty">Loading...</div>
+							</div>
+						</div>
+					</div>
+				</div>
 					</div>
 				</div>
 
@@ -3609,13 +3712,13 @@
 									<th>RESOLUTION</th>
 									<td>
 										<div id="ticket-resolution-editor" style="height: 200px"></div>
-										<div class="mt-2" style="margin-top: 10px">
-											<label for="ticket-template-select" style="font-size: 0.8rem; font-weight: 500">📋 Load Troubleshooting Template:</label>
-											<select id="ticket-template-select" class="form-select" style="font-size: 0.8rem">
-												<option value="">-- Select a template --</option>
-											</select>
-											<small style="font-size: 0.7rem; color: var(--text-muted)">Selecting a template will replace current troubleshooting steps (you can edit afterwards).</small>
-										</div>
+										<div class="mt-2" id="ticket-template-container" style="margin-top: 10px">
+    <label for="ticket-template-select" style="font-size: 0.8rem; font-weight: 500">📋 Load Knowledge Base Templates:</label>
+    <select id="ticket-template-select" class="form-select" style="font-size: 0.8rem">
+        <option value="">-- Select a template --</option>
+    </select>
+    <small style="font-size: 0.7rem; color: var(--text-muted)">Selecting a template will replace current troubleshooting steps (you can edit afterwards).</small>
+</div>
 										<textarea id="ticket-resolution" style="display: none"></textarea>
 									</td>
 								</tr>
@@ -8433,21 +8536,23 @@
 					});
 				}
 
-				function initTicketAdvancedToggle() {
+								function initTicketAdvancedToggle() {
 					const escalatedRow = document.getElementById("ticket-escalated")?.closest("tr");
-					const remarksRow = document.getElementById("ticket-remarks")?.closest("tr");
-					if (!escalatedRow || !remarksRow) return;
+					const templateContainer = document.getElementById("ticket-template-container");
+					const noteRow = document.getElementById("ticket-note")?.closest("tr");
+					if (!escalatedRow || !templateContainer || !noteRow) return;
 
 					const toggleRow = document.createElement("tr");
 					toggleRow.innerHTML = `<th colspan="2" style="padding: 0; border: none;">
 						<div class="collapsible-section-toggle collapsed" id="ticket-advanced-toggle">
-							<span class="arrow">▼</span> Advanced Fields (Escalated, Remarks)
+							<span class="arrow">▼</span> Advanced Fields (Escalated, KB Templates, Note)
 						</div>
 					</th>`;
 					escalatedRow.parentNode.insertBefore(toggleRow, escalatedRow);
 
 					escalatedRow.classList.add("ticket-advanced-row", "hidden-row");
-					remarksRow.classList.add("ticket-advanced-row", "hidden-row");
+					templateContainer.classList.add("ticket-advanced-row", "hidden-row");
+					noteRow.classList.add("ticket-advanced-row", "hidden-row");
 
 					document.getElementById("ticket-advanced-toggle").addEventListener("click", function () {
 						const collapsed = this.classList.toggle("collapsed");
@@ -9289,6 +9394,67 @@
 					document.querySelectorAll(".dashboard-card").forEach((c) => c.classList.toggle("loading", loading));
 				}
 
+								function renderTopModules(data) {
+					const container = document.getElementById("topModulesContainer");
+					if (!container) return;
+
+					if (!data || !data.values || data.values.length < 2) {
+						container.innerHTML = '<div class="performers-empty">No data available.</div>';
+						return;
+					}
+
+					const headers = data.values[0].map((h) => String(h || "").trim().toUpperCase());
+					const dateIdx = headers.findIndex((h) => h.includes("DATE"));
+					const moduleIdx = headers.findIndex((h) => h === "MODULE" || h.includes("MODULE"));
+
+					if (dateIdx < 0 || moduleIdx < 0) {
+						container.innerHTML = '<div class="performers-empty">Module or Date column not found in sheet.</div>';
+						return;
+					}
+
+					const todayEST = getESTDateString();
+					const [year, month] = todayEST.split("-").map(Number);
+					const monthPrefix = `${year}-${String(month).padStart(2, "0")}`;
+
+					const counts = {};
+					for (let i = 1; i < data.values.length; i++) {
+						const row = data.values[i];
+						const rowDate = normalizeDashboardDate(row[dateIdx]);
+						if (!rowDate || !rowDate.startsWith(monthPrefix)) continue;
+						const mod = String(row[moduleIdx] || "").trim().toUpperCase();
+						if (!mod) continue;
+						counts[mod] = (counts[mod] || 0) + 1;
+					}
+
+					const sorted = Object.entries(counts)
+						.sort((a, b) => b[1] - a[1])
+						.slice(0, 10);
+
+					if (!sorted.length) {
+						container.innerHTML = '<div class="performers-empty">No issues recorded this month yet.</div>';
+						return;
+					}
+
+					const maxCount = sorted[0][1];
+					const monthName = new Date(year, month - 1, 1).toLocaleString("default", { month: "long", year: "numeric" });
+
+					container.innerHTML =
+						`<div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 600;">${monthName}</div>` +
+						sorted.map(([mod, count], idx) => {
+							const pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
+							const rankClass = idx < 3 ? "top-3" : "";
+							return `
+								<div class="module-stat-row">
+									<div class="module-stat-rank ${rankClass}">${idx + 1}</div>
+									<div class="module-stat-name" title="${escapeHtml(mod)}">${escapeHtml(mod)}</div>
+									<div class="module-stat-bar-wrap">
+										<div class="module-stat-bar" style="width: ${pct}%;">${count}</div>
+									</div>
+								</div>
+							`;
+						}).join("");
+				}
+
 				async function loadDashboardData() {
 					const currentUser = getLoggedInUser();
 					const container = document.getElementById("dashboardContainer");
@@ -9343,8 +9509,10 @@
 											: "";
 									const isMine = supportIdx >= 0 && rowSupport === userSupport;
 
-									// Track stats for top performers (all rows, all dates)
-									if (rowSupport && rowDate) {
+																		// Track stats for top performers (current calendar month only — resets on 1st of each month)
+									const [curYear, curMonth] = todayEST.split("-");
+									const monthPrefix = `${curYear}-${curMonth}`;
+									if (rowSupport && rowDate && rowDate.startsWith(monthPrefix)) {
 										if (!supportStats[rowSupport]) {
 											supportStats[rowSupport] = { dates: new Set(), ticketCount: 0 };
 										}
@@ -9373,19 +9541,19 @@
 									}
 								}
 
-								// Compute top 5 by average tickets/day
+								// Compute top 5 by total tickets this month
 								const performers = Object.entries(supportStats)
-									.map(([support, stats]) => {
-										const days = stats.dates.size;
-										const totalTickets = stats.ticketCount;
-										const avg = days > 0 ? totalTickets / days : 0;
-										return { support, totalTickets, days, avg };
-									})
-									.filter((p) => p.days > 0)
-									.sort((a, b) => b.avg - a.avg)
+									.map(([support, stats]) => ({
+										support,
+										totalTickets: stats.ticketCount,
+										days: stats.dates.size,
+									}))
+									.filter((p) => p.totalTickets > 0)
+									.sort((a, b) => b.totalTickets - a.totalTickets)
 									.slice(0, 5);
 
 								renderTopPerformers(performers);
+								renderTopModules(data);
 
 								// ✅ NEW: SLA alerts
 								renderSlaAlerts(computeSlaAlerts(data));
@@ -9402,16 +9570,16 @@
 								renderSlaAlerts([]);
 							}
 						} else {
-							// ← ADD THIS LINE
-							["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0")); // ← ADD
+							["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0"));
 							renderTopPerformers([]);
-							renderSlaAlerts([]); // ← ADD
-						} // ← ADD
+							renderTopModules([]);
+							renderSlaAlerts([]);
+						}
 					} catch (err) {
-						// ← unchanged, now correctly closes `try`
 						console.warn("Dashboard WORKLOAD TRACKER fetch failed:", err);
 						["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "--"));
 						renderTopPerformers([]);
+						renderTopModules([]);
 						renderSlaAlerts([]);
 					}
 
@@ -9517,6 +9685,17 @@
 					}
 				}
 
+								function startAnnouncementAutoSlide(total) {
+					if (announcementAutoSlideTimer) {
+						clearInterval(announcementAutoSlideTimer);
+						announcementAutoSlideTimer = null;
+					}
+					if (!total || total < 2) return;
+					announcementAutoSlideTimer = setInterval(() => {
+						goToAnnouncement(currentAnnouncementIndex + 1);
+					}, 10000);
+				}
+
 				function renderAnnouncementCarousel(announcements) {
 					const container = document.getElementById("announcementCarousel");
 					if (!container) return;
@@ -9531,46 +9710,62 @@
 						return;
 					}
 
+					if (currentAnnouncementIndex >= announcements.length) {
+						currentAnnouncementIndex = 0;
+					}
+
 					const currentUser = getLoggedInUser();
 					const mySupport = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
 
-					container.innerHTML = `<div class="announcement-list">${announcements
-						.map((a, idx) => {
-							const key = getAnnouncementKey(a);
-							const poster = (a.support || "").trim().toUpperCase();
-							const requiredUsers = allAnnouncementUsers.filter((u) => u !== poster);
-							const acked = announcementAcks[key] || new Set();
-							const ackCount = requiredUsers.filter((u) => acked.has(u)).length;
-							const totalRequired = requiredUsers.length;
-							const iAcked = mySupport && acked.has(mySupport);
-							const amPoster = mySupport && mySupport === poster;
-							const allAcked = totalRequired > 0 && ackCount >= totalRequired;
+					const slidesHtml = announcements.map((a, idx) => {
+						const key = getAnnouncementKey(a);
+						const poster = (a.support || "").trim().toUpperCase();
+						const requiredUsers = allAnnouncementUsers.filter((u) => u !== poster);
+						const acked = announcementAcks[key] || new Set();
+						const ackCount = requiredUsers.filter((u) => acked.has(u)).length;
+						const totalRequired = requiredUsers.length;
+						const iAcked = mySupport && acked.has(mySupport);
+						const amPoster = mySupport && mySupport === poster;
+						const allAcked = totalRequired > 0 && ackCount >= totalRequired;
 
-							let ackControlHtml = "";
-							if (totalRequired === 0) {
-								ackControlHtml = `<span class="ack-note">No acknowledgers required</span>`;
-							} else if (amPoster) {
-								ackControlHtml = `<span class="ack-note">Your announcement · ${ackCount}/${totalRequired} acknowledged</span>`;
-							} else {
-								ackControlHtml = `
-                    <button class="ack-btn ${iAcked ? "acked" : ""}" data-ack-index="${idx}">
-                        ${iAcked ? "✅ Acknowledged" : "👍 Acknowledge"}
-                    </button>
-                    <span class="ack-count">${ackCount}/${totalRequired} acknowledged${allAcked ? " · deleting…" : ""}</span>
-                `;
-							}
+						let ackControlHtml = "";
+						if (totalRequired === 0) {
+							ackControlHtml = `<span class="ack-note">No acknowledgers required</span>`;
+						} else if (amPoster) {
+							ackControlHtml = `<span class="ack-note">Your announcement · ${ackCount}/${totalRequired} acknowledged</span>`;
+						} else {
+							ackControlHtml = `
+								<button class="ack-btn ${iAcked ? "acked" : ""}" data-ack-index="${idx}">
+									${iAcked ? "✅ Acknowledged" : "👍 Acknowledge"}
+								</button>
+								<span class="ack-count">${ackCount}/${totalRequired} acknowledged${allAcked ? " · deleting…" : ""}</span>
+							`;
+						}
 
-							return `
-        <div class="announcement-item">
-            <div class="announcement-body">
-                ${a.subject ? `<div class="announcement-subject">${escapeHtml(a.subject)}</div>` : ""}
-                ${a.details ? `<div class="announcement-message">${renderRichContent(a.details)}</div>` : ""}
-                ${a.support ? `<div class="announcement-support"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
-                <div class="announcement-ack-row">${ackControlHtml}</div>
-            </div>
-        </div>`;
-						})
-						.join("")}</div>`;
+						return `
+							<div class="carousel-slide" data-slide-index="${idx}">
+								${a.subject ? `<div class="carousel-slide-subject">${escapeHtml(a.subject)}</div>` : ""}
+								${a.details ? `<div class="carousel-slide-details">${renderRichContent(a.details)}</div>` : ""}
+								${a.support ? `<div class="carousel-slide-meta"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
+								<div class="announcement-ack-row">${ackControlHtml}</div>
+							</div>
+						`;
+					}).join("");
+
+					const dotsHtml = announcements.map((_, i) =>
+						`<button class="carousel-dot ${i === currentAnnouncementIndex ? "active" : ""}" data-dot-index="${i}" aria-label="Go to announcement ${i + 1}"></button>`
+					).join("");
+
+					container.innerHTML = `
+						<div class="carousel-viewport" id="announcementViewport">
+							<div class="carousel-track" id="announcementTrack" style="transform: translateX(-${currentAnnouncementIndex * 100}%)">
+								${slidesHtml}
+							</div>
+						</div>
+						<button class="carousel-nav prev" id="announcementPrevBtn" aria-label="Previous announcement">‹</button>
+						<button class="carousel-nav next" id="announcementNextBtn" aria-label="Next announcement">›</button>
+						<div class="carousel-dots" id="announcementDots">${dotsHtml}</div>
+					`;
 
 					container.querySelectorAll(".ack-btn").forEach((btn) => {
 						const idx = parseInt(btn.dataset.ackIndex, 10);
@@ -9578,6 +9773,42 @@
 						if (!ann) return;
 						btn.addEventListener("click", () => handleAnnouncementAcknowledge(ann, btn));
 					});
+
+					document.getElementById("announcementPrevBtn")?.addEventListener("click", () => goToAnnouncement(currentAnnouncementIndex - 1));
+					document.getElementById("announcementNextBtn")?.addEventListener("click", () => goToAnnouncement(currentAnnouncementIndex + 1));
+
+					container.querySelectorAll(".carousel-dot").forEach((dot) => {
+						dot.addEventListener("click", () => goToAnnouncement(parseInt(dot.dataset.dotIndex, 10)));
+					});
+
+					const viewport = document.getElementById("announcementViewport");
+					if (viewport) {
+						let touchStartX = 0;
+						let touchEndX = 0;
+						viewport.addEventListener("touchstart", (e) => {
+							touchStartX = e.changedTouches[0].screenX;
+						}, { passive: true });
+						viewport.addEventListener("touchend", (e) => {
+							touchEndX = e.changedTouches[0].screenX;
+							const diff = touchEndX - touchStartX;
+							if (Math.abs(diff) > 50) {
+								if (diff > 0) goToAnnouncement(currentAnnouncementIndex - 1);
+								else goToAnnouncement(currentAnnouncementIndex + 1);
+							}
+						}, { passive: true });
+
+						viewport.addEventListener("mouseenter", () => {
+							if (announcementAutoSlideTimer) {
+								clearInterval(announcementAutoSlideTimer);
+								announcementAutoSlideTimer = null;
+							}
+						});
+						viewport.addEventListener("mouseleave", () => {
+							startAnnouncementAutoSlide(announcements.length);
+						});
+					}
+
+					startAnnouncementAutoSlide(announcements.length);
 				}
 
 				async function handleAnnouncementAcknowledge(announcement, btnEl) {
@@ -9971,7 +10202,7 @@
 						.join("")}</div>`;
 				}
 
-				function renderTopPerformers(performers) {
+								function renderTopPerformers(performers) {
 					const container = document.getElementById("topPerformersContainer");
 					if (!container) return;
 					if (!performers || performers.length === 0) {
@@ -9984,8 +10215,8 @@
 			        <tr>
 			            <td><span class="performer-rank rank-${i + 1}">${i + 1}</span></td>
 			            <td><strong>${escapeHtml(p.support)}</strong></td>
-			            <td><span class="performer-avg">${p.avg.toFixed(2)}</span> <span class="performer-details">tickets/day</span></td>
-			            <td><span class="performer-details">${p.totalTickets} tickets over ${p.days} day${p.days !== 1 ? "s" : ""}</span></td>
+			            <td><span class="performer-avg">${p.totalTickets}</span> <span class="performer-details">tickets</span></td>
+			            <td><span class="performer-details">Active ${p.days} day${p.days !== 1 ? "s" : ""} this month</span></td>
 			        </tr>
 			    `,
 						)
@@ -9997,7 +10228,7 @@
 			                <tr>
 			                    <th>Rank</th>
 			                    <th>Support</th>
-			                    <th>Average</th>
+			                    <th>Total (Month)</th>
 			                    <th>Details</th>
 			                </tr>
 			            </thead>
