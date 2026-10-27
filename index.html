@@ -2965,7 +2965,6 @@
 			.inline-calendar .cal-selected-label strong {
 				color: var(--accent-color);
 			}
-
 		</style>
 	</head>
 	<body>
@@ -5002,7 +5001,7 @@
 						} catch (e) {}
 					}
 
-										if (prefix === "scheduler") {
+					if (prefix === "scheduler") {
 						const saved = localStorage.getItem(`${prefix}FormData`);
 						if (saved) {
 							try {
@@ -8426,7 +8425,7 @@
 					syncPreviewHeight();
 				}
 
-								let schedulerCalView = null;
+				let schedulerCalView = null;
 
 				function renderSchedulerCalendar() {
 					const container = document.getElementById("scheduler-calendar");
@@ -9357,8 +9356,8 @@
 					const entry = getActiveKbEntries().find((e) => e.id === id);
 					if (!entry) return;
 					const plainContent = htmlToPlainText(entry.content);
-					const text = `${entry.title}\n\n${plainContent}`;
-					navigator.clipboard.writeText(text).then(
+					// Copy content only — no title/subject
+					navigator.clipboard.writeText(plainContent).then(
 						() => showNotification("Entry copied!"),
 						() => showNotification("Failed to copy"),
 					);
@@ -10297,74 +10296,73 @@
 							schedulerTz.value = tzLabel;
 							schedulerUpdatePreview(); // update the preview panel
 						}
-						
 
 						// Attach to both input (typing) and change (paste / blur)
-											// ==================== INLINE SCHEDULER CALENDAR WIRING ====================
-					const schedulerCalendarEl = document.getElementById("scheduler-calendar");
-					const schedulerDateHidden = document.getElementById("scheduler-scheduleDate");
+						// ==================== INLINE SCHEDULER CALENDAR WIRING ====================
+						const schedulerCalendarEl = document.getElementById("scheduler-calendar");
+						const schedulerDateHidden = document.getElementById("scheduler-scheduleDate");
 
-					if (schedulerCalendarEl) {
-						schedulerCalendarEl.addEventListener("click", (e) => {
-							const navBtn = e.target.closest(".cal-nav");
-							if (navBtn) {
-								if (!schedulerCalView) {
-									const now = new Date();
-									schedulerCalView = { year: now.getFullYear(), month: now.getMonth() };
-								}
-								let { year, month } = schedulerCalView;
-								if (navBtn.dataset.dir === "prev") {
-									month--;
-									if (month < 0) {
-										month = 11;
-										year--;
+						if (schedulerCalendarEl) {
+							schedulerCalendarEl.addEventListener("click", (e) => {
+								const navBtn = e.target.closest(".cal-nav");
+								if (navBtn) {
+									if (!schedulerCalView) {
+										const now = new Date();
+										schedulerCalView = { year: now.getFullYear(), month: now.getMonth() };
 									}
-								} else {
-									month++;
-									if (month > 11) {
-										month = 0;
-										year++;
+									let { year, month } = schedulerCalView;
+									if (navBtn.dataset.dir === "prev") {
+										month--;
+										if (month < 0) {
+											month = 11;
+											year--;
+										}
+									} else {
+										month++;
+										if (month > 11) {
+											month = 0;
+											year++;
+										}
 									}
+									schedulerCalView = { year, month };
+									renderSchedulerCalendar();
+									return;
 								}
-								schedulerCalView = { year, month };
-								renderSchedulerCalendar();
-								return;
-							}
 
-							const dayBtn = e.target.closest(".cal-day[data-date]");
-							if (dayBtn && schedulerDateHidden) {
-								schedulerDateHidden.value = dayBtn.dataset.date;
-								// reuse the existing input pipeline (updates preview + saves to localStorage)
-								schedulerDateHidden.dispatchEvent(new Event("input", { bubbles: true }));
-							}
-						});
-
-						if (schedulerDateHidden) {
-							schedulerDateHidden.addEventListener("input", () => {
-								renderSchedulerCalendar();
+								const dayBtn = e.target.closest(".cal-day[data-date]");
+								if (dayBtn && schedulerDateHidden) {
+									schedulerDateHidden.value = dayBtn.dataset.date;
+									// reuse the existing input pipeline (updates preview + saves to localStorage)
+									schedulerDateHidden.dispatchEvent(new Event("input", { bubbles: true }));
+								}
 							});
-						}
 
-						renderSchedulerCalendar();
-					}
+							if (schedulerDateHidden) {
+								schedulerDateHidden.addEventListener("input", () => {
+									renderSchedulerCalendar();
+								});
+							}
+
+							renderSchedulerCalendar();
+						}
 					}
 
 					// ==================== SCHEDULER: OPEN CALENDAR ON CLICK ====================
-const schedulerDateInput = document.getElementById("scheduler-scheduleDate");
-if (schedulerDateInput) {
-    schedulerDateInput.addEventListener("click", function () {
-        // showPicker() reliably opens the native calendar on Chromium browsers.
-        // It throws if the picker is already open (e.g. user clicked the
-        // calendar icon), so we swallow that error.
-        if (typeof this.showPicker === "function") {
-            try {
-                this.showPicker();
-            } catch (err) {
-                /* picker already open or not supported — ignore */
-            }
-        }
-    });
-}
+					const schedulerDateInput = document.getElementById("scheduler-scheduleDate");
+					if (schedulerDateInput) {
+						schedulerDateInput.addEventListener("click", function () {
+							// showPicker() reliably opens the native calendar on Chromium browsers.
+							// It throws if the picker is already open (e.g. user clicked the
+							// calendar icon), so we swallow that error.
+							if (typeof this.showPicker === "function") {
+								try {
+									this.showPicker();
+								} catch (err) {
+									/* picker already open or not supported — ignore */
+								}
+							}
+						});
+					}
 					document.getElementById("sidebar-date").addEventListener("change", syncSidebarToFormFields);
 					document.getElementById("sidebar-shift").addEventListener("change", () => {
 						localStorage.setItem("sidebarShift", document.getElementById("sidebar-shift").value);
