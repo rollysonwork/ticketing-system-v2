@@ -7824,9 +7824,6 @@
 						renderTable();
 						renderSidebar();
 						showNotification(`New day detected. Previous entries moved to history.`);
-						setTimeout(() => {
-							window.location.reload();
-						}, 2000);
 						localStorage.setItem("lastClearDate", todayEST);
 					}
 				}
@@ -11007,23 +11004,6 @@
 						localStorage.setItem("pendingTrackerMode", "false");
 					}
 					document.getElementById("pendingTrackerToggleBtn").addEventListener("click", togglePendingTracker);
-
-					const IDLE_REFRESH_DELAY = 900000;
-					let idleTimeout;
-					function idleReload() {
-						window.location.reload();
-					}
-					function resetIdleTimer() {
-						if (idleTimeout) clearTimeout(idleTimeout);
-						idleTimeout = setTimeout(idleReload, IDLE_REFRESH_DELAY);
-					}
-					const activityEvents = ["mousedown", "mousemove", "keydown", "scroll", "touchstart", "click", "focusin", "input"];
-					activityEvents.forEach((eventName) => {
-						window.addEventListener(eventName, resetIdleTimer, {
-							passive: true,
-						});
-					});
-					resetIdleTimer();
 
 					let refreshInterval = null;
 
