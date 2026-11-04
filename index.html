@@ -9402,6 +9402,9 @@
 					const active = slides[currentAnnouncementIndex];
 					if (!active) return;
 
+					const h = active.getBoundingClientRect().height;
+    				if (!h || h < 1) return;
+
 					viewport.style.transition = "height 0.55s cubic-bezier(0.4, 0, 0.2, 1)";
 					viewport.style.height = active.offsetHeight + "px";
 				}
@@ -9537,7 +9540,8 @@
 						});
 					}
 
-					requestAnimationFrame(updateCarouselHeight);
+					requestAnimationFrame(() => requestAnimationFrame(updateCarouselHeight));
+					setTimeout(updateCarouselHeight, 200);
 					startAnnouncementAutoSlide(announcements.length);
 				}
 
