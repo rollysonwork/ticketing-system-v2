@@ -3187,6 +3187,36 @@
 					flex-wrap: wrap;
 				}
 			}
+			/* ==================== NATIVE TIME INPUT ALIGNMENT ==================== */
+			input[type="time"] {
+				padding: 7px 10px;
+				line-height: 1.4;
+				min-height: 42px;
+				height: auto;
+				font-family: inherit;
+			}
+
+			input[type="time"]::-webkit-datetime-edit {
+				padding: 0;
+				display: inline-flex;
+				align-items: center;
+				gap: 2px;
+			}
+
+			input[type="time"]::-webkit-datetime-edit-fields-wrapper {
+				padding: 0;
+				display: inline-flex;
+				align-items: center;
+			}
+
+			input[type="time"]::-webkit-datetime-edit-ampm-field {
+				padding: 0 2px;
+			}
+
+			input[type="time"]::-webkit-datetime-edit-hour-field,
+			input[type="time"]::-webkit-datetime-edit-minute-field {
+				padding: 2px 3px;
+			}
 		</style>
 	</head>
 	<body>
@@ -4151,7 +4181,7 @@
 								<!-- EMAIL ADDRESS -->
 								<tr>
 									<th>EMAIL ADDRESS</th>
-									<td><input type="email" id="scheduler-email" class="no-uppercase" /></td>
+									<td><input type="email" id="scheduler-email" class="no-uppercase" autocomplete="off" name="sched_email_noauto_xyz" spellcheck="false" autocorrect="off" autocapitalize="off" /></td>
 								</tr>
 								<!-- SCHEDULED DATE (inline calendar) -->
 								<tr>
@@ -4175,8 +4205,11 @@
 								<tr>
 									<th>RetailzPOS User</th>
 									<td>
-										<label><input type="radio" name="scheduler-customer" value="Yes" /> Yes</label>
-										<label><input type="radio" name="scheduler-customer" value="No" /> No</label>
+										<div class="combobox-wrapper">
+											<input type="text" id="scheduler-customer-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select" />
+											<input type="hidden" id="scheduler-customer" />
+											<div id="scheduler-customer-suggestions" class="combobox-suggestions"></div>
+										</div>
 									</td>
 								</tr>
 								<!-- TYPE OF BUSINESS -->
@@ -4188,11 +4221,11 @@
 								<tr>
 									<th>PREFERRED LANGUAGE</th>
 									<td>
-										<select id="scheduler-language">
-											<option value="">-- SELECT --</option>
-											<option value="English">English</option>
-											<option value="Hindi/Gujarati">Hindi/Gujarati</option>
-										</select>
+										<div class="combobox-wrapper">
+											<input type="text" id="scheduler-language-combobox" class="combobox-input no-uppercase" autocomplete="off" placeholder="Type or select language" />
+											<input type="hidden" id="scheduler-language" />
+											<div id="scheduler-language-suggestions" class="combobox-suggestions"></div>
+										</div>
 									</td>
 								</tr>
 							</table>
@@ -5211,7 +5244,7 @@
 					});
 					if (prefix === "scheduler") {
 						formData.demoType = document.getElementById("scheduler-demoType").value;
-						formData.customer = document.querySelector('input[name="scheduler-customer"]:checked')?.value || "";
+						formData.customer = document.getElementById("scheduler-customer").value || "";
 						formData.timezone = document.getElementById("scheduler-timezone").value;
 						formData.language = document.getElementById("scheduler-language").value;
 					}
@@ -5245,11 +5278,16 @@
 									document.getElementById("scheduler-demoType-combobox").value = formData.demoType;
 								}
 								if (formData.customer) {
-									const radio = document.querySelector(`input[name="scheduler-customer"][value="${formData.customer}"]`);
-									if (radio) radio.checked = true;
+									document.getElementById("scheduler-customer").value = formData.customer;
+									const custCombo = document.getElementById("scheduler-customer-combobox");
+									if (custCombo) custCombo.value = formData.customer;
 								}
 								if (formData.timezone) document.getElementById("scheduler-timezone").value = formData.timezone;
-								if (formData.language) document.getElementById("scheduler-language").value = formData.language;
+								if (formData.language) {
+									document.getElementById("scheduler-language").value = formData.language;
+									const langCombo = document.getElementById("scheduler-language-combobox");
+									if (langCombo) langCombo.value = formData.language;
+								}
 							} catch (e) {}
 						}
 						schedulerUpdatePreview();
@@ -6299,8 +6337,13 @@
 						});
 						document.getElementById("scheduler-demoType").value = "";
 						document.getElementById("scheduler-demoType-combobox").value = "";
-						document.querySelectorAll('input[name="scheduler-customer"]').forEach((el) => (el.checked = false));
+						document.getElementById("scheduler-customer").value = "";
+						const custCombo = document.getElementById("scheduler-customer-combobox");
+						if (custCombo) custCombo.value = "";
+
 						document.getElementById("scheduler-language").value = "";
+						const langCombo = document.getElementById("scheduler-language-combobox");
+						if (langCombo) langCombo.value = "";
 						document.getElementById("scheduler-storeSearch").value = "";
 						document.getElementById("scheduler-searchResults").innerHTML = '<div style="padding:20px; text-align:center; color:#64748b;">Type to search for stores...</div>';
 						schedulerCalView = null;
@@ -6371,16 +6414,17 @@
 						document.getElementById(`${prefix}-timezone`).value = entry.moduleData?.timezone || "";
 						document.getElementById(`${prefix}-businessType`).value = entry.moduleData?.businessType || "";
 
-						// Language dropdown
+						// Language combobox
 						const language = entry.moduleData?.language || "";
-						document.getElementById(`${prefix}-language`).value = language;
+						document.getElementById("scheduler-language").value = language;
+						const langCombo = document.getElementById("scheduler-language-combobox");
+						if (langCombo) langCombo.value = language;
 
-						// Customer radio
+						// Customer combobox
 						const customer = entry.moduleData?.customer || "";
-						if (customer) {
-							const radio = document.querySelector(`input[name="${prefix}-customer"][value="${customer}"]`);
-							if (radio) radio.checked = true;
-						}
+						document.getElementById("scheduler-customer").value = customer;
+						const custCombo = document.getElementById("scheduler-customer-combobox");
+						if (custCombo) custCombo.value = customer;
 
 						// Demo type (combobox)
 						const demoType = entry.moduleData?.demoType || "";
@@ -6618,11 +6662,6 @@
 							if (demoTypeCombobox) {
 								demoTypeCombobox.dispatchEvent(new Event("input", { bubbles: true }));
 							}
-							const checkedRadio = document.querySelector('input[name="scheduler-customer"]:checked');
-							if (checkedRadio) {
-								checkedRadio.dispatchEvent(new Event("change", { bubbles: true }));
-							}
-							// Second update after events have fired
 							setTimeout(schedulerUpdatePreview, 0);
 						}
 
@@ -8901,7 +8940,7 @@
 					const scheduleDateRaw = document.getElementById("scheduler-scheduleDate").value;
 					const scheduleTimeRaw = document.getElementById("scheduler-scheduleTime").value;
 					const timezone = document.getElementById("scheduler-timezone").value.trim();
-					const customer = document.querySelector('input[name="scheduler-customer"]:checked')?.value || "";
+					const customer = document.getElementById("scheduler-customer").value || "";
 					const businessType = document.getElementById("scheduler-businessType").value.trim();
 					const language = document.getElementById("scheduler-language").value;
 
@@ -9036,7 +9075,7 @@
 					const scheduleDate = document.getElementById("scheduler-scheduleDate").value;
 					const scheduleTime = document.getElementById("scheduler-scheduleTime").value;
 					const timezone = document.getElementById("scheduler-timezone").value.trim();
-					const customer = document.querySelector('input[name="scheduler-customer"]:checked')?.value || "";
+					const customer = document.getElementById("scheduler-customer").value || "";
 					const businessType = document.getElementById("scheduler-businessType").value.trim();
 					const language = document.getElementById("scheduler-language").value;
 					const demoType = document.getElementById("scheduler-demoType").value;
@@ -10678,13 +10717,6 @@
 						schedulerUpdatePreview();
 						saveFormData("scheduler");
 					});
-					document.getElementById("scheduler-language").addEventListener("change", schedulerUpdatePreview);
-					document.querySelectorAll('input[name="scheduler-customer"]').forEach((el) => {
-						el.addEventListener("change", () => {
-							schedulerUpdatePreview();
-							saveFormData("scheduler");
-						});
-					});
 
 					// Apply uppercase conversion only to inputs/textarea that do NOT have the .no-uppercase class
 					// EXCLUDE the Quill editor's hidden textarea (ticket-resolution)
@@ -11098,6 +11130,16 @@
 					});
 
 					initCombobox("scheduler-demoType-combobox", "scheduler-demoType", DEMO_TYPE_OPTIONS, "scheduler-demoType-suggestions", () => {
+						schedulerUpdatePreview();
+						saveFormData("scheduler");
+					});
+
+					initCombobox("scheduler-customer-combobox", "scheduler-customer", ["Yes", "No"], "scheduler-customer-suggestions", () => {
+						schedulerUpdatePreview();
+						saveFormData("scheduler");
+					});
+
+					initCombobox("scheduler-language-combobox", "scheduler-language", ["English", "Hindi/Gujarati"], "scheduler-language-suggestions", () => {
 						schedulerUpdatePreview();
 						saveFormData("scheduler");
 					});
