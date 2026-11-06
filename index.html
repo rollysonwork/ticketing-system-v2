@@ -3483,44 +3483,44 @@
 				opacity: 0.7;
 			}
 			/* ============ DASHBOARD SECTION CONTROLS ============ */
-.dashboard-section-controls {
-    display: flex;
-    gap: 8px;
-    align-items: center;
-    flex-wrap: wrap;
-}
+			.dashboard-section-controls {
+				display: flex;
+				gap: 8px;
+				align-items: center;
+				flex-wrap: wrap;
+			}
 
-.dashboard-month-select {
-    background: var(--bg-tertiary);
-    border: 1px solid var(--border-color);
-    border-radius: 30px;
-    padding: 6px 14px;
-    font-size: 0.72rem;
-    font-weight: 600;
-    color: var(--text-secondary);
-    cursor: pointer;
-    font-family: inherit;
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
-    transition: var(--transition);
-}
+			.dashboard-month-select {
+				background: var(--bg-tertiary);
+				border: 1px solid var(--border-color);
+				border-radius: 30px;
+				padding: 6px 14px;
+				font-size: 0.72rem;
+				font-weight: 600;
+				color: var(--text-secondary);
+				cursor: pointer;
+				font-family: inherit;
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
+				transition: var(--transition);
+			}
 
-.dashboard-month-select:hover {
-    border-color: var(--accent-color);
-    color: var(--accent-color);
-}
+			.dashboard-month-select:hover {
+				border-color: var(--accent-color);
+				color: var(--accent-color);
+			}
 
-.dashboard-month-select:focus {
-    outline: none;
-    border-color: var(--accent-color);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-}
+			.dashboard-month-select:focus {
+				outline: none;
+				border-color: var(--accent-color);
+				box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+			}
 
-.dashboard-section-controls .dashboard-refresh-btn.active {
-    background: var(--accent-color);
-    color: #fff;
-    border-color: var(--accent-color);
-}
+			.dashboard-section-controls .dashboard-refresh-btn.active {
+				background: var(--accent-color);
+				color: #fff;
+				border-color: var(--accent-color);
+			}
 		</style>
 	</head>
 	<body>
@@ -3655,37 +3655,37 @@
 						</div>
 
 						<!-- Top 10 Common Issues by Module -->
-<div class="dashboard-section">
-    <div class="dashboard-section-header">
-        <h3>
-            🔥 Top 10 Common Issues by Module
-            <span id="topModulesSubtitle" style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500">(This Month)</span>
-        </h3>
-        <div class="dashboard-section-controls">
-            <select id="modulesMonthSelect" class="dashboard-month-select" onchange="onModulesMonthChange(this.value)"></select>
-        </div>
-    </div>
-    <div id="topModulesContainer">
-        <div class="performers-empty">Loading...</div>
-    </div>
-</div>
+						<div class="dashboard-section">
+							<div class="dashboard-section-header">
+								<h3>
+									🔥 Top 10 Common Issues by Module
+									<span id="topModulesSubtitle" style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500">(This Month)</span>
+								</h3>
+								<div class="dashboard-section-controls">
+									<select id="modulesMonthSelect" class="dashboard-month-select" onchange="onModulesMonthChange(this.value)"></select>
+								</div>
+							</div>
+							<div id="topModulesContainer">
+								<div class="performers-empty">Loading...</div>
+							</div>
+						</div>
 
 						<!-- Top performers -->
-<div class="dashboard-section">
-    <div class="dashboard-section-header">
-        <h3>
-            <span id="topPerformersTitle">🏆 Top 5 Performing Support</span>
-            <span id="topPerformersSubtitle" style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500">(This Month)</span>
-        </h3>
-        <div class="dashboard-section-controls">
-            <select id="performersMonthSelect" class="dashboard-month-select" onchange="onPerformersMonthChange(this.value)"></select>
-            <button id="performersShowAllBtn" class="dashboard-refresh-btn" onclick="togglePerformersShowAll()">Show All</button>
-        </div>
-    </div>
-    <div id="topPerformersContainer">
-        <div class="performers-empty">Loading...</div>
-    </div>
-</div>
+						<div class="dashboard-section">
+							<div class="dashboard-section-header">
+								<h3>
+									<span id="topPerformersTitle">🏆 Top 5 Performing Support</span>
+									<span id="topPerformersSubtitle" style="font-size: 0.7rem; color: var(--text-muted); font-weight: 500">(This Month)</span>
+								</h3>
+								<div class="dashboard-section-controls">
+									<select id="performersMonthSelect" class="dashboard-month-select" onchange="onPerformersMonthChange(this.value)"></select>
+									<button id="performersShowAllBtn" class="dashboard-refresh-btn" onclick="togglePerformersShowAll()">Show All</button>
+								</div>
+							</div>
+							<div id="topPerformersContainer">
+								<div class="performers-empty">Loading...</div>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -4453,7 +4453,9 @@
 						<!-- Right panel: preview -->
 						<div class="right-panel" id="ecommerce-previewPanel">
 							<h3>🔍 EMAIL PREVIEW</h3>
-							<div id="ecommerce-email-draft" style="white-space: pre-wrap; background: var(--bg-tertiary); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.88rem; line-height: 1.6; color: var(--text-primary); font-family: &quot;Inter&quot;, system-ui, sans-serif; word-wrap: break-word; overflow-wrap: break-word">Good day! Hope you are doing well, kindly see the API Credentials and the attached integration file below, Store Name: Zip Code: Portal: [API] Link: Username: Password: P@$$w0rd123</div>
+							<div id="ecommerce-email-draft" style="white-space: pre-wrap; background: var(--bg-tertiary); padding: 16px; border-radius: 12px; border: 1px solid var(--border-color); font-size: 0.88rem; line-height: 1.6; color: var(--text-primary); font-family: &quot;Inter&quot;, system-ui, sans-serif; word-wrap: break-word; overflow-wrap: break-word">
+								Good day! Hope you are doing well, kindly see the API Credentials and the attached integration file below, Store Name: Zip Code: Portal: [API] Link: Username: Password: P@$$w0rd123
+							</div>
 							<div style="display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap">
 								<button class="copy-all-btn" id="ecommerce-createDraftBtn" type="button" onclick="openEcommerceDraftEmail()" style="flex: 1; margin-top: 0">📧 Create Draft in Gmail</button>
 								<button class="copy-all-btn" id="ecommerce-copyDraftBtn" type="button" onclick="copyEcommerceDraft()" style="flex: 1; margin-top: 0; background: var(--text-muted); border-color: var(--text-muted)">📋 Copy Draft</button>
@@ -4840,7 +4842,81 @@
 
 				const CONSTANT_ISSUE = `CREATE MOOLAH ACCOUNT - DONE ✅\nINSTALL & UPDATE ALL APPS - DONE ✅\nASSIGN STORE - DONE ✅`;
 
-				const MODULE_OPTIONS = ["POS", "Portal", "Mobile App", "Cash Register", "Item Management", "Inventory", "Back Office", "Credit Card Terminal", "Printer", "Transactions", "Scan-Data", "Promotions", "Reports", "Register Setup", "Store Creation", "Rocket Application", "Moolah", "API", "Database import/export", "Gift Card", "Employee", "EDI", "Demo", "Training", "Credentials", "Other", "MIGRATION", "Version Update", "EBT", "Cash drawer", "LABEL PRINTER", "BULK CHANGE", "CRASH - APK", "SERVER", "TOUCH SCREEN", "CHANGE STORE/EMAIL ID", "Customer Module", "Age Check", "Internet", "SYNC DATA", "Surcharge", "Image set", "Scanner", "TENDER", "TIME CARD", "BANK DEPOSITE", "E-Commerce", "Dual Price", "Lotto Guru", "Tax", "LABEL UTILITY", "FACTORY RESET", "DB EXPORT", "Adjustments", "NVR", "RECEIPT", "RETAILZGO", "INVOICE", "SOLINK INTEGRATION", "Price Level", "CashBack", "Customer Screen", "Active / Deactive", "Store", "OCR", "DEVICE ID", "Invoicely RAI", "Exe Install", "NETWORK", "RetailzPOS Label Printer", "CAMERA INTEGRATION", "PURCHASE ORDER", "Hardware Setup"];
+				const MODULE_OPTIONS = [
+					"POS",
+					"Portal",
+					"Mobile App",
+					"Cash Register",
+					"Item Management",
+					"Inventory",
+					"Back Office",
+					"Credit Card Terminal",
+					"Printer",
+					"Transactions",
+					"Scan-Data",
+					"Promotions",
+					"Reports",
+					"Register Setup",
+					"Store Creation",
+					"Rocket Application",
+					"Moolah",
+					"API",
+					"Database import/export",
+					"Gift Card",
+					"Employee",
+					"EDI",
+					"Demo",
+					"Training",
+					"Credentials",
+					"Other",
+					"MIGRATION",
+					"Version Update",
+					"EBT",
+					"Cash drawer",
+					"LABEL PRINTER",
+					"BULK CHANGE",
+					"CRASH - APK",
+					"SERVER",
+					"TOUCH SCREEN",
+					"CHANGE STORE/EMAIL ID",
+					"Customer Module",
+					"Age Check",
+					"Internet",
+					"SYNC DATA",
+					"Surcharge",
+					"Image set",
+					"Scanner",
+					"TENDER",
+					"TIME CARD",
+					"BANK DEPOSITE",
+					"E-Commerce",
+					"Dual Price",
+					"Lotto Guru",
+					"Tax",
+					"LABEL UTILITY",
+					"FACTORY RESET",
+					"DB EXPORT",
+					"Adjustments",
+					"NVR",
+					"RECEIPT",
+					"RETAILZGO",
+					"INVOICE",
+					"SOLINK INTEGRATION",
+					"Price Level",
+					"CashBack",
+					"Customer Screen",
+					"Active / Deactive",
+					"Store",
+					"OCR",
+					"DEVICE ID",
+					"Invoicely RAI",
+					"Exe Install",
+					"NETWORK",
+					"RetailzPOS Label Printer",
+					"CAMERA INTEGRATION",
+					"PURCHASE ORDER",
+					"Hardware Setup",
+				];
 				const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
 				const SHIFT_OPTIONS = ["9PM - 6AM", "5AM - 2PM", "2PM - 11PM"];
 
@@ -7946,7 +8022,15 @@
 								<div style="margin-left:50px;">Moolah Points: Version Code 42 (Portal 1, 2, 3, OHIO, 5, 6, 7, 8, 9, X, XI)</div>
 						    `;
 
-					const remindersItems = ["Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.", "Ask seniors assistance for issue that needed to be escalated to the India team", "Observe professional call etiquette at all times when handling calls.", "Follow up on any pending tickets and ensure timely updates.", "Review pending issues and escalations using the newly added features in our existing workload tracker", "Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.", "Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history."];
+					const remindersItems = [
+						"Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.",
+						"Ask seniors assistance for issue that needed to be escalated to the India team",
+						"Observe professional call etiquette at all times when handling calls.",
+						"Follow up on any pending tickets and ensure timely updates.",
+						"Review pending issues and escalations using the newly added features in our existing workload tracker",
+						"Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.",
+						"Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.",
+					];
 					const remindersListHtml = `<ul style="margin:4px 0 0 25px; padding-left:20px;">` + remindersItems.map((item) => `<li style="margin:0;">${escapeHtml(item)}</li>`).join("") + `</ul>`;
 
 					const staticSections = `
@@ -9541,54 +9625,62 @@
 				}
 
 				function renderTopModules(data, monthPrefix) {
-    const container = document.getElementById("topModulesContainer");
-    if (!container) return;
+					const container = document.getElementById("topModulesContainer");
+					if (!container) return;
 
-    if (!monthPrefix) {
-        monthPrefix = getESTDateString().slice(0, 7);
-    }
+					if (!monthPrefix) {
+						monthPrefix = getESTDateString().slice(0, 7);
+					}
 
-    if (!data || !data.values || data.values.length < 2) {
-        container.innerHTML = '<div class="performers-empty">No data available.</div>';
-        return;
-    }
+					if (!data || !data.values || data.values.length < 2) {
+						container.innerHTML = '<div class="performers-empty">No data available.</div>';
+						return;
+					}
 
-    const headers = data.values[0].map((h) => String(h || "").trim().toUpperCase());
-    const dateIdx = headers.findIndex((h) => h.includes("DATE"));
-    const moduleIdx = headers.findIndex((h) => h === "MODULE" || h.includes("MODULE"));
+					const headers = data.values[0].map((h) =>
+						String(h || "")
+							.trim()
+							.toUpperCase(),
+					);
+					const dateIdx = headers.findIndex((h) => h.includes("DATE"));
+					const moduleIdx = headers.findIndex((h) => h === "MODULE" || h.includes("MODULE"));
 
-    if (dateIdx < 0 || moduleIdx < 0) {
-        container.innerHTML = '<div class="performers-empty">Module or Date column not found in sheet.</div>';
-        return;
-    }
+					if (dateIdx < 0 || moduleIdx < 0) {
+						container.innerHTML = '<div class="performers-empty">Module or Date column not found in sheet.</div>';
+						return;
+					}
 
-    const counts = {};
-    for (let i = 1; i < data.values.length; i++) {
-        const row = data.values[i];
-        const rowDate = normalizeDashboardDate(row[dateIdx]);
-        if (!rowDate || !rowDate.startsWith(monthPrefix)) continue;
-        const mod = String(row[moduleIdx] || "").trim().toUpperCase();
-        if (!mod) continue;
-        counts[mod] = (counts[mod] || 0) + 1;
-    }
+					const counts = {};
+					for (let i = 1; i < data.values.length; i++) {
+						const row = data.values[i];
+						const rowDate = normalizeDashboardDate(row[dateIdx]);
+						if (!rowDate || !rowDate.startsWith(monthPrefix)) continue;
+						const mod = String(row[moduleIdx] || "")
+							.trim()
+							.toUpperCase();
+						if (!mod) continue;
+						counts[mod] = (counts[mod] || 0) + 1;
+					}
 
-    const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 10);
+					const sorted = Object.entries(counts)
+						.sort((a, b) => b[1] - a[1])
+						.slice(0, 10);
 
-    if (!sorted.length) {
-        container.innerHTML = `<div class="performers-empty">No issues recorded in ${formatMonthLabel(monthPrefix)}.</div>`;
-        return;
-    }
+					if (!sorted.length) {
+						container.innerHTML = `<div class="performers-empty">No issues recorded in ${formatMonthLabel(monthPrefix)}.</div>`;
+						return;
+					}
 
-    const maxCount = sorted[0][1];
-    const monthName = formatMonthLabel(monthPrefix);
+					const maxCount = sorted[0][1];
+					const monthName = formatMonthLabel(monthPrefix);
 
-    container.innerHTML =
-        `<div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 600;">${monthName}</div>` +
-        sorted
-            .map(([mod, count], idx) => {
-                const pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
-                const rankClass = idx < 3 ? "top-3" : "";
-                return `
+					container.innerHTML =
+						`<div style="font-size: 0.7rem; color: var(--text-muted); margin-bottom: 10px; font-weight: 600;">${monthName}</div>` +
+						sorted
+							.map(([mod, count], idx) => {
+								const pct = maxCount > 0 ? (count / maxCount) * 100 : 0;
+								const rankClass = idx < 3 ? "top-3" : "";
+								return `
                 <div class="module-stat-row">
                     <div class="module-stat-rank ${rankClass}">${idx + 1}</div>
                     <div class="module-stat-name" title="${escapeHtml(mod)}">${escapeHtml(mod)}</div>
@@ -9597,112 +9689,122 @@
                     </div>
                 </div>
             `;
-            })
-            .join("");
-}
+							})
+							.join("");
+				}
 
-			/* ==================== DASHBOARD MONTH/PERFORMER STATE ==================== */
-let dashboardWorkloadData = null;
-let performersMonthPrefix = null;   // "YYYY-MM"
-let modulesMonthPrefix = null;      // "YYYY-MM"
-let allPerformersForMonth = [];     // full sorted list for current month selection
-let performersShowAll = false;
+				/* ==================== DASHBOARD MONTH/PERFORMER STATE ==================== */
+				let dashboardWorkloadData = null;
+				let performersMonthPrefix = null; // "YYYY-MM"
+				let modulesMonthPrefix = null; // "YYYY-MM"
+				let allPerformersForMonth = []; // full sorted list for current month selection
+				let performersShowAll = false;
 
-function formatMonthLabel(ym) {
-    if (!ym) return "";
-    const [y, m] = ym.split("-").map(Number);
-    if (!y || !m) return ym;
-    return new Date(y, m - 1, 1).toLocaleString("default", { month: "long", year: "numeric" });
-}
+				function formatMonthLabel(ym) {
+					if (!ym) return "";
+					const [y, m] = ym.split("-").map(Number);
+					if (!y || !m) return ym;
+					return new Date(y, m - 1, 1).toLocaleString("default", { month: "long", year: "numeric" });
+				}
 
-function getAvailableMonths(data) {
-    const months = new Set();
-    if (!data || !data.values || data.values.length < 2) return [];
-    const headers = data.values[0].map((h) => String(h || "").trim().toUpperCase());
-    const dateIdx = headers.findIndex((h) => h.includes("DATE"));
-    if (dateIdx < 0) return [];
-    for (let i = 1; i < data.values.length; i++) {
-        const rowDate = normalizeDashboardDate(data.values[i][dateIdx]);
-        if (!rowDate || rowDate.length < 7) continue;
-        months.add(rowDate.slice(0, 7));
-    }
-    return Array.from(months).sort().reverse(); // newest first
-}
+				function getAvailableMonths(data) {
+					const months = new Set();
+					if (!data || !data.values || data.values.length < 2) return [];
+					const headers = data.values[0].map((h) =>
+						String(h || "")
+							.trim()
+							.toUpperCase(),
+					);
+					const dateIdx = headers.findIndex((h) => h.includes("DATE"));
+					if (dateIdx < 0) return [];
+					for (let i = 1; i < data.values.length; i++) {
+						const rowDate = normalizeDashboardDate(data.values[i][dateIdx]);
+						if (!rowDate || rowDate.length < 7) continue;
+						months.add(rowDate.slice(0, 7));
+					}
+					return Array.from(months).sort().reverse(); // newest first
+				}
 
-function populateMonthSelect(selectEl, months, selected) {
-    if (!selectEl) return;
-    if (!months || months.length === 0) {
-        selectEl.innerHTML = '<option value="">No data</option>';
-        return;
-    }
-    selectEl.innerHTML = months
-        .map((m) => `<option value="${m}" ${m === selected ? "selected" : ""}>${formatMonthLabel(m)}</option>`)
-        .join("");
-}
+				function populateMonthSelect(selectEl, months, selected) {
+					if (!selectEl) return;
+					if (!months || months.length === 0) {
+						selectEl.innerHTML = '<option value="">No data</option>';
+						return;
+					}
+					selectEl.innerHTML = months.map((m) => `<option value="${m}" ${m === selected ? "selected" : ""}>${formatMonthLabel(m)}</option>`).join("");
+				}
 
-function computePerformers(data, monthPrefix) {
-    if (!data || !data.values || data.values.length < 2 || !monthPrefix) return [];
-    const headers = data.values[0].map((h) => String(h || "").trim().toUpperCase());
-    const dateIdx = headers.findIndex((h) => h.includes("DATE"));
-    const supportIdx = headers.findIndex((h) => h.includes("SUPPORT"));
-    const statusIdx = headers.findIndex((h) => h === "STATUS" || h.includes("STATUS"));
-    if (dateIdx < 0 || supportIdx < 0 || statusIdx < 0) return [];
+				function computePerformers(data, monthPrefix) {
+					if (!data || !data.values || data.values.length < 2 || !monthPrefix) return [];
+					const headers = data.values[0].map((h) =>
+						String(h || "")
+							.trim()
+							.toUpperCase(),
+					);
+					const dateIdx = headers.findIndex((h) => h.includes("DATE"));
+					const supportIdx = headers.findIndex((h) => h.includes("SUPPORT"));
+					const statusIdx = headers.findIndex((h) => h === "STATUS" || h.includes("STATUS"));
+					if (dateIdx < 0 || supportIdx < 0 || statusIdx < 0) return [];
 
-    const supportStats = {};
-    for (let i = 1; i < data.values.length; i++) {
-        const row = data.values[i];
-        const rowDate = normalizeDashboardDate(row[dateIdx]);
-        if (!rowDate || !rowDate.startsWith(monthPrefix)) continue;
-        const rowSupport = String(row[supportIdx] || "").trim().toUpperCase();
-        if (!rowSupport) continue;
-        const status = String(row[statusIdx] || "").trim().toUpperCase();
+					const supportStats = {};
+					for (let i = 1; i < data.values.length; i++) {
+						const row = data.values[i];
+						const rowDate = normalizeDashboardDate(row[dateIdx]);
+						if (!rowDate || !rowDate.startsWith(monthPrefix)) continue;
+						const rowSupport = String(row[supportIdx] || "")
+							.trim()
+							.toUpperCase();
+						if (!rowSupport) continue;
+						const status = String(row[statusIdx] || "")
+							.trim()
+							.toUpperCase();
 
-        if (!supportStats[rowSupport]) supportStats[rowSupport] = { dates: new Set(), ticketCount: 0 };
-        supportStats[rowSupport].dates.add(rowDate);
-        if (status !== "OTHER TASK" && status !== "") {
-            supportStats[rowSupport].ticketCount++;
-        }
-    }
+						if (!supportStats[rowSupport]) supportStats[rowSupport] = { dates: new Set(), ticketCount: 0 };
+						supportStats[rowSupport].dates.add(rowDate);
+						if (status !== "OTHER TASK" && status !== "") {
+							supportStats[rowSupport].ticketCount++;
+						}
+					}
 
-    return Object.entries(supportStats)
-        .map(([support, stats]) => ({ support, totalTickets: stats.ticketCount, days: stats.dates.size }))
-        .filter((p) => p.totalTickets > 0)
-        .sort((a, b) => b.totalTickets - a.totalTickets);
-}
+					return Object.entries(supportStats)
+						.map(([support, stats]) => ({ support, totalTickets: stats.ticketCount, days: stats.dates.size }))
+						.filter((p) => p.totalTickets > 0)
+						.sort((a, b) => b.totalTickets - a.totalTickets);
+				}
 
-function renderPerformersSection() {
-    const container = document.getElementById("topPerformersContainer");
-    const titleEl = document.getElementById("topPerformersTitle");
-    const subtitleEl = document.getElementById("topPerformersSubtitle");
-    const showAllBtn = document.getElementById("performersShowAllBtn");
-    if (!container) return;
+				function renderPerformersSection() {
+					const container = document.getElementById("topPerformersContainer");
+					const titleEl = document.getElementById("topPerformersTitle");
+					const subtitleEl = document.getElementById("topPerformersSubtitle");
+					const showAllBtn = document.getElementById("performersShowAllBtn");
+					if (!container) return;
 
-    const hasMore = allPerformersForMonth.length > 5;
-    const effectiveShowAll = performersShowAll && hasMore;
+					const hasMore = allPerformersForMonth.length > 5;
+					const effectiveShowAll = performersShowAll && hasMore;
 
-    if (titleEl) titleEl.textContent = effectiveShowAll ? "🏆 All Performing Support" : "🏆 Top 5 Performing Support";
+					if (titleEl) titleEl.textContent = effectiveShowAll ? "🏆 All Performing Support" : "🏆 Top 5 Performing Support";
 
-    if (subtitleEl) {
-        const currentMonthPrefix = getESTDateString().slice(0, 7);
-        subtitleEl.textContent = performersMonthPrefix === currentMonthPrefix ? "(This Month)" : `(${formatMonthLabel(performersMonthPrefix)})`;
-    }
+					if (subtitleEl) {
+						const currentMonthPrefix = getESTDateString().slice(0, 7);
+						subtitleEl.textContent = performersMonthPrefix === currentMonthPrefix ? "(This Month)" : `(${formatMonthLabel(performersMonthPrefix)})`;
+					}
 
-    if (showAllBtn) {
-        showAllBtn.style.display = hasMore ? "" : "none";
-        showAllBtn.textContent = effectiveShowAll ? "Show Top 5" : "Show All";
-        showAllBtn.classList.toggle("active", effectiveShowAll);
-    }
+					if (showAllBtn) {
+						showAllBtn.style.display = hasMore ? "" : "none";
+						showAllBtn.textContent = effectiveShowAll ? "Show Top 5" : "Show All";
+						showAllBtn.classList.toggle("active", effectiveShowAll);
+					}
 
-    if (!allPerformersForMonth || allPerformersForMonth.length === 0) {
-        container.innerHTML = '<div class="performers-empty">No performance data available for this month.</div>';
-        return;
-    }
+					if (!allPerformersForMonth || allPerformersForMonth.length === 0) {
+						container.innerHTML = '<div class="performers-empty">No performance data available for this month.</div>';
+						return;
+					}
 
-    const displayed = effectiveShowAll ? allPerformersForMonth : allPerformersForMonth.slice(0, 5);
+					const displayed = effectiveShowAll ? allPerformersForMonth : allPerformersForMonth.slice(0, 5);
 
-    const rows = displayed
-        .map(
-            (p, i) => `
+					const rows = displayed
+						.map(
+							(p, i) => `
         <tr>
             <td><span class="performer-rank rank-${i + 1}">${i + 1}</span></td>
             <td><strong>${escapeHtml(p.support)}</strong></td>
@@ -9710,10 +9812,10 @@ function renderPerformersSection() {
             <td><span class="performer-details">Active ${p.days} day${p.days !== 1 ? "s" : ""} this month</span></td>
         </tr>
     `,
-        )
-        .join("");
+						)
+						.join("");
 
-    container.innerHTML = `
+					container.innerHTML = `
         <table class="performers-table">
             <thead>
                 <tr>
@@ -9726,146 +9828,157 @@ function renderPerformersSection() {
             <tbody>${rows}</tbody>
         </table>
     `;
-}
+				}
 
-function updateModulesSubtitle() {
-    const el = document.getElementById("topModulesSubtitle");
-    if (!el) return;
-    const currentMonthPrefix = getESTDateString().slice(0, 7);
-    el.textContent = modulesMonthPrefix === currentMonthPrefix ? "(This Month)" : `(${formatMonthLabel(modulesMonthPrefix)})`;
-}
+				function updateModulesSubtitle() {
+					const el = document.getElementById("topModulesSubtitle");
+					if (!el) return;
+					const currentMonthPrefix = getESTDateString().slice(0, 7);
+					el.textContent = modulesMonthPrefix === currentMonthPrefix ? "(This Month)" : `(${formatMonthLabel(modulesMonthPrefix)})`;
+				}
 
-window.onPerformersMonthChange = function (value) {
-    performersMonthPrefix = value;
-    allPerformersForMonth = dashboardWorkloadData ? computePerformers(dashboardWorkloadData, performersMonthPrefix) : [];
-    renderPerformersSection();
-};
+				window.onPerformersMonthChange = function (value) {
+					performersMonthPrefix = value;
+					allPerformersForMonth = dashboardWorkloadData ? computePerformers(dashboardWorkloadData, performersMonthPrefix) : [];
+					renderPerformersSection();
+				};
 
-window.onModulesMonthChange = function (value) {
-    modulesMonthPrefix = value;
-    renderTopModules(dashboardWorkloadData, modulesMonthPrefix);
-    updateModulesSubtitle();
-};
+				window.onModulesMonthChange = function (value) {
+					modulesMonthPrefix = value;
+					renderTopModules(dashboardWorkloadData, modulesMonthPrefix);
+					updateModulesSubtitle();
+				};
 
-window.togglePerformersShowAll = function () {
-    performersShowAll = !performersShowAll;
-    renderPerformersSection();
-};
+				window.togglePerformersShowAll = function () {
+					performersShowAll = !performersShowAll;
+					renderPerformersSection();
+				};
 
 				async function loadDashboardData() {
-    const currentUser = getLoggedInUser();
-    const container = document.getElementById("dashboardContainer");
-    if (!container) return;
+					const currentUser = getLoggedInUser();
+					const container = document.getElementById("dashboardContainer");
+					if (!container) return;
 
-    if (!currentUser) {
-        container.style.display = "none";
-        return;
-    }
-    container.style.display = "";
+					if (!currentUser) {
+						container.style.display = "none";
+						return;
+					}
+					container.style.display = "";
 
-    const userSupport = (currentUser.support || "").trim().toUpperCase();
-    const todayEST = getESTDateString();
-    const yesterdayEST = getYesterdayEST();
+					const userSupport = (currentUser.support || "").trim().toUpperCase();
+					const todayEST = getESTDateString();
+					const yesterdayEST = getYesterdayEST();
 
-    setDashboardLoading(true);
+					setDashboardLoading(true);
 
-    try {
-        const data = await getWorkloadTrackerData();
-        dashboardWorkloadData = data;
+					try {
+						const data = await getWorkloadTrackerData();
+						dashboardWorkloadData = data;
 
-        if (data.values && data.values.length >= 2) {
-            const headers = data.values[0].map((h) => String(h || "").trim().toUpperCase());
-            const dateIdx = headers.findIndex((h) => h.includes("DATE"));
-            const supportIdx = headers.findIndex((h) => h.includes("SUPPORT"));
-            const statusIdx = headers.findIndex((h) => h === "STATUS" || h.includes("STATUS"));
+						if (data.values && data.values.length >= 2) {
+							const headers = data.values[0].map((h) =>
+								String(h || "")
+									.trim()
+									.toUpperCase(),
+							);
+							const dateIdx = headers.findIndex((h) => h.includes("DATE"));
+							const supportIdx = headers.findIndex((h) => h.includes("SUPPORT"));
+							const statusIdx = headers.findIndex((h) => h === "STATUS" || h.includes("STATUS"));
 
-            if (dateIdx >= 0 && statusIdx >= 0) {
-                let yourToday = 0,
-                    yourYesterday = 0;
-                let todaysTicket = 0,
-                    resolved = 0,
-                    pending = 0,
-                    other = 0;
+							if (dateIdx >= 0 && statusIdx >= 0) {
+								let yourToday = 0,
+									yourYesterday = 0;
+								let todaysTicket = 0,
+									resolved = 0,
+									pending = 0,
+									other = 0;
 
-                for (let i = 1; i < data.values.length; i++) {
-                    const row = data.values[i];
-                    const rowDate = normalizeDashboardDate(row[dateIdx]);
-                    const status = String(row[statusIdx] || "").trim().toUpperCase();
-                    const rowSupport = supportIdx >= 0 ? String(row[supportIdx] || "").trim().toUpperCase() : "";
-                    const isMine = supportIdx >= 0 && rowSupport === userSupport;
+								for (let i = 1; i < data.values.length; i++) {
+									const row = data.values[i];
+									const rowDate = normalizeDashboardDate(row[dateIdx]);
+									const status = String(row[statusIdx] || "")
+										.trim()
+										.toUpperCase();
+									const rowSupport =
+										supportIdx >= 0
+											? String(row[supportIdx] || "")
+													.trim()
+													.toUpperCase()
+											: "";
+									const isMine = supportIdx >= 0 && rowSupport === userSupport;
 
-                    // Overall pending (all dates)
-                    if (status === "PENDING") pending++;
+									// Overall pending (all dates)
+									if (status === "PENDING") pending++;
 
-                    if (rowDate !== todayEST && rowDate !== yesterdayEST) continue;
+									if (rowDate !== todayEST && rowDate !== yesterdayEST) continue;
 
-                    if (rowDate === todayEST) {
-                        todaysTicket++;
-                        if (status === "RESOLVED") resolved++;
-                        else if (status === "OTHER TASK") other++;
-                    }
+									if (rowDate === todayEST) {
+										todaysTicket++;
+										if (status === "RESOLVED") resolved++;
+										else if (status === "OTHER TASK") other++;
+									}
 
-                    const isCountable = status === "RESOLVED" || status === "OTHER TASK";
-                    if (isMine && isCountable) {
-                        if (rowDate === todayEST) yourToday++;
-                        else if (rowDate === yesterdayEST) yourYesterday++;
-                    }
-                }
+									const isCountable = status === "RESOLVED" || status === "OTHER TASK";
+									if (isMine && isCountable) {
+										if (rowDate === todayEST) yourToday++;
+										else if (rowDate === yesterdayEST) yourYesterday++;
+									}
+								}
 
-                // === Month selectors for Top 10 / Top 5 ===
-                const availableMonths = getAvailableMonths(data);
-                const currentMonthPrefix = todayEST.slice(0, 7);
+								// === Month selectors for Top 10 / Top 5 ===
+								const availableMonths = getAvailableMonths(data);
+								const currentMonthPrefix = todayEST.slice(0, 7);
 
-                if (!performersMonthPrefix || !availableMonths.includes(performersMonthPrefix)) {
-                    performersMonthPrefix = availableMonths.includes(currentMonthPrefix) ? currentMonthPrefix : availableMonths[0] || currentMonthPrefix;
-                }
-                if (!modulesMonthPrefix || !availableMonths.includes(modulesMonthPrefix)) {
-                    modulesMonthPrefix = availableMonths.includes(currentMonthPrefix) ? currentMonthPrefix : availableMonths[0] || currentMonthPrefix;
-                }
+								if (!performersMonthPrefix || !availableMonths.includes(performersMonthPrefix)) {
+									performersMonthPrefix = availableMonths.includes(currentMonthPrefix) ? currentMonthPrefix : availableMonths[0] || currentMonthPrefix;
+								}
+								if (!modulesMonthPrefix || !availableMonths.includes(modulesMonthPrefix)) {
+									modulesMonthPrefix = availableMonths.includes(currentMonthPrefix) ? currentMonthPrefix : availableMonths[0] || currentMonthPrefix;
+								}
 
-                populateMonthSelect(document.getElementById("performersMonthSelect"), availableMonths, performersMonthPrefix);
-                populateMonthSelect(document.getElementById("modulesMonthSelect"), availableMonths, modulesMonthPrefix);
+								populateMonthSelect(document.getElementById("performersMonthSelect"), availableMonths, performersMonthPrefix);
+								populateMonthSelect(document.getElementById("modulesMonthSelect"), availableMonths, modulesMonthPrefix);
 
-                allPerformersForMonth = computePerformers(data, performersMonthPrefix);
-                renderPerformersSection();
-                renderTopModules(data, modulesMonthPrefix);
-                updateModulesSubtitle();
-                renderSlaAlerts(computeSlaAlerts(data));
+								allPerformersForMonth = computePerformers(data, performersMonthPrefix);
+								renderPerformersSection();
+								renderTopModules(data, modulesMonthPrefix);
+								updateModulesSubtitle();
+								renderSlaAlerts(computeSlaAlerts(data));
 
-                document.getElementById("dashYourTotalToday").textContent = yourToday;
-                document.getElementById("dashYesterdayTotal").textContent = yourYesterday;
-                document.getElementById("dashTodaysTicket").textContent = todaysTicket;
-                document.getElementById("dashTotalResolved").textContent = resolved;
-                document.getElementById("dashTotalPending").textContent = pending;
-                document.getElementById("dashTotalOtherTasks").textContent = other;
-            } else {
-                ["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0"));
-                allPerformersForMonth = [];
-                renderPerformersSection();
-                renderTopModules(null, performersMonthPrefix);
-                updateModulesSubtitle();
-                renderSlaAlerts([]);
-            }
-        } else {
-            ["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0"));
-            allPerformersForMonth = [];
-            renderPerformersSection();
-            renderTopModules(null, performersMonthPrefix);
-            updateModulesSubtitle();
-            renderSlaAlerts([]);
-        }
-    } catch (err) {
-        console.warn("Dashboard WORKLOAD TRACKER fetch failed:", err);
-        ["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "--"));
-        allPerformersForMonth = [];
-        renderPerformersSection();
-        renderTopModules(null, performersMonthPrefix);
-        updateModulesSubtitle();
-        renderSlaAlerts([]);
-    }
+								document.getElementById("dashYourTotalToday").textContent = yourToday;
+								document.getElementById("dashYesterdayTotal").textContent = yourYesterday;
+								document.getElementById("dashTodaysTicket").textContent = todaysTicket;
+								document.getElementById("dashTotalResolved").textContent = resolved;
+								document.getElementById("dashTotalPending").textContent = pending;
+								document.getElementById("dashTotalOtherTasks").textContent = other;
+							} else {
+								["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0"));
+								allPerformersForMonth = [];
+								renderPerformersSection();
+								renderTopModules(null, performersMonthPrefix);
+								updateModulesSubtitle();
+								renderSlaAlerts([]);
+							}
+						} else {
+							["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "0"));
+							allPerformersForMonth = [];
+							renderPerformersSection();
+							renderTopModules(null, performersMonthPrefix);
+							updateModulesSubtitle();
+							renderSlaAlerts([]);
+						}
+					} catch (err) {
+						console.warn("Dashboard WORKLOAD TRACKER fetch failed:", err);
+						["dashYourTotalToday", "dashYesterdayTotal", "dashTodaysTicket", "dashTotalResolved", "dashTotalPending", "dashTotalOtherTasks"].forEach((id) => (document.getElementById(id).textContent = "--"));
+						allPerformersForMonth = [];
+						renderPerformersSection();
+						renderTopModules(null, performersMonthPrefix);
+						updateModulesSubtitle();
+						renderSlaAlerts([]);
+					}
 
-    setDashboardLoading(false);
-}
+					setDashboardLoading(false);
+				}
 
 				/* ==================== ANNOUNCEMENTS (carousel + tab) ==================== */
 				let allAnnouncementsCache = [];
@@ -12180,7 +12293,6 @@ window.togglePerformersShowAll = function () {
 		<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
 
-		<!-- Knowledge Base Entry Modal -->
 		<div id="kbEntryModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
 			<h3 id="kbEntryModalTitle" style="margin-bottom: 16px">📚 Add Knowledge Base Entry</h3>
 			<input type="hidden" id="kbEntrySource" />
