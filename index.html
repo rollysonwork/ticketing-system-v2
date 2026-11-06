@@ -3476,6 +3476,12 @@
 					min-height: 110px;
 				}
 			}
+			.schedule-name-item.shift-pinned::after {
+				content: "📌";
+				font-size: 0.6rem;
+				margin-left: 4px;
+				opacity: 0.7;
+			}
 		</style>
 	</head>
 	<body>
@@ -10967,6 +10973,10 @@
 						const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 						const isToday = dateStr === todayStr;
 						const people = (byDate[dateStr] || []).filter((p) => {
+							// ✅ Always show the logged-in user's own name,
+							// regardless of which shifts are toggled off.
+							if (myName && p.name === myName) return true;
+
 							const k = getShiftKey(p.shift);
 							if (k === null) return true; // unknown shift — always show
 							return scheduleVisibleShifts[k] !== false; // shown unless toggled off
@@ -10988,9 +10998,12 @@
 						sorted.forEach((p) => {
 							const isMine = myName && p.name === myName;
 							const shiftCls = getShiftClass(p.shift);
-							html += `<div class="schedule-name-item ${shiftCls} ${isMine ? "shift-mine" : ""}"
-                    data-tooltip="${escapeHtml(p.shift)}"
-                    title="${escapeHtml(p.shift)}">${escapeHtml(p.name)}</div>`;
+							const shiftKey = getShiftKey(p.shift);
+							const shiftHidden = shiftKey && scheduleVisibleShifts[shiftKey] === false;
+							const pinnedCls = isMine && shiftHidden ? "shift-pinned" : "";
+							html += `<div class="schedule-name-item ${shiftCls} ${isMine ? "shift-mine" : ""} ${pinnedCls}"
+        data-tooltip="${escapeHtml(p.shift)}"
+        title="${escapeHtml(p.shift)}">${escapeHtml(p.name)}</div>`;
 						});
 
 						html += `</div>`;
@@ -12038,5 +12051,4 @@
 		</div>
 		<div id="announcementModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
 	</body>
-	
 </html>
