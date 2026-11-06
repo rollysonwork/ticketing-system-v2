@@ -11197,11 +11197,10 @@
 				}
 
 				function applyDefaultShiftFilter() {
-					// Never override the user's manual selection.
 					if (scheduleVisibleShiftsManual) return;
 					// All shifts OFF by default.
-					// The user's own rows still appear because renderScheduleCalendar
-					// always keeps `p.name === myName` visible.
+					// With no shifts selected, renderScheduleCalendar pins the logged-in user's own name.
+					// As soon as the user toggles any shift on, that pinning is disabled.
 					scheduleVisibleShifts = { "9PM": false, "5AM": false, "2PM": false };
 					updateScheduleLegendUI();
 				}
@@ -11243,6 +11242,9 @@
 					const todayStr = getESTDateString();
 					const currentUser = getLoggedInUser();
 					const myName = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
+					// True when at least one shift legend is turned ON.
+					// When true → do NOT pin the user's own name.
+					const anyShiftSelected = Object.values(scheduleVisibleShifts).some((v) => v !== false);
 
 					const firstDay = new Date(year, month, 1).getDay();
 					const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -11258,12 +11260,13 @@
 						const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 						const isToday = dateStr === todayStr;
 						const people = (byDate[dateStr] || []).filter((p) => {
-							// ✅ Always keep the logged-in user's own name visible,
-							// regardless of which shift legends are toggled off.
-							if (myName && p.name === myName) return true;
-
 							const k = getShiftKey(p.shift);
 							if (k === null) return true; // unknown shift — always show
+
+							// ✅ Only pin (force-show) the user's own name when NO shift filter is active.
+							// When one or more shifts are selected, the user's own name is filtered like everyone else.
+							if (myName && p.name === myName && !anyShiftSelected) return true;
+
 							return scheduleVisibleShifts[k] !== false; // shown unless toggled off
 						});
 
@@ -11285,7 +11288,8 @@
 							const shiftCls = getShiftClass(p.shift);
 							const shiftKey = getShiftKey(p.shift);
 							const shiftHidden = shiftKey && scheduleVisibleShifts[shiftKey] === false;
-							const pinnedCls = isMine && shiftHidden ? "shift-pinned" : "";
+							// 📌 pin only shows when we're actually in the "no shifts selected" state
+							const pinnedCls = isMine && shiftHidden && !anyShiftSelected ? "shift-pinned" : "";
 							html += `<div class="schedule-name-item ${shiftCls} ${isMine ? "shift-mine" : ""} ${pinnedCls}"
         data-tooltip="${escapeHtml(p.shift)}"
         title="${escapeHtml(p.shift)}">${escapeHtml(p.name)}</div>`;
