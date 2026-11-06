@@ -10747,7 +10747,7 @@
 				const SCHEDULE_FIRST_DAY_COL = 1; // column B = day 1
 				const SCHEDULE_DAYS_PER_MONTH = 28; // 28 days in this sheet
 				const SCHEDULE_DATA_START_ROW = 2; // row 3 = first employee (0-based)
-				const SCHEDULE_SKIP_VALUES = new Set(["DAY-OFF", "HOLIDAY", "VACATION", "SICK", "TRAINING", "LEAVE", "UNAVAILABLE"]);
+				const SCHEDULE_SKIP_VALUES = new Set(["DAY-OFF", "HOLIDAY", "LEAVE"]);
 
 				let scheduleData = null;
 				let scheduleDataLoaded = false;
@@ -11085,7 +11085,6 @@
 					const shifts = byDate[dateStr] || [];
 					const mine = shifts.find((p) => p.name === myName);
 
-					// No shift today → leave whatever the user had. Never insert "DAY-OFF".
 					if (!mine) return;
 
 					const normalized = normalizeShiftTime(mine.shift);
