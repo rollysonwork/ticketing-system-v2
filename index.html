@@ -5227,7 +5227,10 @@
 
 					// ✅ NEW: schedule tab lazy-load + render
 					if (tabName === "schedule") {
-						ensureScheduleLoaded().then(renderScheduleCalendar);
+						ensureScheduleLoaded().then(() => {
+							applyDefaultShiftFilter();
+							renderScheduleCalendar();
+						});
 					}
 
 					if (tabName === "knowledgebase" && !kbLoaded[currentKbType]) {
@@ -10760,23 +10763,37 @@
 				let scheduleView = null; // { year, month }
 				let scheduleParsed = null; // { "YYYY-MM-DD": [{name, shift}] }
 
-				// Which shifts are visible in the calendar. true = shown, false = hidden.
+				// Tracks whether the user has ever manually toggled a shift filter.
+				// When false, we use the "only my schedule" default.
+				let scheduleVisibleShiftsManual = (() => {
+					try {
+						return localStorage.getItem("scheduleVisibleShiftsManual") === "true";
+					} catch (e) {
+						return false;
+					}
+				})();
+
 				let scheduleVisibleShifts = (() => {
 					try {
-						const saved = JSON.parse(localStorage.getItem("scheduleVisibleShifts") || "null");
-						if (saved && typeof saved === "object") {
-							return {
-								"9PM": saved["9PM"] !== false,
-								"5AM": saved["5AM"] !== false,
-								"2PM": saved["2PM"] !== false,
-							};
+						// Only honor a saved state if the user has actually toggled manually.
+						if (scheduleVisibleShiftsManual) {
+							const saved = JSON.parse(localStorage.getItem("scheduleVisibleShifts") || "null");
+							if (saved && typeof saved === "object") {
+								return {
+									"9PM": saved["9PM"] !== false,
+									"5AM": saved["5AM"] !== false,
+									"2PM": saved["2PM"] !== false,
+								};
+							}
 						}
 					} catch (e) {}
-					return { "9PM": true, "5AM": true, "2PM": true };
+					// Default: all off → only the user's own rows show (via the "always show own name" rule)
+					return { "9PM": false, "5AM": false, "2PM": false };
 				})();
 
 				function saveScheduleVisibleShifts() {
 					localStorage.setItem("scheduleVisibleShifts", JSON.stringify(scheduleVisibleShifts));
+					localStorage.setItem("scheduleVisibleShiftsManual", scheduleVisibleShiftsManual ? "true" : "false");
 				}
 
 				function updateScheduleLegendUI() {
@@ -10790,6 +10807,7 @@
 
 				function toggleScheduleShiftVisibility(key) {
 					if (!(key in scheduleVisibleShifts)) return;
+					scheduleVisibleShiftsManual = true; // once the user toggles, remember their choice
 					scheduleVisibleShifts[key] = !scheduleVisibleShifts[key];
 					saveScheduleVisibleShifts();
 					updateScheduleLegendUI();
@@ -10919,6 +10937,16 @@
 
 					scheduleParsed = map;
 					return map;
+				}
+
+				function applyDefaultShiftFilter() {
+					// Never override the user's manual selection.
+					if (scheduleVisibleShiftsManual) return;
+					// All shifts OFF by default.
+					// The user's own rows still appear because renderScheduleCalendar
+					// always keeps `p.name === myName` visible.
+					scheduleVisibleShifts = { "9PM": false, "5AM": false, "2PM": false };
+					updateScheduleLegendUI();
 				}
 
 				function renderScheduleCalendar() {
@@ -11196,10 +11224,13 @@
 					});
 					updateScheduleLegendUI();
 
-					// Preload schedule so the sidebar auto-fill works even before the tab is opened
 					setTimeout(async () => {
 						await ensureScheduleLoaded();
 						autoFillShiftScheduleFromSheet(true); // showNotif on first run
+						applyDefaultShiftFilter();
+						if (currentActiveTab === "schedule") {
+							renderScheduleCalendar();
+						}
 					}, 1200);
 
 					document.getElementById("addAnnouncementBtnTab")?.addEventListener("click", openAnnouncementModal);
