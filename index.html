@@ -3521,6 +3521,17 @@
 				color: #fff;
 				border-color: var(--accent-color);
 			}
+			.schedule-nav-btn:disabled {
+				opacity: 0.3;
+				cursor: not-allowed;
+				filter: grayscale(1);
+			}
+			.schedule-nav-btn:disabled:hover {
+				background: var(--bg-tertiary);
+				color: var(--text-primary);
+				border-color: var(--border-color);
+				transform: none;
+			}
 		</style>
 	</head>
 	<body>
@@ -11006,22 +11017,113 @@
 					});
 				}
 
-				/* ==================== SCHEDULE TAB ==================== */
-				const SCHEDULE_SHEET_NAME = "Scheduling";
-				const SCHEDULE_DATE_ROW = 0; // row 1 = dates (0-based)
-				const SCHEDULE_NAME_COL = 0; // column A = employee name
-				const SCHEDULE_FIRST_DAY_COL = 1; // column B = day 1
-				const SCHEDULE_DAYS_PER_MONTH = 28; // 28 days in this sheet
-				const SCHEDULE_DATA_START_ROW = 2; // row 3 = first employee (0-based)
-				const SCHEDULE_SKIP_VALUES = new Set(["DAY-OFF", "HOLIDAY", "LEAVE"]);
+				/* ==================== SCHEDULE TAB (12 month sheets) ==================== */
+				const SCHEDULE_MONTH_SHEETS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-				let scheduleData = null;
+				// 0-indexed name columns: A=0, Q=16, AG=32, AW=48
+				const SCHEDULE_NAME_COLS = [0, 16, 32, 48];
+
+				// 14 data cols per block = 7 days × 2 cols (IN/OUT, BREAK)
+				const SCHEDULE_DAYS_PER_BLOCK = 7;
+				const SCHEDULE_DATA_COLS_PER_BLOCK = SCHEDULE_DAYS_PER_BLOCK * 2; // 14
+
+				const SCHEDULE_DATA_START_ROW = 2; // row 3 (0-indexed) = first employee
+				const SCHEDULE_SKIP_VALUES = new Set(["DAY-OFF", "HOLIDAY", "LEAVE", "WEEK OFF", "REST DAY"]);
+
+				let scheduleDataByMonth = {}; // { "Jan": [...rows], ... }
 				let scheduleDataLoaded = false;
-				let scheduleView = null; // { year, month }
-				let scheduleParsed = null; // { "YYYY-MM-DD": [{name, shift}] }
+				let scheduleView = null;
+				let scheduleParsed = null;
 
+				function normalizeSupportName(name) {
+					return String(name || "")
+						.replace(/\s+/g, " ")
+						.trim()
+						.toUpperCase();
+				}
+
+				async function ensureScheduleAllowedNames(force = false) {
+					if (scheduleAllowedNames && !force) return;
+
+					try {
+						const data = await fetchFromProxy({
+							action: "getSheetData",
+							sheetName: CONFIG.CRED_SHEET_NAME,
+						});
+
+						if (!data.values || data.values.length < 2) {
+							scheduleAllowedNames = new Set();
+							return;
+						}
+
+						const set = new Set();
+						for (let i = 1; i < data.values.length; i++) {
+							const row = data.values[i];
+							const name = normalizeSupportName(row[0]);
+							const email = String(row[1] || "").trim();
+							if (name && email) set.add(name);
+						}
+
+						scheduleAllowedNames = set;
+						console.info(`[Schedule] Loaded ${set.size} allowed names from CREDENTIALS.`);
+					} catch (err) {
+						console.warn("[Schedule] Failed to load CREDENTIALS for name filter:", err);
+						scheduleAllowedNames = new Set();
+					}
+				}
+
+				function isScheduleNameAllowed(name) {
+					if (!scheduleAllowedNames || scheduleAllowedNames.size === 0) return true;
+					return scheduleAllowedNames.has(normalizeSupportName(name));
+				}
+
+				let scheduleAllowedNames = null;
+				// Tracks whether the user has ever manually toggled a shift filter.
 				// Tracks whether the user has ever manually toggled a shift filter.
 				// When false, we use the "only my schedule" default.
+
+				/* ===== Active 3-month window (previous / current / next) ===== */
+				function getScheduleActiveMonths() {
+					const [y, m] = getESTDateString().split("-").map(Number); // m = 1-indexed
+					const result = [];
+
+					// Previous
+					let pm = m - 1,
+						py = y;
+					if (pm < 1) {
+						pm = 12;
+						py = y - 1;
+					}
+					result.push({ year: py, month: pm, name: SCHEDULE_MONTH_SHEETS[pm - 1] });
+
+					// Current
+					result.push({ year: y, month: m, name: SCHEDULE_MONTH_SHEETS[m - 1] });
+
+					// Next
+					let nm = m + 1,
+						ny = y;
+					if (nm > 12) {
+						nm = 1;
+						ny = y + 1;
+					}
+					result.push({ year: ny, month: nm, name: SCHEDULE_MONTH_SHEETS[nm - 1] });
+
+					return result;
+				}
+
+				function isScheduleMonthNavigable(year, month0) {
+					// month0 is 0-indexed (JS). Convert to 1-indexed for comparison.
+					const m1 = month0 + 1;
+					const active = getScheduleActiveMonths();
+					const first = active[0];
+					const last = active[2];
+
+					const val = year * 12 + m1;
+					const minVal = first.year * 12 + first.month;
+					const maxVal = last.year * 12 + last.month;
+					return val >= minVal && val <= maxVal;
+				}
+
 				let scheduleVisibleShiftsManual = (() => {
 					try {
 						return localStorage.getItem("scheduleVisibleShiftsManual") === "true";
@@ -11104,11 +11206,21 @@
 
 				function normalizeShiftTime(shift) {
 					if (!shift) return "";
-					const m = shift.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
-					if (!m) return shift;
-					const h1 = parseInt(m[1], 10);
-					const h2 = parseInt(m[4], 10);
-					return `${h1}${m[3].toUpperCase()} - ${h2}${m[6].toUpperCase()}`;
+					const trimmed = String(shift).trim();
+
+					// "09:00 PM - 06:00 AM" → "9PM - 6AM"
+					let m = trimmed.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)\s*-\s*(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+					if (m) {
+						return `${parseInt(m[1], 10)}${m[3].toUpperCase()} - ${parseInt(m[4], 10)}${m[6].toUpperCase()}`;
+					}
+
+					// "9PM - 6AM" or "9PM-6AM" → "9PM - 6AM"
+					m = trimmed.match(/^(\d{1,2})\s*(AM|PM)\s*-\s*(\d{1,2})\s*(AM|PM)$/i);
+					if (m) {
+						return `${parseInt(m[1], 10)}${m[2].toUpperCase()} - ${parseInt(m[3], 10)}${m[4].toUpperCase()}`;
+					}
+
+					return trimmed;
 				}
 
 				function getShiftClass(shift) {
@@ -11129,21 +11241,66 @@
 
 				const SCHEDULE_SHIFT_ORDER = { "9PM": 0, "5AM": 1, "2PM": 2 };
 
+				/* Accepts either "Jan" or "Copy of Jan" (and full names as a bonus) */
+				const SCHEDULE_MONTH_FULL_NAMES = {
+					Jan: "January",
+					Feb: "February",
+					Mar: "March",
+					Apr: "April",
+					May: "May",
+					Jun: "June",
+					Jul: "July",
+					Aug: "August",
+					Sep: "September",
+					Oct: "October",
+					Nov: "November",
+					Dec: "December",
+				};
+
 				async function loadScheduleData(force = false) {
 					if (scheduleDataLoaded && !force) return;
-					try {
-						const data = await fetchFromProxy({
-							action: "getSheetData",
-							sheetName: SCHEDULE_SHEET_NAME,
-						});
-						scheduleData = data && data.values ? data.values : [];
-						scheduleParsed = null;
-						scheduleDataLoaded = true;
-					} catch (err) {
-						console.warn("Schedule sheet load failed:", err);
-						scheduleData = [];
-						scheduleParsed = null;
-						scheduleDataLoaded = true;
+
+					await ensureScheduleAllowedNames(force);
+
+					const activeMonths = getScheduleActiveMonths();
+					const results = {};
+					const resolved = {};
+					const missing = [];
+
+					await Promise.all(
+						activeMonths.map(async ({ name: monthName }) => {
+							const candidates = [monthName, `Copy of ${monthName}`, SCHEDULE_MONTH_FULL_NAMES[monthName], `Copy of ${SCHEDULE_MONTH_FULL_NAMES[monthName]}`];
+
+							for (const candidate of candidates) {
+								try {
+									const data = await fetchFromProxy({
+										action: "getSheetData",
+										sheetName: candidate,
+									});
+
+									if (data && Array.isArray(data.values) && data.values.length > 0) {
+										results[monthName] = data.values;
+										resolved[monthName] = candidate;
+										return;
+									}
+								} catch (err) {
+									/* try next candidate */
+								}
+							}
+
+							results[monthName] = [];
+							missing.push(monthName);
+						}),
+					);
+
+					scheduleDataByMonth = results;
+					scheduleParsed = null;
+					scheduleDataLoaded = true;
+
+					console.info("[Schedule] Active months:", activeMonths.map((m) => `${m.name} ${m.year}`).join(", "));
+					console.info("[Schedule] Resolved sheets:", resolved);
+					if (missing.length) {
+						console.warn("[Schedule] No sheet found for months:", missing.join(", "));
 					}
 				}
 
@@ -11154,46 +11311,63 @@
 
 				function parseScheduleMap() {
 					if (scheduleParsed) return scheduleParsed;
-					if (!scheduleData || scheduleData.length < SCHEDULE_DATA_START_ROW + 1) {
-						scheduleParsed = {};
-						return scheduleParsed;
-					}
 
-					// 1. Read the 28 date keys from row 1, columns B → AC
-					const dateRow = scheduleData[SCHEDULE_DATE_ROW] || [];
-					const dateKeys = [];
-					for (let i = 0; i < SCHEDULE_DAYS_PER_MONTH; i++) {
-						const col = SCHEDULE_FIRST_DAY_COL + i;
-						dateKeys.push(parseScheduleDateValue(dateRow[col]));
-					}
-
-					// 2. Walk each employee row (row 3 → last row)
 					const map = {};
-					for (let r = SCHEDULE_DATA_START_ROW; r < scheduleData.length; r++) {
-						const row = scheduleData[r];
-						if (!row) continue;
+					const filteredOutNames = new Set();
 
-						const name = String(row[SCHEDULE_NAME_COL] || "")
-							.trim()
-							.toUpperCase();
-						if (!name) continue;
+					Object.keys(scheduleDataByMonth).forEach((monthName) => {
+						const rows = scheduleDataByMonth[monthName] || [];
+						if (rows.length < SCHEDULE_DATA_START_ROW + 1) return;
 
-						for (let i = 0; i < SCHEDULE_DAYS_PER_MONTH; i++) {
-							const col = SCHEDULE_FIRST_DAY_COL + i;
-							const shift = String(row[col] || "").trim();
-							const dateKey = dateKeys[i];
+						const dateRow = rows[0] || [];
 
-							if (!dateKey) continue;
-							if (!shift) continue;
-							if (SCHEDULE_SKIP_VALUES.has(shift.toUpperCase())) continue;
+						SCHEDULE_NAME_COLS.forEach((nameCol) => {
+							const dateKeys = [];
+							for (let d = 0; d < SCHEDULE_DAYS_PER_BLOCK; d++) {
+								const inOutCol = nameCol + 1 + d * 2;
+								let dateKey = parseScheduleDateValue(dateRow[inOutCol]);
+								if (!dateKey) dateKey = parseScheduleDateValue(dateRow[inOutCol + 1]);
+								dateKeys.push(dateKey);
+							}
 
-							if (!map[dateKey]) map[dateKey] = [];
-							map[dateKey].push({ name, shift });
-						}
+							for (let r = SCHEDULE_DATA_START_ROW; r < rows.length; r++) {
+								const row = rows[r];
+								if (!row) continue;
+
+								const name = normalizeSupportName(row[nameCol]);
+								if (!name) continue;
+
+								if (!isScheduleNameAllowed(name)) {
+									filteredOutNames.add(name);
+									continue;
+								}
+
+								for (let d = 0; d < SCHEDULE_DAYS_PER_BLOCK; d++) {
+									const dateKey = dateKeys[d];
+									if (!dateKey) continue;
+
+									const inOutCol = nameCol + 1 + d * 2;
+									const breakCol = inOutCol + 1;
+
+									const shiftRaw = String(row[inOutCol] || "").trim();
+									const breakRaw = String(row[breakCol] || "").trim();
+
+									if (!shiftRaw) continue;
+									if (SCHEDULE_SKIP_VALUES.has(shiftRaw.toUpperCase())) continue;
+
+									if (!map[dateKey]) map[dateKey] = [];
+									map[dateKey].push({ name, shift: shiftRaw, break: breakRaw });
+								}
+							}
+						});
+					});
+
+					if (filteredOutNames.size > 0) {
+						console.info("[Schedule] Ignored names not in CREDENTIALS:", [...filteredOutNames].sort());
 					}
 
 					scheduleParsed = map;
-					return map;
+					return scheduleParsed;
 				}
 
 				function applyDefaultShiftFilter() {
@@ -11211,24 +11385,17 @@
 					if (!container) return;
 
 					if (!scheduleView) {
-						// Jump to the first month that actually contains data in the sheet
-						const byDateNow = parseScheduleMap();
-						const allDates = Object.keys(byDateNow).sort();
-						if (allDates.length > 0) {
-							const [y, m] = allDates[0].split("-").map(Number);
-							scheduleView = { year: y, month: m - 1 };
-						} else {
-							const now = new Date();
-							scheduleView = { year: now.getFullYear(), month: now.getMonth() };
-						}
+						const [y, m] = getESTDateString().split("-").map(Number);
+						scheduleView = { year: y, month: m - 1 };
 					}
 
 					if (!scheduleDataLoaded) {
 						container.innerHTML = '<div class="schedule-loading"><span class="spinner"></span> Loading schedule…</div>';
 						return;
 					}
-					if (!scheduleData || scheduleData.length === 0) {
-						container.innerHTML = '<div class="schedule-loading">No schedule data found in the <strong>' + escapeHtml(SCHEDULE_SHEET_NAME) + "</strong> sheet.</div>";
+					const hasAnyData = Object.keys(scheduleDataByMonth).some((m) => (scheduleDataByMonth[m] || []).length > 0);
+					if (!hasAnyData) {
+						container.innerHTML = '<div class="schedule-loading">No schedule data found in the loaded months.</div>';
 						if (titleEl) titleEl.textContent = "—";
 						return;
 					}
@@ -11260,16 +11427,20 @@
 						const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
 						const isToday = dateStr === todayStr;
 						const people = (byDate[dateStr] || []).filter((p) => {
+							const isMine = myName && p.name === myName;
+
+							// ── 1) No shift filter is active → show ONLY the user's own name.
+							//       This is the default state; anything else here is the bug.
+							if (!anyShiftSelected) return isMine;
+
+							// ── 2) A shift filter is active → show names whose shift matches.
+							//       Unknown-shift entries (OFF, PTO, typos, …) can never match a filter,
+							//       so they must be hidden — NOT shown.
 							const k = getShiftKey(p.shift);
-							if (k === null) return true; // unknown shift — always show
+							if (k === null) return false;
 
-							// ✅ Only pin (force-show) the user's own name when NO shift filter is active.
-							// When one or more shifts are selected, the user's own name is filtered like everyone else.
-							if (myName && p.name === myName && !anyShiftSelected) return true;
-
-							return scheduleVisibleShifts[k] !== false; // shown unless toggled off
+							return scheduleVisibleShifts[k] !== false;
 						});
-
 						// Sort: user's own name first, then alphabetical
 						const sorted = [...people].sort((a, b) => {
 							const pa = SCHEDULE_SHIFT_ORDER[getShiftKey(a.shift)] ?? 99;
@@ -11299,62 +11470,57 @@
 					}
 
 					html += "</div>";
+
+					// Disable Prev/Next at the boundaries of the 3-month window
+					const prevBtn = document.getElementById("schedulePrevBtn");
+					const nextBtn = document.getElementById("scheduleNextBtn");
+					if (prevBtn) {
+						const pm = month === 0 ? { year: year - 1, month: 11 } : { year, month: month - 1 };
+						prevBtn.disabled = !isScheduleMonthNavigable(pm.year, pm.month);
+					}
+					if (nextBtn) {
+						const nm = month === 11 ? { year: year + 1, month: 0 } : { year, month: month + 1 };
+						nextBtn.disabled = !isScheduleMonthNavigable(nm.year, nm.month);
+					}
+
 					container.innerHTML = html;
 				}
 
 				function schedulePrevMonth() {
-					if (!scheduleView) scheduleView = { year: new Date().getFullYear(), month: new Date().getMonth() };
+					if (!scheduleView) {
+						const [y, m] = getESTDateString().split("-").map(Number);
+						scheduleView = { year: y, month: m - 1 };
+					}
 					let { year, month } = scheduleView;
 					month--;
 					if (month < 0) {
 						month = 11;
 						year--;
 					}
+					if (!isScheduleMonthNavigable(year, month)) return;
 					scheduleView = { year, month };
 					renderScheduleCalendar();
 				}
 
 				function scheduleNextMonth() {
-					if (!scheduleView) scheduleView = { year: new Date().getFullYear(), month: new Date().getMonth() };
+					if (!scheduleView) {
+						const [y, m] = getESTDateString().split("-").map(Number);
+						scheduleView = { year: y, month: m - 1 };
+					}
 					let { year, month } = scheduleView;
 					month++;
 					if (month > 11) {
 						month = 0;
 						year++;
 					}
+					if (!isScheduleMonthNavigable(year, month)) return;
 					scheduleView = { year, month };
 					renderScheduleCalendar();
 				}
 
 				function scheduleGoToday() {
-					const now = new Date();
-					const year = now.getFullYear();
-					const month = now.getMonth();
-
-					// Does the sheet have any data for today's month?
-					const byDate = parseScheduleMap();
-					const prefix = `${year}-${String(month + 1).padStart(2, "0")}`;
-					const hasData = Object.keys(byDate).some((k) => k.startsWith(prefix));
-
-					if (hasData) {
-						scheduleView = { year, month };
-						renderScheduleCalendar();
-						return;
-					}
-
-					// Fallback: jump to the first month that has data
-					const allDates = Object.keys(byDate).sort();
-					if (allDates.length > 0) {
-						const [y, m] = allDates[0].split("-").map(Number);
-						scheduleView = { year: y, month: m - 1 };
-						renderScheduleCalendar();
-						const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-						showNotification(`No data in ${monthNames[month]} ${year}. Showing ${monthNames[m - 1]} ${y}.`);
-						return;
-					}
-
-					// Truly empty sheet → default to today
-					scheduleView = { year, month };
+					const [y, m] = getESTDateString().split("-").map(Number);
+					scheduleView = { year: y, month: m - 1 };
 					renderScheduleCalendar();
 				}
 
