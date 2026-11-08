@@ -10445,7 +10445,7 @@
 					}
 
 					try {
-						await fetchFromProxy({
+						await fetchFromProxyPOST({
 							action: "acknowledgeAnnouncement",
 							key: key,
 							support: mySupport,
@@ -10609,7 +10609,7 @@
 
 				async function deleteAnnouncementSilent(subject, details, support) {
 					if (!subject && !details && !support) throw new Error("Missing announcement identifiers");
-					await fetchFromProxy({
+					await fetchFromProxyPOST({
 						action: "deleteAnnouncement",
 						subject: subject || "",
 						details: details || "",
@@ -11110,7 +11110,7 @@
 							};
 							if (source === "ticketing") payload.module = module;
 
-							await fetchFromProxy(payload);
+							await fetchFromProxyPOST(payload);
 
 							if (source === "ticketing") {
 								list[idx] = { ...list[idx], module, title, content };
@@ -11136,7 +11136,7 @@
 								payload.createdBy = currentUser ? currentUser.support || "" : "";
 							}
 
-							await fetchFromProxy(payload);
+							await fetchFromProxyPOST(payload);
 							showNotification("Entry added!");
 
 							kbLoaded[source] = false;
@@ -11162,7 +11162,7 @@
 
 					const sheetName = getKbSheetName(entry.source);
 					try {
-						await fetchFromProxy({
+						await fetchFromProxyPOST({
 							action: "deleteKnowledgeBaseEntry",
 							sheetName: sheetName,
 							rowIndex: entry.rowIndex,
