@@ -4406,13 +4406,6 @@
 							<div class="dash-card">
 								<div class="dash-card-header">
 									<div class="dash-card-title">🎫 My Tickets Today</div>
-									<div class="dash-card-extra">
-										<select id="myTicketsStatusFilter" class="dash-month-select" onchange="renderMyTicketsToday()" style="font-size: 12px; padding: 4px 8px">
-											<option value="PENDING" selected>Pending Only</option>
-											<option value="ALL">All Statuses</option>
-										</select>
-										<span id="myTicketsCount"></span>
-									</div>
 								</div>
 								<div class="dash-card-body">
 									<div id="myTicketsTodayContainer">
@@ -10776,14 +10769,11 @@
 				/* ==================== MY TICKETS TODAY ==================== */
 				function renderMyTicketsToday() {
 					const container = document.getElementById("myTicketsTodayContainer");
-					const countEl = document.getElementById("myTicketsCount");
-					const statusFilter = document.getElementById("myTicketsStatusFilter")?.value || "PENDING";
 					if (!container) return;
 
 					const currentUser = getLoggedInUser();
 					if (!currentUser || !dashboardWorkloadData?.values || dashboardWorkloadData.values.length < 2) {
 						container.innerHTML = '<div class="dash-empty">No tickets for today.</div>';
-						if (countEl) countEl.textContent = "";
 						return;
 					}
 
@@ -10827,15 +10817,11 @@
 					}
 					allTickets.reverse();
 
-					const pendingCount = allTickets.filter((t) => t.status.toUpperCase() === "PENDING").length;
-					const tickets = statusFilter === "PENDING" ? allTickets.filter((t) => t.status.toUpperCase() === "PENDING") : allTickets;
-
-					if (countEl) {
-						countEl.innerHTML = statusFilter === "PENDING" ? `<span class="dash-count">${tickets.length} pending</span>` : `<span class="dash-count">${tickets.length} total · ${pendingCount} pending</span>`;
-					}
+					// Hardcoded: Pending only
+					const tickets = allTickets.filter((t) => t.status.toUpperCase() === "PENDING");
 
 					if (!tickets.length) {
-						container.innerHTML = `<div class="dash-empty">✨ ${statusFilter === "PENDING" ? "No pending tickets" : "No tickets"} for today. Great job!</div>`;
+						container.innerHTML = `<div class="dash-empty">✨ No pending tickets for today. Great job!</div>`;
 						return;
 					}
 
@@ -11631,7 +11617,7 @@
 				}
 
 				/* ==================== SLA ALERT ==================== */
-				const SLA_THRESHOLD_DAYS = 7;
+				const SLA_THRESHOLD_DAYS = 3;
 
 				function computeSlaAlerts(data) {
 					if (!data || !data.values || data.values.length < 2) return [];
@@ -11740,7 +11726,7 @@
 					if (!alerts || alerts.length === 0) {
 						if (countBadge) countBadge.style.display = "none";
 						document.title = baseTitle;
-						container.innerHTML = '<div class="sla-empty">✅ No SLA breaches. All pending tickets are within the 7-day window.</div>';
+						container.innerHTML = '<div class="sla-empty">✅ No SLA breaches. All pending tickets are within the 48-hour window.</div>';
 						return;
 					}
 
@@ -11753,8 +11739,9 @@
 					container.innerHTML = `<div class="sla-alert-list">${alerts
 						.map((a) => {
 							const days = a.daysPending;
-							const severe = days >= 14;
-							const daysText = days === 1 ? "1 day" : `${days} days`;
+							const hours = days * 24;
+							const severe = days >= 4;
+							const daysText = days <= 3 ? `${hours} hours` : `${days} days`;
 							const issueDisplay = a.issue || a.module || "Pending follow-up";
 							const storeDisplay = a.store ? escapeHtml(a.store) : "Unknown Store";
 							const remarksDisplay = a.remarks && a.remarks.trim() ? escapeHtml(a.remarks) : "—";
