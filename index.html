@@ -1087,6 +1087,75 @@
 				list-style-type: inherit;
 			}
 
+			/* ============================================================
+   Rich-text rendering — links & images inside previews
+   Applies to: announcements, ticket preview, KB, sidebar,
+   carousel slides, everything that shows RTE output.
+   ============================================================ */
+
+			/* Images — mirrors the TipTap `.tiptap-editor img` rule */
+			.preview-multiline img,
+			.carousel-slide-details img,
+			.announcement-message img,
+			.kb-entry-content img,
+			.sla-alert-issue img {
+				max-width: 100% !important;
+				height: auto !important;
+				border-radius: 8px !important;
+				margin: 8px 0 !important;
+				display: block !important;
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+				object-fit: contain;
+			}
+
+			/* Links — visible, clickable, distinct from text */
+			.preview-multiline a,
+			.carousel-slide-details a,
+			.announcement-message a,
+			.kb-entry-content a,
+			.sla-alert-issue a {
+				color: var(--accent-color, #1976d2) !important;
+				text-decoration: underline !important;
+				font-weight: 500;
+				cursor: pointer;
+				word-break: break-word;
+				overflow-wrap: anywhere;
+			}
+
+			.preview-multiline a:hover,
+			.carousel-slide-details a:hover,
+			.announcement-message a:hover,
+			.kb-entry-content a:hover,
+			.sla-alert-issue a:hover {
+				color: var(--accent-hover, #0d47a1) !important;
+			}
+
+			/* Container guards — prevent long links / images from breaking layout */
+			.preview-multiline,
+			.carousel-slide-details,
+			.announcement-message,
+			.kb-entry-content,
+			.sla-alert-issue {
+				word-wrap: break-word;
+				overflow-wrap: break-word;
+				min-width: 0;
+			}
+
+			/* Editor itself — same rules for consistency while editing */
+			.ql-editor img {
+				max-width: 100% !important;
+				height: auto !important;
+				border-radius: 8px !important;
+				margin: 8px 0 !important;
+				display: block !important;
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+			}
+
+			.ql-editor a {
+				color: var(--accent-color, #1976d2) !important;
+				text-decoration: underline !important;
+			}
+
 			/* ==================== ICONS ==================== */
 			.icon-moolah {
 				background-image: var(--logo-moolah-points);
@@ -2941,6 +3010,71 @@
 				fill: var(--accent-color);
 			}
 
+			/* === Match the Vitreous TipTap editor look & behaviour === */
+
+			/* Fixed height with internal scroll, like .tiptap-editor */
+			.ql-editor {
+				min-height: 160px;
+				max-height: 400px;
+				overflow-y: auto;
+				padding: 16px;
+				font-size: 14px;
+				line-height: 1.6;
+			}
+
+			/* Images inside the editor — mirrors the Vitreous `.tiptap-editor img` rule */
+			.ql-editor img {
+				max-width: 100% !important;
+				height: auto !important;
+				border-radius: 8px !important;
+				margin: 8px 0 !important;
+				display: block !important;
+				box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
+			}
+
+			/* Internal‑comment variant (for announcements — optional orange tint) */
+			.ql-editor.internal-comment {
+				background-color: rgba(255, 152, 0, 0.05);
+			}
+
+			/* Paragraph spacing — matches TipTap output */
+			.ql-editor p {
+				margin: 0.5em 0;
+			}
+			.ql-editor p:first-child {
+				margin-top: 0;
+			}
+			.ql-editor p:last-child {
+				margin-bottom: 0;
+			}
+
+			/* @mention chips — mirrors `span.mention` in Vitreous */
+			.ql-editor .mention,
+			span.mention {
+				background-color: #e3f2fd;
+				color: #1976d2;
+				padding: 2px 4px;
+				border-radius: 4px;
+				font-weight: 500;
+				display: inline-block;
+			}
+
+			/* Style the paper‑clip button we're going to add */
+			.ql-toolbar .ql-image-upload {
+				width: 28px;
+				height: 24px;
+				display: inline-flex;
+				align-items: center;
+				justify-content: center;
+				cursor: pointer;
+				border-radius: 4px;
+				transition: background 0.15s;
+				font-size: 16px;
+			}
+			.ql-toolbar .ql-image-upload:hover {
+				background: rgba(0, 0, 0, 0.06);
+			}
+
 			/* ==================== MOBILE CARD LAYOUT ==================== */
 			@media (max-width: 700px) {
 				.table-wrapper {
@@ -3869,6 +4003,7 @@
 									<th>RESOLUTION</th>
 									<td>
 										<div id="ticket-resolution-editor" style="height: 200px"></div>
+										<input type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt,.xlsx,.xls" id="ticket-resolution-file-input" style="display: none" />
 										<div class="mt-2" id="ticket-template-container" style="margin-top: 10px">
 											<label for="ticket-template-select" style="font-size: 0.8rem; font-weight: 500">📋 Load Knowledge Base Templates:</label>
 											<select id="ticket-template-select" class="form-select" style="font-size: 0.8rem">
@@ -4796,6 +4931,20 @@
 				async function fetchFromProxy(params) {
 					const query = new URLSearchParams(params).toString();
 					const res = await fetch(`${PROXY_URL}?${query}`);
+					if (!res.ok) throw new Error(`Proxy error! status: ${res.status}`);
+					const data = await res.json();
+					if (data.error) throw new Error(data.error);
+					return data;
+				}
+
+				async function fetchFromProxyPOST(params) {
+					const res = await fetch(PROXY_URL, {
+						method: "POST",
+						// text/plain keeps this a "simple" CORS request (no preflight),
+						// and your Apps Script doPost JSON.parses the body.
+						headers: { "Content-Type": "text/plain;charset=utf-8" },
+						body: JSON.stringify(params),
+					});
 					if (!res.ok) throw new Error(`Proxy error! status: ${res.status}`);
 					const data = await res.json();
 					if (data.error) throw new Error(data.error);
@@ -6197,28 +6346,45 @@
 					if (!html) return true;
 					const div = document.createElement("div");
 					div.innerHTML = html;
-					const text = div.textContent || div.innerText || "";
-					return text.trim() === "";
+					if (div.querySelector("img, video, iframe")) return false; // ✅
+					return (div.textContent || div.innerText || "").trim() === "";
 				}
 
 				function convertQuillLists(html) {
 					const div = document.createElement("div");
 					div.innerHTML = html;
 
+					/* 1. Convert Quill's <ol><li data-list="bullet"> into real <ul><li> */
 					div.querySelectorAll("ol").forEach((ol) => {
 						const children = [...ol.children];
-
 						if (children.length > 0 && children.every((li) => li.dataset.list === "bullet")) {
 							const ul = document.createElement("ul");
-
 							children.forEach((li) => {
 								li.removeAttribute("data-list");
 								li.className = li.className.replace(/ql-indent-\d+/g, "");
 								ul.appendChild(li);
 							});
-
 							ol.replaceWith(ul);
 						}
+					});
+
+					/* 2. NEW: sanitize + force every link to open in a new tab */
+					div.querySelectorAll("a").forEach((a) => {
+						const href = a.getAttribute("href") || "";
+						if (!/^(https?:|mailto:|\/|#)/i.test(href)) {
+							a.removeAttribute("href"); // strip unsafe/missing href
+							a.removeAttribute("target");
+							a.removeAttribute("rel");
+							return;
+						}
+						a.setAttribute("target", "_blank");
+						a.setAttribute("rel", "noopener noreferrer");
+					});
+
+					/* 3. NEW: lazy-load images so long announcements don't lag */
+					div.querySelectorAll("img").forEach((img) => {
+						img.setAttribute("loading", "lazy");
+						img.setAttribute("decoding", "async");
 					});
 
 					return div.innerHTML;
@@ -6365,11 +6531,7 @@
 					let resolution = "";
 
 					function isTroubleshootingEmpty(html) {
-						if (!html) return true;
-						const tempDiv = document.createElement("div");
-						tempDiv.innerHTML = html;
-						const plainText = tempDiv.textContent || tempDiv.innerText || "";
-						return plainText.trim() === "";
+						return isHtmlEmpty(html); // already checks img/video/iframe
 					}
 
 					if (editId) {
@@ -7723,7 +7885,16 @@
 				}
 
 				function saveAllEntries() {
-					localStorage.setItem("unifiedEntries", JSON.stringify(allEntries));
+					try {
+						localStorage.setItem("unifiedEntries", JSON.stringify(allEntries));
+					} catch (e) {
+						if (e.name === "QuotaExceededError") {
+							showNotification("⚠️ Local storage full — export old entries or reduce image size.");
+						} else {
+							throw e;
+						}
+						return;
+					}
 					updateStatusCounters();
 					localStorageCheckCounter++;
 					if (localStorageCheckCounter % 20 === 0) checkLocalStorageSize();
@@ -10402,8 +10573,7 @@
 					let details = "";
 					if (announcementQuill) {
 						const html = announcementQuill.root.innerHTML.trim();
-						const plain = announcementQuill.getText().trim();
-						if (plain !== "") {
+						if (!isQuillContentEmpty(announcementQuill)) {
 							details = html;
 						}
 					} else {
@@ -10419,7 +10589,7 @@
 					const support = currentUser ? currentUser.support || "" : "";
 
 					try {
-						await fetchFromProxy({
+						await fetchFromProxyPOST({
 							action: "addAnnouncement",
 							subject: subject,
 							details: details,
@@ -10477,6 +10647,7 @@
 					if (announcementQuill) announcementQuill.root.innerHTML = "";
 					document.getElementById("announcementModal").style.display = "block";
 					document.getElementById("announcementModalBackdrop").style.display = "block";
+					if (announcementQuill) announcementQuill.enable(true); // ✅ re-arm
 					setTimeout(() => document.getElementById("newAnnouncementSubject").focus(), 50);
 				}
 
@@ -10818,12 +10989,24 @@
 				function copyKbEntry(id) {
 					const entry = getActiveKbEntries().find((e) => e.id === id);
 					if (!entry) return;
-					const plainContent = htmlToPlainText(entry.content);
-					// Copy content only — no title/subject
-					navigator.clipboard.writeText(plainContent).then(
-						() => showNotification("Entry copied!"),
-						() => showNotification("Failed to copy"),
-					);
+
+					const plain = htmlToPlainText(entry.content);
+					const html = convertQuillLists(entry.content);
+
+					(async () => {
+						try {
+							await navigator.clipboard.write([
+								new ClipboardItem({
+									"text/plain": new Blob([plain], { type: "text/plain" }),
+									"text/html": new Blob([html], { type: "text/html" }),
+								}),
+							]);
+							showNotification("Entry copied (rich)!");
+						} catch {
+							navigator.clipboard.writeText(plain);
+							showNotification("Entry copied (plain text)");
+						}
+					})();
 				}
 
 				let editingKbId = null;
@@ -10875,6 +11058,7 @@
 
 					modal.style.display = "block";
 					backdrop.style.display = "block";
+					if (kbQuill) kbQuill.enable(true);
 					setTimeout(() => titleInput.focus(), 50);
 				}
 
@@ -10896,7 +11080,7 @@
 					let content = contentInput.value.trim();
 					const module = source === "ticketing" ? moduleEl.value.trim() : "";
 
-					if (kbQuill && kbQuill.getText().trim() === "") {
+					if (kbQuill && isQuillContentEmpty(kbQuill)) {
 						content = "";
 					}
 
@@ -11566,6 +11750,170 @@
 					if (showNotif) showNotification(`Shift auto-loaded from schedule: ${matched}`);
 				}
 
+				/* ============================================================
+   Quill ↔ Vitreous‑style RTE upgrade
+   Replicates the TipTap behaviour seen on the Vitreous platform:
+     • paper‑clip upload button in the toolbar
+     • reliable image paste (base64) from screenshots & copied files
+     • images preserved when pasting HTML from other editors
+     • proper image rendering via CSS (see Part A)
+   ============================================================ */
+				function upgradeQuillEditor(quill, fileInputId) {
+					if (!quill || quill.__upgraded) return;
+					quill.__upgraded = true;
+
+					const fileInput = document.getElementById(fileInputId);
+
+					/* ----- 1. Paper‑clip button in the toolbar ------------------- */
+					const toolbar = quill.getModule("toolbar");
+					if (toolbar) {
+						const container = toolbar.container;
+
+						// <span class="ql-formats"><button class="ql-image-upload">📎</button></span>
+						const formats = document.createElement("span");
+						formats.className = "ql-formats";
+
+						const uploadBtn = document.createElement("button");
+						uploadBtn.type = "button";
+						uploadBtn.className = "ql-image-upload";
+						uploadBtn.title = "Attach image or file";
+						uploadBtn.setAttribute("aria-label", "Attach image or file");
+						uploadBtn.textContent = "📎";
+						formats.appendChild(uploadBtn);
+						container.appendChild(formats);
+
+						uploadBtn.addEventListener("click", (e) => {
+							e.preventDefault();
+							if (fileInput) fileInput.click();
+						});
+					}
+
+					/* ----- 2. File input handler: insert images / links ------- */
+					if (fileInput) {
+						fileInput.addEventListener("change", () => {
+							const files = Array.from(fileInput.files || []);
+							if (!files.length) return;
+
+							files.forEach((file) => {
+								const range = quill.getSelection(true);
+								const index = range ? range.index : quill.getLength();
+
+								if (file.type.startsWith("image/")) {
+									// Image → embed as base64 (same result as paste)
+									const reader = new FileReader();
+									reader.onload = async (ev) => {
+										const compressed = await compressImageBlob(file);
+										const src = compressed || ev.target.result;
+										quill.insertEmbed(index, "image", src, "user");
+										quill.setSelection(index + 1, 0, "silent");
+									};
+									reader.readAsDataURL(file);
+								} else {
+									// Non‑image → insert as a link with the filename
+									// (Quill has no file‑embed; this matches how the
+									//  Vitreous RTE surfaces attachments as links.)
+									const safeName = file.name.replace(/[<>"&]/g, "");
+									quill.insertText(index, `📎 ${safeName}`, "user");
+									quill.formatText(index, safeName.length + 2, "link", URL.createObjectURL(file));
+									quill.setSelection(index + safeName.length + 2, 0, "silent");
+								}
+							});
+
+							fileInput.value = ""; // reset so the same file can be re‑picked
+						});
+					}
+
+					/* ----- 3. Paste handler for image files (screenshots) ----- */
+					quill.root.addEventListener(
+						"paste",
+						function (e) {
+							if (e.defaultPrevented) return; // Quill already handled it
+							const cd = e.clipboardData || window.clipboardData;
+							if (!cd || !cd.items) return;
+
+							for (let i = 0; i < cd.items.length; i++) {
+								const item = cd.items[i];
+								if (item.kind === "file" && item.type.indexOf("image/") === 0) {
+									e.preventDefault();
+									e.stopImmediatePropagation();
+
+									const blob = item.getAsFile();
+									if (!blob) continue;
+
+									const reader = new FileReader();
+									reader.onload = async (ev) => {
+										const compressed = await compressImageBlob(blob);
+										const src = compressed || ev.target.result;
+										const range = quill.getSelection(true);
+										const index = range ? range.index : quill.getLength();
+										quill.insertEmbed(index, "image", src, "user");
+										quill.setSelection(index + 1, 0, "silent");
+									};
+									reader.readAsDataURL(blob);
+									return;
+								}
+							}
+						},
+						true,
+					);
+
+					/* ----- 4. Keep images that arrive via text/html paste ------ */
+					/*  (e.g. copying an image from another Quill editor)          */
+					quill.clipboard.addMatcher("IMG", (node, delta) => {
+						const src = node.getAttribute("src");
+						if (!src) return delta;
+						// Allow data:, blob:, http(s):, and relative URLs
+						if (!/^(https?:|data:image\/|blob:|\/)/i.test(src)) return delta;
+						return new Quill.import("delta")().insert({ image: src });
+					});
+					/* ----- 5. Keep links coming in via paste (even external) --- */
+					quill.clipboard.addMatcher("A", (node, delta) => {
+						const href = node.getAttribute("href");
+						if (!href) return delta;
+						// block javascript:, data:, vbscript: …
+						if (!/^(https?:|mailto:|\/|#)/i.test(href)) return delta;
+
+						// Attach the link to every text op in this node — do NOT re-insert text
+						// (that would duplicate it). Mutate in place and return the same delta.
+						delta.ops.forEach((op) => {
+							if (typeof op.insert === "string") {
+								op.attributes = { ...(op.attributes || {}), link: href };
+							}
+						});
+						return delta;
+					});
+				}
+
+				async function compressImageBlob(blob, maxWidth = 1600, quality = 0.78) {
+					return new Promise((resolve) => {
+						const img = new Image();
+						const url = URL.createObjectURL(blob);
+						img.onload = () => {
+							URL.revokeObjectURL(url);
+							let { width, height } = img;
+							if (width > maxWidth) {
+								height = Math.round((height * maxWidth) / width);
+								width = maxWidth;
+							}
+							const canvas = document.createElement("canvas");
+							canvas.width = width;
+							canvas.height = height;
+							canvas.getContext("2d").drawImage(img, 0, 0, width, height);
+							resolve(canvas.toDataURL("image/jpeg", quality));
+						};
+						img.onerror = () => resolve(null);
+						img.src = url;
+					});
+				}
+
+				/* Small helper: image‑only content is NOT empty */
+				function isQuillContentEmpty(quill) {
+					if (!quill) return true;
+					if (quill.getText().trim() !== "") return false;
+					const contents = quill.getContents();
+					return !(contents.ops || []).some((op) => op.insert && typeof op.insert === "object");
+				}
+
 				function init() {
 					const loggedInUser = getLoggedInUser();
 					if (!loggedInUser) {
@@ -11928,6 +12276,8 @@
 						},
 					});
 
+					upgradeQuillEditor(quillEditor, "ticket-resolution-file-input");
+
 					// Announcement rich text editor
 					// Announcement RTE: use the Team Reminders rich-text toolbar.
 					announcementQuill = new Quill("#newAnnouncementEditor", {
@@ -11941,6 +12291,8 @@
 						document.getElementById("newAnnouncementText").value = announcementQuill.root.innerHTML;
 					});
 
+					upgradeQuillEditor(announcementQuill, "newAnnouncement-file-input");
+
 					// Knowledge Base content editor
 					// Knowledge Base RTE: use the Team Reminders rich-text toolbar.
 					kbQuill = new Quill("#kbEntryContentEditor", {
@@ -11953,6 +12305,7 @@
 					kbQuill.on("text-change", () => {
 						document.getElementById("kbEntryContent").value = kbQuill.root.innerHTML;
 					});
+					upgradeQuillEditor(kbQuill, "kbEntryContent-file-input");
 
 					loadTroubleshootingTemplates();
 					initTemplateSelector();
@@ -12484,6 +12837,7 @@
 			<div class="kb-form-row">
 				<label>Content / Steps <span style="color: var(--danger)">*</span></label>
 				<div id="kbEntryContentEditor" style="height: 220px; background: var(--bg-secondary); border-radius: 12px"></div>
+				<input type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt,.xlsx,.xls" id="kbEntryContent-file-input" style="display: none" />
 				<textarea id="kbEntryContent" style="display: none"></textarea>
 			</div>
 
@@ -12500,6 +12854,7 @@
 			<h3 style="margin-bottom: 16px">📢 New Announcement</h3>
 			<input type="text" id="newAnnouncementSubject" class="no-uppercase" placeholder="Subject" style="width: 100%; margin-bottom: 12px" />
 			<div id="newAnnouncementEditor" style="height: 220px; margin-bottom: 12px; background: var(--bg-secondary); border-radius: 12px"></div>
+			<input type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt,.xlsx,.xls" id="newAnnouncement-file-input" style="display: none" />
 			<textarea id="newAnnouncementText" style="display: none"></textarea>
 			<div style="display: flex; gap: 8px; justify-content: flex-end">
 				<button id="submitAnnouncementBtn" class="login-action-btn">Post</button>
