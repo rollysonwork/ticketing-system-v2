@@ -9794,14 +9794,52 @@
 				}
 
 				/* ==================== BEFOREUNLOAD WARN ==================== */
-				function initBeforeUnloadWarn() {
-					window.addEventListener("beforeunload", (e) => {
-						if (Object.values(formDirty).some((v) => v)) {
-							e.preventDefault();
-							e.returnValue = "";
-							return "";
-						}
+				/* ==================== IDLE AUTO-REFRESH ====================
+   Refreshes the page after 15 minutes of inactivity, but ONLY
+   while the tab/window is hidden (i.e. the user is away).
+   Replaces the old "Changes you made may not be saved" prompt.
+   Form data is persisted to localStorage just before reload.
+   ============================================================ */
+				function initIdleAutoRefresh() {
+					const IDLE_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
+					const CHECK_INTERVAL_MS = 30 * 1000; // poll every 30 seconds
+
+					let lastActivity = Date.now();
+					let reloading = false;
+
+					const markActivity = () => {
+						lastActivity = Date.now();
+					};
+
+					// Any real user interaction resets the idle clock
+					["mousemove", "mousedown", "keydown", "scroll", "touchstart", "click", "input", "change"].forEach((ev) => window.addEventListener(ev, markActivity, { passive: true }));
+
+					// If they return to the tab, treat that as activity too
+					document.addEventListener("visibilitychange", () => {
+						if (!document.hidden) markActivity();
 					});
+
+					setInterval(() => {
+						if (reloading) return;
+
+						const isAway = document.hidden; // away from tab/window
+						const idleForMs = Date.now() - lastActivity; // no input
+
+						if (isAway && idleForMs >= IDLE_TIMEOUT_MS) {
+							reloading = true;
+
+							// Persist form data so the reload is lossless
+							try {
+								["ticket", "store", "moolah", "ecommerce", "scheduler"].forEach((prefix) => saveFormData(prefix));
+								saveAllEntries();
+							} catch (e) {
+								console.warn("Pre-refresh save failed:", e);
+							}
+
+							console.info("[Idle-Refresh] User away ≥ 15 min — reloading page silently.");
+							location.reload();
+						}
+					}, CHECK_INTERVAL_MS);
 				}
 
 				/* ==================== DASHBOARD CARD CLICK ==================== */
@@ -13875,9 +13913,9 @@
 					initCopyAllButtons();
 					initFocusTrap();
 					initKeyboardShortcuts();
-					initBeforeUnloadWarn();
 					initDashboardCardClicks();
 					checkLocalStorageSize();
+					initIdleAutoRefresh();
 				}
 
 				window.handleHistorySourceToggle = handleHistorySourceToggle;
