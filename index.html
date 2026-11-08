@@ -5563,10 +5563,20 @@
 					showNotification("Redo successful");
 				}
 
+				const MOBILE_PANEL_MQ = window.matchMedia("(max-width: 1400px)");
+
 				function syncPreviewHeight() {
 					const leftPanel = document.querySelector(`#tab-${currentActiveTab} .left-panel`);
 					const rightPanel = document.querySelector(`#tab-${currentActiveTab} .right-panel`);
 					if (!leftPanel || !rightPanel) return;
+
+					// Stacked layout (≤ 1400px): let the preview flow naturally — no nested scrollbar.
+					if (MOBILE_PANEL_MQ.matches) {
+						rightPanel.style.maxHeight = "";
+						rightPanel.style.overflowY = "";
+						return;
+					}
+
 					const leftHeight = leftPanel.offsetHeight;
 					rightPanel.style.maxHeight = leftHeight + "px";
 					rightPanel.style.overflowY = "auto";
@@ -6912,22 +6922,8 @@
 						showNotification(`${prefix === "store" ? "Store" : "Moolah"} entry added!`);
 					}
 
-					// Clear form fields after adding/updating
-					if (prefix === "store") {
-						["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"].forEach((id) => {
-							const el = document.getElementById(`store-${id}`);
-							if (el) el.value = "";
-						});
-						storeUpdatePreview();
-						saveFormData("store");
-					} else if (prefix === "moolah") {
-						["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "sku", "noOfTabs", "mokiId", "anydeskId"].forEach((id) => {
-							const el = document.getElementById(`moolah-${id}`);
-							if (el) el.value = "";
-						});
-						moolahUpdatePreview();
-						saveFormData("moolah");
-					}
+					// Clear form fields after adding/updating (also resets step state via clearFormFields)
+					clearFormFields(prefix);
 
 					markClean(prefix);
 					clearEditingBadge();
@@ -6983,6 +6979,11 @@
 						});
 						const textareas = document.querySelectorAll(`#tab-store textarea`);
 						textareas.forEach((ta) => autoGrow(ta));
+
+						// 🔁 Reset step state so the next entry starts fresh
+						window.storeSteps = { form: "pending", creation: "pending", install: "pending", upload: "pending" };
+						applyStepButtonStyles("store", window.storeSteps);
+						updateStoreIssuePreview();
 					} else if (prefix === "moolah") {
 						const fields = ["portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"];
 						fields.forEach((id) => {
@@ -6991,6 +6992,11 @@
 						});
 						const textareas = document.querySelectorAll(`#tab-moolah textarea`);
 						textareas.forEach((ta) => autoGrow(ta));
+
+						// 🔁 Reset step state so the next entry starts fresh
+						window.moolahSteps = { create: "pending", install: "pending", assign: "pending" };
+						applyStepButtonStyles("moolah", window.moolahSteps);
+						updateMoolahIssuePreview();
 					} else if (prefix === "ecommerce") {
 						const fields = ["portal", "storeName", "zipcode", "contact", "contactNumber", "api"];
 						fields.forEach((id) => {
@@ -8824,14 +8830,30 @@
 				}
 
 				async function updatePasswordInSheet(email, oldPassword, newPassword) {
-					const url = `${PASSWORD_UPDATE_SCRIPT_URL}?email=${encodeURIComponent(email)}&oldPassword=${encodeURIComponent(oldPassword)}&newPassword=${encodeURIComponent(newPassword)}`;
 					try {
-						await fetch(url, { method: "GET", mode: "no-cors" });
+						// PROXY_URL and PASSWORD_UPDATE_SCRIPT_URL are the same endpoint.
+						// Using fetchFromProxy gives us real CORS + JSON error detection
+						// (unlike mode: "no-cors", which returned an opaque response).
+						const data = await fetchFromProxy({
+							email,
+							oldPassword,
+							newPassword,
+						});
 
-						showNotification("Password change request sent. Check your sheet.");
+						// Tolerate common Apps Script success/failure shapes:
+						//   { success: false, message } → failure
+						//   { success: true } / { updated: 1 } / {} → success
+						if (data && data.success === false) {
+							showNotification(data.message || data.error || "Password update failed — old password may be incorrect.");
+							return false;
+						}
+
+						showNotification("Password updated successfully. Please log in again.");
 						return true;
 					} catch (err) {
-						showNotification("Network error: " + err.message);
+						// fetchFromProxy throws on: non-2xx HTTP, non-JSON body, or { error: "..." }
+						const msg = err && err.message ? err.message : "Unknown error";
+						showNotification(`Password update failed: ${msg}`);
 						return false;
 					}
 				}
@@ -9218,9 +9240,9 @@
 				let isPendingTrackerMode = false;
 				let cachedPendingEntries = [];
 
-				async function fetchWorkloadSheetData(onlyMine = false, silent = false) {
+				async function fetchWorkloadSheetData(onlyMine = false, silent = false, forceRefresh = false) {
 					try {
-						const data = await getWorkloadTrackerData();
+						const data = await getWorkloadTrackerData(forceRefresh);
 						if (!data.values || data.values.length < 2) {
 							if (!silent) showNotification("No data found in WORKLOAD TRACKER 2026");
 							return [];
@@ -9354,7 +9376,8 @@
 
 					if (isPendingTrackerMode) {
 						showNotification("📋 TL mode: Showing all pending tickets from all agents");
-						const pendingEntries = await fetchWorkloadSheetData(false, false); // all pendings
+						invalidateWorkloadTrackerCache();
+						const pendingEntries = await fetchWorkloadSheetData(false, false, true); // force fresh
 						cachedPendingEntries = pendingEntries;
 						renderPendingTableView(pendingEntries);
 						toggleBtn.classList.add("active");
@@ -9617,6 +9640,34 @@
 				function syncMoolahButtonsFromIssueText(issueText) {
 					window.moolahSteps = parseStepStatusesFromIssue(issueText, MOOLAH_STEP_LABELS, window.moolahSteps);
 					applyStepButtonStyles("moolah", window.moolahSteps);
+				}
+
+				function initStoreStepButtons() {
+					document.querySelectorAll(".store-step-btn").forEach((btn) => {
+						if (btn.__wired) return;
+						btn.__wired = true;
+						btn.addEventListener("click", () => {
+							const step = btn.dataset.step;
+							const status = btn.dataset.status;
+							window.storeSteps[step] = status;
+							applyStepButtonStyles("store", window.storeSteps);
+							updateStoreIssuePreview();
+						});
+					});
+				}
+
+				function initMoolahStepButtons() {
+					document.querySelectorAll(".moolah-step-btn").forEach((btn) => {
+						if (btn.__wired) return;
+						btn.__wired = true;
+						btn.addEventListener("click", () => {
+							const step = btn.dataset.step;
+							const status = btn.dataset.status;
+							window.moolahSteps[step] = status;
+							applyStepButtonStyles("moolah", window.moolahSteps);
+							updateMoolahIssuePreview();
+						});
+					});
 				}
 
 				function schedulerUpdatePreview() {
@@ -12602,161 +12653,6 @@
 
 					quillEditor.on("text-change", () => markDirty("ticket"));
 
-					function updateStoreIssuePreview() {
-						const steps = {
-							form: "NEW STORE CREATION FORM SENT",
-							creation: "STORE CREATION",
-							install: "INSTALL, UPDATE APPS & LOGIN ACCOUNT",
-							upload: "UPLOAD DATABASE",
-						};
-						const lines = [];
-						for (const [key, label] of Object.entries(steps)) {
-							const status = window.storeSteps[key];
-							if (status === "cleared") continue;
-							const statusText = status === "done" ? "DONE ✅" : "PENDING ❌";
-							lines.push(`${label} - ${statusText}`);
-						}
-						const issueText = lines.join("\n");
-						const el = document.getElementById("store-generated-issue");
-						if (el) el.innerText = issueText;
-						window._storeCurrentIssue = issueText;
-					}
-
-					function updateMoolahIssuePreview() {
-						const steps = {
-							create: "CREATE MOOLAH ACCOUNT",
-							install: "INSTALL & UPDATE ALL APPS",
-							assign: "ASSIGN STORE",
-						};
-						const lines = [];
-						for (const [key, label] of Object.entries(steps)) {
-							const status = window.moolahSteps[key];
-							if (status === "cleared") continue;
-							const statusText = status === "done" ? "DONE ✅" : "PENDING ❌";
-							lines.push(`${label} - ${statusText}`);
-						}
-						const issueText = lines.join("\n");
-						const el = document.getElementById("moolah-generated-issue");
-						if (el) el.innerText = issueText;
-						window._moolahCurrentIssue = issueText;
-					}
-
-					const STORE_STEP_LABELS = {
-						form: "NEW STORE CREATION FORM SENT",
-						creation: "STORE CREATION",
-						install: "INSTALL, UPDATE APPS & LOGIN ACCOUNT",
-						upload: "UPLOAD DATABASE",
-					};
-
-					const MOOLAH_STEP_LABELS = {
-						create: "CREATE MOOLAH ACCOUNT",
-						install: "INSTALL & UPDATE ALL APPS",
-						assign: "ASSIGN STORE",
-					};
-
-					function parseStepStatusesFromIssue(issueText, stepLabels, currentSteps) {
-						const result = { ...currentSteps };
-						if (!issueText) return result;
-						const lines = issueText
-							.split(/\r?\n/)
-							.map((line) => line.trim())
-							.filter((line) => line.length > 0);
-						lines.forEach((line) => {
-							for (const [step, label] of Object.entries(stepLabels)) {
-								if (!line.toLowerCase().includes(label.toLowerCase())) continue;
-								if (/\bdone\b/i.test(line)) {
-									result[step] = "done";
-								} else if (/\bpending\b/i.test(line)) {
-									result[step] = "pending";
-								}
-							}
-						});
-						return result;
-					}
-
-					function applyStepButtonStyles(prefix, steps) {
-						document.querySelectorAll(`.${prefix}-step-btn`).forEach((btn) => {
-							const step = btn.dataset.step;
-							const status = btn.dataset.status; // "done", "pending", "cleared"
-							if (!step || steps[step] === undefined) return;
-
-							const currentStatus = steps[step];
-
-							// Remove all button-related classes and inline styles
-							btn.className = btn.className
-								.split(" ")
-								.filter((c) => !c.startsWith("btn-"))
-								.join(" ")
-								.trim();
-							btn.style.backgroundColor = "";
-							btn.style.color = "";
-							btn.style.borderColor = "";
-
-							// Determine if this button is the active one
-							const isActive = currentStatus === status;
-
-							if (isActive) {
-								// Active button: solid color
-								if (status === "done") {
-									btn.classList.add("btn-success");
-									btn.style.backgroundColor = "#198754";
-									btn.style.color = "white";
-								} else if (status === "pending") {
-									btn.classList.add("btn-danger");
-									btn.style.backgroundColor = "#dc3545";
-									btn.style.color = "white";
-								} else if (status === "cleared") {
-									btn.classList.add("btn-secondary");
-									btn.style.backgroundColor = "#6c757d";
-									btn.style.color = "white";
-								}
-							} else {
-								// Inactive button: outline style
-								if (status === "done") {
-									btn.classList.add("btn-outline-success");
-								} else if (status === "pending") {
-									btn.classList.add("btn-outline-danger");
-								} else if (status === "cleared") {
-									btn.classList.add("btn-outline-secondary");
-								}
-							}
-						});
-					}
-
-					function initStoreStepButtons() {
-						document.querySelectorAll(".store-step-btn").forEach((btn) => {
-							btn.addEventListener("click", () => {
-								const step = btn.dataset.step;
-								const status = btn.dataset.status;
-								window.storeSteps[step] = status;
-								applyStepButtonStyles("store", window.storeSteps);
-								updateStoreIssuePreview();
-							});
-						});
-					}
-
-					function initMoolahStepButtons() {
-						document.querySelectorAll(".moolah-step-btn").forEach((btn) => {
-							btn.addEventListener("click", () => {
-								const step = btn.dataset.step;
-								const status = btn.dataset.status;
-								window.moolahSteps[step] = status;
-								applyStepButtonStyles("moolah", window.moolahSteps);
-								updateMoolahIssuePreview();
-							});
-						});
-					}
-
-					function syncStoreButtonsFromIssueText(issueText) {
-						window.storeSteps = parseStepStatusesFromIssue(issueText, STORE_STEP_LABELS, window.storeSteps);
-						applyStepButtonStyles("store", window.storeSteps);
-					}
-
-					function syncMoolahButtonsFromIssueText(issueText) {
-						window.moolahSteps = parseStepStatusesFromIssue(issueText, MOOLAH_STEP_LABELS, window.moolahSteps);
-						applyStepButtonStyles("moolah", window.moolahSteps);
-					}
-
 					initStoreStepButtons();
 					initMoolahStepButtons();
 					syncStoreButtonsFromIssueText(document.getElementById("store-generated-issue")?.innerText || "");
@@ -13050,8 +12946,19 @@
 					initCombobox("kbEntryModule-combobox", "kbEntryModule", MODULE_OPTIONS, "kbEntryModule-suggestions", () => {});
 
 					initTicketAdvancedToggle();
-					initAdvancedToggle("store", ["store-portal", "store-storeName", "store-zipcode", "store-contact", "store-contactNumber", "store-email", "store-password", "store-sku", "store-database", "store-noOfReg"]);
-					initAdvancedToggle("moolah", ["moolah-portal", "moolah-storeName", "moolah-zipcode", "moolah-contact", "moolah-contactNumber", "moolah-email", "moolah-password", "moolah-sku", "moolah-noOfTabs"]);
+
+					function initAdvancedToggleChecked(prefix, basicFieldIds) {
+						const mismatched = basicFieldIds.filter((id) => !id.startsWith(prefix + "-"));
+						if (mismatched.length) {
+							console.error(`initAdvancedToggle("${prefix}") received foreign field IDs:`, mismatched);
+						}
+						initAdvancedToggle(prefix, basicFieldIds);
+					}
+
+					initAdvancedToggleChecked("store", ["store-portal", "store-storeName", "store-zipcode", "store-contact", "store-contactNumber", "store-agent", "store-email", "store-password", "store-sku", "store-database", "store-noOfReg"]);
+
+					initAdvancedToggleChecked("moolah", ["moolah-portal", "moolah-storeName", "moolah-zipcode", "moolah-contact", "moolah-contactNumber", "moolah-email", "moolah-password", "moolah-sku", "moolah-noOfTabs"]);
+
 					initCopyAllButtons();
 					initFocusTrap();
 					initKeyboardShortcuts();
