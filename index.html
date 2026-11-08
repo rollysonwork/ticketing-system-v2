@@ -9802,7 +9802,7 @@
    ============================================================ */
 				function initIdleAutoRefresh() {
 					const IDLE_TIMEOUT_MS = 15 * 60 * 1000; // 15 minutes
-					const CHECK_INTERVAL_MS = 30 * 1000; // poll every 30 seconds
+					const CHECK_INTERVAL_MS = 10 * 1000; // poll every 10 seconds
 
 					let lastActivity = Date.now();
 					let reloading = false;
