@@ -10357,6 +10357,7 @@
 					}
 					if (!total || total < 2) return;
 					announcementAutoSlideTimer = setInterval(() => {
+						if (!document.getElementById("tab-dashboard").classList.contains("active")) return;
 						goToAnnouncement(currentAnnouncementIndex + 1);
 					}, 30000);
 				}
