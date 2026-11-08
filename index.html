@@ -134,7 +134,9 @@
 			body:has(#tab-schedule.active) .bulk-bar,
 			body:has(#tab-schedule.active) #entryTable,
 			body:has(#tab-knowledgebase.active) .bulk-bar,
-			body:has(#tab-knowledgebase.active) #entryTable {
+			body:has(#tab-knowledgebase.active) #entryTable,
+			body:has(#tab-accounts.active) .bulk-bar,
+			body:has(#tab-accounts.active) #entryTable {
 				display: none;
 			}
 
@@ -2760,6 +2762,54 @@
 				margin-bottom: 0;
 			}
 
+			/* ==================== DEPARTMENT ACCOUNTS ==================== */
+			.accounts-page {
+				max-width: 900px;
+				margin: 0 auto;
+				display: flex;
+				flex-direction: column;
+				gap: 20px;
+			}
+
+			.account-field {
+				margin: 8px 0;
+				font-size: 0.9rem;
+				display: flex;
+				align-items: baseline;
+				gap: 8px;
+				flex-wrap: wrap;
+			}
+
+			.account-field strong {
+				color: var(--accent-color);
+				min-width: 90px;
+				display: inline-block;
+				font-size: 0.78rem;
+				text-transform: uppercase;
+				letter-spacing: 0.03em;
+			}
+
+			.account-field span {
+				font-family: "Google Sans Code", monospace;
+				word-break: break-all;
+				background: var(--bg-tertiary);
+				padding: 3px 10px;
+				border-radius: 8px;
+				border: 1px solid var(--border-color);
+			}
+
+			/* Make the KB card header show it's clickable */
+			.kb-entry-card {
+				cursor: pointer;
+			}
+			.kb-entry-card .kb-entry-content,
+			.kb-entry-card .kb-entry-actions {
+				cursor: default;
+			}
+			.kb-entry-card.expanded .kb-entry-header {
+				cursor: pointer;
+			}
+
 			/* ============ INLINE SCHEDULER CALENDAR ============ */
 			.inline-calendar {
 				background: var(--bg-tertiary);
@@ -3704,6 +3754,7 @@
 					<button class="tab-button" data-tab="ecommerce" onclick="switchTab('ecommerce', this)"><i class="bi bi-cart-fill"></i><span>E‑COMMERCE</span></button>
 					<button class="tab-button" data-tab="scheduler" onclick="switchTab('scheduler', this)"><i class="bi bi-calendar-event-fill"></i><span>SCHEDULER</span></button>
 					<button class="tab-button" data-tab="knowledgebase" onclick="switchTab('knowledgebase', this)"><i class="bi bi-book-fill"></i><span>KNOWLEDGE BASE</span></button>
+					<button class="tab-button" data-tab="accounts" onclick="switchTab('accounts', this)"><i class="bi bi-shield-lock-fill"></i><span>DEPARTMENT ACCOUNTS</span></button>
 					<button class="tab-button" data-tab="announcement" onclick="switchTab('announcement', this)"><i class="bi bi-megaphone-fill"></i><span>ANNOUNCEMENTS</span></button>
 					<button class="tab-button" data-tab="schedule" onclick="switchTab('schedule', this)"><i class="bi bi-calendar-week-fill"></i><span>MONTHLY SCHEDULE</span></button>
 				</nav>
@@ -3893,6 +3944,22 @@
 						<!-- Entry List -->
 						<div id="kbEntryList" class="kb-entry-list">
 							<div class="kb-empty">Loading knowledge base...</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- ==================== DEPARTMENT ACCOUNTS TAB ==================== -->
+				<div id="tab-accounts" class="tab-content">
+					<div class="accounts-page">
+						<div class="kb-header">
+							<h2>🔐 Department Accounts</h2>
+							<button class="kb-add-btn" id="accountAddBtn" onclick="openAccountEntryModal()"><i class="bi bi-plus-circle-fill"></i> Add Account</button>
+						</div>
+
+						<div id="accountStatus" class="kb-status"></div>
+
+						<div id="accountEntryList" class="kb-entry-list">
+							<div class="kb-empty">Loading accounts...</div>
 						</div>
 					</div>
 				</div>
@@ -5523,6 +5590,10 @@
 
 					if (tabName === "knowledgebase" && !kbLoaded[currentKbType]) {
 						loadKnowledgeBase(currentKbType);
+					}
+
+					if (tabName === "accounts" && !accountsLoaded) {
+						loadDepartmentAccounts();
 					}
 
 					setTimeout(() => {
@@ -9034,7 +9105,7 @@
 				function initFocusTrap() {
 					document.addEventListener("keydown", (e) => {
 						if (e.key !== "Tab") return;
-						const candidates = [document.getElementById("changePwdModal"), document.getElementById("kbEntryModal"), document.getElementById("announcementModal"), document.querySelector(".shift-report-modal")];
+						const candidates = [document.getElementById("changePwdModal"), document.getElementById("kbEntryModal"), document.getElementById("announcementModal"), document.getElementById("accountEntryModal"), document.querySelector(".shift-report-modal")];
 						let modal = null;
 						for (const m of candidates) {
 							if (m && window.getComputedStyle(m).display !== "none") modal = m;
@@ -10961,11 +11032,11 @@
 							const createdByMeta = e.source === "hrms" && e.createdBy ? `<span><i class="bi bi-person-fill"></i> ${escapeHtml(e.createdBy)}</span>` : "";
 
 							return `
-        <div class="kb-entry-card${wasExpanded ? " expanded" : ""}" data-kb-id="${e.id}">
-            <div class="kb-entry-header" onclick="toggleKbEntry(this)">
-                <div class="kb-entry-title">${escapeHtml(e.title || "(Untitled)")}</div>
-                ${moduleBadge}
-            </div>
+        <div class="kb-entry-card${wasExpanded ? " expanded" : ""}" data-kb-id="${e.id}" onclick="handleKbCardClick(event, this)">
+    <div class="kb-entry-header">
+        <div class="kb-entry-title">${escapeHtml(e.title || "(Untitled)")}</div>
+        ${moduleBadge}
+    </div>
             <div class="kb-entry-meta">
                 <span><i class="bi bi-collection"></i> ${e.source === "ticketing" ? "Ticketing" : "HRMS"}</span>
                 ${createdByMeta}
@@ -11178,6 +11249,213 @@
 					} catch (err) {
 						showNotification(`Delete failed: ${err.message}`);
 					}
+				}
+
+				/* ==================== DEPARTMENT ACCOUNTS ==================== */
+				const ACCOUNTS_SHEET_NAME = "DEPARTMENT ACCOUNTS";
+
+				let departmentAccounts = [];
+				let accountsLoaded = false;
+				let editingAccountRowIndex = null;
+
+				async function loadDepartmentAccounts() {
+					const statusEl = document.getElementById("accountStatus");
+					if (statusEl) {
+						statusEl.innerHTML = '<span class="spinner" style="display:inline-block;width:14px;height:14px;border:2px solid var(--border-color);border-top-color:var(--accent-color);border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;margin-right:6px;"></span> Loading...';
+					}
+
+					try {
+						const data = await fetchFromProxy({
+							action: "getSheetData",
+							sheetName: ACCOUNTS_SHEET_NAME,
+						});
+						const rows = (data.values || []).slice(1);
+
+						departmentAccounts = rows
+							.map((r, i) => ({
+								id: `acc_${i}`,
+								subj: (r[0] || "").toString().trim(),
+								email: (r[1] || "").toString().trim(),
+								password: (r[2] || "").toString().trim(),
+								rowIndex: i + 2,
+							}))
+							.filter((e) => e.subj);
+
+						accountsLoaded = true;
+						if (statusEl) statusEl.textContent = "";
+					} catch (err) {
+						if (statusEl) {
+							statusEl.innerHTML = `<span style="color: var(--danger)">❌ ${escapeHtml(err.message)}</span>`;
+						}
+						departmentAccounts = [];
+					}
+
+					renderDepartmentAccounts();
+				}
+
+				function renderDepartmentAccounts() {
+					const list = document.getElementById("accountEntryList");
+					if (!list) return;
+
+					if (!departmentAccounts.length) {
+						list.innerHTML = '<div class="kb-empty">No accounts yet. Click "Add Account" to create one.</div>';
+						return;
+					}
+
+					list.innerHTML = departmentAccounts
+						.map(
+							(e) => `
+        <div class="kb-entry-card" data-acc-id="${e.id}" onclick="handleKbCardClick(event, this)">
+            <div class="kb-entry-header">
+                <div class="kb-entry-title">${escapeHtml(e.subj || "(Untitled)")}</div>
+            </div>
+            <div class="kb-entry-content">
+                <div class="account-field">
+                    <strong>Email</strong>
+                    <span>${escapeHtml(e.email || "—")}</span>
+                </div>
+                <div class="account-field">
+                    <strong>Password</strong>
+                    <span>${escapeHtml(e.password || "—")}</span>
+                </div>
+            </div>
+            <div class="kb-entry-actions">
+                <button onclick="event.stopPropagation(); openAccountEntryModal('${e.id}')" title="Edit">
+                    <i class="bi bi-pencil-fill"></i> Edit
+                </button>
+                <button class="kb-delete-btn" onclick="event.stopPropagation(); deleteAccountEntry('${e.id}')" title="Delete">
+                    <i class="bi bi-trash3-fill"></i> Delete
+                </button>
+            </div>
+        </div>`,
+						)
+						.join("");
+				}
+
+				function toggleAccountEntry(headerEl) {
+					const card = headerEl.closest(".kb-entry-card");
+					if (card) card.classList.toggle("expanded");
+				}
+
+				function openAccountEntryModal(id) {
+					editingAccountRowIndex = null;
+					const modal = document.getElementById("accountEntryModal");
+					const backdrop = document.getElementById("accountEntryModalBackdrop");
+					const titleEl = document.getElementById("accountEntryModalTitle");
+					const subjEl = document.getElementById("accountEntrySubj");
+					const emailEl = document.getElementById("accountEntryEmail");
+					const pwdEl = document.getElementById("accountEntryPassword");
+					const rowEl = document.getElementById("accountEntryRowIndex");
+					const errEl = document.getElementById("accountEntryError");
+
+					errEl.textContent = "";
+
+					if (id) {
+						const entry = departmentAccounts.find((e) => e.id === id);
+						if (!entry) return;
+						editingAccountRowIndex = entry.rowIndex;
+						rowEl.value = entry.rowIndex;
+						titleEl.textContent = "✏️ Edit Department Account";
+						subjEl.value = entry.subj || "";
+						emailEl.value = entry.email || "";
+						pwdEl.value = entry.password || "";
+					} else {
+						rowEl.value = "";
+						titleEl.textContent = "🔐 Add Department Account";
+						subjEl.value = "";
+						emailEl.value = "";
+						pwdEl.value = "";
+					}
+
+					modal.style.display = "block";
+					backdrop.style.display = "block";
+					setTimeout(() => subjEl.focus(), 50);
+				}
+
+				function closeAccountEntryModal() {
+					document.getElementById("accountEntryModal").style.display = "none";
+					document.getElementById("accountEntryModalBackdrop").style.display = "none";
+					editingAccountRowIndex = null;
+				}
+
+				async function saveAccountEntry() {
+					const subj = document.getElementById("accountEntrySubj").value.trim();
+					const email = document.getElementById("accountEntryEmail").value.trim();
+					const password = document.getElementById("accountEntryPassword").value.trim();
+					const errEl = document.getElementById("accountEntryError");
+					errEl.textContent = "";
+
+					if (!subj) {
+						errEl.textContent = "Subject is required.";
+						return;
+					}
+
+					const saveBtn = document.getElementById("accountEntrySaveBtn");
+					saveBtn.disabled = true;
+					saveBtn.textContent = "Saving...";
+
+					try {
+						if (editingAccountRowIndex !== null) {
+							await fetchFromProxyPOST({
+								action: "updateDepartmentAccount",
+								sheetName: ACCOUNTS_SHEET_NAME,
+								rowIndex: editingAccountRowIndex,
+								subj: subj,
+								email: email,
+								password: password,
+							});
+							showNotification("Account updated!");
+						} else {
+							await fetchFromProxyPOST({
+								action: "addDepartmentAccount",
+								sheetName: ACCOUNTS_SHEET_NAME,
+								subj: subj,
+								email: email,
+								password: password,
+							});
+							showNotification("Account added!");
+						}
+
+						closeAccountEntryModal();
+						accountsLoaded = false;
+						await loadDepartmentAccounts();
+					} catch (err) {
+						errEl.textContent = `Error: ${err.message}`;
+					} finally {
+						saveBtn.disabled = false;
+						saveBtn.textContent = "Save";
+					}
+				}
+
+				async function deleteAccountEntry(id) {
+					const entry = departmentAccounts.find((e) => e.id === id);
+					if (!entry) return;
+
+					if (!confirm(`Delete "${entry.subj}"?\n\nThis cannot be undone.`)) return;
+
+					try {
+						await fetchFromProxyPOST({
+							action: "deleteDepartmentAccount",
+							sheetName: ACCOUNTS_SHEET_NAME,
+							rowIndex: entry.rowIndex,
+						});
+						showNotification("Account deleted.");
+						accountsLoaded = false;
+						await loadDepartmentAccounts();
+					} catch (err) {
+						showNotification(`Delete failed: ${err.message}`);
+					}
+				}
+
+				/* Unified expand/collapse for entry cards (KB + Accounts).
+   - Click anywhere on the card (header / meta) → toggles
+   - Click on the content area when expanded → does NOT collapse (so text can be selected)
+   - Click on action buttons → does nothing
+*/
+				function handleKbCardClick(e, card) {
+					if (e.target.closest(".kb-entry-actions")) return;
+					if (e.target.closest(".kb-entry-content")) return;
+					card.classList.toggle("expanded");
 				}
 
 				function initSidebarToggle() {
@@ -12760,6 +13038,7 @@
 						kbSearchInput.addEventListener("input", filterKnowledgeBase);
 					}
 					document.getElementById("kbEntryModalBackdrop").addEventListener("click", closeKbEntryModal);
+					document.getElementById("accountEntryModalBackdrop")?.addEventListener("click", closeAccountEntryModal);
 
 					// Sync toggle button active state to match persisted type
 					document.querySelectorAll(".kb-type-btn").forEach((b) => {
@@ -12808,10 +13087,43 @@
 				window.deleteKbEntry = deleteKbEntry;
 				window.openEcommerceDraftEmail = openEcommerceDraftEmail;
 				window.copyEcommerceDraft = copyEcommerceDraft;
+				window.openAccountEntryModal = openAccountEntryModal;
+				window.closeAccountEntryModal = closeAccountEntryModal;
+				window.saveAccountEntry = saveAccountEntry;
+				window.deleteAccountEntry = deleteAccountEntry;
+				window.toggleAccountEntry = toggleAccountEntry;
+				window.handleKbCardClick = handleKbCardClick;
 
 				document.addEventListener("DOMContentLoaded", init);
 			})();
 		</script>
+		<div id="accountEntryModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 520px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
+			<h3 id="accountEntryModalTitle" style="margin-bottom: 16px">🔐 Add Department Account</h3>
+			<input type="hidden" id="accountEntryRowIndex" />
+
+			<div class="kb-form-row">
+				<label>Subject <span style="color: var(--danger)">*</span></label>
+				<input type="text" id="accountEntrySubj" class="no-uppercase" placeholder="e.g., RetailzPOS Support Email" />
+			</div>
+
+			<div class="kb-form-row">
+				<label>Email</label>
+				<input type="text" id="accountEntryEmail" class="no-uppercase" placeholder="support@retailzpos.com" />
+			</div>
+
+			<div class="kb-form-row">
+				<label>Password</label>
+				<input type="text" id="accountEntryPassword" class="no-uppercase" />
+			</div>
+
+			<div id="accountEntryError" style="color: var(--danger); margin-bottom: 12px; font-size: 0.85rem"></div>
+
+			<div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px">
+				<button id="accountEntrySaveBtn" class="login-action-btn" onclick="saveAccountEntry()">Save</button>
+				<button class="login-action-btn" style="background: #6b7280" onclick="closeAccountEntryModal()">Cancel</button>
+			</div>
+		</div>
+		<div id="accountEntryModalBackdrop" style="display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.5); z-index: 1150"></div>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 		<script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/jquery@4.0.0/dist/jquery.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
