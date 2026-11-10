@@ -1302,157 +1302,6 @@
 				border-color: var(--accent-color) !important;
 			}
 
-			/* ============ DASHBOARD METRIC CARDS ============ */
-			.dashboard-container {
-				background: var(--bg-secondary);
-				border: 1px solid var(--border-color);
-				border-radius: 20px;
-				padding: 18px 20px;
-				margin-bottom: 0;
-				box-shadow: var(--card-shadow);
-				transition: var(--transition);
-			}
-
-			.dashboard-header {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				margin-bottom: 14px;
-			}
-
-			.dashboard-header h3 {
-				font-size: 0.95rem;
-				font-weight: 700;
-				margin: 0;
-				color: var(--text-primary);
-				text-transform: uppercase;
-				letter-spacing: 0.05em;
-			}
-
-			.dashboard-refresh-btn {
-				background: var(--bg-tertiary);
-				border: 1px solid var(--border-color);
-				border-radius: 30px;
-				padding: 6px 14px;
-				font-size: 0.72rem;
-				font-weight: 600;
-				cursor: pointer;
-				color: var(--text-secondary);
-				transition: var(--transition);
-				display: inline-flex;
-				align-items: center;
-				gap: 5px;
-				text-transform: uppercase;
-				letter-spacing: 0.03em;
-			}
-
-			.dashboard-refresh-btn:hover {
-				background: var(--accent-color);
-				color: #fff;
-				border-color: var(--accent-color);
-				transform: translateY(-1px);
-			}
-
-			.dashboard-grid {
-				display: grid;
-				grid-template-columns: repeat(auto-fit, minmax(155px, 1fr));
-				gap: 12px;
-			}
-
-			.dashboard-card {
-				background: var(--bg-tertiary);
-				border: 1px solid var(--border-color);
-				border-radius: 14px;
-				padding: 14px 14px 16px;
-				display: flex;
-				flex-direction: column;
-				gap: 6px;
-				position: relative;
-				overflow: hidden;
-				transition: var(--transition);
-			}
-
-			.dashboard-card:hover {
-				transform: translateY(-2px);
-				box-shadow: var(--card-shadow-hover);
-			}
-
-			.dashboard-card::before {
-				content: "";
-				position: absolute;
-				top: 0;
-				left: 0;
-				right: 0;
-				height: 3px;
-			}
-
-			.dashboard-card.card-today::before {
-				background: #3b82f6;
-			}
-			.dashboard-card.card-yesterday::before {
-				background: #8b5cf6;
-			}
-			.dashboard-card.card-tickets::before {
-				background: #0ea5e9;
-			}
-			.dashboard-card.card-resolved::before {
-				background: #10b981;
-			}
-			.dashboard-card.card-pending::before {
-				background: #f59e0b;
-			}
-			.dashboard-card.card-other::before {
-				background: #6b7280;
-			}
-
-			.dashboard-label {
-				font-size: 0.68rem;
-				font-weight: 600;
-				text-transform: uppercase;
-				letter-spacing: 0.05em;
-				color: var(--text-muted);
-				line-height: 1.25;
-			}
-
-			.dashboard-value {
-				font-size: 1.9rem;
-				font-weight: 700;
-				line-height: 1;
-				color: var(--text-primary);
-			}
-
-			.dashboard-card.card-today .dashboard-value {
-				color: #3b82f6;
-			}
-			.dashboard-card.card-yesterday .dashboard-value {
-				color: #8b5cf6;
-			}
-			.dashboard-card.card-tickets .dashboard-value {
-				color: #0ea5e9;
-			}
-			.dashboard-card.card-resolved .dashboard-value {
-				color: #10b981;
-			}
-			.dashboard-card.card-pending .dashboard-value {
-				color: #f59e0b;
-			}
-			.dashboard-card.card-other .dashboard-value {
-				color: #6b7280;
-			}
-
-			.dashboard-card.loading .dashboard-value {
-				opacity: 0.35;
-			}
-
-			@media (max-width: 900px) {
-				.dashboard-grid {
-					grid-template-columns: repeat(2, 1fr);
-				}
-				.dashboard-value {
-					font-size: 1.5rem;
-				}
-			}
-
 			/* ============ HISTORY SOURCE TOGGLE ============ */
 			.history-source-controls {
 				display: inline-flex;
@@ -3245,14 +3094,10 @@
 			}
 
 			/* ==================== CLICKABLE DASHBOARD CARDS ==================== */
-			.dashboard-card.card-resolved,
-			.dashboard-card.card-pending,
-			.dashboard-card.card-other {
+			.dash-stat.is-clickable {
 				cursor: pointer;
 			}
-			.dashboard-card.card-resolved:hover,
-			.dashboard-card.card-pending:hover,
-			.dashboard-card.card-other:hover {
+			.dash-stat.is-clickable:hover {
 				transform: translateY(-2px);
 				box-shadow:
 					var(--card-shadow-hover),
@@ -3648,45 +3493,7 @@
 				margin-left: 4px;
 				opacity: 0.7;
 			}
-			/* ============ DASHBOARD SECTION CONTROLS ============ */
-			.dashboard-section-controls {
-				display: flex;
-				gap: 8px;
-				align-items: center;
-				flex-wrap: wrap;
-			}
-
-			.dashboard-month-select {
-				background: var(--bg-tertiary);
-				border: 1px solid var(--border-color);
-				border-radius: 30px;
-				padding: 6px 14px;
-				font-size: 0.72rem;
-				font-weight: 600;
-				color: var(--text-secondary);
-				cursor: pointer;
-				font-family: inherit;
-				text-transform: uppercase;
-				letter-spacing: 0.03em;
-				transition: var(--transition);
-			}
-
-			.dashboard-month-select:hover {
-				border-color: var(--accent-color);
-				color: var(--accent-color);
-			}
-
-			.dashboard-month-select:focus {
-				outline: none;
-				border-color: var(--accent-color);
-				box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
-			}
-
-			.dashboard-section-controls .dashboard-refresh-btn.active {
-				background: var(--accent-color);
-				color: #fff;
-				border-color: var(--accent-color);
-			}
+			
 			.schedule-nav-btn:disabled {
 				opacity: 0.3;
 				cursor: not-allowed;
@@ -5496,8 +5303,6 @@
 				"gemini-2.5-pro",
 			];
 
-			const PASSWORD_UPDATE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxPcizPPjndZAHgWypPmstNtij9MUCS4gSKonFkxTE-C3hfrNvSlwdH2bTHm94RYhWUuw/exec";
-
 			(function () {
 				"use strict";
 
@@ -5654,8 +5459,6 @@
 					"2PM - 11PM": ["02:00 PM", "11:00 PM"],
 				};
 
-				const CONSTANT_ISSUE = `CREATE MOOLAH ACCOUNT - DONE ✅\nINSTALL & UPDATE ALL APPS - DONE ✅\nASSIGN STORE - DONE ✅`;
-
 				const MODULE_OPTIONS = [
 					"POS",
 					"Portal",
@@ -5732,7 +5535,6 @@
 					"Hardware Setup",
 				];
 				const STATUS_OPTIONS = ["RESOLVED", "PENDING", "OTHER TASK", "UNSOLVED"];
-				const SHIFT_OPTIONS = ["9PM - 6AM", "5AM - 2PM", "2PM - 11PM"];
 
 				let currentStatusFilter = new Set();
 				let currentActiveTab = "dashboard";
@@ -5803,18 +5605,6 @@
 					});
 					// en-CA gives YYYY-MM-DD format
 					return formatter.format(now);
-				}
-
-				function isTodayEST(dateStr) {
-					if (!dateStr) return false;
-					const todayEST = getESTDateString();
-					const parts = dateStr.split("/");
-					if (parts.length !== 3) return false;
-					const month = parts[0].padStart(2, "0");
-					const day = parts[1].padStart(2, "0");
-					const year = parts[2];
-					const entryFormatted = `${year}-${month}-${day}`;
-					return entryFormatted === todayEST;
 				}
 
 				function parseDateFromString(dateStr) {
@@ -6094,23 +5884,6 @@
 						day: "2-digit",
 					});
 					return formatter.format(new Date()); // returns MM/DD/YYYY
-				}
-
-				function toSentenceCase(text) {
-					if (!text) return "";
-					const lines = text.split(/\r?\n/);
-					const processedLines = lines.map((line) => {
-						if (line.trim() === "") return line;
-						let lowerLine = line.toLowerCase();
-						lowerLine = lowerLine.charAt(0).toUpperCase() + lowerLine.slice(1);
-						if (lowerLine.startsWith("•")) {
-							if (lowerLine.length > 2 && lowerLine[2] === " ") {
-								lowerLine = lowerLine.substring(0, 3) + lowerLine[3].toUpperCase() + lowerLine.substring(4);
-							}
-						}
-						return lowerLine;
-					});
-					return processedLines.join("\n");
 				}
 
 				function cloneEntries(entries) {
@@ -6513,7 +6286,13 @@
 					});
 				}
 
-				function saveFormData(prefix) {
+								// ============ saveFormData — 400ms debounce ============
+				// Keystroke-level callers coalesce into a single localStorage write.
+				// Critical paths (beforeunload, idle-refresh) call flushAllFormDataNow()
+				// to bypass the debounce and persist immediately.
+				const _saveFormDataTimers = {};
+
+				function _writeFormDataNow(prefix) {
 					const fields = {
 						moolah: ["shift", "portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "email", "password", "noOfTabs", "sku", "mokiId", "anydeskId"],
 						store: ["shift", "portal", "storeName", "zipcode", "contact", "contactNumber", "address1", "address2", "city", "state", "agent", "email", "password", "sku", "database", "noOfReg", "mokiId", "anydeskId"],
@@ -6532,8 +6311,31 @@
 						formData.timezone = document.getElementById("scheduler-timezone").value;
 						formData.language = document.getElementById("scheduler-language").value;
 					}
+					try {
+						localStorage.setItem(`${prefix}FormData`, JSON.stringify(formData));
+					} catch (e) {
+						console.warn("[saveFormData] quota exceeded:", e);
+					}
+				}
 
-					localStorage.setItem(`${prefix}FormData`, JSON.stringify(formData));
+				function saveFormData(prefix) {
+					if (_saveFormDataTimers[prefix]) clearTimeout(_saveFormDataTimers[prefix]);
+					_saveFormDataTimers[prefix] = setTimeout(() => {
+						_saveFormDataTimers[prefix] = null;
+						_writeFormDataNow(prefix);
+					}, 400);
+				}
+
+				function flushFormDataNow(prefix) {
+					if (_saveFormDataTimers[prefix]) {
+						clearTimeout(_saveFormDataTimers[prefix]);
+						_saveFormDataTimers[prefix] = null;
+					}
+					_writeFormDataNow(prefix);
+				}
+
+				function flushAllFormDataNow() {
+					["ticket", "store", "moolah", "ecommerce", "scheduler"].forEach(flushFormDataNow);
 				}
 
 				function loadFormData(prefix) {
@@ -6600,67 +6402,6 @@
 					ecommerceUpdatePreview();
 					schedulerUpdatePreview();
 					ticketUpdatePreview();
-				}
-
-				function syncShiftSupportFromTicket() {
-					const ticketShift = document.getElementById("ticket-shift").value;
-					const ticketSupport = document.getElementById("ticket-support").value;
-					const ticketDate = document.getElementById("ticket-date").value;
-
-					// Helper to update a disabled shift dropdown
-					function updateShiftDisplay(prefix, shiftValue) {
-						const hiddenInput = document.getElementById(`${prefix}-shift`);
-						const labelSpan = document.getElementById(`${prefix}-shiftDropdownLabel`);
-						if (hiddenInput) hiddenInput.value = shiftValue || "";
-						if (labelSpan) labelSpan.textContent = shiftValue || "Select shift";
-					}
-
-					// Store
-					updateShiftDisplay("store", ticketShift);
-					document.getElementById("store-support").value = ticketSupport;
-					document.getElementById("store-date").value = ticketDate;
-
-					// Moolah
-					updateShiftDisplay("moolah", ticketShift);
-					document.getElementById("moolah-support").value = ticketSupport;
-					document.getElementById("moolah-date").value = ticketDate;
-
-					// E‑commerce
-					updateShiftDisplay("ecommerce", ticketShift);
-					document.getElementById("ecommerce-support").value = ticketSupport;
-					document.getElementById("ecommerce-date").value = ticketDate;
-
-					// Scheduler
-					updateShiftDisplay("scheduler", ticketShift);
-					document.getElementById("scheduler-support").value = ticketSupport;
-					document.getElementById("scheduler-date").value = ticketDate;
-
-					storeUpdatePreview();
-					moolahUpdatePreview();
-					ecommerceUpdatePreview(); // ✅ also update ecommerce preview
-					schedulerUpdatePreview();
-					saveFormData("store");
-					saveFormData("moolah");
-					saveFormData("ecommerce");
-					saveFormData("scheduler");
-				}
-
-				function uppercaseTextNodes(element) {
-					Array.from(element.childNodes).forEach((node) => {
-						if (node.nodeType === Node.TEXT_NODE) {
-							node.textContent = node.textContent.toUpperCase();
-						} else if (node.nodeType === Node.ELEMENT_NODE) {
-							uppercaseTextNodes(node);
-						}
-					});
-				}
-
-				function uppercaseHtmlPreserveTags(html) {
-					if (!html) return "";
-					const temp = document.createElement("div");
-					temp.innerHTML = html;
-					uppercaseTextNodes(temp);
-					return temp.innerHTML;
 				}
 
 				function moolahUpdatePreview() {
@@ -7103,24 +6844,6 @@
 
 					const troubleshootingRaw = document.getElementById("ticket-resolution").value;
 					document.getElementById("ticket-previewTroubleshooting").innerHTML = !isHtmlEmpty(troubleshootingRaw) ? convertQuillLists(troubleshootingRaw) : "";
-					syncPreviewHeight();
-				}
-
-				function updatePreviewWithEntry(entry) {
-					document.getElementById("ticket-previewPortal").textContent = entry.portal.toUpperCase();
-					document.getElementById("ticket-previewStore").textContent = entry.store.toUpperCase();
-					document.getElementById("ticket-previewZip").textContent = entry.zip.toUpperCase();
-					document.getElementById("ticket-previewContactPerson").textContent = entry.contact.toUpperCase();
-					document.getElementById("ticket-previewCaller").textContent = entry.contact.toUpperCase();
-					document.getElementById("ticket-previewContactNumber").textContent = entry.contactNumber;
-					document.getElementById("ticket-previewContact").textContent = entry.contactNumber;
-
-					document.getElementById("ticket-previewIssue").innerHTML = formatMultilinePreview(entry.issue || "");
-					document.getElementById("ticket-previewNote").innerHTML = formatMultilinePreview(entry.note || "");
-					const troubleshootingContent = !isHtmlEmpty(entry.troubleshooting) ? entry.troubleshooting : "";
-					document.getElementById("ticket-previewTroubleshooting").innerHTML = convertQuillLists(troubleshootingContent);
-					document.getElementById("ticket-previewResolution").innerHTML = formatMultilinePreview(entry.resolution || "");
-
 					syncPreviewHeight();
 				}
 
@@ -7828,10 +7551,6 @@
 							updateStoreIssuePreview();
 						}
 					}
-				}
-
-				function populateFormFromData(prefix, draftData) {
-					populateFormFromEntry(prefix, draftData);
 				}
 
 				function attachDraftAutoSave(prefix, entryId) {
@@ -9092,135 +8811,6 @@
 					syncPreviewHeight();
 				}
 
-				function getBootstrapDropdownDefaultLabel(inputId) {
-					if (inputId === "ticket-status") return "Select status";
-					if (inputId === "ticket-module") return "Select module";
-					if (inputId === "ticket-shift") return "Select shift";
-					return "Select";
-				}
-
-				function setBootstrapDropdownValue(inputId, value) {
-					const input = document.getElementById(inputId);
-					const label = document.getElementById(`${inputId}DropdownLabel`);
-					const defaultLabel = getBootstrapDropdownDefaultLabel(inputId);
-					if (input) input.value = value || "";
-					if (label) label.textContent = value ? value : defaultLabel;
-				}
-
-				function setupBootstrapDropdown(inputId, options, nextFieldId) {
-					const input = document.getElementById(inputId);
-					const dropdownBtn = document.getElementById(`${inputId}-dropdown-btn`);
-					const menu = document.getElementById(`${inputId}DropdownMenu`);
-					const searchInput = document.getElementById(`${inputId}-search`);
-					if (!input || !dropdownBtn || !menu || !searchInput) return;
-
-					function renderMenu(filter = "") {
-						const query = filter.trim().toLowerCase();
-						const filtered = query === "" ? options.slice() : options.filter((opt) => opt.toLowerCase().includes(query));
-						menu.innerHTML = "";
-
-						if (filtered.length === 0) {
-							const emptyItem = document.createElement("div");
-							emptyItem.className = "dropdown-item text-muted";
-							emptyItem.textContent = "No matching options";
-							menu.appendChild(emptyItem);
-							return;
-						}
-
-						filtered.forEach((opt) => {
-							const item = document.createElement("button");
-							item.type = "button";
-							item.className = "dropdown-item";
-							item.textContent = opt;
-							item.addEventListener("click", () => {
-								setBootstrapDropdownValue(inputId, opt);
-								input.dispatchEvent(new Event("input", { bubbles: true }));
-								input.dispatchEvent(new Event("change", { bubbles: true }));
-								if (nextFieldId) {
-									setTimeout(() => document.getElementById(nextFieldId)?.focus(), 10);
-								}
-							});
-							menu.appendChild(item);
-						});
-					}
-
-					dropdownBtn.addEventListener("click", () => {
-						searchInput.value = "";
-						renderMenu("");
-						setTimeout(() => searchInput.focus(), 0);
-					});
-
-					searchInput.addEventListener("input", function () {
-						renderMenu(this.value);
-					});
-
-					searchInput.addEventListener("keydown", function (e) {
-						if (e.key === "Escape") {
-							dropdownBtn.focus();
-						}
-					});
-
-					setBootstrapDropdownValue(inputId, input.value);
-					renderMenu("");
-				}
-
-				function setupAutocomplete(inputId, options, nextFieldId) {
-					const input = document.getElementById(inputId);
-					const listId = inputId + "List";
-					const datalist = document.getElementById(listId);
-
-					datalist.innerHTML = "";
-					options.forEach((opt) => {
-						const option = document.createElement("option");
-						option.value = opt;
-						datalist.appendChild(option);
-					});
-
-					input.addEventListener("input", function () {
-						const val = this.value.toLowerCase();
-						datalist.innerHTML = "";
-						const filtered = options.filter((opt) => opt.toLowerCase().includes(val));
-						filtered.forEach((opt) => {
-							const option = document.createElement("option");
-							option.value = opt;
-							datalist.appendChild(option);
-						});
-						if (filtered.length === 0) {
-							options.forEach((opt) => {
-								const option = document.createElement("option");
-								option.value = opt;
-								datalist.appendChild(option);
-							});
-						}
-					});
-
-					input.addEventListener("keydown", function (e) {
-						if (e.key === "Tab") {
-							const options = Array.from(datalist.children);
-							if (options.length > 0 && this.value) {
-								const matches = options.filter((opt) => opt.value.toLowerCase().includes(this.value.toLowerCase()));
-								if (matches.length > 0) {
-									e.preventDefault();
-									this.value = matches[0].value;
-									const event = new Event("input", { bubbles: true });
-									this.dispatchEvent(event);
-									if (nextFieldId) {
-										setTimeout(() => document.getElementById(nextFieldId).focus(), 10);
-									}
-								}
-							} else if (options.length > 0) {
-								e.preventDefault();
-								this.value = options[0].value;
-								const event = new Event("input", { bubbles: true });
-								this.dispatchEvent(event);
-								if (nextFieldId) {
-									setTimeout(() => document.getElementById(nextFieldId).focus(), 10);
-								}
-							}
-						}
-					});
-				}
-
 				function checkAndRefreshTable() {
 					const todayEST = getESTDateString();
 					const storedDate = localStorage.getItem("lastClearDate");
@@ -9308,76 +8898,6 @@
 						document.getElementById("shiftReportBtn").style.display = "none";
 					} else if (role === "LEVEL 2") {
 						document.getElementById("shiftReportBtn").style.display = "none";
-					}
-				}
-
-				async function refreshUserRole() {
-					const currentUser = getLoggedInUser();
-					if (!currentUser) return;
-
-					try {
-						const data = await fetchFromProxy({
-							action: "getSheetData",
-							sheetName: CONFIG.CRED_SHEET_NAME,
-						});
-						if (!data.values || data.values.length < 2) return;
-
-						const email = currentUser.email.toLowerCase();
-						for (let i = 1; i < data.values.length; i++) {
-							const row = data.values[i];
-							const rowEmail = (row[1] || "").trim().toLowerCase();
-							if (rowEmail === email) {
-								const newRole = (row[3] || "").trim().toUpperCase();
-								const newSupport = (row[0] || "").trim();
-
-								let roleChanged = newRole !== currentUser.role;
-								let supportChanged = newSupport !== currentUser.support;
-
-								if (roleChanged || supportChanged) {
-									if (supportChanged) {
-										currentUser.support = newSupport;
-										autoFillSupportName(newSupport);
-									}
-									if (roleChanged) {
-										currentUser.role = newRole;
-										applyRoleRestrictions(newRole);
-									}
-									setLoggedInUser(currentUser);
-
-									const sidebarSupport = document.getElementById("sidebarProfileSupport");
-									const sidebarRole = document.getElementById("sidebarProfileRole");
-									if (sidebarSupport) sidebarSupport.textContent = currentUser.support;
-									if (sidebarRole) sidebarRole.textContent = currentUser.role;
-
-									if (roleChanged) showNotification(`Role updated to: ${newRole}`);
-									if (supportChanged) showNotification(`Support name updated to: ${newSupport}`);
-								}
-								return;
-							}
-						}
-					} catch (error) {
-						console.warn("Failed to refresh user role:", error);
-					}
-				}
-
-				let roleRefreshInterval = null;
-
-				function startRoleRefresh() {
-					if (roleRefreshInterval) clearInterval(roleRefreshInterval);
-					roleRefreshInterval = setInterval(() => {
-						// Only refresh if not in pending tracker mode
-						if (typeof isPendingTrackerMode !== "undefined" && !isPendingTrackerMode) {
-							refreshUserRole();
-						} else {
-							refreshUserRole();
-						}
-					}, 30000); // Check every 30 seconds
-				}
-
-				function stopRoleRefresh() {
-					if (roleRefreshInterval) {
-						clearInterval(roleRefreshInterval);
-						roleRefreshInterval = null;
 					}
 				}
 
@@ -9814,7 +9334,7 @@
 
 							// Persist form data so the reload is lossless
 							try {
-								["ticket", "store", "moolah", "ecommerce", "scheduler"].forEach((prefix) => saveFormData(prefix));
+								flushAllFormDataNow();
 								saveAllEntries();
 							} catch (e) {
 								console.warn("Pre-refresh save failed:", e);
@@ -9838,6 +9358,7 @@
 						if (!card) return;
 						const status = map[id];
 						card.title = `Click to filter table by ${status}`;
+						card.classList.add("is-clickable");
 						card.addEventListener("click", () => {
 							switchTab("ticket", document.querySelector('.tab-button[data-tab="ticket"]'));
 							setTimeout(() => {
@@ -11953,11 +11474,6 @@
 						.join("");
 				}
 
-				function toggleKbEntry(headerEl) {
-					const card = headerEl.closest(".kb-entry-card");
-					if (card) card.classList.toggle("expanded");
-				}
-
 				function copyKbEntry(id) {
 					const entry = getActiveKbEntries().find((e) => e.id === id);
 					if (!entry) return;
@@ -12233,11 +11749,6 @@
 						.join("");
 				}
 
-				function toggleAccountEntry(headerEl) {
-					const card = headerEl.closest(".kb-entry-card");
-					if (card) card.classList.toggle("expanded");
-				}
-
 				function openAccountEntryModal(id) {
 					editingAccountRowIndex = null;
 					const modal = document.getElementById("accountEntryModal");
@@ -12451,9 +11962,8 @@
 				// 0-indexed name columns: A=0, Q=16, AG=32, AW=48
 				const SCHEDULE_NAME_COLS = [0, 16, 32, 48];
 
-				// 14 data cols per block = 7 days × 2 cols (IN/OUT, BREAK)
+				// Each block covers 7 days (Sun–Sat), 2 cols per day (IN/OUT, BREAK)
 				const SCHEDULE_DAYS_PER_BLOCK = 7;
-				const SCHEDULE_DATA_COLS_PER_BLOCK = SCHEDULE_DAYS_PER_BLOCK * 2; // 14
 
 				const SCHEDULE_DATA_START_ROW = 2; // row 3 (0-indexed) = first employee
 				const SCHEDULE_SKIP_VALUES = new Set(["DAY-OFF", "HOLIDAY", "LEAVE", "WEEK OFF", "REST DAY"]);
@@ -13746,9 +13256,7 @@
 					});
 
 					window.addEventListener("beforeunload", () => {
-						["ticket", "store", "moolah", "ecommerce", "scheduler"].forEach((prefix) => {
-							saveFormData(prefix);
-						});
+						flushAllFormDataNow();
 					});
 
 					window.addEventListener("beforeunload", () => {
@@ -13902,7 +13410,6 @@
 				window.switchKbType = switchKbType;
 				window.filterKnowledgeBase = filterKnowledgeBase;
 				window.copyKbEntry = copyKbEntry;
-				window.toggleKbEntry = toggleKbEntry;
 				window.openKbEntryModal = openKbEntryModal;
 				window.closeKbEntryModal = closeKbEntryModal;
 				window.saveKbEntry = saveKbEntry;
@@ -13913,7 +13420,6 @@
 				window.closeAccountEntryModal = closeAccountEntryModal;
 				window.saveAccountEntry = saveAccountEntry;
 				window.deleteAccountEntry = deleteAccountEntry;
-				window.toggleAccountEntry = toggleAccountEntry;
 				window.handleKbCardClick = handleKbCardClick;
 
 				document.addEventListener("DOMContentLoaded", init);
