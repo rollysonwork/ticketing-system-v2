@@ -2036,15 +2036,6 @@
 				font-size: 0.85rem;
 			}
 
-			.announcement-subject {
-				font-size: 0.95rem;
-				font-weight: 700;
-				color: var(--text-primary);
-				margin-bottom: 4px;
-				word-wrap: break-word;
-				overflow-wrap: break-word;
-			}
-
 			.announcement-support {
 				font-size: 0.72rem;
 				color: var(--text-muted);
@@ -2157,16 +2148,6 @@
 				min-width: 100%;
 				padding: 22px 26px;
 				box-sizing: border-box;
-			}
-
-			.carousel-slide-subject {
-				font-size: 1.05rem;
-				font-weight: 700;
-				color: var(--text-primary);
-				margin-bottom: 8px;
-				word-wrap: break-word;
-				overflow-wrap: break-word;
-				line-height: 1.35;
 			}
 
 			.carousel-slide-details {
@@ -11171,7 +11152,7 @@
 				let acksLoaded = false;
 
 				function getAnnouncementKey(a) {
-					return JSON.stringify([(a.subject || "").trim(), (a.details || "").trim(), (a.support || "").trim()]);
+					return JSON.stringify([(a.details || "").trim(), (a.support || "").trim()]);
 				}
 
 				async function ensureAnnouncementUsersLoaded(force = false) {
@@ -11236,11 +11217,10 @@
 						// Col A = SUBJECT, Col B = DETAILS, Col C = SUPPORT
 						const announcements = rows
 							.map((r) => ({
-								subject: (r[0] || "").toString(),
-								details: (r[1] || "").toString(),
-								support: (r[2] || "").toString(),
+								details: (r[0] || "").toString(), // Col A
+								support: (r[1] || "").toString(), // Col B
 							}))
-							.filter((a) => a.subject.trim() !== "" || a.details.trim() !== "");
+							.filter((a) => a.details.trim() !== "");
 
 						announcements.reverse();
 						allAnnouncementsCache = announcements;
@@ -11337,7 +11317,6 @@
 
 							return `
 							<div class="carousel-slide" data-slide-index="${idx}">
-								${a.subject ? `<div class="carousel-slide-subject">${escapeHtml(a.subject)}</div>` : ""}
 								${a.details ? `<div class="carousel-slide-details">${renderRichContent(a.details)}</div>` : ""}
 								${a.support ? `<div class="carousel-slide-meta"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
 								<div class="announcement-ack-row">${ackControlHtml}</div>
@@ -11447,7 +11426,6 @@
 							action: "acknowledgeAnnouncement",
 							key: key,
 							support: mySupport,
-							subject: announcement.subject || "",
 							details: announcement.details || "",
 							postedBy: announcement.support || "",
 						});
@@ -11479,7 +11457,7 @@
 
 				async function autoDeleteAcknowledgedAnnouncement(announcement) {
 					try {
-						await deleteAnnouncementSilent(announcement.subject || "", announcement.details || "", announcement.support || "");
+						await deleteAnnouncementSilent(announcement.details || "", announcement.support || "");
 
 						const key = getAnnouncementKey(announcement);
 						delete announcementAcks[key];
@@ -11544,30 +11522,24 @@
 							(a) => `
 <div class="announcement-item">
     <div class="announcement-body">
-        ${a.subject ? `<div class="announcement-subject">${escapeHtml(a.subject)}</div>` : ""}
-        ${a.details ? `<div class="announcement-message">${renderRichContent(a.details)}</div>` : ""}
-        ${a.support ? `<div class="announcement-support"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
-    </div>
-    <button class="announcement-delete-btn" 
-            data-subject="${escapeHtml(a.subject)}" 
-            data-details="${escapeHtml(a.details)}" 
-            data-support="${escapeHtml(a.support)}"
-            title="Delete announcement">
-        <i class="bi bi-trash3-fill"></i>
-    </button>
+    ${a.details ? `<div class="announcement-message">${renderRichContent(a.details)}</div>` : ""}
+    ${a.support ? `<div class="announcement-support"><i class="bi bi-person-fill"></i> Posted by: <strong>${escapeHtml(a.support)}</strong></div>` : ""}
+</div>
+<button class="announcement-delete-btn"
+        data-details="${escapeHtml(a.details)}"
+        data-support="${escapeHtml(a.support)}"
+        title="Delete announcement">
+    <i class="bi bi-trash3-fill"></i>
+</button>
 </div>`,
 						)
 						.join("");
 					list.querySelectorAll(".announcement-delete-btn").forEach((btn) => {
-						btn.addEventListener("click", () => deleteAnnouncement(btn.dataset.subject, btn.dataset.details, btn.dataset.support));
+						btn.addEventListener("click", () => deleteAnnouncement(btn.dataset.details, btn.dataset.support));
 					});
 				}
 
 				async function addAnnouncement() {
-					const subjectInput = document.getElementById("newAnnouncementSubject");
-					const subject = (subjectInput.value || "").trim();
-
-					// Read from Quill, but treat "<p><br></p>" as empty
 					let details = "";
 					if (announcementQuill) {
 						const html = announcementQuill.root.innerHTML.trim();
@@ -11578,8 +11550,8 @@
 						details = (document.getElementById("newAnnouncementText").value || "").trim();
 					}
 
-					if (!subject && !details) {
-						showNotification("Please enter a subject or details.");
+					if (!details) {
+						showNotification("Please enter announcement details.");
 						return;
 					}
 
@@ -11589,34 +11561,31 @@
 					try {
 						await fetchFromProxyPOST({
 							action: "addAnnouncement",
-							subject: subject,
 							details: details,
 							support: support,
 						});
 						showNotification("Announcement posted!");
-						subjectInput.value = "";
 						if (announcementQuill) announcementQuill.root.innerHTML = "";
 						document.getElementById("newAnnouncementText").value = "";
 						closeAnnouncementModal();
-						currentAnnouncementIndex = 0; // jump to newest
+						currentAnnouncementIndex = 0;
 						loadAnnouncements();
 					} catch (err) {
 						showNotification("Failed to post announcement: " + err.message);
 					}
 				}
 
-				async function deleteAnnouncementSilent(subject, details, support) {
-					if (!subject && !details && !support) throw new Error("Missing announcement identifiers");
+				async function deleteAnnouncementSilent(details, support) {
+					if (!details && !support) throw new Error("Missing announcement identifiers");
 					await fetchFromProxyPOST({
 						action: "deleteAnnouncement",
-						subject: subject || "",
 						details: details || "",
 						support: support || "",
 					});
 				}
 
-				async function deleteAnnouncement(subject, details, support) {
-					if (!subject && !details && !support) return;
+				async function deleteAnnouncement(details, support) {
+					if (!details && !support) return;
 
 					const currentUser = getLoggedInUser();
 					const isTL = currentUser && (currentUser.role || "").toUpperCase() === "TL";
@@ -11627,11 +11596,12 @@
 						return;
 					}
 
-					const preview = subject ? `"${subject.slice(0, 50)}${subject.length > 50 ? "..." : ""}"` : "this announcement";
+					const plainPreview = htmlToPlainText(details || "").slice(0, 60);
+					const preview = plainPreview ? `"${plainPreview}${plainPreview.length >= 60 ? "..." : ""}"` : "this announcement";
 					if (!confirm(`Delete ${preview}?`)) return;
 
 					try {
-						await deleteAnnouncementSilent(subject, details, support);
+						await deleteAnnouncementSilent(details, support);
 						showNotification("Announcement deleted.");
 						loadAnnouncements();
 					} catch (err) {
@@ -11640,13 +11610,14 @@
 				}
 
 				function openAnnouncementModal() {
-					document.getElementById("newAnnouncementSubject").value = "";
 					document.getElementById("newAnnouncementText").value = "";
 					if (announcementQuill) announcementQuill.root.innerHTML = "";
 					document.getElementById("announcementModal").style.display = "block";
 					document.getElementById("announcementModalBackdrop").style.display = "block";
-					if (announcementQuill) announcementQuill.enable(true); // ✅ re-arm
-					setTimeout(() => document.getElementById("newAnnouncementSubject").focus(), 50);
+					if (announcementQuill) announcementQuill.enable(true);
+					setTimeout(() => {
+						if (announcementQuill) announcementQuill.focus();
+					}, 50);
 				}
 
 				function closeAnnouncementModal() {
@@ -14023,7 +13994,6 @@
 
 		<div id="announcementModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: var(--bg-secondary); border-radius: 20px; padding: 24px; box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.3); width: 700px; max-width: 92%; max-height: 85vh; overflow-y: auto; z-index: 1200; border: 1px solid var(--border-color)">
 			<h3 style="margin-bottom: 16px">📢 New Announcement</h3>
-			<input type="text" id="newAnnouncementSubject" class="no-uppercase" placeholder="Subject" style="width: 100%; margin-bottom: 12px" />
 			<div id="newAnnouncementEditor" style="height: 220px; margin-bottom: 12px; background: var(--bg-secondary); border-radius: 12px"></div>
 			<input type="file" multiple accept="image/*,.pdf,.doc,.docx,.txt,.xlsx,.xls" id="newAnnouncement-file-input" style="display: none" />
 			<textarea id="newAnnouncementText" style="display: none"></textarea>
