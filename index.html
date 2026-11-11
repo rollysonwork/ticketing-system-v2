@@ -3493,7 +3493,7 @@
 				margin-left: 4px;
 				opacity: 0.7;
 			}
-			
+
 			.schedule-nav-btn:disabled {
 				opacity: 0.3;
 				cursor: not-allowed;
@@ -4042,7 +4042,8 @@
 		</style>
 	</head>
 	<body>
-		<div id="loginOverlay" style="display: none; position: fixed; inset: 0; background-image: url(&quot;https://patelprocessing.com/Login-Page-(1920x1080).jpg&quot;); background-size: cover; background-position: center; z-index: 2000; align-items: center; justify-content: center; flex-direction: column; gap: 16px"><div style="background: var(--bg-secondary); border-radius: 20px; padding: 32px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); max-width: 400px; width: 90%">
+		<div id="loginOverlay" style="display: none; position: fixed; inset: 0; background-image: url(&quot;https://patelprocessing.com/Login-Page-(1920x1080).jpg&quot;); background-size: cover; background-position: center; z-index: 2000; align-items: center; justify-content: center; flex-direction: column; gap: 16px">
+			<div style="background: var(--bg-secondary); border-radius: 20px; padding: 32px; box-shadow: var(--card-shadow); border: 1px solid var(--border-color); max-width: 400px; width: 90%">
 				<div style="text-align: center; margin-bottom: 16px">
 					<img src="https://vitreous.support/logo.png?v=1777764480010_0.43758564004058664" alt="Logo" style="max-width: 300px; height: auto" />
 				</div>
@@ -6286,7 +6287,7 @@
 					});
 				}
 
-								// ============ saveFormData — 400ms debounce ============
+				// ============ saveFormData — 400ms debounce ============
 				// Keystroke-level callers coalesce into a single localStorage write.
 				// Critical paths (beforeunload, idle-refresh) call flushAllFormDataNow()
 				// to bypass the debounce and persist immediately.
@@ -7151,6 +7152,8 @@
 							noOfReg: document.getElementById("store-noOfReg").value,
 							mokiId: document.getElementById("store-mokiId").value,
 							anydeskId: document.getElementById("store-anydeskId").value,
+							// ✅ NEW — persist full step state (preserves "cleared")
+							steps: { ...window.storeSteps },
 						};
 					} else if (prefix === "moolah") {
 						moduleData = {
@@ -7164,6 +7167,8 @@
 							noOfTabs: document.getElementById("moolah-noOfTabs").value,
 							mokiId: document.getElementById("moolah-mokiId").value,
 							anydeskId: document.getElementById("moolah-anydeskId").value,
+							// ✅ NEW — persist full step state (preserves "cleared")
+							steps: { ...window.moolahSteps },
 						};
 					}
 
@@ -7522,7 +7527,14 @@
 						document.getElementById("moolah-state").value = entry.moduleData?.state || "";
 						document.getElementById("moolah-mokiId").value = entry.moduleData?.mokiId || "";
 						document.getElementById("moolah-anydeskId").value = entry.moduleData?.anydeskId || "";
-						if (entry.issue) {
+
+						// ✅ NEW — prefer persisted step state (preserves "cleared"),
+						//          fall back to issue-text parsing for older entries.
+						if (entry.moduleData?.steps) {
+							window.moolahSteps = { ...entry.moduleData.steps };
+							applyStepButtonStyles("moolah", window.moolahSteps);
+							updateMoolahIssuePreview();
+						} else if (entry.issue) {
 							window._moolahCurrentIssue = entry.issue;
 							syncMoolahButtonsFromIssueText(entry.issue);
 							updateMoolahIssuePreview();
@@ -7545,7 +7557,14 @@
 						document.getElementById("store-state").value = entry.moduleData?.state || "";
 						document.getElementById("store-mokiId").value = entry.moduleData?.mokiId || "";
 						document.getElementById("store-anydeskId").value = entry.moduleData?.anydeskId || "";
-						if (entry.issue) {
+
+						// ✅ NEW — prefer persisted step state (preserves "cleared"),
+						//          fall back to issue-text parsing for older entries.
+						if (entry.moduleData?.steps) {
+							window.storeSteps = { ...entry.moduleData.steps };
+							applyStepButtonStyles("store", window.storeSteps);
+							updateStoreIssuePreview();
+						} else if (entry.issue) {
 							window._storeCurrentIssue = entry.issue;
 							syncStoreButtonsFromIssueText(entry.issue);
 							updateStoreIssuePreview();
@@ -8531,7 +8550,7 @@
 					const trainingLine = trainingEntries.length > 0 ? `${indent(2)}Scheduled Training: ${trainingEntries.map((e) => e.support || "Unknown Support").join(", ")}` : `${indent(2)}No Training for today`;
 					const demoLine = demoEntries.length > 0 ? `${indent(2)}Scheduled Demo: ${demoEntries.map((e) => e.support || "Unknown Support").join(", ")}` : `${indent(2)}No Demo for today`;
 
-										const staticSections = [
+					const staticSections = [
 						`${indent(1)}5. Updates / Notices`,
 						`${indent(1)}The current latest versions:`,
 						`${indent(2)}RetailzPOS: Version Code 252 (All)`,
@@ -11259,7 +11278,8 @@
 					if (!alerts || alerts.length === 0) {
 						if (countBadge) countBadge.style.display = "none";
 						document.title = baseTitle;
-						container.innerHTML = '<div class="sla-empty">✅ No SLA breaches. All pending tickets are within the 72-hour window.</div>';return;
+						container.innerHTML = '<div class="sla-empty">✅ No SLA breaches. All pending tickets are within the 72-hour window.</div>';
+						return;
 					}
 
 					if (countBadge) {
@@ -13271,7 +13291,7 @@
 					const schedulerTz = document.getElementById("scheduler-timezone");
 
 					if (schedulerZip && schedulerTz) {
-												function updateSchedulerTimezone() {
+						function updateSchedulerTimezone() {
 							const zip = schedulerZip.value.trim();
 							let tzLabel = "";
 							if (/^\d{5}$/.test(zip)) {
