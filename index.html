@@ -6848,6 +6848,44 @@
 					syncPreviewHeight();
 				}
 
+				const RESOLUTION_CLOSING_QUOTE = "If you have any questions or concerns, please don’t hesitate to contact our Support team at 888-342-5659. Thank you for choosing RetailzPOS, and have a great day!";
+
+				function buildResolutionText(rawSummary) {
+					if (!rawSummary) return "";
+					let body = String(rawSummary).trim();
+
+					// Strip markdown code fences if the model accidentally wrapped the output
+					body = body
+						.replace(/^```[a-z]*\s*/i, "")
+						.replace(/```$/i, "")
+						.trim();
+
+					// Strip any trailing punctuation so we can control the closing cleanly
+					body = body.replace(/[.\s]+$/g, "");
+
+					// Light 3rd-person → 1st-person normalization (non-destructive).
+					// We only rewrite common patterns; anything already in 1st person passes through.
+					const replacements = [
+						[/\bthe support (agent|representative|team|member)\b/gi, "I"],
+						[/\bsupport (agent|representative|team member)\b/gi, "I"],
+						[/\bthe agent\b/gi, "I"],
+						[/\bagent\b/gi, "I"],
+						[/\bI\s+I\b/g, "I"], // collapse "I I" from over-eager swaps
+						[/\bI\s+was able to\b/gi, "I was able to"],
+					];
+					for (const [pattern, replacement] of replacements) {
+						body = body.replace(pattern, replacement);
+					}
+
+					// Capitalize the first character
+					if (body && /^[a-z]/.test(body)) {
+						body = body.charAt(0).toUpperCase() + body.slice(1);
+					}
+
+					// Append the closing quote on its own paragraph
+					return `${body}.\n\n${RESOLUTION_CLOSING_QUOTE}`;
+				}
+
 				async function summarizeText(text) {
 					try {
 						const data = await fetchFromProxy({
@@ -6855,7 +6893,9 @@
 							text: text,
 							models: JSON.stringify(GEMINI_MODELS), // 👈 pass the fallback list
 						});
-						return data.summary;
+						const rawSummary = (data && data.summary) || "";
+						if (!String(rawSummary).trim()) return null;
+						return buildResolutionText(rawSummary);
 					} catch (error) {
 						showNotification(`Summarization failed: ${error.message}`);
 						return null;
