@@ -5595,18 +5595,17 @@
 					renderSidebar();
 				};
 
-				function getESTDateString() {
-					const now = new Date();
-					// Use Intl.DateTimeFormat with the America/New_York timezone
-					const formatter = new Intl.DateTimeFormat("en-CA", {
-						timeZone: "America/New_York",
-						year: "numeric",
-						month: "2-digit",
-						day: "2-digit",
-					});
-					// en-CA gives YYYY-MM-DD format
-					return formatter.format(now);
-				}
+function getESTDateString() {
+	const now = new Date();
+	// Change timeZone from "America/New_York" to "America/Chicago"
+	const formatter = new Intl.DateTimeFormat("en-CA", {
+		timeZone: "America/Chicago",
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+	});
+	return formatter.format(now);
+}
 
 				function parseDateFromString(dateStr) {
 					const parts = dateStr.split("/");
@@ -5877,15 +5876,15 @@
 					}
 				}
 
-				function storeGetFormattedDateMinusOne() {
-					const formatter = new Intl.DateTimeFormat("en-US", {
-						timeZone: "America/New_York",
-						year: "numeric",
-						month: "2-digit",
-						day: "2-digit",
-					});
-					return formatter.format(new Date()); // returns MM/DD/YYYY
-				}
+function storeGetFormattedDateMinusOne() {
+	const formatter = new Intl.DateTimeFormat("en-US", {
+		timeZone: "America/Chicago",
+		year: "numeric",
+		month: "2-digit",
+		day: "2-digit",
+	});
+	return formatter.format(new Date()); // returns MM/DD/YYYY
+}
 
 				function cloneEntries(entries) {
 					return JSON.parse(JSON.stringify(entries));
@@ -5999,24 +5998,23 @@
 					}, 100);
 				}
 
-				function clock(type, prefix) {
-					const shift = document.getElementById(`${prefix}-shift`).value;
-					if (!shift) {
-						showNotification("Set SHIFT");
-						return;
-					}
-					if (!CLOCK_TIMES[shift]) {
-						showNotification("Invalid SHIFT");
-						return;
-					}
-					const now = new Date();
-					const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-					const dateStr = now.toLocaleDateString("en-US");
-					const dayName = days[now.getDay()];
-					const timeStr = CLOCK_TIMES[shift][type === "IN" ? 0 : 1];
-					const output = `${dateStr} - ${dayName} Shift\nClock ${type} - ${timeStr}`;
-					navigator.clipboard.writeText(output).then(() => showNotification(`Clock ${type} copied!`));
-				}
+function clock(type, prefix) {
+	const shift = document.getElementById(`${prefix}-shift`).value;
+	if (!shift) {
+		showNotification("Set SHIFT");
+		return;
+	}
+	if (!CLOCK_TIMES[shift]) {
+		showNotification("Invalid SHIFT");
+		return;
+	}
+	const now = new Date();
+	const dateStr = now.toLocaleDateString("en-US", { timeZone: "America/Chicago" });
+	const dayName = now.toLocaleDateString("en-US", { timeZone: "America/Chicago", weekday: "long" });
+	const timeStr = CLOCK_TIMES[shift][type === "IN" ? 0 : 1];
+	const output = `${dateStr} - ${dayName} Shift\nClock ${type} - ${timeStr}`;
+	navigator.clipboard.writeText(output).then(() => showNotification(`Clock ${type} copied!`));
+}
 
 				async function loadSheetData() {
 					const statusEls = {
