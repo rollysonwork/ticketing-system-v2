@@ -6862,13 +6862,12 @@
 					body = body.replace(/[.\s]+$/g, "");
 
 					// Light 3rd-person → 1st-person normalization (non-destructive).
-					// We only rewrite common patterns; anything already in 1st person passes through.
 					const replacements = [
 						[/\bthe support (agent|representative|team|member)\b/gi, "I"],
 						[/\bsupport (agent|representative|team member)\b/gi, "I"],
 						[/\bthe agent\b/gi, "I"],
 						[/\bagent\b/gi, "I"],
-						[/\bI\s+I\b/g, "I"], // collapse "I I" from over-eager swaps
+						[/\bI\s+I\b/g, "I"],
 						[/\bI\s+was able to\b/gi, "I was able to"],
 					];
 					for (const [pattern, replacement] of replacements) {
@@ -6880,8 +6879,14 @@
 						body = body.charAt(0).toUpperCase() + body.slice(1);
 					}
 
-					// Append the closing quote on its own paragraph
-					return `${body}.\n\n${RESOLUTION_CLOSING_QUOTE}`;
+					// Return ONLY the body (without the closing quote)
+					return `${body}.`;
+				}
+
+				function getPreviewResolutionText(baseResolution) {
+					const trimmed = (baseResolution || "").trim();
+					if (!trimmed) return "";
+					return `${trimmed}\n\n${RESOLUTION_CLOSING_QUOTE}`;
 				}
 
 				async function summarizeText(text) {
@@ -7696,7 +7701,7 @@
 							ecommerceUpdatePreview();
 						} else {
 							ticketUpdatePreview();
-							let resolutionText = entry.resolution || "";
+							let resolutionText = getPreviewResolutionText(entry.resolution);
 							const resolutionPreviewSpan = document.getElementById("ticket-previewResolution");
 							if (resolutionPreviewSpan) {
 								resolutionPreviewSpan.innerHTML = formatMultilinePreview(resolutionText);
@@ -8284,7 +8289,7 @@
 
 								const troubleshootingHtml = entry.troubleshooting || "";
 								const troubleshootingPlain = htmlToPlainTextForCopy(troubleshootingHtml);
-								const formattedResolution = entry.resolution || "";
+								const formattedResolution = getPreviewResolutionText(entry.resolution);
 
 								const plainText = `📞 CONTACT:
 			CALLER NAME: ${displayContact}
