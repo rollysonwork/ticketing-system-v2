@@ -8537,6 +8537,58 @@
 					}
 				}
 
+				function getDailyHuddleTimes(shiftStr) {
+					const s = (shiftStr || "").trim().toUpperCase();
+					const shiftStartHoursPHT = {
+						"9PM - 6AM": 21, // 9:00 PM PHT
+						"5AM - 2PM": 5, // 5:00 AM PHT
+						"2PM - 11PM": 14, // 2:00 PM PHT
+					};
+
+					const startHourPHT = shiftStartHoursPHT[s];
+					if (startHourPHT === undefined) {
+						return { firstHour: "N/A", lastHour: "N/A" };
+					}
+
+					const formatEasternRange = (phtHour) => {
+						const now = new Date();
+						// Get today's date in Manila (UTC+8)
+						const phDate = new Intl.DateTimeFormat("en-CA", {
+							timeZone: "Asia/Manila",
+							year: "numeric",
+							month: "2-digit",
+							day: "2-digit",
+						}).format(now);
+
+						const hourStr = String(phtHour).padStart(2, "0");
+						const startUtc = new Date(`${phDate}T${hourStr}:00:00+08:00`);
+						const endUtc = new Date(startUtc.getTime() + 60 * 60 * 1000);
+
+						const timeFmt = new Intl.DateTimeFormat("en-US", {
+							timeZone: "America/New_York",
+							hour: "numeric",
+							minute: "2-digit",
+							hour12: true,
+						});
+
+						const tzAbbr =
+							new Intl.DateTimeFormat("en-US", {
+								timeZone: "America/New_York",
+								timeZoneName: "short",
+							})
+								.formatToParts(startUtc)
+								.find((p) => p.type === "timeZoneName")?.value || "EST";
+
+						return `${timeFmt.format(startUtc)} – ${timeFmt.format(endUtc)} ${tzAbbr}`;
+					};
+
+					// First hour starts at shift start; Last hour (of an 8-hr shift) starts 7 hours after shift start
+					return {
+						firstHour: formatEasternRange(startHourPHT),
+						lastHour: formatEasternRange((startHourPHT + 7) % 24),
+					};
+				}
+
 				function generateShiftReportPlain(entries) {
 					const indent = (level) => " ".repeat(level * 5);
 					const visible = entries || [];
@@ -8548,6 +8600,8 @@
 
 					const uniqueShifts = [...new Set(visible.map((e) => e.shift).filter((s) => s))];
 					const shiftLine = `Shift: ${uniqueShifts.join(", ")}`;
+					const activeShift = uniqueShifts[0] || document.getElementById("sidebar-shift")?.value || "";
+					const huddleTimes = getDailyHuddleTimes(activeShift);
 
 					const pendingEntries = visible.filter((e) => e.status?.toUpperCase() === "PENDING");
 					const pendingCount = pendingEntries.length;
@@ -8606,6 +8660,14 @@
 						`${indent(1)}6. Training (Retailz Members): No training for today`,
 						``,
 						`${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`,
+						``,
+						`${indent(1)}8. Daily Huddle:`,
+						`${indent(1)}• First Hour of Shift (${huddleTimes.firstHour})`,
+						`${indent(2)}◦ `,
+						`${indent(1)}• Middle of Shift`,
+						`${indent(2)}◦ `,
+						`${indent(1)}• Last Hour of Shift (${huddleTimes.lastHour})`,
+						`${indent(2)}◦ `,
 					].join("\n");
 
 					return [dateLine, shiftLine, "", "Good day everyone,", "", "Please find below the shift report for today,", "", `${indent(1)}1. Pending Tickets: ${pendingCount}`, pendingList, "", `${indent(1)}2. Total Calls: ${totalCalls}`, "", "", `${indent(1)}3. Total Other Tasks: ${otherCount}`, otherList, "", `${indent(1)}4. Scheduled Training/Demo (Merchant)`, trainingLine, demoLine, "", staticSections].join("\n");
@@ -8621,6 +8683,8 @@
 
 					const uniqueShifts = [...new Set(visible.map((e) => e.shift).filter((s) => s))];
 					const shiftLine = `Shift: ${uniqueShifts.join(", ")}`;
+					const activeShift = uniqueShifts[0] || document.getElementById("sidebar-shift")?.value || "";
+					const huddleTimes = getDailyHuddleTimes(activeShift);
 
 					const pendingEntries = visible.filter((e) => e.status?.toUpperCase() === "PENDING");
 					const pendingCount = pendingEntries.length;
@@ -8668,10 +8732,10 @@
 					const demoLine = demoEntries.length > 0 ? `<div style="margin-left:25px;">Scheduled Demo: ${escapeHtml(demoEntries.map((e) => e.support || "Unknown Support").join(", "))}</div>` : `<div style="margin-left:25px;">No Demo for today</div>`;
 
 					const versionHtml = `
-						        <div style="margin-left:25px;">The current latest versions:</div>
-								<div style="margin-left:50px;">RetailzPOS: Version Code 252 (All)</div>
-								<div style="margin-left:50px;">Moolah Points: Version Code 45 (All)</div>
-						    `;
+		<div style="margin-left:25px;">The current latest versions:</div>
+		<div style="margin-left:50px;">RetailzPOS: Version Code 252 (All)</div>
+		<div style="margin-left:50px;">Moolah Points: Version Code 45 (All)</div>
+	`;
 
 					const remindersItems = [
 						"Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.",
@@ -8684,41 +8748,63 @@
 					];
 					const remindersListHtml = `<ul style="margin:4px 0 0 25px; padding-left:20px;">` + remindersItems.map((item) => `<li style="margin:0;">${escapeHtml(item)}</li>`).join("") + `</ul>`;
 
+					const dailyHuddleHtml = `
+		<ul style="margin:4px 0 0 25px; padding-left:20px; list-style-type:disc;">
+			<li style="margin:0;">First Hour of Shift (${escapeHtml(huddleTimes.firstHour)})
+				<ul style="margin:0; padding-left:20px; list-style-type:circle;">
+					<li style="margin:0;">&nbsp;</li>
+				</ul>
+			</li>
+			<li style="margin:0;">Middle of Shift
+				<ul style="margin:0; padding-left:20px; list-style-type:circle;">
+					<li style="margin:0;">&nbsp;</li>
+				</ul>
+			</li>
+			<li style="margin:0;">Last Hour of Shift (${escapeHtml(huddleTimes.lastHour)})
+				<ul style="margin:0; padding-left:20px; list-style-type:circle;">
+					<li style="margin:0;">&nbsp;</li>
+				</ul>
+			</li>
+		</ul>
+	`;
+
 					const staticSections = `
-						        <div><strong>5. Updates / Notices</strong></div>
-						        ${versionHtml}
-						        <div style="margin-top:8px;"></div>
-						        <div style="margin-left:25px;">Reminders for Retailz team members:</div>
-						        ${remindersListHtml}
-						        <div style="margin-top:8px;"><strong>6. Training (Retailz Members):</strong> No training for today</div>
-						        <div style="margin-top:4px;"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</div>
-						    `;
+		<div><strong>5. Updates / Notices</strong></div>
+		${versionHtml}
+		<div style="margin-top:8px;"></div>
+		<div style="margin-left:25px;">Reminders for Retailz team members:</div>
+		${remindersListHtml}
+		<div style="margin-top:8px;"><strong>6. Training (Retailz Members):</strong> No training for today</div>
+		<div style="margin-top:4px;"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</div>
+		<div style="margin-top:8px;"><strong>8. Daily Huddle:</strong></div>
+		${dailyHuddleHtml}
+	`;
 
 					return `
-						        <div style="font-family: sans-serif; line-height:1.4;">
-						            <div>${escapeHtml(dateLine)}</div>
-						            <div>${escapeHtml(shiftLine)}</div>
-						            <div><br></div>
-						            <div>Good day everyone,</div>
-						            <div><br></div>
-						            <div>Please find below the shift report for today,</div>
-						            <div><br></div>
-						            <div><strong>1. Pending Tickets: ${pendingCount}</strong></div>
-						            ${pendingListHtml}
-						            <div><br></div>
-						            <div><strong>2. Total Calls: ${totalCalls}</strong></div>
-						            <div><br></div>
-						            <div><br></div>
-						            <div><strong>3. Total Other Tasks: ${otherCount}</strong></div>
-						            ${otherListHtml}
-						            <div><br></div>
-						            <div><strong>4. Scheduled Training/Demo (Merchant)</strong></div>
-						            ${trainingLine}
-						            ${demoLine}
-						            <div><br></div>
-						            ${staticSections}
-						        </div>
-						    `;
+		<div style="font-family: sans-serif; line-height:1.4;">
+			<div>${escapeHtml(dateLine)}</div>
+			<div>${escapeHtml(shiftLine)}</div>
+			<div><br></div>
+			<div>Good day everyone,</div>
+			<div><br></div>
+			<div>Please find below the shift report for today,</div>
+			<div><br></div>
+			<div><strong>1. Pending Tickets: ${pendingCount}</strong></div>
+			${pendingListHtml}
+			<div><br></div>
+			<div><strong>2. Total Calls: ${totalCalls}</strong></div>
+			<div><br></div>
+			<div><br></div>
+			<div><strong>3. Total Other Tasks: ${otherCount}</strong></div>
+			${otherListHtml}
+			<div><br></div>
+			<div><strong>4. Scheduled Training/Demo (Merchant)</strong></div>
+			${trainingLine}
+			${demoLine}
+			<div><br></div>
+			${staticSections}
+		</div>
+	`;
 				}
 
 				async function showShiftReportModal() {
