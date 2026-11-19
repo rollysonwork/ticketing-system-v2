@@ -8552,7 +8552,6 @@
 
 					const formatEasternRange = (phtHour) => {
 						const now = new Date();
-						// Get today's date in Manila (UTC+8)
 						const phDate = new Intl.DateTimeFormat("en-CA", {
 							timeZone: "Asia/Manila",
 							year: "numeric",
@@ -8582,10 +8581,10 @@
 						return `${timeFmt.format(startUtc)} – ${timeFmt.format(endUtc)} ${tzAbbr}`;
 					};
 
-					// First hour starts at shift start; Last hour (of an 8-hr shift) starts 7 hours after shift start
+					// First hour starts at shift start; Last hour starts 8 hours after shift start (e.g., 5AM-6AM for 9PM-6AM)
 					return {
 						firstHour: formatEasternRange(startHourPHT),
-						lastHour: formatEasternRange((startHourPHT + 7) % 24),
+						lastHour: formatEasternRange((startHourPHT + 8) % 24),
 					};
 				}
 
@@ -8599,8 +8598,9 @@
 					const dateLine = `Date: ${dateStr} - ${dayName} Shift`;
 
 					const uniqueShifts = [...new Set(visible.map((e) => e.shift).filter((s) => s))];
-					const shiftLine = `Shift: ${uniqueShifts.join(", ")}`;
-					const activeShift = uniqueShifts[0] || document.getElementById("sidebar-shift")?.value || "";
+					const sidebarShift = document.getElementById("sidebar-shift")?.value || "";
+					const activeShift = uniqueShifts[0] || sidebarShift;
+					const shiftLine = `Shift: ${uniqueShifts.length > 0 ? uniqueShifts.join(", ") : sidebarShift}`;
 					const huddleTimes = getDailyHuddleTimes(activeShift);
 
 					const pendingEntries = visible.filter((e) => e.status?.toUpperCase() === "PENDING");
@@ -8682,8 +8682,9 @@
 					const dateLine = `Date: ${dateStr} - ${dayName} Shift`;
 
 					const uniqueShifts = [...new Set(visible.map((e) => e.shift).filter((s) => s))];
-					const shiftLine = `Shift: ${uniqueShifts.join(", ")}`;
-					const activeShift = uniqueShifts[0] || document.getElementById("sidebar-shift")?.value || "";
+					const sidebarShift = document.getElementById("sidebar-shift")?.value || "";
+					const activeShift = uniqueShifts[0] || sidebarShift;
+					const shiftLine = `Shift: ${uniqueShifts.length > 0 ? uniqueShifts.join(", ") : sidebarShift}`;
 					const huddleTimes = getDailyHuddleTimes(activeShift);
 
 					const pendingEntries = visible.filter((e) => e.status?.toUpperCase() === "PENDING");
