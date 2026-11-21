@@ -3411,6 +3411,20 @@
 				padding: 1px 7px;
 				border-radius: 10px;
 			}
+			.schedule-day.outside-month {
+				opacity: 0.45;
+				background: var(--bg-secondary);
+				border-color: var(--border-color);
+			}
+
+			.schedule-day.outside-month .schedule-day-number {
+				color: var(--text-muted);
+			}
+
+			.schedule-day.outside-month .schedule-name-item {
+				opacity: 0.65;
+			}
+
 			.schedule-name-item {
 				font-size: 0.72rem;
 				font-weight: 600;
@@ -12481,96 +12495,277 @@
 						container.innerHTML = '<div class="schedule-loading"><span class="spinner"></span> Loading schedule…</div>';
 						return;
 					}
+
 					const hasAnyData = Object.keys(scheduleDataByMonth).some((m) => (scheduleDataByMonth[m] || []).length > 0);
+
 					if (!hasAnyData) {
 						container.innerHTML = '<div class="schedule-loading">No schedule data found in the loaded months.</div>';
-						if (titleEl) titleEl.textContent = "—";
+
+						if (titleEl) {
+							titleEl.textContent = "—";
+						}
+
 						return;
 					}
 
 					const { year, month } = scheduleView;
+
 					const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+					// Monday → Sunday, similar to the Windows calendar layout
 					const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-					if (titleEl) titleEl.textContent = `${monthNames[month]} ${year}`;
+
+					if (titleEl) {
+						titleEl.textContent = `${monthNames[month]} ${year}`;
+					}
 
 					const byDate = parseScheduleMap();
+
 					const todayStr = getESTDateString();
+
 					const currentUser = getLoggedInUser();
+
 					const myName = currentUser ? (currentUser.support || "").trim().toUpperCase() : "";
-					// True when at least one shift legend is turned ON.
-					// When true → do NOT pin the user's own name.
+
+					/*
+					 * True when at least one shift legend is turned ON.
+					 *
+					 * When false:
+					 *     → show ONLY the logged-in user's schedule.
+					 *
+					 * When true:
+					 *     → show schedules matching the selected shift(s).
+					 */
 					const anyShiftSelected = Object.values(scheduleVisibleShifts).some((v) => v !== false);
 
+					/*
+					 * JavaScript getDay():
+					 *
+					 * Sunday = 0
+					 * Monday = 1
+					 * Tuesday = 2
+					 * ...
+					 *
+					 * Convert it to:
+					 *
+					 * Monday = 0
+					 * Tuesday = 1
+					 * ...
+					 * Sunday = 6
+					 */
 					const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
-					const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+					/*
+					 * Always render 42 cells:
+					 *
+					 * 7 days × 6 weeks = 42
+					 *
+					 * This gives the calendar the same consistent height every month
+					 * and allows previous/next month dates to appear.
+					 */
+					const totalCalendarCells = 42;
+
+					/*
+					 * Start on the Monday of the week containing
+					 * the first day of the selected month.
+					 */
+					const calendarStart = new Date(year, month, 1);
+
+					calendarStart.setDate(calendarStart.getDate() - firstDay);
 
 					let html = '<div class="schedule-grid">';
-					weekdays.forEach((d) => {
-						html += `<div class="schedule-weekday">${d}</div>`;
+
+					/*
+					 * Weekday headers
+					 */
+					weekdays.forEach((dayName) => {
+						html += `<div class="schedule-weekday">${dayName}</div>`;
 					});
 
-					for (let i = 0; i < firstDay; i++) html += '<div class="schedule-day empty"></div>';
+					/*
+					 * Render all 42 calendar cells.
+					 */
+					for (let i = 0; i < totalCalendarCells; i++) {
+						const cellDate = new Date(calendarStart);
 
-					for (let day = 1; day <= daysInMonth; day++) {
-						const dateStr = `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+						cellDate.setDate(calendarStart.getDate() + i);
+
+						const cellYear = cellDate.getFullYear();
+						const cellMonth = cellDate.getMonth();
+						const cellDay = cellDate.getDate();
+
+						/*
+						 * Determine whether this date belongs
+						 * to the currently selected month.
+						 */
+						const isCurrentMonth = cellYear === year && cellMonth === month;
+
+						/*
+						 * Convert date to YYYY-MM-DD.
+						 */
+						const dateStr = `${cellYear}-${String(cellMonth + 1).padStart(2, "0")}-${String(cellDay).padStart(2, "0")}`;
+
+						/*
+						 * Highlight today's date.
+						 */
 						const isToday = dateStr === todayStr;
+
+						/*
+						 * Get schedules for this date and apply
+						 * the existing shift-filter behavior.
+						 */
 						const people = (byDate[dateStr] || []).filter((p) => {
 							const isMine = myName && p.name === myName;
 
-							// ── 1) No shift filter is active → show ONLY the user's own name.
-							//       This is the default state; anything else here is the bug.
-							if (!anyShiftSelected) return isMine;
+							/*
+							 * No shift filter selected:
+							 * show ONLY the logged-in user's schedule.
+							 */
+							if (!anyShiftSelected) {
+								return isMine;
+							}
 
-							// ── 2) A shift filter is active → show names whose shift matches.
-							//       Unknown-shift entries (OFF, PTO, typos, …) can never match a filter,
-							//       so they must be hidden — NOT shown.
+							/*
+							 * Shift filter is active:
+							 * only show valid shift entries.
+							 */
 							const k = getShiftKey(p.shift);
-							if (k === null) return false;
+
+							if (k === null) {
+								return false;
+							}
 
 							return scheduleVisibleShifts[k] !== false;
 						});
-						// Sort: user's own name first, then alphabetical
+
+						/*
+						 * Sort schedules by:
+						 *
+						 * 1. Shift order
+						 * 2. Employee name
+						 */
 						const sorted = [...people].sort((a, b) => {
 							const pa = SCHEDULE_SHIFT_ORDER[getShiftKey(a.shift)] ?? 99;
+
 							const pb = SCHEDULE_SHIFT_ORDER[getShiftKey(b.shift)] ?? 99;
-							if (pa !== pb) return pa - pb;
+
+							if (pa !== pb) {
+								return pa - pb;
+							}
+
 							return a.name.localeCompare(b.name);
 						});
 
-						html += `<div class="schedule-day ${isToday ? "today" : ""}">`;
-						html += `<div class="schedule-day-number"><span>${day}</span>`;
-						if (sorted.length > 0) html += `<span class="schedule-day-count">${sorted.length}</span>`;
-						html += `</div>`;
+						/*
+						 * Dates outside the currently selected month
+						 * receive the "outside-month" class.
+						 */
+						const outsideMonthClass = isCurrentMonth ? "" : " outside-month";
 
+						const todayClass = isToday ? " today" : "";
+
+						html += `
+            <div class="schedule-day${outsideMonthClass}${todayClass}">
+        `;
+
+						/*
+						 * Day number + schedule count.
+						 */
+						html += `
+            <div class="schedule-day-number">
+                <span>${cellDay}</span>
+        `;
+
+						if (sorted.length > 0) {
+							html += `
+                <span class="schedule-day-count">
+                    ${sorted.length}
+                </span>
+            `;
+						}
+
+						html += `
+            </div>
+        `;
+
+						/*
+						 * Render employees scheduled for this date.
+						 */
 						sorted.forEach((p) => {
 							const isMine = myName && p.name === myName;
+
 							const shiftCls = getShiftClass(p.shift);
+
 							const shiftKey = getShiftKey(p.shift);
+
 							const shiftHidden = shiftKey && scheduleVisibleShifts[shiftKey] === false;
-							// 📌 pin only shows when we're actually in the "no shifts selected" state
+
+							/*
+							 * Pin the logged-in user's schedule
+							 * when no shift filter is selected.
+							 */
 							const pinnedCls = isMine && shiftHidden && !anyShiftSelected ? "shift-pinned" : "";
-							html += `<div class="schedule-name-item ${shiftCls} ${isMine ? "shift-mine" : ""} ${pinnedCls}"
-        data-tooltip="${escapeHtml(p.shift)}"
-        title="${escapeHtml(p.shift)}">${escapeHtml(p.name)}</div>`;
+
+							html += `
+                <div
+                    class="schedule-name-item ${shiftCls} ${isMine ? "shift-mine" : ""} ${pinnedCls}"
+                    data-tooltip="${escapeHtml(p.shift)}"
+                    title="${escapeHtml(p.shift)}"
+                >
+                    ${escapeHtml(p.name)}
+                </div>
+            `;
 						});
 
-						html += `</div>`;
+						html += `
+            </div>
+        `;
 					}
 
 					html += "</div>";
 
-					// Disable Prev/Next at the boundaries of the 3-month window
+					/*
+					 * Disable Prev/Next buttons at the boundaries
+					 * of the existing 3-month window.
+					 */
 					const prevBtn = document.getElementById("schedulePrevBtn");
+
 					const nextBtn = document.getElementById("scheduleNextBtn");
+
 					if (prevBtn) {
-						const pm = month === 0 ? { year: year - 1, month: 11 } : { year, month: month - 1 };
+						const pm =
+							month === 0
+								? {
+										year: year - 1,
+										month: 11,
+									}
+								: {
+										year,
+										month: month - 1,
+									};
+
 						prevBtn.disabled = !isScheduleMonthNavigable(pm.year, pm.month);
 					}
+
 					if (nextBtn) {
-						const nm = month === 11 ? { year: year + 1, month: 0 } : { year, month: month + 1 };
+						const nm =
+							month === 11
+								? {
+										year: year + 1,
+										month: 0,
+									}
+								: {
+										year,
+										month: month + 1,
+									};
+
 						nextBtn.disabled = !isScheduleMonthNavigable(nm.year, nm.month);
 					}
 
+					/*
+					 * Finally place the generated calendar
+					 * into the schedule container.
+					 */
 					container.innerHTML = html;
 				}
 
