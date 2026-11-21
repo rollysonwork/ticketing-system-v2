@@ -12490,7 +12490,7 @@
 
 					const { year, month } = scheduleView;
 					const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-					const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+					const weekdays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 					if (titleEl) titleEl.textContent = `${monthNames[month]} ${year}`;
 
 					const byDate = parseScheduleMap();
@@ -12501,7 +12501,7 @@
 					// When true → do NOT pin the user's own name.
 					const anyShiftSelected = Object.values(scheduleVisibleShifts).some((v) => v !== false);
 
-					const firstDay = new Date(year, month, 1).getDay();
+					const firstDay = (new Date(year, month, 1).getDay() + 6) % 7;
 					const daysInMonth = new Date(year, month + 1, 0).getDate();
 
 					let html = '<div class="schedule-grid">';
