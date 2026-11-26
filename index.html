@@ -8610,45 +8610,81 @@
 				function generateShiftReportPlain(entries) {
 					const indent = (level) => " ".repeat(level * 5);
 					const visible = entries || [];
+
 					const baseDate = getShiftReportBaseDate();
 					const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 					const dateStr = baseDate.toLocaleDateString("en-US");
 					const dayName = days[baseDate.getDay()];
 					const dateLine = `Date: ${dateStr} - ${dayName} Shift`;
 
 					const uniqueShifts = [...new Set(visible.map((e) => e.shift).filter((s) => s))];
+
 					const sidebarShift = document.getElementById("sidebar-shift")?.value || "";
+
+					// Determine the active shift used for the Daily Huddle times.
+					// Priority:
+					// 1. Shift stored in the report entries
+					// 2. User's Shift Schedule from the sidebar
 					const activeShift = uniqueShifts[0] || sidebarShift;
+
 					const shiftLine = `Shift: ${uniqueShifts.length > 0 ? uniqueShifts.join(", ") : sidebarShift}`;
+
+					// Keep the Daily Huddle times dynamic based on the user's shift.
+					// getDailyHuddleTimes() converts the shift schedule to Eastern Time.
 					const huddleTimes = getDailyHuddleTimes(activeShift);
 
+					/* =========================================================
+	   1. PENDING TICKETS
+	   ========================================================= */
+
 					const pendingEntries = visible.filter((e) => e.status?.toUpperCase() === "PENDING");
+
 					const pendingCount = pendingEntries.length;
+
 					let pendingList = "";
+
 					if (pendingCount > 0) {
 						pendingList = pendingEntries.map((e) => `${indent(1)}${e.store || "Unknown Store"} - ${e.issue || "No issue details"}`).join("\n");
 					} else {
 						pendingList = `${indent(1)}No Pending Tickets`;
 					}
 
+					/* =========================================================
+	   2. TOTAL CALLS
+	   ========================================================= */
+
 					const totalCalls = visible.filter((e) => e.status?.toUpperCase() !== "OTHER TASK").length;
 
+					/* =========================================================
+	   3. OTHER TASKS
+	   ========================================================= */
+
 					const otherEntries = visible.filter((e) => e.status?.toUpperCase() === "OTHER TASK");
+
 					const otherCount = otherEntries.length;
+
 					let otherList = "";
+
 					if (otherCount > 0) {
 						const uniqueItems = new Set();
+
 						otherEntries.forEach((e) => {
 							const moduleName = e.module && e.module.trim() ? e.module : "";
+
 							if (moduleName.toUpperCase() === "OTHER") {
 								const issueText = e.issue ? e.issue.trim() : "";
+
 								const display = issueText || "Other";
+
 								uniqueItems.add(display);
 							} else {
 								const display = moduleName || "Other";
+
 								uniqueItems.add(display);
 							}
 						});
+
 						otherList = Array.from(uniqueItems)
 							.map((item) => `${indent(1)}${item}`)
 							.join("\n");
@@ -8656,17 +8692,28 @@
 						otherList = `${indent(1)}No Other Tasks`;
 					}
 
+					/* =========================================================
+	   4. TRAINING / DEMO
+	   ========================================================= */
+
 					const trainingEntries = otherEntries.filter((e) => e.module?.toUpperCase() === "TRAINING");
+
 					const demoEntries = otherEntries.filter((e) => e.module?.toUpperCase() === "DEMO");
+
 					const trainingLine = trainingEntries.length > 0 ? `${indent(2)}Scheduled Training: ${trainingEntries.map((e) => e.support || "Unknown Support").join(", ")}` : `${indent(2)}No Training for today`;
+
 					const demoLine = demoEntries.length > 0 ? `${indent(2)}Scheduled Demo: ${demoEntries.map((e) => e.support || "Unknown Support").join(", ")}` : `${indent(2)}No Demo for today`;
+
+					/* =========================================================
+	   5–8. STATIC SECTIONS
+	   ========================================================= */
 
 					const staticSections = [
 						`${indent(1)}5. Updates / Notices`,
 						`${indent(1)}The current latest versions:`,
 						`${indent(2)}RetailzPOS: Version Code 252 (All)`,
 						`${indent(2)}Moolah Points: Version Code 45 (All)`,
-						``,
+						"",
 						`${indent(2)}Reminders for Retailz team members:`,
 						`${indent(2)}- Any database-related issues must be escalated to a senior team member immediately. These involve sensitive data where zero errors are acceptable.`,
 						`${indent(2)}- Ask seniors assistance for issue that needed to be escalated to the India team`,
@@ -8675,18 +8722,30 @@
 						`${indent(2)}- Review pending issues and escalations using the newly added features in our existing workload tracker`,
 						`${indent(2)}- Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.`,
 						`${indent(2)}- Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.`,
-						``,
+						"",
 						`${indent(1)}6. Training (Retailz Members): No training for today`,
-						``,
+						"",
 						`${indent(1)}7. Tasks/Tickets to be Delegated: No delegated task for today`,
-						``,
+						"",
 						`${indent(1)}8. Daily Huddle:`,
+
+						// First Hour keeps the dynamically calculated time.
 						`${indent(1)}• First Hour of Shift (${huddleTimes.firstHour})`,
-						`${indent(2)}◦ `,
+						`${indent(2)}◦ We started the shift by reviewing all pending tickets from the previous shift and ensuring that each case was properly checked for available updates. We successfully contacted the affected merchants, provided updates regarding their previously reported concerns, and proceeded with closing the tickets that had already been resolved. Aside from handling pending cases, the team also received incoming merchant calls, which were attended to by the assigned support agents to ensure that their concerns were properly addressed.`,
+
+						// Middle of Shift has no time.
 						`${indent(1)}• Middle of Shift`,
-						`${indent(2)}◦ `,
+						`${indent(2)}◦ The team continued accepting and handling incoming merchant calls throughout the shift. As the Team Leader, I also monitored all open and pending tickets to ensure that each case was properly tracked and followed up on. We continued waiting for updates from the India Team regarding tickets that required further investigation or backend assistance, while ensuring that all pending concerns remained monitored for the necessary next steps.`,
+
+						// Last Hour keeps the dynamically calculated time.
 						`${indent(1)}• Last Hour of Shift (${huddleTimes.lastHour})`,
-						`${indent(2)}◦ `,
+						`${indent(2)}◦ Before ending the shift, the team reviewed and finalized their tickets to ensure that all resolved cases were properly updated and closed. We also identified pending concerns that required further follow-up and endorsed them to the next shift for continued troubleshooting and action.`,
+
+						"",
+						`${indent(1)}The following tickets were endorsed:`,
+
+						// Dynamically list the actual pending tickets.
+						...(pendingCount > 0 ? pendingEntries.map((e) => `${indent(2)}- ${e.store || "Unknown Store"} - ${e.issue || "No issue details"}`) : [`${indent(2)}- No tickets were endorsed.`]),
 					].join("\n");
 
 					return [dateLine, shiftLine, "", "Good day everyone,", "", "Please find below the shift report for today,", "", `${indent(1)}1. Pending Tickets: ${pendingCount}`, pendingList, "", `${indent(1)}2. Total Calls: ${totalCalls}`, "", "", `${indent(1)}3. Total Other Tasks: ${otherCount}`, otherList, "", `${indent(1)}4. Scheduled Training/Demo (Merchant)`, trainingLine, demoLine, "", staticSections].join("\n");
@@ -8694,67 +8753,166 @@
 
 				function generateShiftReportHTML(entries) {
 					const visible = entries || [];
+
 					const baseDate = getShiftReportBaseDate();
+
 					const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 					const dateStr = baseDate.toLocaleDateString("en-US");
+
 					const dayName = days[baseDate.getDay()];
+
 					const dateLine = `Date: ${dateStr} - ${dayName} Shift`;
 
 					const uniqueShifts = [...new Set(visible.map((e) => e.shift).filter((s) => s))];
+
 					const sidebarShift = document.getElementById("sidebar-shift")?.value || "";
+
+					// Determine the active shift.
 					const activeShift = uniqueShifts[0] || sidebarShift;
+
 					const shiftLine = `Shift: ${uniqueShifts.length > 0 ? uniqueShifts.join(", ") : sidebarShift}`;
+
+					// Keep the Daily Huddle times dynamic.
 					const huddleTimes = getDailyHuddleTimes(activeShift);
 
+					/* =========================================================
+	   1. PENDING TICKETS
+	   ========================================================= */
+
 					const pendingEntries = visible.filter((e) => e.status?.toUpperCase() === "PENDING");
+
 					const pendingCount = pendingEntries.length;
+
 					let pendingListHtml = "";
+
 					if (pendingCount > 0) {
 						pendingListHtml = pendingEntries
 							.map((e) => {
 								const storeName = escapeHtml(e.store || "Unknown Store");
+
 								const issueText = escapeHtml(e.issue || "No issue details");
-								return `<div style="margin-left:25px;"><b>${storeName}</b> - <i>${issueText}</i></div>`;
+
+								return `
+						<div style="margin-left:25px;">
+							<b>${storeName}</b> -
+							<i>${issueText}</i>
+						</div>
+					`;
 							})
 							.join("");
 					} else {
-						pendingListHtml = `<div style="margin-left:25px;">No Pending Tickets</div>`;
+						pendingListHtml = `
+			<div style="margin-left:25px;">
+				No Pending Tickets
+			</div>
+		`;
 					}
+
+					/* =========================================================
+	   2. TOTAL CALLS
+	   ========================================================= */
 
 					const totalCalls = visible.filter((e) => e.status?.toUpperCase() !== "OTHER TASK").length;
 
+					/* =========================================================
+	   3. OTHER TASKS
+	   ========================================================= */
+
 					const otherEntries = visible.filter((e) => e.status?.toUpperCase() === "OTHER TASK");
+
 					const otherCount = otherEntries.length;
+
 					let otherListHtml = "";
+
 					if (otherCount > 0) {
 						const uniqueItems = new Set();
+
 						otherEntries.forEach((e) => {
 							const moduleName = e.module && e.module.trim() ? e.module : "";
+
 							if (moduleName.toUpperCase() === "OTHER") {
 								const issueText = e.issue ? e.issue.trim() : "";
+
 								const display = issueText || "Other";
+
 								uniqueItems.add(display);
 							} else {
 								const display = moduleName || "Other";
+
 								uniqueItems.add(display);
 							}
 						});
+
 						otherListHtml = Array.from(uniqueItems)
-							.map((item) => `<div style="margin-left:25px;">${escapeHtml(item)}</div>`)
+							.map(
+								(item) => `
+						<div style="margin-left:25px;">
+							${escapeHtml(item)}
+						</div>
+					`,
+							)
 							.join("");
 					} else {
-						otherListHtml = `<div style="margin-left:25px;">No Other Tasks</div>`;
+						otherListHtml = `
+			<div style="margin-left:25px;">
+				No Other Tasks
+			</div>
+		`;
 					}
 
+					/* =========================================================
+	   4. TRAINING / DEMO
+	   ========================================================= */
+
 					const trainingEntries = otherEntries.filter((e) => e.module?.toUpperCase() === "TRAINING");
+
 					const demoEntries = otherEntries.filter((e) => e.module?.toUpperCase() === "DEMO");
-					const trainingLine = trainingEntries.length > 0 ? `<div style="margin-left:25px;">Scheduled Training: ${escapeHtml(trainingEntries.map((e) => e.support || "Unknown Support").join(", "))}</div>` : `<div style="margin-left:25px;">No Training for today</div>`;
-					const demoLine = demoEntries.length > 0 ? `<div style="margin-left:25px;">Scheduled Demo: ${escapeHtml(demoEntries.map((e) => e.support || "Unknown Support").join(", "))}</div>` : `<div style="margin-left:25px;">No Demo for today</div>`;
+
+					const trainingLine =
+						trainingEntries.length > 0
+							? `
+				<div style="margin-left:25px;">
+					Scheduled Training:
+					${escapeHtml(trainingEntries.map((e) => e.support || "Unknown Support").join(", "))}
+				</div>
+			`
+							: `
+				<div style="margin-left:25px;">
+					No Training for today
+				</div>
+			`;
+
+					const demoLine =
+						demoEntries.length > 0
+							? `
+				<div style="margin-left:25px;">
+					Scheduled Demo:
+					${escapeHtml(demoEntries.map((e) => e.support || "Unknown Support").join(", "))}
+				</div>
+			`
+							: `
+				<div style="margin-left:25px;">
+					No Demo for today
+				</div>
+			`;
+
+					/* =========================================================
+	   5. UPDATES / NOTICES
+	   ========================================================= */
 
 					const versionHtml = `
-		<div style="margin-left:25px;">The current latest versions:</div>
-		<div style="margin-left:50px;">RetailzPOS: Version Code 252 (All)</div>
-		<div style="margin-left:50px;">Moolah Points: Version Code 45 (All)</div>
+		<div style="margin-left:25px;">
+			The current latest versions:
+		</div>
+
+		<div style="margin-left:50px;">
+			RetailzPOS: Version Code 252 (All)
+		</div>
+
+		<div style="margin-left:50px;">
+			Moolah Points: Version Code 45 (All)
+		</div>
 	`;
 
 					const remindersItems = [
@@ -8766,63 +8924,252 @@
 						"Kindly ensure that all details are thoroughly recorded in the tracker/HRMS. This will allow the next person assisting the merchant to refer to the existing information and prevent repetitive inquiries.",
 						"Use clear and proper escalation notes within the tracker to provide transparency and maintain an accurate issue history.",
 					];
-					const remindersListHtml = `<ul style="margin:4px 0 0 25px; padding-left:20px;">` + remindersItems.map((item) => `<li style="margin:0;">${escapeHtml(item)}</li>`).join("") + `</ul>`;
 
-					const dailyHuddleHtml = `
-		<ul style="margin:4px 0 0 25px; padding-left:20px; list-style-type:disc;">
-			<li style="margin:0;">First Hour of Shift (${escapeHtml(huddleTimes.firstHour)})
-				<ul style="margin:0; padding-left:20px; list-style-type:circle;">
-					<li style="margin:0;">&nbsp;</li>
-				</ul>
-			</li>
-			<li style="margin:0;">Middle of Shift
-				<ul style="margin:0; padding-left:20px; list-style-type:circle;">
-					<li style="margin:0;">&nbsp;</li>
-				</ul>
-			</li>
-			<li style="margin:0;">Last Hour of Shift (${escapeHtml(huddleTimes.lastHour)})
-				<ul style="margin:0; padding-left:20px; list-style-type:circle;">
-					<li style="margin:0;">&nbsp;</li>
-				</ul>
-			</li>
+					const remindersListHtml = `
+		<ul style="margin:4px 0 0 25px; padding-left:20px;">
+			${remindersItems
+				.map(
+					(item) => `
+						<li style="margin:0;">
+							${escapeHtml(item)}
+						</li>
+					`,
+				)
+				.join("")}
 		</ul>
 	`;
 
+					/* =========================================================
+	   8. DAILY HUDDLE
+	   ========================================================= */
+
+					const dailyHuddleHtml = `
+		<ul
+			style="
+				margin:4px 0 0 25px;
+				padding-left:20px;
+				list-style-type:disc;
+			"
+		>
+
+			<!-- FIRST HOUR -->
+			<li style="margin:0;">
+				First Hour of Shift
+				(${escapeHtml(huddleTimes.firstHour)})
+
+				<ul
+					style="
+						margin:0;
+						padding-left:20px;
+						list-style-type:circle;
+					"
+				>
+					<li style="margin:0;">
+						We started the shift by reviewing all pending tickets from the previous shift and ensuring that each case was properly checked for available updates. We successfully contacted the affected merchants, provided updates regarding their previously reported concerns, and proceeded with closing the tickets that had already been resolved. Aside from handling pending cases, the team also received incoming merchant calls, which were attended to by the assigned support agents to ensure that their concerns were properly addressed.
+					</li>
+				</ul>
+			</li>
+
+			<!-- MIDDLE OF SHIFT -->
+			<li style="margin:0;">
+				Middle of Shift
+
+				<ul
+					style="
+						margin:0;
+						padding-left:20px;
+						list-style-type:circle;
+					"
+				>
+					<li style="margin:0;">
+						The team continued accepting and handling incoming merchant calls throughout the shift. As the Team Leader, I also monitored all open and pending tickets to ensure that each case was properly tracked and followed up on. We continued waiting for updates from the India Team regarding tickets that required further investigation or backend assistance, while ensuring that all pending concerns remained monitored for the necessary next steps.
+					</li>
+				</ul>
+			</li>
+
+			<!-- LAST HOUR -->
+			<li style="margin:0;">
+				Last Hour of Shift
+				(${escapeHtml(huddleTimes.lastHour)})
+
+				<ul
+					style="
+						margin:0;
+						padding-left:20px;
+						list-style-type:circle;
+					"
+				>
+					<li style="margin:0;">
+						Before ending the shift, the team reviewed and finalized their tickets to ensure that all resolved cases were properly updated and closed. We also identified pending concerns that required further follow-up and endorsed them to the next shift for continued troubleshooting and action.
+					</li>
+				</ul>
+			</li>
+
+		</ul>
+
+		<!-- ENDORSED TICKETS -->
+		<div
+			style="
+				margin-top:8px;
+				margin-left:25px;
+			"
+		>
+			The following tickets were endorsed:
+		</div>
+
+		<div style="margin-left:50px;">
+
+			${
+				pendingCount > 0
+					? pendingEntries
+							.map(
+								(e) => `
+									<div style="margin-top:3px;">
+										• <b>${escapeHtml(e.store || "Unknown Store")}</b>
+										-
+										<i>${escapeHtml(e.issue || "No issue details")}</i>
+									</div>
+								`,
+							)
+							.join("")
+					: `
+						<div style="margin-top:3px;">
+							• No tickets were endorsed.
+						</div>
+					`
+			}
+
+		</div>
+	`;
+
+					/* =========================================================
+	   STATIC SECTIONS
+	   ========================================================= */
+
 					const staticSections = `
-		<div><strong>5. Updates / Notices</strong></div>
+		<div>
+			<strong>
+				5. Updates / Notices
+			</strong>
+		</div>
+
 		${versionHtml}
+
 		<div style="margin-top:8px;"></div>
-		<div style="margin-left:25px;">Reminders for Retailz team members:</div>
+
+		<div style="margin-left:25px;">
+			Reminders for Retailz team members:
+		</div>
+
 		${remindersListHtml}
-		<div style="margin-top:8px;"><strong>6. Training (Retailz Members):</strong> No training for today</div>
-		<div style="margin-top:4px;"><strong>7. Tasks/Tickets to be Delegated:</strong> No delegated task for today</div>
-		<div style="margin-top:8px;"><strong>8. Daily Huddle:</strong></div>
+
+		<div style="margin-top:8px;">
+			<strong>
+				6. Training (Retailz Members):
+			</strong>
+			No training for today
+		</div>
+
+		<div style="margin-top:4px;">
+			<strong>
+				7. Tasks/Tickets to be Delegated:
+			</strong>
+			No delegated task for today
+		</div>
+
+		<div style="margin-top:8px;">
+			<strong>
+				8. Daily Huddle:
+			</strong>
+		</div>
+
 		${dailyHuddleHtml}
 	`;
 
+					/* =========================================================
+	   FINAL HTML REPORT
+	   ========================================================= */
+
 					return `
-		<div style="font-family: sans-serif; line-height:1.4;">
-			<div>${escapeHtml(dateLine)}</div>
-			<div>${escapeHtml(shiftLine)}</div>
+		<div
+			style="
+				font-family:sans-serif;
+				line-height:1.5;
+			"
+		>
+
+			<div>
+				${escapeHtml(dateLine)}
+			</div>
+
+			<div>
+				${escapeHtml(shiftLine)}
+			</div>
+
 			<div><br></div>
-			<div>Good day everyone,</div>
+
+			<div>
+				Good day everyone,
+			</div>
+
 			<div><br></div>
-			<div>Please find below the shift report for today,</div>
+
+			<div>
+				Please find below the shift report for today,
+			</div>
+
 			<div><br></div>
-			<div><strong>1. Pending Tickets: ${pendingCount}</strong></div>
+
+			<!-- 1. PENDING TICKETS -->
+			<div>
+				<strong>
+					1. Pending Tickets:
+					${pendingCount}
+				</strong>
+			</div>
+
 			${pendingListHtml}
+
 			<div><br></div>
-			<div><strong>2. Total Calls: ${totalCalls}</strong></div>
+
+			<!-- 2. TOTAL CALLS -->
+			<div>
+				<strong>
+					2. Total Calls:
+					${totalCalls}
+				</strong>
+			</div>
+
 			<div><br></div>
+
 			<div><br></div>
-			<div><strong>3. Total Other Tasks: ${otherCount}</strong></div>
+
+			<!-- 3. OTHER TASKS -->
+			<div>
+				<strong>
+					3. Total Other Tasks:
+					${otherCount}
+				</strong>
+			</div>
+
 			${otherListHtml}
+
 			<div><br></div>
-			<div><strong>4. Scheduled Training/Demo (Merchant)</strong></div>
+
+			<!-- 4. TRAINING / DEMO -->
+			<div>
+				<strong>
+					4. Scheduled Training/Demo (Merchant)
+				</strong>
+			</div>
+
 			${trainingLine}
 			${demoLine}
+
 			<div><br></div>
+
 			${staticSections}
+
 		</div>
 	`;
 				}
